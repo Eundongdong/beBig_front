@@ -18,7 +18,11 @@ import Policy from '@/pages/Policy.vue'
 import Signup from '@/pages/Signup.vue'  
 import SocialSignup from '@/pages/SocialSignup.vue'  
 import Survey from '@/pages/Survey.vue'  
-import SurveyResult from '@/pages/SurveyResult.vue'  
+import SurveyResult from '@/pages/SurveyResult.vue'
+import BankLogin from '@/pages/BankLogin.vue'
+import AccountList from '@/pages/AccountList.vue'
+import AccountDetail from '@/pages/AccountDetail.vue'
+import SurveyStart from '@/pages/SurveyStart.vue'  
 
 
 
@@ -26,6 +30,9 @@ const router = createRouter({
     history: createWebHistory(),
     routes : [
         {path:'/addbank', component:AddBank},
+        {path:'/banklogin', component:BankLogin},
+        {path:'/accountlist', component:AccountList},
+        {path:'/accountdetail', component:AccountDetail},
         {path:'/asset', component:Asset},
         {path:'/communityadd', component:CommunityAdd},
         {path:'/communitydetail', component:CommunityDetail},
@@ -42,6 +49,7 @@ const router = createRouter({
         {path:'/policy', component:Policy},
         {path:'/signup', component:Signup},
         {path:'/socialsignup', component:SocialSignup},
+        {path:'/surveystart', component:SurveyStart},
         {path:'/survey', component:Survey},
         {path:'/surveyresult', component:SurveyResult},
 
