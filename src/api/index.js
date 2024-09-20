@@ -1,11 +1,15 @@
+// env
+
 //프로젝트의 공통 API 모듈
 
 import axios from 'axios';
 // import { userStore } from '@/stores/userStore';
 import router from '@/router';
+import _env from "@/lib/env.js";
 
 const api = axios.create({
-  baseURL: /*process.env.VUE_APP_API_URL ||*/ 'http://localhost:8080', // 실제 서버 포트 번호로 변경
+  // baseURL: 'http://localhost:8080', // 실제 서버 포트 번호로 변경
+  baseURL: _env.API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
