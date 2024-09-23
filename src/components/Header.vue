@@ -1,6 +1,6 @@
 <template lang="">
     <div>
-        Header
+        <img src="../../public/images/logo.png">
     </div>
 </template>
 <script>
@@ -9,11 +9,11 @@ export default {
 }
 </script>
 <style scoped>
-*{
-    box-sizing: border-box;
-}
-header{
-    border:1px solid;
-    height: 100px;
-}
+    *{
+        box-sizing: border-box;
+        width: 100%;
+    }
+    img{
+        width: 30%;
+    }
 </style>
