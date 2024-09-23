@@ -10,7 +10,7 @@ export default[
         component:()=>import('../pages/community/CommunityAdd.vue')
     },
     {
-        path:'/community/detail',
+        path:'/community/detail/:postId',
         name:'communityDetail',
         component:()=>import('../pages/community/CommunityDetail.vue')
     }
