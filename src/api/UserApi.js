@@ -1,4 +1,5 @@
-import api from "@/api";
+// import api from "@/api";
+import api from "@/api/ex_index"
 
 const BASE_URL = "/user";
 const headers = { "Content-Type": "multipart/form-data" };
@@ -10,8 +11,12 @@ export default {
         for (const key in user) {
             formData.append(key, user[key]);
         }
-
-        const { data } = await api.post(`${BASE_URL}/signup`, formData, { headers });
+        // formData의 키와 값을 출력
+        for (let key of formData.keys()) {
+            console.log(key);  // 키 출력
+            console.log(formData.get(key));  // 해당 키의 값 출력
+        }
+        const { data } = await api.post(`${BASE_URL}/signup`, formData,{ headers: { 'Content-Type': 'multipart/form-data' } });
         return data;
     },
 
@@ -86,5 +91,11 @@ export default {
     
         const { data } = await api.post(`${BASE_URL}/find-pwd`, formData, { headers });
         return data;
-    }
+    },
+
+    // 정책 받아오기
+    async getPolicy() {
+        const { data } = await api.get(`${BASE_URL}/policy`);
+        return data;
+    },    
 };

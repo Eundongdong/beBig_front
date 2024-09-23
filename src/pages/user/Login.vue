@@ -1,90 +1,110 @@
     <template>
-        <div>
-        <h2>Login</h2>
-        <button @click="testUserApi">API 테스트</button>
+        <div class="Page">
+            <div class="Logo">
+                <h1>beBIG</h1>
+            </div>
+            <div class="Input">
+                <ul>
+                    <li>
+                        <h3>아이디</h3>
+                        <input type="text" v-model="loginUser.id" placeholder="Enter your ID"/>
+                    </li>
+                    <li>
+                        <h3>비밀번호</h3>
+                        <input type="password" v-model="loginUser.password" placeholder="Enter your password"/>
+                    </li>
+                    <li>
+                        <button class="button" @click="GoSignup">회원가입</button>
+                        <button class="button" :disabled="disableSubmit" @click="login">로그인</button>
+                    </li>
+                    <li>
+                        <button class="button" @click="GoFindId">아이디 찾기</button>
+                        <button class="button" @click="GoFindPwd">비밀번호 찾기</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="Button">
+                <ul>
+                    <li><button class="naver_button" @click="naverSocialLogin">네이버 로그인</button></li>
+                    <li><button class="kakao_button" @click="naverSocialLogin">네이버 로그인</button></li>
+                    <li><button class="unsign_button" @click="unsignLogin">가입없이 이용</button></li>
+                </ul>
+            </div>
         </div>
+
     </template>
     
     <script setup>
-    import UserApi from "@/api/UserApi"; // 올바른 이름으로 import
+    import { ref, reactive, computed } from 'vue';
+    import { useRouter} from 'vue-router';
+    import {useUserStore} from '@/stores/user';
     
-    const testUserApi = async () => {
-        try {
-        // 1. 일반 회원가입 테스트
-        const newUser = {
-            name: "이름",
-            nickname: "닉네임",
-            id: "아이디",
-            password: "비번",
-            email: "이메일",
-            gender: true,
-            birth: "1997-02-05",
-        };
-        const createdUser = await UserApi.signup(newUser);
-        console.log("회원가입 성공:", createdUser);
-    
-        // 2. ID 중복체크 테스트
-        const idDupCheck = await UserApi.idDuplicateCheck("checkId");
-        console.log("아이디 중복 체크 성공:", idDupCheck);
-    
-        // 3-1. 소셜 회원가입 정보전달 테스트
-        const socialSignupInfo = await UserApi.socialSignupInfo();
-        console.log("소셜 회원가입 정보전달 체크 성공:", socialSignupInfo);
+    //////변수 선언
+    const router = useRouter();
+    const userStore = useUserStore();
 
-        // 3. 소셜 회원가입 등록 테스트
-        const socialUser = {
-            name: "소셜이름",
-            nickname: "소셜닉네임",
-            email: "소셜이메일",
-            gender: true,
-            birth: "1997-02-05",
-        };
-        const socialCreatedUser = await UserApi.socialSignupRegister(socialUser);
-        console.log("소셜 회원가입 성공:", socialCreatedUser);
+    const loginUser = reactive({
+        id: '',
+        password: '',
+    });
+
+    const noLogin = reactive({
+        id: 'test',
+        password: '0000',
+    });
     
-        // 4. 일반 로그인 테스트
-        const loginUser = {
-            id: "아이디",
-            password: "비번",
-        };
-        const loggedInUser = await UserApi.login(loginUser);
-        console.log("로그인 성공:", loggedInUser);
-    
-        // 5. 소셜 로그인 테스트
-        const socialLoginUser = {
-            id: "소셜아이디",
-            password: "소셜비번",
-        };
-        const socialLoggedInUser = await UserApi.socialLogin(socialLoginUser);
-        console.log("소셜 로그인 성공:", socialLoggedInUser);
-    
-        // 6. 로그아웃 테스트
-        const logoutResult = await UserApi.logout();
-        console.log("로그아웃 성공:", logoutResult);
-    
-        // 7. 아이디 찾기 테스트
-        const findUserId = {
-            name: "이름",
-            email: "이메일",
-        };
-        const foundUserId = await UserApi.findUserId(findUserId);
-        console.log("아이디 찾기 성공:", foundUserId);
-    
-        // 8. 비밀번호 찾기 테스트
-        const userForPwdReset = {
-            name: "이름",
-            id: "아이디",
-            email: "이메일",
-        };
-        const foundUserPwd = await UserApi.findUserPwd(userForPwdReset);
-        console.log("비밀번호 찾기 성공:", foundUserPwd);
-    
-        } catch (error) {
-        console.error("API 호출 중 오류 발생:", error);
+    // id, password 입력 확인 => id, password 입력시 버튼 활성화
+    const disableSubmit = computed(() => !(loginUser.id && loginUser.password));
+
+    //로그인
+    const login = async() =>{
+        console.log(loginUser);
+        try{
+            await userStore.login(loginUser);
+            router.push('/home')
+            //아이디 비번 틀릴시 alter 나오게 만들어야함.
+        }catch(error){
+            console.log('에러 =>',error);
         }
     };
+
+    //가입없이 이용
+    const unsignLogin = async() =>{
+        console.log(loginUser);
+        try{
+            await userStore.login(noLogin);
+            //아이디 비번 틀릴시 alter 나오게 만들어야함.
+        }catch(error){
+            console.log('에러 =>',error);
+        }
+    };
+
+    /////라우터 이동
+    //회원가입 이동
+    const GoSignup = () => {
+            router.push('./user/signup')
+        };
+    //아이디 찾기 이동
+    const GoFindId = () => {
+            router.push('./user/findid')
+        };
+    //비밀번호 찾기 이동
+    const GoFindPwd = ()=>{
+            router.push('./user/findpwd')
+        };
+
     </script>
     
     <style scoped>
+        .Page {
+            width: 100%;
+            min-width: 340px;  /*스마트폰 기준 너비 */
+            margin: 0 auto;
+            padding: 20px;
+        }
 
+        ul{
+            list-style-type: none;
+
+        }
     </style>
