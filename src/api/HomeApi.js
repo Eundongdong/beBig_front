@@ -1,5 +1,5 @@
-//import api from "@/api";
-import api from "@/api/ex_index"
+import api from "@/api";
+//import api from "@/api/ex_index"
 
 const BASE_URL = "/home";
 const headers = { "Content-Type": "multipart/form-data" };
