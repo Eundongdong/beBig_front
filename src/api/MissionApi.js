@@ -1,4 +1,5 @@
-import api from "@/api";
+//import api from "@/api";
+import api from "@/api/ex_index"
 
 const BASE_URL = "/mission";
 const headers = { "Content-Type": "multipart/form-data" };

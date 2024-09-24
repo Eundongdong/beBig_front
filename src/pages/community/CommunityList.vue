@@ -206,14 +206,15 @@ onMounted(() => {
 
 
 <style scoped>
-/* 전체 컨테이너 */
+.content {
+  padding: 16px;
+  padding-bottom: 60px; /* 푸터 높이만큼 추가 */
+}
+
 .community-list {
-  display: flex;
-  flex-direction: column;
   padding: 16px;
 }
 
-/* 필터 및 정렬 섹션 */
 .filter-sort-bar {
   display: flex;
   justify-content: space-between;
@@ -222,23 +223,22 @@ onMounted(() => {
 
 .sort-options, .filter-options {
   display: flex;
-  gap: 8px; /* 버튼 간 간격 */
+  gap: 8px;
 }
 
 button {
   padding: 8px 12px;
   border: none;
   border-radius: 8px;
-  background-color: #f0f0f0; /* 임시 색상 */
+  background-color: #f0f0f0;
   cursor: pointer;
 }
 
 button.active {
-  background-color: #007bff; /* 선택된 버튼 색상 */
+  background-color: #007bff;
   color: #fff;
 }
 
-/* 게시글 아이템 컨테이너 */
 .post {
   display: flex;
   flex-direction: column;
@@ -246,10 +246,9 @@ button.active {
   padding: 16px;
   border: 1px solid #e0e0e0;
   border-radius: 12px;
-  background-color: #ffffff; /* 임시 배경색 */
+  background-color: #ffffff;
 }
 
-/* 게시글 헤더 (아이콘, 제목, 날짜) */
 .post-header {
   display: flex;
   align-items: center;
@@ -261,7 +260,7 @@ button.active {
   height: 40px;
   margin-right: 12px;
   border-radius: 50%;
-  background-color: #ccc; /* 임시 아이콘 배경 */
+  background-color: #ccc;
 }
 
 .post-info {
@@ -280,7 +279,6 @@ button.active {
   margin: 0;
 }
 
-/* 게시글 본문 */
 .post-body {
   margin-bottom: 12px;
 }
@@ -297,54 +295,46 @@ button.active {
   margin-top: 12px;
 }
 
-/* 게시글 하단 (좋아요 버튼) */
 .post-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-
 .like-btn {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 24px;
-  }
-  
-  .filled-heart {
-  color: #ff4d4d; /* 채워진 하트는 빨간색 */
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
 }
 
-  .empty-heart {
-    color: #ff4d4d; /* 빈 하트 테두리만 빨간색 */
-  }
-
-/* 기타 유틸리티 */
-button:focus {
-  outline: none;
+.filled-heart {
+  color: #ff4d4d;
 }
 
-/* 새 글 작성 버튼 */
+.empty-heart {
+  color: #ff4d4d;
+}
+
 .add-post-button {
-  position: fixed; /* 화면의 고정 위치 */
-  bottom: 20px; /* 하단으로부터 20px 위 */
-  right: 20px; /* 오른쪽으로부터 20px 왼쪽 */
-  width: 36px; /* 버튼 크기 */
-  height: 36px; /* 버튼 크기 */
-  border-radius: 50%; /* 동그라미 버튼 */
-  background-color: #007bff; /* 파란색 배경 */
+  position: fixed;
+  bottom: 80px; /* 푸터와 겹치지 않도록 위로 올리기 */
+  right: 20px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #007bff;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: white; /* 아이콘 색상 */
-  font-size: 20px; /* 아이콘 크기 */
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 살짝의 그림자 */
-  z-index: 1000; /* 다른 컴포넌트 위에 겹치도록 설정 */
+  color: white;
+  font-size: 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000; /* 푸터보다 위로 나오도록 설정 */
 }
 
 .add-post-button:hover {
-  background-color: #0056b3; /* hover 시 약간 어두운 색 */
+  background-color: #0056b3;
 }
 
 </style>
