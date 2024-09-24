@@ -1,82 +1,146 @@
-<template lang="">
-    FindPwd
-    </template>
-    <script>
-     
-     const testUserApi = async () => {
-        try {
-        // 1. 일반 회원가입 테스트
-        const newUser = {
-            name: "이름",
-            nickname: "닉네임",
-            id: "아이디",
-            password: "비번",
-            email: "이메일",
-            gender: true,
-            birth: "1997-02-05",
-        };
-        const createdUser = await UserApi.signup(newUser);
-        console.log("회원가입 성공:", createdUser);
-    
-        // 2. ID 중복체크 테스트
-        const idDupCheck = await UserApi.idDuplicateCheck("checkId");
-        console.log("아이디 중복 체크 성공:", idDupCheck);
-    
-        // 3-1. 소셜 회원가입 정보전달 테스트
-        const socialSignupInfo = await UserApi.socialSignupInfo();
-        console.log("소셜 회원가입 정보전달 체크 성공:", socialSignupInfo);
+<template>
+  <div class="find_pwd_container">
+    <header class="header-container">
+      <button class="back" @click="goBack">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+      <p class="title">비밀번호 찾기</p>
+    </header>
 
-        // 3. 소셜 회원가입 등록 테스트
-        const socialUser = {
-            name: "소셜이름",
-            nickname: "소셜닉네임",
-            email: "소셜이메일",
-            gender: true,
-            birth: "1997-02-05",
-        };
-        const socialCreatedUser = await UserApi.socialSignupRegister(socialUser);
-        console.log("소셜 회원가입 성공:", socialCreatedUser);
+    <form @submit.prevent="findPassword">
+      <div>
+        <label for="name">이름</label>
+        <input
+          v-model="name"
+          type="text"
+          id="name"
+          autocomplete="name"
+          required
+        />
+      </div>
+      <div>
+        <label for="userId">아이디</label>
+        <input
+          v-model="userId"
+          type="text"
+          id="userId"
+          autocomplete="username"
+          required
+        />
+      </div>
+      <div>
+        <label for="email">이메일</label>
+        <input
+          v-model="email"
+          type="email"
+          id="email"
+          autocomplete="email"
+          required
+        />
+      </div>
+
+      <button type="submit">비밀번호 찾기</button>
+    </form>
+
+    <!-- 결과 표시 -->
+    <div v-if="message" class="result">
+      <p>{{ message }}</p>
+    </div>
+    <div v-else-if="errorMessage" class="error">
+      <p>{{ errorMessage }}</p>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue';
+import UserApi from '@/api/UserApi'; // 실제 API 모듈 경로 확인
+
+const name = ref(''); // 사용자 이름
+const userId = ref(''); // 사용자 아이디
+const email = ref(''); // 사용자 이메일
+const message = ref(null); // 성공 메시지
+const errorMessage = ref(null); // 오류 메시지
+
+const findPassword = async () => {
+  try {
     
-        // 4. 일반 로그인 테스트
-        const loginUser = {
-            id: "아이디",
-            password: "비번",
-        };
-        const loggedInUser = await UserApi.login(loginUser);
-        console.log("로그인 성공:", loggedInUser);
+
+    const response = await UserApi.findUserPwd({
+      name: name.value,
+      userId: userId.value,
+      email: email.value,
+    });
+
+    name.value = '';
+    userId.value = '';
+    email.value = '';
+
+    message.value =
+      '임시 비밀번호를 입력하신 이메일로 보냈어요!';
+
     
-        // 5. 소셜 로그인 테스트
-        const socialLoginUser = {
-            id: "소셜아이디",
-            password: "소셜비번",
-        };
-        const socialLoggedInUser = await UserApi.socialLogin(socialLoginUser);
-        console.log("소셜 로그인 성공:", socialLoggedInUser);
-    
-        // 6. 로그아웃 테스트
-        const logoutResult = await UserApi.logout();
-        console.log("로그아웃 성공:", logoutResult);
-    
-        // 7. 아이디 찾기 테스트
-        const findUserId = {
-            name: "이름",
-            email: "이메일",
-        };
-        const foundUserId = await UserApi.findUserId(findUserId);
-        console.log("아이디 찾기 성공:", foundUserId);
-    
-        // 8. 비밀번호 찾기 테스트
-        const userForPwdReset = {
-            name: "이름",
-            id: "아이디",
-            email: "이메일",
-        };
-        const foundUserPwd = await UserApi.findUserPwd(userForPwdReset);
-        console.log("비밀번호 찾기 성공:", foundUserPwd);
-    
-        } catch (error) {
-        console.error("API 호출 중 오류 발생:", error);
-        }
-    };
-    </script>
-    <style lang=""></style>
+
+  } catch (error) {
+    console.error(
+      'API 호출 중 오류 발생:',
+      error
+    );
+    if (
+      error.response &&
+      error.response.status === 404
+    ) {
+      errorMessage.value =
+        '해당 정보로 등록된 계정을 찾을 수 없습니다.';
+    } else {
+      errorMessage.value =
+        '서버와 통신 중 오류가 발생했습니다.';
+    }
+    message.value = null;
+  }
+};
+
+const goBack = () => {
+  window.history.back(); // 뒤로 가기
+};
+</script>
+
+<style>
+.find_pwd_container {
+  text-align: center;
+  padding: 20px;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.title {
+  flex: 1;
+  text-align: center;
+  margin-right: 24px; /* 아이콘 크기에 맞게 여백을 추가 */
+}
+
+.back {
+  background: none;
+  border: none;
+  font-size: 24px;
+}
+
+.result,
+.error {
+  margin-top: 20px;
+}
+
+.error {
+  color: red;
+}
+
+.result {
+  color: #007bff;
+  font-weight: bold;
+}
+</style>
