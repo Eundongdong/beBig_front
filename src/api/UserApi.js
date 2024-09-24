@@ -62,14 +62,11 @@ export default {
     },
 
   // 아이디찾기
-    async findUserId(user) {
-        const formData = new FormData();
-        for (const key in user) {
-            formData.append(key, user[key]);
-        }
-
-        const { data } = await api.post(`${BASE_URL}/find-id`, formData, { headers });
-        return data;
+  async findUserId(user) {
+    const { data } = await api.post(`${BASE_URL}/find-id`, user, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+    return data;
     },
     
     // 비밀번호 찾기
