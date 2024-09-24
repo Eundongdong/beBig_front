@@ -17,33 +17,36 @@
       <!-- 필터 드롭다운: 카테고리, 자산유형 -->
       <div class="filter-options">
         <!--카테고리 필터-->
-        <select v-model="selectedCategory" @change="filterByCategory">
-          <option value="">카테고리 전체</option>
-          <option value="category1">카테고리 1</option>
-          <option value="category2">카테고리 2</option>
-          <option value="category3">카테고리 3</option>
-          <option value="category4">카테고리 4</option>
+        <select v-model="selectedCategory" @change="fetchPosts">
+          <option value="-1">카테고리 전체</option>
+          <option value="1">예적금</option>
+          <option value="2">재테크</option>
+          <option value="3">정보공유</option>
+          <option value="4">절약팁</option>
         </select>
         <!--자산유형(FinType) 필터-->
-        <select v-model="selectedFinType" @change="filterByFinType">
-          <option value="">유형 전체</option>
-          <option value="1">유형 1</option>
-          <option value="2">유형 2</option>
-          <option value="3">유형 3</option>
-          <option value="4">유형 4</option>
+        <select v-model="selectedFinType" @change="fetchPosts">
+          <option value="-1">유형 전체</option>
+          <option value="1">꿀벌</option>
+          <option value="2">호랑이</option>
+          <option value="3">다람쥐</option>
+          <option value="4">나무늘보</option>
         </select>
       </div>
     </div>
 
     <!-- 게시글 목록 -->
-    <div class="post" v-for="post in filteredPosts" :key="post.postId">
+    <div class="post" v-for="post in sortedPosts" :key="post.postId">
       <!-- 게시글 아이템 -->
       <div class="post-item">
         <div class="post-header">
           <!-- 글쓴이 캐릭터 아이콘 (fintype에 따른 아이콘 표시)-->
           <img class="author-icon" :src="getAuthorIcon(post.postWriterFinTypeCode)" alt="Author Icon" />
           <div class="post-info">
-            <router-link :to="{ name: 'communityDetail', params: { postId: post.postId } }" class="post-title">{{ post.postTitle }}</router-link>
+            <router-link
+              :to="{ name: 'communityDetail',
+              params: { postId: post.postId } }" class="post-title">{{post.postTitle }}
+            </router-link>
             <p class="post-date">{{ formatDate(post.postCreatedTime) }}</p>
           </div>
         </div>
@@ -69,7 +72,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, nextTick } from 'vue';
 import communityApi from "@/api/CommunityApi";
 
 // api테스트
@@ -105,46 +108,37 @@ const testCommunityApi = async () => {
 // 게시글 데이터
 const posts = ref([]);     //API로 가져온 게시글 데이터
 const sortType = ref('latest');     // 기본 정렬은 최신순
-const selectedCategory = ref('');
-const selectedFinType = ref('');
+const selectedCategory = ref('-1'); // 초기값을 '-1'로 설정
+const selectedFinType = ref('-1'); // 초기값을 '-1'로 설정
 
-  const filteredPosts=computed(() => {
-      // 선택한 카테고리, 자산 유형에 따라 필터링
-      let filtered = posts.value;
+const sortedPosts = computed(() => {
+  if (sortType.value === 'likeHits') {
+    return [...posts.value].sort((a, b) => b.postLikeHits - a.postLikeHits);
+  } else if (sortType.value === 'latest') {
+    return [...posts.value].sort((a, b) => new Date(b.postCreatedTime) - new Date(a.postCreatedTime));
+  }
+  return posts.value;
+});
 
-      // 카테고리 필터링
-      if (selectedCategory.value) {
-        filtered = filtered.filter(post => post.postCategory === selectedCategory.value);
-      }
-
-      //자산 유형 필터링
-      if (selectedFinType.value) {
-        filtered = filtered.filter(post => post.postWriterFinTypeCode === parseInt(selectedFinType.value));
-      }
-
-      // 정렬
-      if (sortType.value === 'likeHits') {
-        return filtered.sort((a, b) => b.postLikeHits - a.postLikeHits);
-      } else if (sortType.value === 'latest') {
-        return filtered.sort((a, b) => new Date(b.postCreatedTime) - new Date(a.postCreatedTime));
-      }
-      return filtered;
-
+// 정렬 변경 함수
+const sortBy = (type) => {
+  sortType.value = type;
+  // 정렬 후에 화면을 다시 그리도록 Vue에 알림
+  nextTick(() => {
+    // 필요한 경우 여기에 추가 로직
   });
+};
 
-    // 정렬 변경 함수
-    const sortBy = (type) => {
-      sortType.value=type;
-    };
-
-    // 카테고리 필터 함수
-const filterByCategory = () => {
+// 카테고리 필터 함수
+const filterByCategory = async () => {
   console.log("카테고리 필터링:", selectedCategory.value);
+  await fetchPosts(); // 필터링 후 다시 데이터를 불러옴
 };
 
 // 자산 유형 필터 함수
-const filterByFinType = () => {
+const filterByFinType = async () => {
   console.log("자산유형 필터링:", selectedFinType.value);
+  await fetchPosts();  // 필터링 후 다시 데이터를 불러옴
 };
 
 // 작성자 아이콘을 가져오는 함수
@@ -166,35 +160,43 @@ const formatDate = (dateString) => {
 
 // 게시글 목록을 API에서 가져오는 함수
 const fetchPosts = async () => {
-    try {
-      const response = await communityApi.list();
-      console.log("API 응답:", response);  // 응답 전체를 출력하여 확인
-      if (Array.isArray(response)) {
-        posts.value = response.map(post => ({
-          ...post,
-          isLiked: false,  // 기본적으로 좋아요 상태를 false로 설정
-        }));
-      } else if (response && Array.isArray(response.data)){
-        posts.value=response.data.map(post => ({
-          ...post,
-          isLiked: false,
-        }));
-      }else{
-        console.error("유효하지 않은 데이터 형식:", response);
-      }
-    } catch (error) {
-      console.error('게시글 목록을 불러오는 중 오류 발생:', error);
+  try {
+    // 선택된 값이 빈 문자열일 경우 -1로 변경
+    const category = selectedCategory.value === '-1' ? -1 : parseInt(selectedCategory.value);
+    const type = selectedFinType.value === '-1' ? -1 : parseInt(selectedFinType.value);
+
+    const response = await communityApi.list(category, type); //필터링 값 전달
+    console.log("API 전체 응답: ", response); // 응답 전체를 출력하여 확인
+    console.log("API 응답 데이터: ", response.data);
+    console.log("API 응답 타입: ", typeof response.data);
+
+    if (response.data && Array.isArray(response.data)) {
+      posts.value = response.data.map(post => ({
+        ...post,
+        isLiked: false,  // 기본적으로 좋아요 상태를 false로 설정
+      }));
+    } else {
+      console.error("유효하지 않은 데이터 형식:", response.data);
     }
-  };
+  } catch (error) {
+    console.error('게시글 목록을 불러오는 중 오류 발생:', error);
+  }
+};
+
 
 // 좋아요 기능
 const likePost = async (post) => {
+  // 사용자 로컬 상태 업데이트
+  post.isLiked = !post.isLiked; // 상태 반전
+  post.postLikeHits += post.isLiked ? 1 : -1; // 상태에 따라 개수 증가 또는 감소
+
   try {
-    const updatedPost = await communityApi.like(post.postId);
-    post.isLiked = updatedPost.isLiked;
-    post.postLikeHits = updatedPost.postLikeHits;
+    await communityApi.like(post.postId);
   } catch (error) {
     console.error('좋아요 상태 변경 중 오류 발생:', error);
+    // 에러 발생 시 원래 상태로 복구
+    post.isLiked = !post.isLiked; // 원래 상태로 되돌림
+    post.postLikeHits += post.isLiked ? 1 : -1; // 원래 상태로 개수 조정
   }
 };
 
@@ -208,31 +210,14 @@ onMounted(() => {
 <style scoped>
 .content {
   padding: 16px;
-  padding-bottom: 60px; /* 푸터 높이만큼 추가 */
+  padding-bottom: 60px;
+  /* 푸터 높이만큼 추가 */
 }
 
 .community-list {
   padding: 16px;
 }
 
-.filter-sort-bar {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-
-.sort-options, .filter-options {
-  display: flex;
-  gap: 8px;
-}
-
-button {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 8px;
-  background-color: #f0f0f0;
-  cursor: pointer;
-}
 
 button.active {
   background-color: #007bff;
@@ -318,7 +303,8 @@ button.active {
 
 .add-post-button {
   position: fixed;
-  bottom: 80px; /* 푸터와 겹치지 않도록 위로 올리기 */
+  bottom: 80px;
+  /* 푸터와 겹치지 않도록 위로 올리기 */
   right: 20px;
   width: 36px;
   height: 36px;
@@ -330,11 +316,44 @@ button.active {
   color: white;
   font-size: 20px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  z-index: 1000; /* 푸터보다 위로 나오도록 설정 */
+  z-index: 1000;
+  /* 푸터보다 위로 나오도록 설정 */
 }
 
 .add-post-button:hover {
   background-color: #0056b3;
 }
 
+.filter-sort-bar {
+  display: flex;
+  flex-wrap: wrap;
+  /* 작은 화면에서 한 줄에 맞게 감싸도록 설정 */
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+  /* 정렬 및 필터 요소 간격 조정 */
+  width: 100%;
+  /* 부모 컨테이너의 전체 너비 사용 */
+  box-sizing: border-box;
+  /* 패딩과 크기를 함께 계산 */
+}
+
+.sort-options,
+.filter-options {
+  display: flex;
+  gap: 4px;
+  /* 간격을 좁혀 작은 화면에서도 잘 맞도록 */
+}
+
+button,
+select {
+  flex: 1 1 auto;
+  /* 요소들이 동일한 비율로 너비를 차지하도록 설정 */
+  min-width: 0;
+  /* 요소의 최소 너비를 제한해 더 많이 줄어들 수 있도록 */
+  padding: 4px 6px;
+  /* 패딩을 더 줄여서 요소들이 작아지도록 설정 */
+  font-size: 10px;
+  /* 텍스트 크기 유지 */
+}
 </style>
