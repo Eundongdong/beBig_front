@@ -71,12 +71,9 @@ export default {
     
     // 비밀번호 찾기
     async findUserPwd(user) {
-        const formData = new FormData();
-        for (const key in user) {
-            formData.append(key, user[key]);
-        }
-    
-        const { data } = await api.post(`${BASE_URL}/find-pwd`, formData, { headers });
+        const { data } = await api.post("/user/find-pwd", user, {
+          headers: { "Content-Type": "application/json" }
+        });
         return data;
     },
 
