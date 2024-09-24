@@ -1,66 +1,61 @@
 <template>
-    <ul class="footer">
-        <li>
-            <button @click="goCommunity">
-                <div class="icon-wrapper">
-                    <i class="fas fa-file-lines"></i>
-                </div>
-                <span>커뮤니티</span> <!-- 아이콘 아래 텍스트 -->
-            </button>
-        </li>
-        <li>
-            <button @click="goHome">
-                <div class="icon-wrapper">
-                    <i class="fas fa-home"></i>
-                </div>
-                <span>홈</span>
-            </button>
-        </li>
-        <li>
-            <button @click="goAsset">
-                <div class="icon-wrapper">
-                    <i class="fas fa-chart-simple"></i>
-                </div>
-                <span>자산 분석</span>
-            </button>
-        </li>
-        <li>
-            <button @click="goMypage">
-                <div class="icon-wrapper">
-                    <i class="fas fa-user"></i>
-                </div>
-                <span>마이페이지</span>
-            </button>
-        </li>
-    </ul>
+    <div class="footer-container">
+        <ul class="footer">
+            <li>
+                <button @click="goCommunity" :class="{'active': isCommunity}">
+                    <i class="fas fa-file-lines"></i> <!-- Community 아이콘 -->
+                    <span>커뮤니티</span>
+                </button>
+            </li>
+            <li>
+                <button @click="goHome" :class="{'active': isHome}">
+                    <i class="fas fa-home"></i> <!-- Home 아이콘 -->
+                    <span>홈</span>
+                </button>
+            </li>
+            <li>
+                <button @click="goAsset" :class="{'active': isAsset}">
+                    <i class="fas fa-chart-simple"></i> <!-- 자산 분석 아이콘 -->
+                    <span>자산분석</span>
+                </button>
+            </li>
+            <li>
+                <button @click="goMypage" :class="{'active': isMypage}">
+                    <i class="fas fa-user"></i> <!-- 마이페이지 아이콘 -->
+                    <span>마이페이지</span>
+                </button>
+            </li>
+        </ul>
+    </div>
 </template>
 
 <script setup>
-    import { useRouter } from 'vue-router';
-    const router = useRouter();
+import { useRouter, useRoute } from 'vue-router';
+import { computed } from 'vue';
 
-    //라우터 이동
+const router = useRouter();
+const route = useRoute();
 
-    //커뮤니티 이동
-    const goCommunity= () => {
-        router.push({ name: 'communityList' })
-    }
-    //메인 이동
-    const goHome = () => {
-        router.push({ name: 'main' })
-    }
-    //자산분석 이동
-    const goAsset= ()=>{
-        router.push({ name: 'asset' })
-    }
-    //마이페이지 이동
-    const goMypage= ()=>{
-        router.push({name: 'mypage'})
-    }
+// 라우팅 정보에 따라 버튼 색상 변경
+const isCommunity = computed(() => route.path.startsWith('/community'));
+const isHome = computed(() => route.path === '/home');
+const isAsset = computed(() => route.path.startsWith('/asset'));
+const isMypage = computed(() => route.path.startsWith('/mypage'));
+
+// 라우터 이동 함수
+const goCommunity = () => {
+    router.push({ name: 'communityList' });
+};
+const goHome = () => {
+    router.push({ name: 'main' });
+};
+const goAsset = () => {
+    router.push({ name: 'asset' });
+};
+const goMypage = () => {
+    router.push({ name: 'mypage' });
+};
 </script>
-
-
-
 
 <style scoped>
 * {
@@ -101,23 +96,27 @@ button {
     background: none;
     border: none;
     font-size: 24px;
+    color: #888888; /* 기본 아이콘 색상은 회색 */
     cursor: pointer;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
+button span {
+    font-size: 12px;
+    color: #888888; /* 기본 텍스트 색상은 회색 */
+}
+
+button.active {
+    color: black; /* 선택된 아이콘과 텍스트의 색상은 검정색 */
+}
+
+button.active span {
+    color: black; /* 선택된 텍스트의 색상도 검정색 */
+}
+
 button:focus {
     outline: none;
-}
-
-i {
-    display: block;
-    margin-bottom: 5px; /* 아이콘과 텍스트 간격 */
-}
-
-span {
-    font-size: 12px; /* 설명 텍스트 크기 */
-    color: #333;
 }
 </style>
