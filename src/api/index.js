@@ -1,9 +1,7 @@
-// env
-
 //프로젝트의 공통 API 모듈
 
 import axios from 'axios';
-import { userStore } from '@/stores/user';
+import { useUserStore } from '@/stores/user';
 import router from '@/router';
 import _env from "@/lib/env.js";
 
@@ -18,15 +16,17 @@ const instance = axios.create({
 // 요청 인터셉터
 instance.interceptors.request.use(
   (config) => {
-    const { getToken } = userStore();
+    const { getToken } = useUserStore();
     const token = getToken();
-    
+    console.log("token: "+token);
     // Authorization 헤더에 토큰 추가
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
       console.log('Authorization 헤더에 토큰 추가:', config.headers.Authorization);
     }
-
+    else{
+      console.log("noooooo");
+    }
     return config;
   },
   (error) => {

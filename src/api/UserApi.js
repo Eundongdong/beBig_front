@@ -7,18 +7,11 @@ const headers = { "Content-Type": "multipart/form-data" };
 export default {
   //일반 회원가입
     async signup(user) {
-        const formData = new FormData();
-        for (const key in user) {
-            formData.append(key, user[key]);
-        }
-        // formData의 키와 값을 출력
-        for (let key of formData.keys()) {
-            console.log(key);  // 키 출력
-            console.log(formData.get(key));  // 해당 키의 값 출력
-        }
-        const { data } = await api.post(`${BASE_URL}/signup`, formData,{ headers: { 'Content-Type': 'multipart/form-data' } });
-        return data;
-    },
+        const { data } = await api.post(`${BASE_URL}/signup`, user, { 
+            headers: { 'Content-Type': 'application/json' } 
+        });
+    return data;
+},
 
   // ID중복체크 
     async idDuplicateCheck(userID) {
@@ -45,12 +38,9 @@ export default {
 
   // 일반 로그인
     async login(user) {
-        const formData = new FormData();
-        for (const key in user) {
-            formData.append(key, user[key]);
-        }
-
-        const { data } = await api.post(`${BASE_URL}/login`, formData, { headers });
+        const { data } = await api.post(`${BASE_URL}/login`, user, { 
+            headers: { 'Content-Type': 'application/json' } 
+        });
         return data;
     },
 

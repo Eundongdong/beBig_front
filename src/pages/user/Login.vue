@@ -7,7 +7,7 @@
                 <ul>
                     <li>
                         <h3>아이디</h3>
-                        <input type="text" v-model="loginUser.id" placeholder="Enter your ID"/>
+                        <input type="text" v-model="loginUser.userId" placeholder="Enter your ID"/>
                     </li>
                     <li>
                         <h3>비밀번호</h3>
@@ -44,17 +44,17 @@
     const userStore = useUserStore();
 
     const loginUser = reactive({
-        id: '',
+        userId: '',
         password: '',
     });
 
     const noLogin = reactive({
-        id: 'test',
+        userId: 'test',
         password: '0000',
     });
     
     // id, password 입력 확인 => id, password 입력시 버튼 활성화
-    const disableSubmit = computed(() => !(loginUser.id && loginUser.password));
+    const disableSubmit = computed(() => !(loginUser.userId && loginUser.password));
 
     //로그인
     const login = async() =>{
@@ -62,9 +62,9 @@
         try{
             await userStore.login(loginUser);
             router.push('/home')
-            //아이디 비번 틀릴시 alter 나오게 만들어야함.
         }catch(error){
-            console.log('에러 =>',error);
+            console.log('에러 =>', error.message);  // 에러 로그 출력
+            alert(error.message);  // 경고창으로 에러 메시지 표시
         }
     };
 
@@ -73,7 +73,6 @@
         console.log(loginUser);
         try{
             await userStore.login(noLogin);
-            //아이디 비번 틀릴시 alter 나오게 만들어야함.
         }catch(error){
             console.log('에러 =>',error);
         }
