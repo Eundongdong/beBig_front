@@ -20,8 +20,8 @@
           <!-- 진행 바 -->
           <div class="progress-bar">
             <!-- 캐릭터 이미지 (진행된 만큼 왼쪽으로 배치) -->
-            <img src="/images/character.png" alt="달리는 캐릭터 이미지" class="progress-character"
-              :style="{ left: monthlyProgress + '%' }" />
+              <img :src="characterImage" alt="달리는 캐릭터 이미지" class="progress-character"
+             :style="{ left: monthlyProgress + '%' }" />
 
             <!-- 진행 바 채움 -->
             <div class="progress-fill" :style="{ width: monthlyProgress + '%' }"></div>
@@ -121,6 +121,24 @@ const remainingDays = ref(30);       // 남은 일수(예시)
 const dailyMissions = ref([]);  //일간 미션 목록
 const monthlyMission = ref([]); // 월간 미션 정보
 
+// 사용자 자산유형에 따른 캐릭터 이미지 설정
+const characterType = ref(null); // API 호출로 가져올 자산유형 값
+const characterImage = computed(() => {
+  switch (characterType.value) {
+    case 1:
+      return '/images/character1.png';
+    case 2:
+      return '/images/character2.png';
+    case 3:
+      return '/images/character3.png';
+    case 4:
+      return '/images/character4.png';
+    default:
+      return '/images/character4.png'; // 자산유형이 없는 경우 고려X
+      // return '/images/0.png';
+  }
+});
+
 // 미션 진행률 계산 함수
 const calculateMonthlyProgress = (missionData) => {
   const totalDays = missionData.totalDays || 30;
@@ -128,8 +146,30 @@ const calculateMonthlyProgress = (missionData) => {
   return Math.floor((completedDays / totalDays) * 100);
 };
 
+//API 호출
+const fetchUserData = async () => {
+  try {
+    const userId = 1;  // 테스트용 접속된 사용자 ID 예시, 실제 ID로 대체 가능
+    
+    // API 호출 부분 - 실제 API가 준비되지 않았으므로 더미 데이터를 사용
+    // 실제 API가 준비되면 아래 주석 처리된 코드 부분을 활성화하고, 더미 데이터를 제거합니다.
+    /*
+    const response = await userApi.getUserAssetType(userId); 
+    characterType.value = response.assetType;
+    */
+
+    // 개발 테스트용 더미 데이터 (추후 삭제 예정)
+    const dummyResponse = { assetType: 2 };  // 자산 유형 2번 캐릭터 선택 (예시)
+    characterType.value = dummyResponse.assetType;
+  } catch (error) {
+    console.error("사용자 자산유형 데이터를 불러오는 중 오류 발생:", error);
+  }
+};
+
 // // 컴포넌트가 마운트될 때 미션 데이터를 불러옴
 // onMounted(async () => {
+  //컴포넌트가 마운트될 때 자산유형 데이터 로드
+    // fetchUserData();
 //   try {
 //     const missionData = await MissionApi.showMission(userNo);
 //     console.log("미션 데이터: ", missionData); // 데이터 확인을 위한 콘솔 출력
@@ -144,7 +184,10 @@ const calculateMonthlyProgress = (missionData) => {
 // });
 
 onMounted(() => {
+  fetchUserData();
+
   // 실제 API 호출을 생략하고 임의의 데이터 사용
+  // 개발 테스트용 하드코딩된 더미 데이터 (추후 삭제 예정)
   const mockMissionData = {
     monthlyMission: {
       description: '한 달 동안 매일 3만 원씩 저축하기',
@@ -160,7 +203,7 @@ onMounted(() => {
 
   // 하드코딩된 데이터로 상태를 설정
   dailyMissions.value = mockMissionData.dailyMissions;
-  monthlyProgress.value = Math.min(mockMissionData.monthlyProgress || 0, 100);
+  monthlyProgress.value = Math.min(mockMissionData.monthlyProgress || 0, 100); // 0~100 사이로 제한
   remainingDays.value = mockMissionData.remainingDays;
   monthlyMission.value = {
     description: mockMissionData.monthlyMission.description,
@@ -263,13 +306,12 @@ const handleBack = () => {
 /* 캐릭터 이미지 설정: 진행된 만큼 위치 */
 .progress-character {
   position: absolute;
-  bottom: 10px;
-  /* 바 위로 살짝 올려 배치 */
+  bottom: 10px; /* 바 위로 살짝 올려 배치 */
   width: 50px;
   height: auto;
   z-index: 2;
-  transition: left 0.3s ease;
-  /* 부드럽게 움직이도록 transition 추가 */
+  transition: left 0.3s ease; /* 부드럽게 움직이도록 transition 추가 */
+  transform: translateX(-50%); /* 캐릭터 이미지의 중앙을 기준으로 움직이게 만듦 */
 }
 
 /* 깃발 이미지 설정: 바의 오른쪽 끝에 고정 */

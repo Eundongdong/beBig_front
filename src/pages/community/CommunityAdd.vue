@@ -64,6 +64,10 @@ import communityApi from '@/api/CommunityApi'; // API 모듈 임포트
 const router = useRouter();
 const route = useRoute();
 
+const postTitle=ref('');
+const postContent=ref('');
+const postImages=ref([]);
+const postId=ref(null);
 
 
 const handleBack = () => {
@@ -78,7 +82,11 @@ const handleBack = () => {
 const formData = ref({
   title: route.query.title || '',
   content: route.query.content || '',
-  images: route.query.images ? route.query.images.split(',') : [],  // 이미지 파일 배열
+  images: Array.isArray(route.query.images)
+    ? route.query.images
+    : typeof route.query.images === 'string'
+    ? route.query.images.split(',')
+    : []  // null 또는 undefined일 경우 빈 배열 처리
 });
 
 const categories = ref([
@@ -92,29 +100,35 @@ const selectedCategory = ref(''); // 새글 작성 시 빈 문자열로 초기�
 const imagePreviews = ref([]);  // 기본 이미지 미리보기 설정
 const fileNames = ref([]); //파일명 배열
 
-const fetchPostDetail = async () => {
-  if (route.query.postId) {
-    try {
-      const response = await communityApi.detail(route.query.postId);
+const fetchPostDetails = async (postId) => {
+  try{
+      const response = await communityApi.detail(postId);
       formData.value.title = response.title || '';
       formData.value.content = response.content || '';
+      selectedCategory.value=response.category || '';
 
       //images 처리
-      const images = response.images;
-
-      //이미지가 배열인 경우
-      if (Array.isArray(response.images)) {
-        formData.value.images = response.images; //서버에서 배열로 받아옴
-      } else if (typeof response.images === 'string') {
-        formData.value.images = response.images.split(','); //문자열이면 분할
-      } else {
-        formData.value.images = []; //기본값
-      }
-      imagePreviews.value = formData.value.images.map(img => img); //배열일 경우
-    } catch (error) {
-      console.error('게시글을 불러오는 중 오류 발생:', error);
-    }
+      processImages(response.images);
+  }catch(error){
+    console.error("게시글을 불러오는 중 오류 발생: ", error);
   }
+};
+
+//이미지 처리 함수
+const processImages=(images)=>{
+  //images가 undefined일 경우 빈 배열로 처리
+  if(!images){
+    formData.value.images=[];
+  }
+  //images가 배열일 경우 그대로 사용
+  else if (Array.isArray(images)) {
+    formData.value.images = images; //서버에서 배열로 받아옴
+  } else if (typeof images === 'string') {
+    formData.value.images = images.split(','); //문자열이면 분할
+  } else{
+    formData.value.images=[]; //이미지가 없거나 알 수 없는 경우 빈 배열
+  }
+  imagePreviews.value = formData.value.images.map(img => img); //미리보기 생성
 };
 
 const onFileChange = (event) => {
@@ -174,8 +188,16 @@ const submitPost = async () => {
 onMounted(() => {
   if (route.query.postId) {
     // 수정 모드인 경우
-    fetchPostDetails(route.query.postId);
+    postId.value=route.query.postId; //postId 저장
+    fetchPostDetails(route.query.postId); //게시글 세부 정보 가져오기
   }
+  
+
+  // 쿼리로 직접 전달된 값 처리 (수정 모드와 무관하게 직접 전달된 경우)
+  if (route.query.title) formData.value.title = route.query.title;
+  if (route.query.content) formData.value.content = route.query.content;
+  if (route.query.category) selectedCategory.value=route.query.category;
+  if (route.query.images) processImages(route.query.images);
 });
 </script>
 

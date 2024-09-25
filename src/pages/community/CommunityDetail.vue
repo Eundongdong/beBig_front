@@ -8,7 +8,10 @@
     <!-- 게시글 정보 -->
     <div class="post-header">
       <!-- 글쓴이 캐릭터 아이콘 (fintype에 따른 아이콘 표시) -->
-      <img class="author-icon" :src="getAuthorIcon(post.postWriterFinTypeCode)" alt="Author Icon" />
+      <img class="author-icon"
+      :src="getAuthorIcon(post.postWriterFinTypeCode)"
+      alt="프로필 사진"
+      @click="profileClick(post.postWriterId)" />
       <div class="post-info">
         <h1 class="post-title">{{ post.postTitle }}</h1>
         <p class="post-date">{{ formatDate(post.postCreatedTime) }}</p>
@@ -30,7 +33,7 @@
 
     <!-- 좋아요 버튼 -->
     <div class="post-footer">
-          <button @click="likePost(post.postId, post.postWriterNo)" class="like-btn">
+          <button @click="likePost(post.postId, post.postWriterId)" class="like-btn">
             <i :class="post.isLiked ? 'fas fa-heart filled-heart' : 'far fa-heart empty-heart'"></i>
             {{ post.postLikeHits }}
           </button>
@@ -55,19 +58,27 @@ const route = useRoute();
 const router = useRouter();  // useRouter를 통해 router 인스턴스 가져옴
 const postId = route.params.postId;
 
-const post = ref(null);  // 게시글 데이터를 저장할 post 객체 초기화
+const post = ref({});  // 게시글 데이터를 저장할 post 객체 초기화
 const isAuthor = ref(false);
 
 const handleBack = () => {
   router.push({ name: 'communityList' });
 };
 
-const fetchPostDetail = async () => {
+const fetchPostDetails = async () => {
   try {
     const response = await communityApi.detail(postId);
-    post.value = response; // response 자체가 객체일 경우 바로 할당
-    post.value.isLiked = false; // 초기 좋아요 상태 설정
-    // 여기서 작성자 여부를 판단하는 로직 추가 필요
+
+    //응답을 콘솔에 출력하여 확인
+    console.log("API 응답: ", response);
+
+    post.value = {
+      ...response, //서버에서 받은 응답 데이터를 모두 복사
+      isLiked: response.isLiked, //좋아요 상태
+      postLikeHits: response.postLikeHits, //좋아요 수
+      postWriterId: response.postWriterId
+    };
+    
     isAuthor.value = checkIfAuthor(post.value); // 작성자 확인 함수 호출
   } catch (error) {
     console.error('게시글을 불러오는 중 오류 발생:', error);
@@ -79,6 +90,7 @@ const editPost = () => {
   router.push({
     name: 'communityAdd',
     query: {
+      postId: post.value.postId,
       title: post.value.postTitle,
       content: post.value.postContent,
       images: post.value.postImagePath ? [post.value.postImagePath] : []
@@ -102,14 +114,16 @@ const deletePost = async () => {
 };
 
 // 좋아요 기능
-const likePost = async (postId, postWriterNo) => {
+const likePost = async (postId, postWriterId) => {
+  //postId와 postWriterId를 콘솔에 찍어서 확인
+  console.log(`PostID: ${postId}, PostWriterID: ${post.postWriterId}`);
   try {
-    if (!postId || !postWriterNo) {
-      console.error('Post ID or Writer No is missing');
+    if (!postId || !postWriterId) {
+      console.error('게시글번호 또는 작성자번호가 없습니다');
       return;
     }
-    console.log(`Post ID: ${postId}, Writer No: ${postWriterNo}`); // 값 확인
-    const response = await communityApi.likePost(postId, { postWriterNo });
+    console.log(`Post ID: ${postId}, Writer No: ${postWriterId}`); // 값 확인
+    const response = await communityApi.likePost(postId, postWriterId);
     console.log('Response:', response);
 
     // 좋아요 상태를 업데이트 (post 객체에 직접 접근)
@@ -127,15 +141,36 @@ const formatDate = (dateString) => {
   return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
 };
 
+console.log(post.value);
+
+// 작성자 아이콘을 가져오는 함수
 const getAuthorIcon = (finTypeCode) => {
+  console.log("finTypeCode:", finTypeCode);
   const iconMap = {
-    1: 'images/finType1.png',
-    2: 'images/finType2.png',
-    3: 'images/finType3.png',
-    4: 'images/finType4.png',
+    1: 'images/1.png',
+    2: 'images/2.png',
+    3: 'images/3.png',
+    4: 'images/4.png',
   };
-  return iconMap[finTypeCode] || 'images/default.png';
+  return iconMap[finTypeCode] || 'images/0.png';
 };
+
+//작성자의 프로필을 눌렀을 때
+const profileClick = async (writerNo) => {
+  try {
+    const userInfo = await communityApi.getUserInfo(writerNo); // 사용자 정보 API 호출
+    if (userInfo.isPublic) {
+      router.push({ name: 'mypage', params: { userNo: writerNo } });
+    } else {
+      alert("비공개 사용자입니다.");
+    }
+  } catch (error) {
+    console.error('사용자 정보를 불러오는 중 오류 발생:', error);
+    alert("사용자 정보를 불러오는 데 실패했습니다.");
+  }
+};
+
+
 
 // 현재 사용자와 게시글 작성자가 같은지 확인하는 로직 (예시로 id 비교)
 const checkIfAuthor = (post) => {
@@ -146,7 +181,10 @@ const checkIfAuthor = (post) => {
 };
 
 // 컴포넌트가 마운트될 때 게시글 정보를 가져옵니다.
-onMounted(fetchPostDetail);
+onMounted(()=>{
+  const postId = route.params.postId; // 라우터에서 postId 파라미터 가져오기
+  fetchPostDetails(postId);
+});
 </script>
 
 

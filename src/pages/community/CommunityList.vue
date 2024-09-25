@@ -144,12 +144,12 @@ const sortBy = (type) => {
 // 작성자 아이콘을 가져오는 함수
 const getAuthorIcon = (finTypeCode) => {
   const iconMap = {
-    1: 'images/finType1.png',
-    2: 'images/finType2.png',
-    3: 'images/finType3.png',
-    4: 'images/finType4.png',
+    1: 'images/1.png',
+    2: 'images/2.png',
+    3: 'images/3.png',
+    4: 'images/4.png',
   };
-  return iconMap[finTypeCode] || 'images/default.png';
+  return iconMap[finTypeCode] || 'images/0.png';
 };
 
 // 날짜 포맷 함수
@@ -183,28 +183,30 @@ const fetchPosts = async () => {
   }
 };
 
-
 // 좋아요 기능
-const likePost = async (postId, postWriterNo) => {
+const likePost = async (postId, postWriterId) => {
+  //postId와 postWriterId를 콘솔에 찍어서 확인
+  console.log(`PostID: ${postId}, PostWriterID: ${postWriterId}`);
   try {
-    if (!postId || !postWriterNo) {
-      console.error('Post ID or Writer No is missing');
+    if (!postId || !postWriterId) {
+      console.error('게시글번호 또는 작성자번호가 없습니다');
       return;
     }
-    console.log(`Post ID: ${postId}, Writer No: ${postWriterNo}`); // 값 확인
-    const response = await communityApi.likePost(postId, { postWriterNo });
+
+    //좋아요 API 호출
+    const response = await communityApi.likePost(postId, postWriterId);
     console.log('Response:', response);
 
-    // 좋아요 상태를 업데이트
-    const post = posts.value.find(p => p.postId === postId);
-    if (post) {
-      post.isLiked = !post.isLiked;
-      post.postLikeHits += post.isLiked ? 1 : -1;
+    
+    /// 좋아요 상태를 업데이트 (post 객체에 직접 접근하지 않고 posts 배열에서 해당 게시글을 찾아 업데이트)
+    const postIndex = posts.value.findIndex(post => post.postId === postId);
+    if (postIndex !== -1) {
+      posts.value[postIndex].isLiked = !posts.value[postIndex].isLiked;
+      posts.value[postIndex].postLikeHits += posts.value[postIndex].isLiked ? 1 : -1;
     }
   } catch (error) {
     console.error('Error:', error);
   }
-
 };
 
 
