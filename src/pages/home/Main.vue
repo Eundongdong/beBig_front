@@ -1,59 +1,269 @@
 <template>
-    <div>
-        <h1>Home API 테스트</h1>
-        <button @click="testHomeApi">API 테스트</button>
+    <div class="category">
+        <ul>
+            <li>
+                <h1 class="name">{{user.userName}}님,<br> 안녕하세요</h1>
+                <button class="category_button" @click="GoSurvey">
+                    <img class="category_img" :src="`../../../public/images/${user.userType}.png`">
+                    <h5 class="category_tag">{{ user.userType === '0' ? '유형검사 하러 가기' : '내 유형 보기' }}</h5>
+                </button>
+            </li>
+        </ul>
+    </div>
+    <div class="asset">
+        <ul>
+            <li class="asset_total">
+                <h3>총 자산</h3>
+                <button class="add-bank-button" @click="GoAddBank" v-if="accountList.length != 0">계좌 추가하기</button>
+            </li>
+            <li class="asset-sum">
+                <h2>{{totalAmount}}원</h2>
+            </li>
+            <!-- accountList가 비어있을 경우 계좌 연결하기 버튼 표시 -->
+            <li v-if="accountList.length == 0" class="connect-bank">
+                <button class="connect-bank-button" @click="GoAddBank">계좌 연결하기</button>
+            </li>
+        </ul>
+        <!-- 계좌 목록 출력 -->
+        <div v-for="(account, index) in accountList" :key="index" class="account-info">
+            <img :src="`../../../public/images/bank/${account.bankName}.png`" alt="Bank Logo" class="bank-logo">
+            <div class="account-details">
+                <p>잔액: {{ account.amount }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="mission">
+        <h3>나의 미션</h3>
+        <div v-if="!mission.MonthMission && !mission.dailyMission1 && !mission.dailyMission2">
+            <h2>계좌를 연결하고 미션을 받아보세요</h2>
+        </div>
+        <div v-else>
+            <h2>
+                {{ mission.MonthMission }}
+                <button 
+                    :class="{'completed': !mission.MonthMissionType}" 
+                    :disabled="!mission.MonthMissionType" 
+                    @click="completeMission('MonthMission')">
+                    {{ mission.MonthMissionType ? '완료' : '완료됨' }}
+                </button>
+            </h2>
+            <h2>
+                {{ mission.dailyMission1 }}
+                <button 
+                    :class="{'completed': !mission.dailyMission1Type}" 
+                    :disabled="!mission.dailyMission1Type" 
+                    @click="completeMission('dailyMission1')">
+                    {{ mission.dailyMission1Type ? '완료' : '완료됨' }}
+                </button>
+            </h2>
+            <h2>
+                {{ mission.dailyMission2 }}
+                <button 
+                    :class="{'completed': !mission.dailyMission2Type}" 
+                    :disabled="!mission.dailyMission2Type" 
+                    @click="completeMission('dailyMission2')">
+                    {{ mission.dailyMission2Type ? '완료' : '완료됨' }}
+                </button>
+            </h2>
+        </div>
     </div>
 </template>
 
 <script setup>
     import HomeApi from "@/api/HomeApi";
-    import { ref } from 'vue';
+    import { reactive, onMounted } from 'vue';
+    import { useRouter } from 'vue-router';
 
-    const userNo = ref(1); // 테스트할 사용자 번호
-    
-    const testHomeApi = async () => {
+    const user = reactive({
+        userName: 'test',
+        userType: '0',
+    });
+
+    const accountList = reactive([
+        {
+            bankName: '신한',
+            amount: '1,234,000원',
+        },
+        {
+            bankName: 'KB국민',
+            amount: '5,678,000원',
+        },
+    ]);
+
+    const totalAmount = reactive('1234');
+    const mission = reactive({
+        MonthMission: 'aaa',
+        dailyMission1: 'bbb',
+        dailyMission2: 'ccc',
+        dailyMission1Type: true,
+        dailyMission2Type: false,
+        MonthMissionType: true,
+    });
+
+    const getUser = async () => {
         try {
-        // 내정보 가져오기 테스트
-        const myInfo = await HomeApi.getMyInfo(userNo.value);
-        console.log("내 정보:", myInfo);
-    
-        // 설문조사 가져오기 테스트
-        const surveys = await HomeApi.surveyList(userNo.value);
-        console.log("설문조사 목록:", surveys);
-    
-        // 설문 결과 보내기 테스트
-        const surveyData = { answer: "응답" }; // 예시 데이터
-        const surveySubmission = await HomeApi.submitSurvey(userNo.value, surveyData);
-        console.log("설문 제출 결과:", surveySubmission);
-    
-        // 설문 결과 내용 조회 테스트
-        const surveyResults = await HomeApi.surveyResult(userNo.value);
-        console.log("설문 결과:", surveyResults);
-    
-        // 계좌 추가 테스트
-        const newAccount = { accountName: "새 계좌", balance: 1000 }; // 예시 데이터
-        const accountAddition = await HomeApi.addAccount(userNo.value, newAccount);
-        console.log("계좌 추가 결과:", accountAddition);
-    
-        // 미션보기 테스트
-        const missions = await HomeApi.missionList(userNo.value);
-        console.log("미션 목록:", missions);
-    
-        // 계좌 목록 조회 테스트
-        const accountList = await HomeApi.accountList(userNo.value);
-        console.log("계좌 목록:", accountList);
-    
-        // 거래 내역 조회 테스트
-        const accountNum = "계좌번호"; // 실제 계좌번호로 변경
-        const transactions = await HomeApi.transactionList(userNo.value, accountNum);
-        console.log("거래 내역:", transactions);
-    
+            const userInfo = await HomeApi.getMyInfo();
+            console.log(userInfo);
         } catch (error) {
-        console.error("API 호출 중 오류 발생:", error);
+            console.error("API 호출 중 오류 발생:", error);
         }
-};
+    };
+
+    const getAsset = async () => {
+        try {
+            const userAsset = await HomeApi.accountList();
+            console.log(userAsset);
+            totalAmount.value = userAsset.totalAsset; // API 데이터 형식에 맞게 수정 필요
+        } catch (error) {
+            console.error("API 호출 중 오류 발생:", error);
+        }
+    };
+
+    const getMission = async () => {
+        try {
+            const userMission = await HomeApi.missionList();
+            console.log(userMission);
+            Object.assign(mission, userMission); // mission 객체에 API 응답 값 설정
+        } catch (error) {
+            console.error("API 호출 중 오류 발생:", error);
+        }
+    };
+
+    onMounted(() => {
+        // getUser();
+        // getAsset();
+        // getMission();
+    });
+
+    const router = useRouter();
+
+    const GoAddBank = () => {
+        router.push('/home/bank');
+    };
+
+    const GoSurvey = () => {
+        router.push('/home/survey-start');
+    };
+
+    const completeMission = (missionType) => {
+        // 미션 완료 로직 구현
+        if (missionType === 'MonthMission') {
+            mission.MonthMissionType = false; // 미션 완료 후 버튼 비활성화
+        } else if (missionType === 'dailyMission1') {
+            mission.dailyMission1Type = false; // 미션 완료 후 버튼 비활성화
+        } else if (missionType === 'dailyMission2') {
+            mission.dailyMission2Type = false; // 미션 완료 후 버튼 비활성화
+        }
+    };
 </script>
 
 <style scoped>
+    ul {
+        list-style-type: none;
+    }
 
+    .category, .asset, .mission {
+        width: 100%;
+        margin-bottom: 10%;
+        background-color: #f3f3f3;
+        border-radius: 10px;
+        padding: 10px;
+        border: none;
+    }
+
+    .category_button, .name {
+        width: 40%;
+    }
+
+    h3 {
+        color: black;
+    }
+
+    .name {
+        width: 100%;
+        color: black;
+    }
+
+    .category_img {
+        width: 100%;
+    }
+
+    .category_tag {
+        width: 100%;
+        color: black;
+    }
+
+    li {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .connect-bank-button {
+        width: 100%;
+        height: 30%;
+        background-color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        margin-top: auto;
+        text-align: center;
+        color: black;
+    }
+
+    .add-bank-button {
+        background-color: #f3f3f3;
+        border: none;
+        border-radius: 10px;
+        padding: 10px;
+        color: black;
+    }
+    
+    .account-details {
+        color: black;
+    }
+
+    .connect-bank {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .asset_total {
+        width: 100%;
+        height: 30%;
+    }
+
+    .asset-sum {
+        width: 100%;
+        height: 20%;
+        color: black;
+    }
+
+    .mission h3, .mission h2 {
+        color: black;
+    }
+
+    /* 계좌 정보와 이미지 좌우 배치 */
+    .account-info {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .bank-logo {
+        width: 50px;
+        height: 50px;
+        margin-right: 15px;
+    }
+
+    .account-details {
+        flex-grow: 1;
+    }
+
+    /* 완료된 버튼 스타일 */
+    button.completed {
+        background-color: #d3d3d3; /* 회색으로 색상 변경 */
+        color: #a9a9a9; /* 회색 텍스트 */
+        cursor: not-allowed; /* 커서 변경 */
+    }
 </style>
