@@ -57,7 +57,7 @@
         </div>
         <!-- 좋아요 버튼 추가 -->
         <div class="post-footer">
-          <button @click="likePost(post)" class="like-btn">
+          <button @click="likePost(post.postId, post.postWriterNo)" class="like-btn">
             <i :class="post.isLiked ? 'fas fa-heart filled-heart' : 'far fa-heart empty-heart'"></i>
             {{ post.postLikeHits }}
           </button>
@@ -129,27 +129,27 @@ const sortBy = (type) => {
   });
 };
 
-// 카테고리 필터 함수
-const filterByCategory = async () => {
-  console.log("카테고리 필터링:", selectedCategory.value);
-  await fetchPosts(); // 필터링 후 다시 데이터를 불러옴
-};
+// // 카테고리 필터 함수
+// const filterByCategory = async () => {
+//   console.log("카테고리 필터링:", selectedCategory.value);
+//   await fetchPosts(); // 필터링 후 다시 데이터를 불러옴
+// };
 
-// 자산 유형 필터 함수
-const filterByFinType = async () => {
-  console.log("자산유형 필터링:", selectedFinType.value);
-  await fetchPosts();  // 필터링 후 다시 데이터를 불러옴
-};
+// // 자산 유형 필터 함수
+// const filterByFinType = async () => {
+//   console.log("자산유형 필터링:", selectedFinType.value);
+//   await fetchPosts();  // 필터링 후 다시 데이터를 불러옴
+// };
 
 // 작성자 아이콘을 가져오는 함수
 const getAuthorIcon = (finTypeCode) => {
   const iconMap = {
-    1: '/components/icons/finType1.png',
-    2: '/components/icons/finType2.png',
-    3: '/components/icons/finType3.png',
-    4: '/components/icons/finType4.png',
+    1: 'images/finType1.png',
+    2: 'images/finType2.png',
+    3: 'images/finType3.png',
+    4: 'images/finType4.png',
   };
-  return iconMap[finTypeCode] || '/components/icons/default.png';
+  return iconMap[finTypeCode] || 'images/default.png';
 };
 
 // 날짜 포맷 함수
@@ -185,20 +185,28 @@ const fetchPosts = async () => {
 
 
 // 좋아요 기능
-const likePost = async (post) => {
-  // 사용자 로컬 상태 업데이트
-  post.isLiked = !post.isLiked; // 상태 반전
-  post.postLikeHits += post.isLiked ? 1 : -1; // 상태에 따라 개수 증가 또는 감소
-
+const likePost = async (postId, postWriterNo) => {
   try {
-    await communityApi.like(post.postId);
+    if (!postId || !postWriterNo) {
+      console.error('Post ID or Writer No is missing');
+      return;
+    }
+    console.log(`Post ID: ${postId}, Writer No: ${postWriterNo}`); // 값 확인
+    const response = await communityApi.likePost(postId, { postWriterNo });
+    console.log('Response:', response);
+
+    // 좋아요 상태를 업데이트
+    const post = posts.value.find(p => p.postId === postId);
+    if (post) {
+      post.isLiked = !post.isLiked;
+      post.postLikeHits += post.isLiked ? 1 : -1;
+    }
   } catch (error) {
-    console.error('좋아요 상태 변경 중 오류 발생:', error);
-    // 에러 발생 시 원래 상태로 복구
-    post.isLiked = !post.isLiked; // 원래 상태로 되돌림
-    post.postLikeHits += post.isLiked ? 1 : -1; // 원래 상태로 개수 조정
+    console.error('Error:', error);
   }
+
 };
+
 
 // 컴포넌트가 마운트되면 게시글을 불러옴
 onMounted(() => {
