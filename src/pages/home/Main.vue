@@ -1,4 +1,12 @@
 <template>
+    <!-- 모달이 활성화될 경우 표시 -->
+    <div v-if="showModal" class="modal-overlay">
+      <div class="modal">
+        <p>설문 결과 페이지</p>
+        <button @click="closeModal">닫기</button>
+      </div>
+    </div>
+
     <div class="category">
         <ul>
             <li>
@@ -30,6 +38,7 @@
             <div class="account-details">
                 <p>잔액: {{ account.amount }}</p>
             </div>
+            <button v-if="index ==0" class="details-button" @click="goToAccountDetails(account)">></button>
         </div>
     </div>
     <div class="mission">
@@ -71,12 +80,12 @@
 
 <script setup>
     import HomeApi from "@/api/HomeApi";
-    import { reactive, onMounted } from 'vue';
+    import { ref, reactive, onMounted } from 'vue';
     import { useRouter } from 'vue-router';
 
     const user = reactive({
         userName: 'test',
-        userType: '0',
+        userType: '0'  //2로도 바꿔보세요.
     });
 
     const accountList = reactive([
@@ -142,19 +151,39 @@
     };
 
     const GoSurvey = () => {
-        router.push('/home/survey-start');
+        // userType이 '0'일 때는 /home/survey-start로 이동
+        if (user.userType === '0') {
+            router.push('/home/survey-start');
+        } else {
+            // 그 외의 경우에는 모달을 띄움
+            showModal.value = true;
+        }
+    };
+
+        // 모달 닫기 함수
+    const closeModal = () => {
+    showModal.value = false;
     };
 
     const completeMission = (missionType) => {
-        // 미션 완료 로직 구현
         if (missionType === 'MonthMission') {
-            mission.MonthMissionType = false; // 미션 완료 후 버튼 비활성화
+            mission.MonthMissionType = false;
         } else if (missionType === 'dailyMission1') {
-            mission.dailyMission1Type = false; // 미션 완료 후 버튼 비활성화
+            mission.dailyMission1Type = false;
         } else if (missionType === 'dailyMission2') {
-            mission.dailyMission2Type = false; // 미션 완료 후 버튼 비활성화
+            mission.dailyMission2Type = false;
         }
     };
+
+    const goToAccountDetails = (account) => {
+        // /home/account 경로로 이동
+        router.push('/home/account');
+    };
+
+    // 모달 활성화 상태 변수
+    const showModal = ref(false);
+
+
 </script>
 
 <style scoped>
@@ -220,6 +249,7 @@
     
     .account-details {
         color: black;
+        flex-grow: 1;
     }
 
     .connect-bank {
@@ -260,10 +290,26 @@
         flex-grow: 1;
     }
 
+    /* 계좌 상세 페이지로 이동하는 버튼 스타일 */
+    .details-button {
+        background-color: transparent;
+        border: none;
+        font-size: 24px;
+        color: black;
+        cursor: pointer;
+    }
+
     /* 완료된 버튼 스타일 */
     button.completed {
-        background-color: #d3d3d3; /* 회색으로 색상 변경 */
-        color: #a9a9a9; /* 회색 텍스트 */
-        cursor: not-allowed; /* 커서 변경 */
+        background-color: #d3d3d3;
+        color: #a9a9a9;
+        cursor: not-allowed;
+    }
+
+    /* details-button을 계좌 정보 옆에 배치 */
+    .account-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 </style>
