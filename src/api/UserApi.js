@@ -78,8 +78,8 @@ export default {
     },
 
     // 정책 받아오기
-    async getPolicy() {
-        const { data } = await api.get(`${BASE_URL}/policy`);
+    async getTerms() {
+        const { data } = await api.get(`${BASE_URL}/terms`);
         return data;
     },    
 };
