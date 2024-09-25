@@ -27,14 +27,14 @@
       <img v-if="post.postImagePath" :src="post.postImagePath" alt="게시글 이미지" />
     </div>
 
+
     <!-- 좋아요 버튼 -->
     <div class="post-footer">
-      <button @click="likePost" class="like-btn">
-        <i :class="post.isLiked ? 'fas fa-heart filled-heart' : 'far fa-heart empty-heart'"></i>
-        <!-- 좋아요 상태에 따라 하트 모양 변화 -->
-        {{ post.postLikeHits }}
-      </button>
-    </div>
+          <button @click="likePost(post.postId, post.postWriterNo)" class="like-btn">
+            <i :class="post.isLiked ? 'fas fa-heart filled-heart' : 'far fa-heart empty-heart'"></i>
+            {{ post.postLikeHits }}
+          </button>
+        </div>
   </div>
 
   <div v-else>
@@ -101,13 +101,24 @@ const deletePost = async () => {
   }
 };
 
-const likePost = async () => {
+// 좋아요 기능
+const likePost = async (postId, postWriterNo) => {
   try {
-    const updatedPost = await communityApi.like(post.value.postId);
-    post.value.isLiked = updatedPost.isLiked;
-    post.value.postLikeHits = updatedPost.postLikeHits;
+    if (!postId || !postWriterNo) {
+      console.error('Post ID or Writer No is missing');
+      return;
+    }
+    console.log(`Post ID: ${postId}, Writer No: ${postWriterNo}`); // 값 확인
+    const response = await communityApi.likePost(postId, { postWriterNo });
+    console.log('Response:', response);
+
+    // 좋아요 상태를 업데이트 (post 객체에 직접 접근)
+    if (post.value) {
+      post.value.isLiked = !post.value.isLiked;
+      post.value.postLikeHits += post.value.isLiked ? 1 : -1;
+    }
   } catch (error) {
-    console.error('좋아요 상태 변경 중 오류 발생:', error);
+    console.error('Error:', error);
   }
 };
 
@@ -118,12 +129,12 @@ const formatDate = (dateString) => {
 
 const getAuthorIcon = (finTypeCode) => {
   const iconMap = {
-    1: 'components/icons/finType1.png',
-    2: 'components/icons/finType2.png',
-    3: 'components/icons/finType3.png',
-    4: 'components/icons/finType4.png',
+    1: 'images/finType1.png',
+    2: 'images/finType2.png',
+    3: 'images/finType3.png',
+    4: 'images/finType4.png',
   };
-  return iconMap[finTypeCode] || '/components/icons/default.png';
+  return iconMap[finTypeCode] || 'images/default.png';
 };
 
 // 현재 사용자와 게시글 작성자가 같은지 확인하는 로직 (예시로 id 비교)
@@ -165,7 +176,7 @@ onMounted(fetchPostDetail);
 }
 
 .post-title {
-  font-size: 24px;
+  font-size: 20px;
   margin: 0;
 }
 

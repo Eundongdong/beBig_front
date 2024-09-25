@@ -36,8 +36,8 @@ export default {
   },
 
   // 게시글 좋아요
-  async like(postId) {
-    const response = await api.post(`${BASE_URL}/${postId}/like`);
+  async likePost(postId, postWriterNo) {
+    const response = await api.post(`${BASE_URL}/${postId}/like`, postWriterNo);
     console.log("COMMUNITY POST LIKE", response);
     return response.data;
   },
