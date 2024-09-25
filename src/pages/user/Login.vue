@@ -71,7 +71,7 @@
         <li>
           <button
             class="kakao_button"
-            @click="naverSocialLogin"
+            @click="kakaoSocialLogin"
           >
             카카오 로그인
           </button>
@@ -135,6 +135,36 @@ const unsignLogin = async () => {
   }
 };
 
+// 카카오 소셜 로그인
+const kakaoSocialLogin = () => {
+  const REST_API_KEY = 'f8156e1595fd76d2b241ad4b4f3c4ca6';
+  const REDIRECT_URI = 'http://localhost:8080/user/social-kakao';  // 백엔드의 redirect_uri
+
+  // 카카오 로그인 페이지로 리디렉션
+  window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+};
+
+// 카카오 로그인 성공 후 소셜 회원가입 페이지로 이동
+const GoSocialSignup = (user) => {
+  router.push({
+    path: '/user/social-signup',
+    query: {
+      name: user.name,
+      email: user.email,
+      gender: user.gender,
+      nickname: user.nickname,
+      userLoginType: user.userLoginType
+    }
+  });
+};
+
+
+// 네이버 소셜 로그인
+const naverSocialLogin = () => {
+  // 네이버 소셜 로그인 구현
+};
+
+
 /////라우터 이동
 //회원가입 이동
 const GoSignup = () => {
@@ -149,10 +179,7 @@ const GoFindPwd = () => {
   router.push('./user/findpwd');
 };
 
-//소셜 회원가입 페이지 이동
-const GoSocialSignup = () => {
-  router.push('/user/social-signup'); // 소셜 회원가입 페이지 경로
-};
+
 </script>
 
 <style scoped>
