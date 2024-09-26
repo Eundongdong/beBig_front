@@ -33,11 +33,11 @@
     </form>
 
     <!-- 결과 표시 -->
-    <div v-if="userID" class="result">
+    <div v-if="userLoginId" class="result">
       <p>
         <strong class="highlight">{{ name }}</strong> 님의 아이디는
-        <br>
-        <strong class="highlight">{{ userID }}</strong> 입니다.
+        <br />
+        <strong class="highlight">{{ userLoginId }}</strong> 입니다.
       </p>
     </div>
     <div v-else-if="errorMessage" class="error">
@@ -53,21 +53,21 @@ import UserApi from '@/api/UserApi';
 
 const name = ref(''); // 사용자 이름
 const email = ref(''); // 사용자 이메일
-const userID = ref(null); // 찾은 사용자 ID
+const userLoginId = ref(null); // 찾은 사용자 ID
 const errorMessage = ref(''); // 오류 메시지
 
 const findID = async () => {
   try {
-    const response = await UserApi.findUserId({
+    const response = await UserApi.finduserLoginId({
       name: name.value,
       email: email.value,
     });
-    userID.value = response; // 성공적으로 받은 아이디
+    userLoginId.value = response; // 성공적으로 받은 아이디
     errorMessage.value = '';
   } catch (error) {
     console.error('API 호출 중 오류 발생:', error);
     errorMessage.value = '해당 이름과 이메일로 등록된 아이디가 없습니다.';
-    userID.value = null;
+    userLoginId.value = null;
   }
 };
 

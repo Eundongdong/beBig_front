@@ -22,7 +22,7 @@
           <h3>아이디</h3>
           <input
             type="text"
-            v-model="User.userId"
+            v-model="User.userLoginId"
             placeholder="Enter your ID"
             @change="idDupCheckAPI"
           />
@@ -158,11 +158,12 @@ const route = useRoute();
 const User = reactive({
   name: '',
   nickname: '',
-  userId: '',
+  userLoginId: '',
   password: '',
   email: '',
   gender: '',
   birth: '',
+  userLoginType: 'general',
 });
 
 const year = ref('');
@@ -214,7 +215,7 @@ const pwdChecking = computed(() => {
 //ID 중복체크
 const idDupCheckAPI = async () => {
   try {
-    const idDupCheck = await UserApi.idDuplicateCheck(User.userId);
+    const idDupCheck = await UserApi.idDuplicateCheck(User.userLoginId);
     console.log('아이디 중복 체크 성공:', idDupCheck);
     idDupCheckResult.value = idDupCheck === true;
   } catch (error) {
