@@ -42,7 +42,10 @@
         </div>
     </div>
     <div class="mission">
-        <h3>나의 미션</h3>
+        <div class="mission-header">
+            <h3 class="mission-title">나의 미션</h3>
+            <button @click="goToMission" class="mission-button">미션 보러 가기</button>
+        </div>
         <div v-if="!mission.MonthMission && !mission.dailyMission1 && !mission.dailyMission2">
             <h2>계좌를 연결하고 미션을 받아보세요</h2>
         </div>
@@ -165,6 +168,11 @@
     showModal.value = false;
     };
 
+        // '미션 보러 가기' 버튼 클릭 시 Mission 페이지로 이동
+    const goToMission = () => {
+    router.push({ name: 'mission' });
+    };
+
     const completeMission = (missionType) => {
         if (missionType === 'MonthMission') {
             mission.MonthMissionType = false;
@@ -272,6 +280,29 @@
     .mission h3, .mission h2 {
         color: black;
     }
+
+    .mission-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mission-title {
+  margin: 0;
+}
+
+.mission-button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.mission-button:hover {
+  background-color: #0056b3;
+}
 
     /* 계좌 정보와 이미지 좌우 배치 */
     .account-info {

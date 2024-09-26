@@ -64,10 +64,12 @@ import communityApi from '@/api/CommunityApi'; // API 모듈 임포트
 const router = useRouter();
 const route = useRoute();
 
-const postTitle=ref('');
-const postContent=ref('');
-const postImages=ref([]);
-const postId=ref(null);
+
+const formData=ref({
+  title: '',
+  content: '',
+  images: []
+});
 
 
 const handleBack = () => {
@@ -79,15 +81,6 @@ const handleBack = () => {
   }
 };
 
-const formData = ref({
-  title: route.query.title || '',
-  content: route.query.content || '',
-  images: Array.isArray(route.query.images)
-    ? route.query.images
-    : typeof route.query.images === 'string'
-    ? route.query.images.split(',')
-    : []  // null 또는 undefined일 경우 빈 배열 처리
-});
 
 const categories = ref([
   { id: 1, name: '예적금' },
@@ -96,6 +89,14 @@ const categories = ref([
   { id: 4, name: '절약팁' },
 ]);
 
+// const fetchCategories=async()=>{
+//   try {
+//     categories.value = await communityApi.getCategories();
+//   } catch (error) {
+//     console.error('카테고리를 불러오는 중 오류 발생:', error);
+//   }
+// };
+
 const selectedCategory = ref(''); // 새글 작성 시 빈 문자열로 초기화
 const imagePreviews = ref([]);  // 기본 이미지 미리보기 설정
 const fileNames = ref([]); //파일명 배열
@@ -103,12 +104,11 @@ const fileNames = ref([]); //파일명 배열
 const fetchPostDetails = async (postId) => {
   try{
       const response = await communityApi.detail(postId);
-      formData.value.title = response.title || '';
-      formData.value.content = response.content || '';
+      formData.value.title = response.postTitle || '';
+      formData.value.content = response.postContent || '';
       selectedCategory.value=response.category || '';
-
       //images 처리
-      processImages(response.images);
+      processImages(response.postImagePath);
   }catch(error){
     console.error("게시글을 불러오는 중 오류 발생: ", error);
   }
@@ -125,8 +125,6 @@ const processImages=(images)=>{
     formData.value.images = images; //서버에서 배열로 받아옴
   } else if (typeof images === 'string') {
     formData.value.images = images.split(','); //문자열이면 분할
-  } else{
-    formData.value.images=[]; //이미지가 없거나 알 수 없는 경우 빈 배열
   }
   imagePreviews.value = formData.value.images.map(img => img); //미리보기 생성
 };
@@ -163,41 +161,59 @@ const onImageClick = (index) => {
 
 
 const submitPost = async () => {
+  // 필수값 검증
+  if (!formData.value.title) {
+    alert('제목을 작성해주세요.');
+    return;
+  }
+
+  if (!selectedCategory.value) {
+    alert('카테고리를 선택해주세요.');
+    return;
+  }
+
+  if (!formData.value.content) {
+    alert('본문을 작성해주세요.');
+    return;
+  }
+
   const formDataToSubmit = new FormData();
+  console.log(formDataToSubmit); // FormData가 올바르게 생성되었는지 확인
+
   formDataToSubmit.append('title', formData.value.title);
   formDataToSubmit.append('content', formData.value.content);
+  formDataToSubmit.append('category', selectedCategory.value);
 
   formData.value.images.forEach((image, index) => {
+    console.log('추가되는 이미지:', image); // 디버깅용 로그
     formDataToSubmit.append(`image_${index}`, image);
   });
 
   try {
     if (route.query.postId) {
+      //수정인 경우
       await communityApi.update(route.query.postId, formDataToSubmit);
     } else {
+      //새로 등록하는 경우
       await communityApi.write(formDataToSubmit);
     }
-    alert('게시글이 성공적으로 업로드되었습니다.');
-    router.push({ name: 'communityList' });
+    // alert('게시글이 성공적으로 업로드되었습니다.');
+    // router.push({ name: 'communityList' });
   } catch (error) {
     console.error('게시글 업로드 실패:', error);
   }
 };
 
+
+
 // 컴포넌트가 마운트될 때 게시글 세부정보를 가져옵니다.
 onMounted(() => {
+  // fetchCategories(); //카테고리 불러오기
   if (route.query.postId) {
     // 수정 모드인 경우
-    postId.value=route.query.postId; //postId 저장
     fetchPostDetails(route.query.postId); //게시글 세부 정보 가져오기
   }
   
-
-  // 쿼리로 직접 전달된 값 처리 (수정 모드와 무관하게 직접 전달된 경우)
-  if (route.query.title) formData.value.title = route.query.title;
-  if (route.query.content) formData.value.content = route.query.content;
-  if (route.query.category) selectedCategory.value=route.query.category;
-  if (route.query.images) processImages(route.query.images);
 });
 </script>
 

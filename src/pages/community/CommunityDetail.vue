@@ -87,13 +87,16 @@ const fetchPostDetails = async () => {
 
 //게시글 수정
 const editPost = () => {
+  console.log("전달할 데이터:", post.value);
+
   router.push({
     name: 'communityAdd',
     query: {
       postId: post.value.postId,
       title: post.value.postTitle,
       content: post.value.postContent,
-      images: post.value.postImagePath ? [post.value.postImagePath] : []
+      images: post.value.postImagePath ? [post.value.postImagePath] : [],
+      postWriterId: post.value.postWriterId
     }
   });
 };
