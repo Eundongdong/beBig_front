@@ -9,7 +9,7 @@
           <h3>아이디</h3>
           <input
             type="text"
-            v-model="loginUser.userId"
+            v-model="loginUser.userLoginId"
             placeholder="Enter your ID"
           />
         </li>
@@ -66,17 +66,19 @@ const router = useRouter();
 const userStore = useUserStore();
 
 const loginUser = reactive({
-  userId: '',
+  userLoginId: '',
   password: '',
 });
 
 const noLogin = reactive({
-  userId: 'test',
+  userLoginId: 'test',
   password: '0000',
 });
 
 // id, password 입력 확인 => id, password 입력 시 버튼 활성화
-const disableSubmit = computed(() => !(loginUser.userId && loginUser.password));
+const disableSubmit = computed(
+  () => !(loginUser.userLoginId && loginUser.password)
+);
 
 // 로그인
 const login = async () => {

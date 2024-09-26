@@ -19,11 +19,11 @@
         />
       </div>
       <div>
-        <label for="userId">아이디</label>
+        <label for="userLoginId">아이디</label>
         <input
-          v-model="userId"
+          v-model="userLoginId"
           type="text"
-          id="userId"
+          id="userLoginId"
           autocomplete="username"
           required
         />
@@ -57,44 +57,30 @@ import { ref } from 'vue';
 import UserApi from '@/api/UserApi'; // 실제 API 모듈 경로 확인
 
 const name = ref(''); // 사용자 이름
-const userId = ref(''); // 사용자 아이디
+const userLoginId = ref(''); // 사용자 아이디
 const email = ref(''); // 사용자 이메일
 const message = ref(null); // 성공 메시지
 const errorMessage = ref(null); // 오류 메시지
 
 const findPassword = async () => {
   try {
-    
-
     const response = await UserApi.findUserPwd({
       name: name.value,
-      userId: userId.value,
+      userLoginId: userLoginId.value,
       email: email.value,
     });
 
     name.value = '';
-    userId.value = '';
+    userLoginId.value = '';
     email.value = '';
 
-    message.value =
-      '임시 비밀번호를 입력하신 이메일로 보냈어요!';
-
-    
-
+    message.value = '임시 비밀번호를 입력하신 이메일로 보냈어요!';
   } catch (error) {
-    console.error(
-      'API 호출 중 오류 발생:',
-      error
-    );
-    if (
-      error.response &&
-      error.response.status === 404
-    ) {
-      errorMessage.value =
-        '해당 정보로 등록된 계정을 찾을 수 없습니다.';
+    console.error('API 호출 중 오류 발생:', error);
+    if (error.response && error.response.status === 404) {
+      errorMessage.value = '해당 정보로 등록된 계정을 찾을 수 없습니다.';
     } else {
-      errorMessage.value =
-        '서버와 통신 중 오류가 발생했습니다.';
+      errorMessage.value = '서버와 통신 중 오류가 발생했습니다.';
     }
     message.value = null;
   }

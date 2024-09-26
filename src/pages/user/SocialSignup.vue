@@ -35,8 +35,8 @@
       <div class="input_group">
         <label for="gender">성별</label>
         <select v-model="formData.gender" id="gender">
-          <option :value="true">남성</option>
-          <option :value="false">여성</option>
+          <option :value="false">남성</option>
+          <option :value="true">여성</option>
         </select>
       </div>
 
@@ -117,6 +117,7 @@ const formData = ref({
   birth: '',
   nickname: '',
   userLoginType: 'kakao',
+  userLoginId: '',
   password: 'kakao',
 });
 
@@ -147,6 +148,7 @@ const loadSocialLoginData = () => {
     formData.value.email = parsedData.email || '';
     formData.value.gender = parsedData.gender === 'M' ? true : false;
     formData.value.birth = parsedData.birth || '';
+    formData.value.userLoginId = parsedData.userLoginId || '';
   }
 };
 
