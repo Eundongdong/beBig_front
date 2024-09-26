@@ -6,6 +6,7 @@ import homeRoutes from './home';
 import missionRoutes from './mission';
 import mypageRoutes from './mypage';
 import userRoutes from './user';
+import utilRoutes from './util';
 
 
 const router = createRouter({
@@ -20,7 +21,8 @@ const router = createRouter({
         ...homeRoutes,
         ...missionRoutes,
         ...mypageRoutes,
-        ...userRoutes
+        ...userRoutes,
+        ...utilRoutes
     ]   
 })
 export default router;
