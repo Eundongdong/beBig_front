@@ -10,7 +10,7 @@
     </div>
   
     <!-- 계좌 목록을 보여주는 섹션 -->
-    <div class="account-list">
+    <div v-if="accountList.length != 0" class="account-list">
       <div v-for="(account, index) in accountList" :key="index" class="account-info">
         <img :src="`../../../public/images/bank/${account.bankName}.png`" alt="Bank Logo" class="bank-logo">
         <div class="account-details">
@@ -27,23 +27,26 @@
   
   <script setup>
     import { useBankStore } from '@/stores/bank'; // Pinia 스토어 가져오기
-    import { ref, reactive, computed } from 'vue';
+    import HomeApi from '@/api/HomeApi';
+    import { ref, reactive, computed, watch } from 'vue';
     import { useRouter } from 'vue-router';
+    const router = useRouter();
     
     const bankStore = useBankStore(); // Pinia 스토어 사용
   
     const bankAccount = reactive({
+      bank: '',
       Id: '',
       pwd: ''
     });
-    
     const count = ref(3);  // 남은 횟수
     
     // Pinia에서 선택된 은행 이름을 가져옴
     const selectedBank = computed(() => bankStore.selectedBank);
-  
+    bankAccount.bank = selectedBank.value;
+
     // 예시 계좌 목록
-    const accountList = ref([
+    const accountList = reactive([
       {
         bankName: '신한',
         accountName: '생활비',
@@ -59,13 +62,41 @@
     ]);
   
     // "계좌 연결하기" 버튼 클릭 시 호출될 함수
-    const Connect = () => {
+    const Connect = async() => {
       console.log("계좌 연결 시도");
+      try{
+        const connectBank = await HomeApi.getAccountList(bankAccount);
+        console.log(connectBank); //connectBank가 해당 은행의 계좌 정보들 들어오게
+
+        //connectBank에 받아진 계좌 정보들을 accountList에 넣기
+        connectBank.forEach(account => {
+          accountList.push({
+            bankName: account.bankName,  //백에서 받는 값 형식에 맞게 수정필요
+            accountName: account.accountName, 
+            accountNumber: account.accountNumber,
+            balance: account.balance 
+          });
+        });
+      }catch(error){
+        //여기서 error 코드에 따라 남은 횟수 수정하기
+        console.error('API 호출 중 오류 발생:', error);
+      }
     };
+
   
     // "계좌를 추가하시겠습니까?" 버튼 클릭 시 호출될 함수
-    const addAccount = () => {
+    const addAccount = async() => {
       console.log("계좌 추가 시도");
+      try{
+        const response = await HomeApi.addAccount(accountList);
+        goHome;
+      }catch(error){
+        console.error('API 호출 중 오류 발생:', error);
+      }
+    }; 
+    
+    const goHome = () => {
+      router.push('/home');
     };
   </script>
   

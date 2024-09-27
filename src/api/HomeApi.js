@@ -43,20 +43,31 @@ export default {
     return data;
   },
 
-  // 계좌 추가
-  async addAccount(userId, account) {
-    const formData = new FormData();
-    for (const key in account) {
-      formData.append(key, account[key]);
-    }
+    // 은행 아이디, 비번 받고, 해당 은행 계좌 정보 받아오기
+    async getAccountList(bankAccount) {
+        const { data } = await api.post(
+          `${BASE_URL}/account`,
+          bankAccount,
+          { 
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+        return data;
+    },
+    //확인된 계좌 정보들 db에 저장하기
+    async addAccount(accountList){
+      const { data } = await api.post(
+        `${BASE_URL}/account/add`,
+        accountList,
+        { 
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      return data;
+    },
 
-    const { data } = await api.post(
-      `${BASE_URL}/${userId}/account/add`,
-      formData,
-      { headers }
-    );
-    return data;
-  },
 
   // 미션보기
   async missionList(userId) {
@@ -68,18 +79,16 @@ export default {
   },
 
   // 계좌 목록 조회
-  async accountList(userId) {
-    const { data } = await api.get(
-      `${BASE_URL}/${userId}/account/list`
-    );
-    return data;
-  },
 
-  // 거래 내역 조회
-  async transactionList(userId, accountNum) {
-    const { data } = await api.get(
-      `${BASE_URL}/${userId}/account/${accountNum}/detail`
-    );
-    return data;
-  },
+    async accountList() {
+        const { data } = await api.get(`${BASE_URL}/account/list`);
+        return data;
+    },
+    
+    // 거래 내역 조회
+    async transactionList(accountNum) {
+        const { data } = await api.get(`${BASE_URL}/account/${accountNum}/detail`);
+        return data;
+    }
 };
+

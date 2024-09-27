@@ -24,9 +24,6 @@ instance.interceptors.request.use(
       config.headers['Authorization'] = `Bearer ${token}`;
       console.log('Authorization 헤더에 토큰 추가:', config.headers.Authorization);
     }
-    else{
-      console.log("noooooo");
-    }
     return config;
   },
   (error) => {
