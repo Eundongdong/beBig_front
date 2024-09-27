@@ -90,7 +90,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import UserApi from '@/api/UserApi';
 import { useRouter } from 'vue-router';
 
@@ -121,23 +121,45 @@ const formData = ref({
   password: 'kakao',
 });
 
-// 약관 데이터 배열
-const terms = ref([]);
 
 // 전체 동의 체크박스 상태
 const allAgree = ref(false);
 
-// 약관 표시 토글 함수
+// 약관 데이터 배열
+const terms = ref([]);
+
+// 약관 데이터를 불러오는 함수 (모든 약관의 동의 상태는 false로 초기화)
+const getTerms = async () => {
+  const response = await UserApi.getTerms(); // API로부터 약관 데이터 불러옴
+  terms.value = response.map((term) => ({
+    ...term,
+    agreed: false, // 모든 약관의 동의 상태를 false로 초기화
+    showContent: false, // 약관 내용 표시 여부
+  }));
+};
+
+// 전체 동의 토글 함수
+const toggleAll = () => {
+  const newState = !allAgree.value;
+  allAgree.value = newState; // 전체 동의 상태 반전
+  terms.value.forEach((term) => {
+    term.agreed = newState; // 모든 약관의 동의 상태를 전체 동의에 맞춤
+  });
+};
+
+
+// 약관 내용을 토글하는 함수
 const toggleShowTermContent = (index) => {
   terms.value[index].showContent = !terms.value[index].showContent;
 };
 
-// 전체 동의 체크박스 동작
-const toggleAll = () => {
-  terms.value.forEach((term) => {
-    term.agreed = allAgree.value;
-  });
-};
+
+// 약관 상태를 감지하고 전체 동의 상태 업데이트
+watch(terms, (newTerms) => {
+  // 모든 약관이 동의되었는지 확인하여 전체 동의 체크박스를 업데이트
+  allAgree.value = newTerms.every(term => term.agreed);
+}, { deep: true });
+
 
 // 소셜 로그인 후 localStorage에 저장된 데이터를 불러오는 함수
 const loadSocialLoginData = () => {
@@ -152,25 +174,19 @@ const loadSocialLoginData = () => {
   }
 };
 
-// 약관 데이터를 불러오는 함수
-const getTerms = async () => {
-  try {
-    const response = await UserApi.getTerms(); // API 호출
-    terms.value = response.map((term) => ({
-      ...term,
-      agreed: false, // 동의 상태 추가
-      showContent: false, // 내용 표시 여부 추가
-    }));
-  } catch (error) {
-    console.error('약관 데이터를 불러오는 중 오류 발생:', error);
-  }
-};
-
 // 폼 제출 함수
 const submitSignup = async () => {
   // 생년월일 형식 검증
   if (!isValidDateFormat(formData.value.birth)) {
     alert('생년월일은 "YYYY-MM-DD" 형식이어야 합니다.');
+    return;
+  }
+
+// 모든 필수 약관에 동의했는지 확인
+const allTermsAgreed = terms.value.every(term => term.agreed);
+  
+  if (!allTermsAgreed) {
+    alert('모든 약관에 동의해야 회원가입이 가능합니다.');
     return;
   }
 
@@ -208,6 +224,7 @@ const goBack = () => {
   window.history.back();
 };
 </script>
+
 
 <style>
 .social_signup_container {
@@ -301,7 +318,7 @@ const goBack = () => {
 }
 
 .slider input {
-  opacity: 0;
+  opacity: 0; /* input을 보이지 않게 숨김 */
   width: 0;
   height: 0;
 }

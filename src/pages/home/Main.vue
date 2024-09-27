@@ -4,8 +4,8 @@
             <li>
                 <h1 class="name">{{user.userName}}님,<br> 안녕하세요</h1>
                 <button class="category_button" @click="GoSurvey">
-                    <img class="category_img" :src="`../../../public/images/${user.userType}.png`">
-                    <h5 class="category_tag">{{ user.userType === '0' ? '유형검사 하러 가기' : '내 유형 보기' }}</h5>
+                    <img class="category_img" :src="`../../../public/images/${user.finTypeCode}.png`">
+                    <h5 class="category_tag">{{ user.finTypeCode === '0' ? '유형검사 하러 가기' : '내 유형 보기' }}</h5>
                 </button>
             </li>
         </ul>
@@ -42,44 +42,61 @@
             <button v-if="index ==0" class="details-button" @click="goToAccountDetails(account)">></button>
         </div>
     </div>
-    <div class="mission">
-        <div class="mission-header">
-            <h3 class="mission-title">나의 미션</h3>
-            <button @click="goToMission" class="mission-button">미션 보러 가기</button>
-        </div>
-        <div v-if="!mission.MonthMission && !mission.dailyMission1 && !mission.dailyMission2">
-            <h2>계좌를 연결하고 미션을 받아보세요</h2>
-        </div>
-        <div v-else>
-            <h2>
-                {{ mission.MonthMission }}
-                <button 
-                    :class="{'completed': !mission.MonthMissionType}" 
-                    :disabled="!mission.MonthMissionType" 
-                    @click="completeMission('MonthMission')">
-                    {{ mission.MonthMissionType ? '완료' : '완료됨' }}
-                </button>
-            </h2>
-            <h2>
-                {{ mission.dailyMission1 }}
-                <button 
-                    :class="{'completed': !mission.dailyMission1Type}" 
-                    :disabled="!mission.dailyMission1Type" 
-                    @click="completeMission('dailyMission1')">
-                    {{ mission.dailyMission1Type ? '완료' : '완료됨' }}
-                </button>
-            </h2>
-            <h2>
-                {{ mission.dailyMission2 }}
-                <button 
-                    :class="{'completed': !mission.dailyMission2Type}" 
-                    :disabled="!mission.dailyMission2Type" 
-                    @click="completeMission('dailyMission2')">
-                    {{ mission.dailyMission2Type ? '완료' : '완료됨' }}
-                </button>
-            </h2>
-        </div>
+    <div v-else>
+      <h2>
+        {{ mission.MonthMission }}
+        <button
+          :class="{
+            completed: !mission.MonthMissionType,
+          }"
+          :disabled="!mission.MonthMissionType"
+          @click="completeMission('MonthMission')"
+        >
+          {{
+            mission.MonthMissionType
+              ? '완료'
+              : '완료됨'
+          }}
+        </button>
+      </h2>
+      <h2>
+        {{ mission.dailyMission1 }}
+        <button
+          :class="{
+            completed: !mission.dailyMission1Type,
+          }"
+          :disabled="!mission.dailyMission1Type"
+          @click="
+            completeMission('dailyMission1')
+          "
+        >
+          {{
+            mission.dailyMission1Type
+              ? '완료'
+              : '완료됨'
+          }}
+        </button>
+      </h2>
+      <h2>
+        {{ mission.dailyMission2 }}
+        <button
+          :class="{
+            completed: !mission.dailyMission2Type,
+          }"
+          :disabled="!mission.dailyMission2Type"
+          @click="
+            completeMission('dailyMission2')
+          "
+        >
+          {{
+            mission.dailyMission2Type
+              ? '완료'
+              : '완료됨'
+          }}
+        </button>
+      </h2>
     </div>
+  </div>
 </template>
 
 <script setup>
@@ -89,8 +106,8 @@
     import SurveyResult from "./SurveyResult.vue";
 
     const user = reactive({
-        userName: 'test',
-        userType: '0'  //2로도 바꿔보세요.
+        userName: '',
+        finTypeCode: ''  //2로도 바꿔보세요.
     });
 
     const accountList = reactive([
@@ -114,14 +131,17 @@
         MonthMissionType: true,
     });
 
-    const getUser = async () => {
-        try {
-            const userInfo = await HomeApi.getMyInfo();
-            console.log(userInfo);
-        } catch (error) {
-            console.error("API 호출 중 오류 발생:", error);
-        }
-    };
+// 사용자 정보를 가져오는 함수
+const getUser = async () => {
+  try {
+    const userInfo = await HomeApi.getMyInfo(); // /home/info 호출
+    console.log(userInfo);  // userInfo 값 확인
+    user.userName = userInfo.userName;
+    user.finTypeCode = userInfo.finTypeCode; // 필요한 정보가 어떤건지 확인 필요
+  } catch (error) {
+    console.error('사용자 정보 가져오는 함수 API 호출 중 오류 발생:', error);
+  }
+};
 
     const getAsset = async () => {
         try {
@@ -144,7 +164,7 @@
     };
 
     onMounted(() => {
-        // getUser();
+         getUser();
         // getAsset();
         // getMission();
     });
@@ -199,97 +219,100 @@
     // 모달 활성화 상태 변수
     const showModal = ref(false);
 
-
 </script>
 
 <style scoped>
-    ul {
-        list-style-type: none;
-    }
+ul {
+  list-style-type: none;
+}
 
-    .category, .asset, .mission {
-        width: 100%;
-        margin-bottom: 10%;
-        background-color: #f3f3f3;
-        border-radius: 10px;
-        padding: 10px;
-        border: none;
-    }
+.category,
+.asset,
+.mission {
+  width: 100%;
+  margin-bottom: 10%;
+  background-color: #f3f3f3;
+  border-radius: 10px;
+  padding: 10px;
+  border: none;
+}
 
-    .category_button, .name {
-        width: 40%;
-    }
+.category_button,
+.name {
+  width: 40%;
+}
 
-    h3 {
-        color: black;
-    }
+h3 {
+  color: black;
+}
 
-    .name {
-        width: 100%;
-        color: black;
-    }
+.name {
+  width: 100%;
+  color: black;
+}
 
-    .category_img {
-        width: 100%;
-    }
+.category_img {
+  width: 100%;
+}
 
-    .category_tag {
-        width: 100%;
-        color: black;
-    }
+.category_tag {
+  width: 100%;
+  color: black;
+}
 
-    li {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
+li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-    .connect-bank-button {
-        width: 100%;
-        height: 30%;
-        background-color: #ffffff;
-        border: none;
-        border-radius: 10px;
-        margin-top: auto;
-        text-align: center;
-        color: black;
-    }
+.connect-bank-button {
+  width: 100%;
+  height: 30%;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  margin-top: auto;
+  text-align: center;
+  color: black;
+}
 
-    .add-bank-button {
-        background-color: #f3f3f3;
-        border: none;
-        border-radius: 10px;
-        padding: 10px;
-        color: black;
-    }
-    
-    .account-details {
-        color: black;
-        flex-grow: 1;
-    }
+.add-bank-button {
+  background-color: #f3f3f3;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  color: black;
+}
 
-    .connect-bank {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-    }
+.account-details {
+  color: black;
+  flex-grow: 1;
+}
 
-    .asset_total {
-        width: 100%;
-        height: 30%;
-    }
+.connect-bank {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
 
-    .asset-sum {
-        width: 100%;
-        height: 20%;
-        color: black;
-    }
+.asset_total {
+  width: 100%;
+  height: 30%;
+}
 
-    .mission h3, .mission h2 {
-        color: black;
-    }
+.asset-sum {
+  width: 100%;
+  height: 20%;
+  color: black;
+}
 
-    .mission-header {
+.mission h3,
+.mission h2 {
+  color: black;
+}
+
+.mission-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
