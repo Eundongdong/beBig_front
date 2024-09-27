@@ -65,7 +65,7 @@
         <div v-for="(term, index) in terms" :key="index" class="term_item">
           <div>
             <label>{{ term.utilTitle }}</label>
-            <button @click="toggleShowTermContent(index)">
+            <button type="button" @click="toggleShowTermContent(index)">
               {{ term.showContent ? '▲' : '▼' }}
             </button>
           </div>
@@ -82,9 +82,7 @@
       </div>
 
       <!-- 가입하기 버튼 -->
-      <button type="submit" class="signup_button" @click="submitSignup">
-        가입하기
-      </button>
+      <button type="submit" class="signup_button">가입하기</button>
     </form>
   </div>
 </template>
@@ -140,10 +138,9 @@ const getTerms = async () => {
 
 // 전체 동의 토글 함수
 const toggleAll = () => {
-  const newState = !allAgree.value;
-  allAgree.value = newState; // 전체 동의 상태 반전
+  // 약관 모두 동의 상태 반영
   terms.value.forEach((term) => {
-    term.agreed = newState; // 모든 약관의 동의 상태를 전체 동의에 맞춤
+    term.agreed = allAgree.value;
   });
 };
 
