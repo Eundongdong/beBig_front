@@ -9,9 +9,9 @@
     <div class="post-header">
       <!-- 글쓴이 캐릭터 아이콘 (fintype에 따른 아이콘 표시) -->
       <img class="author-icon"
-      :src="getAuthorIcon(post.postWriterFinTypeCode)"
-      alt="프로필 사진"
-      @click="profileClick(post.postWriterId)" />
+      :src="getProfileIcon(post.finTypeCode)"
+      alt="Profile"
+      @click="profileClick(post.userId)" />
       <div class="post-info">
         <h1 class="post-title">{{ post.postTitle }}</h1>
         <p class="post-date">{{ formatDate(post.postCreatedTime) }}</p>
@@ -33,7 +33,7 @@
 
     <!-- 좋아요 버튼 -->
     <div class="post-footer">
-          <button @click="likePost(post.postId, post.postWriterId)" class="like-btn">
+          <button @click="likePost(post.postId, post.userId)" class="like-btn">
             <i :class="post.isLiked ? 'fas fa-heart filled-heart' : 'far fa-heart empty-heart'"></i>
             {{ post.postLikeHits }}
           </button>
@@ -76,7 +76,8 @@ const fetchPostDetails = async () => {
       ...response, //서버에서 받은 응답 데이터를 모두 복사
       isLiked: response.isLiked, //좋아요 상태
       postLikeHits: response.postLikeHits, //좋아요 수
-      postWriterId: response.postWriterId
+      finTypeCode: response.finTypeCode,
+      userId: response.userId
     };
     
     isAuthor.value = checkIfAuthor(post.value); // 작성자 확인 함수 호출
@@ -96,7 +97,7 @@ const editPost = () => {
       title: post.value.postTitle,
       content: post.value.postContent,
       images: post.value.postImagePath ? [post.value.postImagePath] : [],
-      postWriterId: post.value.postWriterId
+      userId: post.value.userId
     }
   });
 };
@@ -117,16 +118,15 @@ const deletePost = async () => {
 };
 
 // 좋아요 기능
-const likePost = async (postId, postWriterId) => {
-  //postId와 postWriterId를 콘솔에 찍어서 확인
-  console.log(`PostID: ${postId}, PostWriterID: ${post.postWriterId}`);
+const likePost = async (postId, userId) => {
+  //postId와 userId를 콘솔에 찍어서 확인
+  console.log(`PostID: ${postId}, userID: ${userId}`);
   try {
-    if (!postId || !postWriterId) {
+    if (!postId || !userId) {
       console.error('게시글번호 또는 작성자번호가 없습니다');
       return;
     }
-    console.log(`Post ID: ${postId}, Writer No: ${postWriterId}`); // 값 확인
-    const response = await communityApi.likePost(postId, postWriterId);
+    const response = await communityApi.likePost(postId, userId);
     console.log('Response:', response);
 
     // 좋아요 상태를 업데이트 (post 객체에 직접 접근)
@@ -147,15 +147,13 @@ const formatDate = (dateString) => {
 console.log(post.value);
 
 // 작성자 아이콘을 가져오는 함수
-const getAuthorIcon = (finTypeCode) => {
-  console.log("finTypeCode:", finTypeCode);
-  const iconMap = {
-    1: 'images/1.png',
-    2: 'images/2.png',
-    3: 'images/3.png',
-    4: 'images/4.png',
-  };
-  return iconMap[finTypeCode] || 'images/0.png';
+const getProfileIcon = (finTypeCode) => {
+  // finTypeCode가 유효한지 확인
+  if (finTypeCode && finTypeCode !== 0) {
+    return `images/${finTypeCode}.png`;
+  }
+  // 기본 이미지 반환
+  return 'images/0.png';
 };
 
 //작성자의 프로필을 눌렀을 때

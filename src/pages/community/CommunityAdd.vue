@@ -89,14 +89,6 @@ const categories = ref([
   { id: 4, name: '절약팁' },
 ]);
 
-// const fetchCategories=async()=>{
-//   try {
-//     categories.value = await communityApi.getCategories();
-//   } catch (error) {
-//     console.error('카테고리를 불러오는 중 오류 발생:', error);
-//   }
-// };
-
 const selectedCategory = ref(''); // 새글 작성 시 빈 문자열로 초기화
 const imagePreviews = ref([]);  // 기본 이미지 미리보기 설정
 const fileNames = ref([]); //파일명 배열

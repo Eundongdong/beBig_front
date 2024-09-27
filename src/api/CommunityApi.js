@@ -7,11 +7,15 @@ const headers = { "Content-Type": "multipart/form-data" };
 export default {
   // 게시글 목록 조회
   async list(category, type) {
-    const params = new URLSearchParams();
-    if (category !== -1) params.append("category", category);
-    if (type !== -1) params.append("type", type);
+    const formData = new FormData(); // FormData 객체 생성
+    if (category !== -1) formData.append("category", category);
+    if (type !== -1) formData.append("type", type);
 
-    const response = await api.get(`${BASE_URL}`, { params });
+    const response = await api.post(`${BASE_URL}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data", // form-data 형식으로 전송
+      },
+    });
     console.log("COMMUNITY GET LIST", response); // API에서 반환되는 데이터를 로그로 확인
     return response; //data 속성을 반환하지 않고 전체 응답을 반환
   },
@@ -43,12 +47,12 @@ export default {
   },
 
   // 게시글 좋아요
-  async likePost(postId, postWriterId) {
-    const response = await api.post(`${BASE_URL}/${postId}/like`, {
-      postWriterId,
-    });
+  async likePost(postId, userId) {
+    const response = await api.post(`${BASE_URL}/${postId}/like`, { userId });
+    
+    // 서버에서 갱신된 postLikeHits 값을 응답으로 받는다고 가정
     console.log("COMMUNITY POST LIKE", response);
-    return response.data;
+    return response.data; // 좋아요 처리 후 변경된 데이터 반환
   },
 
   // 게시글 수정
@@ -61,7 +65,9 @@ export default {
         console.log(`${key} is null or undefined`); //디버깅 전용 로그
       }
     }
-    const response = await api.post(`${BASE_URL}/${postId}/update`, formData, {headers});
+    const response = await api.post(`${BASE_URL}/${postId}/update`, formData, {
+      headers,
+    });
     console.log("COMMUNITY POST UPDATE", response);
     return response.data;
   },
