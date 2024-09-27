@@ -67,14 +67,14 @@ export default {
     },
 
   // 계좌 목록 조회
-    async accountList(userNo) {
-        const { data } = await api.get(`${BASE_URL}/${userNo}/account/list`);
+    async accountList() {
+        const { data } = await api.get(`${BASE_URL}/account/list`);
         return data;
     },
     
     // 거래 내역 조회
-    async transactionList(userNo, accountNum) {
-        const { data } = await api.get(`${BASE_URL}/${userNo}/account/${accountNum}/detail`);
+    async transactionList(accountNum) {
+        const { data } = await api.get(`${BASE_URL}/account/${accountNum}/detail`);
         return data;
     }
 };

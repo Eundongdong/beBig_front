@@ -14,16 +14,18 @@
             <img :src="`../../../public/images/bank/${account.bankName}.png`" alt="Bank Logo" class="bank-logo">
             <div class="account-details">
                 <p>{{ account.accountName }}</p>
+                <p>{{ account.accountNum }}</p>
                 <p>{{ account.amount }}</p>
             </div>
-            <button class="details-button" @click="goBankDetail(accountList)">></button>
+            <button class="details-button" @click="goBankDetail(account.accountNum)">></button>
         </div>
     </div>
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { reactive, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import HomeApi from '@/api/HomeApi';
 const router = useRouter();
 
 const totalAmount = 1234000; // 총 자산 예시
@@ -31,29 +33,63 @@ const accountList = reactive([
     {
         bankName: '신한',
         accountName: '블라블라',
+        accountNum: '0123045687',
         amount: '1,234,000',
     },
     {
         bankName: 'KB국민',
         accountName: '블라블라',
+        accountNum: '9851355687',
         amount: '5,678,000',
     },
     {
         bankName: '하나',
         accountName: '블라블라',
+        accountNum: '012304354587',
         amount: '2,345,000',
     },
 ]);
 
+const getList = async() =>{
+    try{
+        const accounts = await HomeApi.accountList();
+        console.log(accounts);
+        accounts.forEach(account => {
+            accountList.push({
+            bankName: account.bankName,  //백에서 받는 값 형식에 맞게 수정필요
+            accountName: account.accountName, 
+            accountNum: account.accountNum,
+            amount: account.amount
+            });
+        });
+
+        // 총 자산 계산
+        totalAmount.value = accounts.reduce((sum, account) => {
+            // amount 값을 문자열에서 숫자로 변환 (예: "1,234,000원" -> 1234000)
+            const amount = parseInt(account.amount.replace(/[^0-9]/g, ''), 10);
+            return sum + (isNaN(amount) ? 0 : amount); // NaN 방지
+        }, 0);
+
+    }catch(error){
+        console.error('API 호출 중 오류 발생:', error);
+    }
+}
+
+
 const GoBack = () => {
     router.push('/home');
 };
-const goBankDetail = (accountList) => {
+const goBankDetail = (accountNum) => {
     router.push({
         path: '/home/account-detail',
-        query: { accountName: accountList.bankName } // 계좌 이름을 쿼리 파라미터로 전달
+        query: {accountNum: accountNum} // 계좌 이름을 쿼리 파라미터로 전달
     });
 };
+
+onMounted(() => {
+        //getList();
+    });
+
 </script>
 
 <style scoped>
