@@ -42,6 +42,14 @@
             <button v-if="index ==0" class="details-button" @click="goToAccountDetails(account)">></button>
         </div>
     </div>
+    <div class="mission">
+        <div class="mission-header">
+            <h3 class="mission-title">나의 미션</h3>
+            <button @click="goToMission" class="mission-button">미션 보러 가기</button>
+        </div>
+        <div v-if="!mission.MonthMission && !mission.dailyMission1 && !mission.dailyMission2">
+            <h2>계좌를 연결하고 미션을 받아보세요</h2>
+        </div>
     <div v-else>
       <h2>
         {{ mission.MonthMission }}
