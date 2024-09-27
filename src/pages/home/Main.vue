@@ -1,12 +1,4 @@
 <template>
-    <!-- 모달이 활성화될 경우 표시 -->
-    <div v-if="showModal" class="modal-overlay">
-      <div class="modal">
-        <p>설문 결과 페이지</p>
-        <button @click="closeModal">닫기</button>
-      </div>
-    </div>
-
     <div class="category">
         <ul>
             <li>
@@ -18,6 +10,15 @@
             </li>
         </ul>
     </div>
+
+    <!-- 모달이 활성화될 경우 표시 -->
+    <div v-if="showModal" class="modal-overlay" @click="closeModalOnOverlay">
+      <div class="modal" @click.stop>
+        <SurveyResult/>
+        <button @click="closeModal" class="modal-close-button">닫기</button>
+      </div>
+    </div>
+
     <div class="asset">
         <ul>
             <li class="asset_total">
@@ -85,6 +86,7 @@
     import HomeApi from "@/api/HomeApi";
     import { ref, reactive, onMounted } from 'vue';
     import { useRouter } from 'vue-router';
+    import SurveyResult from "./SurveyResult.vue";
 
     const user = reactive({
         userName: 'test',
@@ -166,6 +168,12 @@
         // 모달 닫기 함수
     const closeModal = () => {
     showModal.value = false;
+    };
+    // 모달 외부 클릭 시 닫기 함수
+    const closeModalOnOverlay = (e) => {
+        if (e.target === e.currentTarget) {
+            closeModal();
+        }
     };
 
         // '미션 보러 가기' 버튼 클릭 시 Mission 페이지로 이동
@@ -343,4 +351,47 @@
         justify-content: space-between;
         align-items: center;
     }
+
+/* 모달 관련 스타일 */
+/* 화면 전체를 덮는 반투명한 배경 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* 다른 요소 위에 표시 */
+}
+
+/* 모달 창 스타일 */
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  max-width: 100%;
+  max-height: 80vh; /* 모달 창의 최대 높이 제한 */
+  overflow: auto; /* 스크롤 활성화 */
+  z-index: 1001;
+}
+
+/* 닫기 버튼 스타일 */
+.modal-close-button {
+  margin-top: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.modal-close-button:hover {
+  background-color: #0056b3;
+}
 </style>
