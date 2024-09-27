@@ -34,15 +34,29 @@ export default {
         return data;
     },
 
-    // 계좌 추가
-    async addAccount(userNo, account) {
-        const formData = new FormData();
-        for (const key in account) {
-            formData.append(key, account[key]);
-        }
-
-        const { data } = await api.post(`${BASE_URL}/${userNo}/account/add`, formData, { headers });
+    // 은행 아이디, 비번 받고, 해당 은행 계좌 정보 받아오기
+    async getAccountList(bankAccount) {
+        const { data } = await api.post(
+          `${BASE_URL}/account`,
+          bankAccount,
+          { 
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
         return data;
+    },
+    //확인된 계좌 정보들 db에 저장하기
+    async addAccount(accountList){
+      const { data } = await api.post(
+        `${BASE_URL}/account/add`,
+        accountList,
+        { 
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      return data;
     },
 
   // 미션보기
