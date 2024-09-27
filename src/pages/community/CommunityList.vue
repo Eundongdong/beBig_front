@@ -35,35 +35,37 @@
       </div>
     </div>
 
-    <!-- 게시글 목록 -->
-    <div class="post" v-for="post in sortedPosts" :key="post.postId">
-      <!-- 게시글 아이템 -->
-      <div class="post-item">
-        <div class="post-header">
-          <!-- 글쓴이 캐릭터 아이콘 (fintype에 따른 아이콘 표시)-->
-          <img class="author-icon" :src="getAuthorIcon(post.postWriterFinTypeCode)" alt="Author Icon" />
-          <div class="post-info">
-            <router-link
-              :to="{ name: 'communityDetail',
-              params: { postId: post.postId } }" class="post-title">{{post.postTitle }}
-            </router-link>
-            <p class="post-date">{{ formatDate(post.postCreatedTime) }}</p>
+
+
+
+      <!-- 게시글 목록 -->
+      <div class="post" v-for="post in sortedPosts" :key="post.postId">
+        <!-- 게시글 아이템 -->
+        <div class="post-item">
+          <div class="post-header">
+            <!-- 글쓴이 캐릭터 아이콘 (fintype에 따른 아이콘 표시)-->
+            <img class="author-icon" :src="getProfileIcon(post.finTypeCode)" alt="Profile" />
+            <div class="post-info">
+              <router-link :to="{ name: 'communityDetail', params: { postId: post.postId } }"
+                class="post-title">{{ post.postTitle }} </router-link>
+              <p class="post-date">{{ formatDate(post.postCreatedTime) }}</p>
+            </div>
+          </div>
+          <!-- 게시글 내용 -->
+          <div class="post-body">
+            <p class="post-content">{{ post.postContent }}</p>
+            <img v-if="post.postImagePath" class="post-image" :src="post.postImagePath" alt="Post Image" />
+          </div>
+          <!-- 좋아요 버튼 추가 -->
+          <div class="post-footer">
+            <button @click="likePost(post.postId, post.userId)" class="like-btn">
+              <i :class="post.isLiked ? 'fas fa-heart filled-heart' : 'far fa-heart empty-heart'"></i>
+              {{ post.postLikeHits }}
+            </button>
           </div>
         </div>
-        <!-- 게시글 내용 -->
-        <div class="post-body">
-          <p class="post-content">{{ post.postContent }}</p>
-          <img v-if="post.postImagePath" class="post-image" :src="post.postImagePath" alt="Post Image" />
-        </div>
-        <!-- 좋아요 버튼 추가 -->
-        <div class="post-footer">
-          <button @click="likePost(post.postId, post.postWriterNo)" class="like-btn">
-            <i :class="post.isLiked ? 'fas fa-heart filled-heart' : 'far fa-heart empty-heart'"></i>
-            {{ post.postLikeHits }}
-          </button>
-        </div>
       </div>
-    </div>
+
     <!-- 새 글 작성 버튼 -->
     <router-link to="/community/add" class="add-post-button">
       <i class="fas fa-plus"></i> <!-- FontAwesome 플러스 아이콘 -->
@@ -129,27 +131,13 @@ const sortBy = (type) => {
   });
 };
 
-// // 카테고리 필터 함수
-// const filterByCategory = async () => {
-//   console.log("카테고리 필터링:", selectedCategory.value);
-//   await fetchPosts(); // 필터링 후 다시 데이터를 불러옴
-// };
-
-// // 자산 유형 필터 함수
-// const filterByFinType = async () => {
-//   console.log("자산유형 필터링:", selectedFinType.value);
-//   await fetchPosts();  // 필터링 후 다시 데이터를 불러옴
-// };
-
-// 작성자 아이콘을 가져오는 함수
-const getAuthorIcon = (finTypeCode) => {
-  const iconMap = {
-    1: 'images/1.png',
-    2: 'images/2.png',
-    3: 'images/3.png',
-    4: 'images/4.png',
-  };
-  return iconMap[finTypeCode] || 'images/0.png';
+const getProfileIcon = (finTypeCode) => {
+  // finTypeCode가 유효한지 확인
+  if (finTypeCode && finTypeCode !== 0) {
+    return `images/${finTypeCode}.png`;
+  }
+  // 기본 이미지 반환
+  return 'images/0.png';
 };
 
 // 날짜 포맷 함수
@@ -184,25 +172,31 @@ const fetchPosts = async () => {
 };
 
 // 좋아요 기능
-const likePost = async (postId, postWriterId) => {
-  //postId와 postWriterId를 콘솔에 찍어서 확인
-  console.log(`PostID: ${postId}, PostWriterID: ${postWriterId}`);
+const likePost = async (postId, userId) => {
+  //postId와 userId를 콘솔에 찍어서 확인
+  console.log(`PostID: ${postId}, userID: ${userId}`);
   try {
-    if (!postId || !postWriterId) {
+    if (!postId || !userId) {
       console.error('게시글번호 또는 작성자번호가 없습니다');
       return;
     }
 
     //좋아요 API 호출
-    const response = await communityApi.likePost(postId, postWriterId);
+    const response = await communityApi.likePost(postId, userId);
     console.log('Response:', response);
 
-    
+
     /// 좋아요 상태를 업데이트 (post 객체에 직접 접근하지 않고 posts 배열에서 해당 게시글을 찾아 업데이트)
     const postIndex = posts.value.findIndex(post => post.postId === postId);
     if (postIndex !== -1) {
       posts.value[postIndex].isLiked = !posts.value[postIndex].isLiked;
-      posts.value[postIndex].postLikeHits += posts.value[postIndex].isLiked ? 1 : -1;
+      // 서버에서 반환된 값을 반영
+      if (response && response.postLikeHits !== undefined) {
+        posts.value[postIndex].postLikeHits = response.postLikeHits;
+      } else {
+        // 서버 응답이 없으면 로컬에서 값을 증가/감소
+        posts.value[postIndex].postLikeHits += posts.value[postIndex].isLiked ? 1 : -1;
+      }
     }
   } catch (error) {
     console.error('Error:', error);
