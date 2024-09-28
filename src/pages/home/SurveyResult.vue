@@ -18,10 +18,15 @@
   <script setup>
   import { ref, onMounted } from 'vue';
   import { useRouter } from 'vue-router';
+  import { useHomeStore } from '@/stores/home';
   
   const router = useRouter();
+  const homeStore = useHomeStore();
 //   const finType = ref(route.params.result || '0'); // result 파라미터에서 finType을 가져옴
-  const finType = ref('2'); // 테스트를 위해 finType을 2로 고정
+  const finType = ref(''); // 테스트를 위해 finType을 2로 고정
+  finType.value = String(homeStore.getUserFintype());
+
+  console.log(finType);
   
   // finType에 따라 이미지, 제목, 설명 설정
   const finTypeImage = ref('');

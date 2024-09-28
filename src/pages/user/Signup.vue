@@ -27,6 +27,7 @@
             @change="idDupCheckAPI"
           />
           <h4 v-if="idDupCheckResult">다른 아이디를 입력해주세요</h4>
+          <h4 v-if="idDupCheckOk">사용가능한 아이디입니다.</h4>
         </li>
         <li>
           <h3>비밀번호</h3>
@@ -63,7 +64,9 @@
             type="text"
             v-model="User.email"
             placeholder="Enter your Email"
+            @input="validateEmail"
           />
+          <p v-if="emailError" style="color: red;">이메일 형식에 맞게 입력해주세요.</p>
         </li>
         <li>
           <h3>성별</h3>
@@ -172,6 +175,7 @@ const day = ref('');
 
 //아이디 비번 중복 체크 변수
 const idDupCheckResult = ref(false);
+const idDupCheckOk = ref(false);
 const checkPassword = ref('');
 
 // 토글 상태
@@ -217,10 +221,25 @@ const idDupCheckAPI = async () => {
   try {
     const idDupCheck = await UserApi.idDuplicateCheck(User.userLoginId);
     console.log('아이디 중복 체크 성공:', idDupCheck);
-    idDupCheckResult.value = idDupCheck === true;
+    idDupCheckOk.value = true;
+    idDupCheckResult.value = false;
   } catch (error) {
     console.error('API 호출 중 오류 발생:', error);
+    idDupCheckOk.value = false;
+    idDupCheckResult.value = true;
   }
+};
+
+// 이메일 에러 상태 저장
+const emailError = ref(false);
+
+// 이메일 유효성 검사 함수
+const validateEmail = () => {
+  // 이메일 형식 정규표현식
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  // 이메일이 유효하지 않으면 emailError를 true로 설정
+  emailError.value = !emailPattern.test(User.email);
 };
 
 //생년월일 받아오기
