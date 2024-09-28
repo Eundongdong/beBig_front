@@ -93,51 +93,35 @@
         </li>
       </ul>
     </div>
+
     <div class="Policy">
-      <ul>
-        <li>
-          <h5>전체동의</h5>
+        <div>
+          <p>전체 동의</p>
           <label class="slider">
             <input type="checkbox" v-model="allAgree" @change="toggleAll" />
             <span class="slider-knob"></span>
           </label>
-        </li>
-      </ul>
-      <ul>
-        <li>
-          <h2>개인정보 이용 동의</h2>
-          <h5>동의</h5>
+        </div>
+        
+        <div v-for="(term, index) in terms" :key="index" class="term_item">
+          <div>
+            <label>{{ term.utilTitle }}</label>
+            <button type="button" @click="toggleShowTermContent(index)">
+              {{ term.showContent ? '▲' : '▼' }}
+            </button>
+          </div>
+          <div v-if="term.showContent">
+            <p>{{ term.utilContent }}</p>
+          </div>
+
+          <p>동의</p>
           <label class="slider">
-            <input type="checkbox" v-model="personalAgree" />
+            <input type="checkbox" v-model="term.agreed" />
             <span class="slider-knob"></span>
           </label>
-
-          <button @click="toggleShowPersonalTerms">
-            {{ showPersonalTerms ? '▲' : '▼' }}
-          </button>
-          <div v-if="showPersonalTerms">
-            <p>{{ getPersonalTerms() }}</p>
-          </div>
-        </li>
-      </ul>
-      <ul>
-        <li>
-          <h2>금융정보 이용 동의</h2>
-          <h5>동의</h5>
-          <label class="slider">
-            <input type="checkbox" v-model="financialAgree" />
-            <span class="slider-knob"></span>
-          </label>
-
-          <button @click="toggleShowFinancialTerms">
-            {{ showFinancialTerms ? '▲' : '▼' }}
-          </button>
-          <div v-if="showFinancialTerms">
-            <p>{{ getFinancialTerms() }}</p>
-          </div>
-        </li>
-      </ul>
+        </div>
     </div>
+
     <div class="Button">
       <button class="signup_button" @click="signup" :disabled="!allAgree">
         가입하기
@@ -148,7 +132,7 @@
 
 <script setup>
 import UserApi from '@/api/UserApi';
-import { ref, reactive, computed, watch } from 'vue';
+import { ref, reactive, computed, watch, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 
 //////변수 선언
@@ -179,23 +163,61 @@ const allAgree = ref(false);
 const personalAgree = ref(false);
 const financialAgree = ref(false);
 
-// 약관 보기 상태
-const showPersonalTerms = ref(false);
-const showFinancialTerms = ref(false);
+// 약관 데이터 배열
+const terms = ref([]);
 
-// 약관 내용을 저장할 변수
-const personalTermsContent = ref(''); // 개인정보 약관 내용 저장
-const financialTermsContent = ref(''); // 금융정보 약관 내용 저장
-
-// 전체 동의 시, 하위 항목도 변경
-const toggleAll = () => {
-  personalAgree.value = allAgree.value;
-  financialAgree.value = allAgree.value;
+// 약관 데이터를 불러오는 함수 (모든 약관의 동의 상태는 false로 초기화)
+const getTerms = async () => {
+  try {
+    const response = await UserApi.getTerms(); // API로부터 약관 데이터 불러옴
+    terms.value = response.map((term) => ({
+      ...term,
+      agreed: false, // 모든 약관의 동의 상태를 false로 초기화
+      showContent: false, // 약관 내용 표시 여부
+    }));
+  } catch (error) {
+    console.error('API 호출 중 오류 발생:', error);
+  }
 };
-// 모든 약관 동의 상태 업데이트
-watch([personalAgree, financialAgree], () => {
-  allAgree.value = personalAgree.value && financialAgree.value;
-});
+
+
+// // 약관 보기 상태
+// const showPersonalTerms = ref(false);
+// const showFinancialTerms = ref(false);
+
+// // 약관 내용을 저장할 변수
+// const personalTermsContent = ref(''); // 개인정보 약관 내용 저장
+// const financialTermsContent = ref(''); // 금융정보 약관 내용 저장
+
+// // 전체 동의 시, 하위 항목도 변경
+// const toggleAll = () => {
+//   personalAgree.value = allAgree.value;
+//   financialAgree.value = allAgree.value;
+// };
+
+// 전체 동의 토글 함수
+const toggleAll = () => {
+  // 약관 모두 동의 상태 반영
+  terms.value.forEach((term) => {
+    term.agreed = allAgree.value;
+  });
+};
+
+// // 모든 약관 동의 상태 업데이트
+// watch([personalAgree, financialAgree], () => {
+//   allAgree.value = personalAgree.value && financialAgree.value;
+// });
+
+// 약관 내용을 토글하는 함수
+const toggleShowTermContent = (index) => {
+  terms.value[index].showContent = !terms.value[index].showContent;
+};
+
+// 약관 상태를 감지하고 전체 동의 상태 업데이트
+watch(terms, (newTerms) => {
+  // 모든 약관이 동의되었는지 확인하여 전체 동의 체크박스를 업데이트
+  allAgree.value = newTerms.every(term => term.agreed);
+}, { deep: true });
 
 // 약관 내용 보이기/숨기기
 const toggleShowPersonalTerms = () => {
@@ -250,23 +272,23 @@ watch([year, month, day], () => {
   }
 });
 
-//약관 불러오기
-const getPersonalTerms = async () => {
-  try {
-    const response = await UserApi.getPolicy();
-    personalTermsContent.value = response.data.personalTerms;
-  } catch (error) {
-    console.error('API 호출 중 오류 발생:', error);
-  }
-};
-const getFinancialTerms = async () => {
-  try {
-    const response = await UserApi.getPolicy();
-    financialTermsContent.value = response.data.financialTerms;
-  } catch (error) {
-    console.error('API 호출 중 오류 발생:', error);
-  }
-};
+// //약관 불러오기
+// const getPersonalTerms = async () => {
+//   try {
+//     const response = await UserApi.getPolicy();
+//     personalTermsContent.value = response.data.personalTerms;
+//   } catch (error) {
+//     console.error('API 호출 중 오류 발생:', error);
+//   }
+// };
+// const getFinancialTerms = async () => {
+//   try {
+//     const response = await UserApi.getPolicy();
+//     financialTermsContent.value = response.data.financialTerms;
+//   } catch (error) {
+//     console.error('API 호출 중 오류 발생:', error);
+//   }
+// };
 
 //회원가입
 const signup = async () => {
@@ -284,6 +306,13 @@ const signup = async () => {
 const GoBack = () => {
   router.push('/user');
 };
+
+
+// 페이지 로드 시 약관 데이터 가져오기
+onMounted(() => {
+  getTerms(); // 약관 데이터 로드
+});
+
 </script>
 
 <style scoped>
