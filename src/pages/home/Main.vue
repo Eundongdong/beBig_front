@@ -2,13 +2,16 @@
     <button @click="logout">logout</button>
     <div class="category">
         <ul>
-            <li>
+          <li v-if="user.userName !== 'NoLogin'">
                 <h1 class="name">{{user.userName}}님,<br> 안녕하세요</h1>
                 <button class="category_button" @click="GoSurvey">
                     <img class="category_img" :src="`../../../public/images/${user.finTypeCode}.png`">
-                    <h5 class="category_tag">{{ user.finTypeCode != '1' ||  user.finTypeCode != '2' || user.finTypeCode != '3' || user.finTypeCode != '4' ? '유형검사 하러 가기' : '내 유형 보기' }}</h5>
+                    <h5 class="category_tag">{{ user.finTypeCode == '1' ||  user.finTypeCode == '2' || user.finTypeCode == '3' || user.finTypeCode == '4' ? '내 유형 보기' : '유형검사 하러 가기' }}</h5>
                 </button>
             </li>
+            <li v-else>
+            <h1 class="noLogin">안녕하세요.<br>우리는 beBIG입니다.<br>로그인하고 더 많은 기능을 이용해보시겠어요?</h1>
+        </li>
         </ul>
     </div>
 
@@ -121,6 +124,7 @@
 
     const logout = async()=>{
         userStore.logout();
+        router.push('/');
     }
 
     const user = reactive({
@@ -153,10 +157,9 @@
 const getUser = async () => {
   try {
     const userInfo = await HomeApi.getMyInfo(); // /home/info 호출
-    //console.log(userInfo);  // userInfo 값 확인
-    user.userName = userInfo.userName;
-    user.finTypeCode = userInfo.finTypeCode; // 필요한 정보가 어떤건지 확인 필요
-    homeStore.setuserFintype(user.finTypeCode);
+      user.userName = userInfo.userName;
+      user.finTypeCode = userInfo.finTypeCode; // 필요한 정보가 어떤건지 확인 필요
+      homeStore.setuserFintype(user.finTypeCode);
   } catch (error) {
     console.error('사용자 정보 가져오는 함수 API 호출 중 오류 발생:', error);
   }
@@ -195,12 +198,10 @@ const getUser = async () => {
     };
 
     const GoSurvey = () => {
-        // userType이 '0'일 때는 /home/survey-start로 이동
-        if (user.finTypeCode != '1' ||  user.finTypeCode != '2' || user.finTypeCode != '3' || user.finTypeCode != '4') {
-            router.push('/home/survey-start');
+        if (user.finTypeCode == '1' ||  user.finTypeCode == '2' || user.finTypeCode == '3' || user.finTypeCode == '4') {
+          showModal.value = true;
         } else {
-            // 그 외의 경우에는 모달을 띄움
-            showModal.value = true;
+            router.push('/home/survey-start');
         }
     };
 
@@ -259,6 +260,12 @@ ul {
 .category_button,
 .name {
   width: 40%;
+}
+.noLogin {
+  color: black;
+  margin-bottom: 10px;
+  text-align: left;
+  font-size: 24px;
 }
 
 h3 {

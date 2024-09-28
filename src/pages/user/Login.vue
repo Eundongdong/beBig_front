@@ -70,8 +70,8 @@ const loginUser = reactive({
 });
 
 const noLogin = reactive({
-  userLoginId: 'test',
-  password: '0000',
+  userLoginId: 'NoLogin',
+  password: '1234',
 });
 
 // id, password 입력 확인 => id, password 입력 시 버튼 활성화
@@ -93,9 +93,9 @@ const login = async () => {
 
 // 가입 없이 이용
 const unsignLogin = async () => {
-  console.log(loginUser);
   try {
     await userStore.login(noLogin);
+    router.push('/home');
   } catch (error) {
     console.log('에러 =>', error);
   }
