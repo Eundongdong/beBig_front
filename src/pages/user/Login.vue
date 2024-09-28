@@ -145,7 +145,7 @@ const handleKakaoLogin = async () => {
         GoSocialSignup(data.user);
       } else if (data.existingUser === true) {
         // token을 저장하고 홈 화면으로 이동
-        handleSuccessfulLogin(data.token);
+        handleSuccessfulLogin(data);
       }
     } catch (error) {
       console.error('카카오 로그인 처리 중 오류:', error);
@@ -157,12 +157,16 @@ const handleKakaoLogin = async () => {
 };
 
 // 로그인 성공 시 토큰을 저장하고 홈 화면으로 이동하는 함수
-const handleSuccessfulLogin = (token) => {
+const handleSuccessfulLogin = async(data) => {
   // 토큰을 localStorage에 저장
-  localStorage.setItem('authToken', token);
-
+  //localStorage.setItem('authToken', token);
+  try{
+  userStore.socialLigin(data);
   // 홈 화면으로 이동
   router.push('/home');
+  }catch(error){
+    console.log(error);
+  }
 };
 
 // 페이지 로드 시 인가 코드가 있는지 확인

@@ -1,4 +1,5 @@
 <template>
+    <button @click="logout">logout</button>
     <div class="category">
         <ul>
             <li>
@@ -112,6 +113,12 @@
     import { ref, reactive, onMounted } from 'vue';
     import { useRouter } from 'vue-router';
     import SurveyResult from "./SurveyResult.vue";
+    import { useUserStore } from '@/stores/user';
+    const userStore = useUserStore();
+
+    const logout = async()=>{
+        userStore.logout();
+    }
 
     const user = reactive({
         userName: '',
@@ -143,7 +150,7 @@
 const getUser = async () => {
   try {
     const userInfo = await HomeApi.getMyInfo(); // /home/info 호출
-    console.log(userInfo);  // userInfo 값 확인
+    //console.log(userInfo);  // userInfo 값 확인
     user.userName = userInfo.userName;
     user.finTypeCode = userInfo.finTypeCode; // 필요한 정보가 어떤건지 확인 필요
   } catch (error) {
