@@ -105,7 +105,7 @@ const unsignLogin = async () => {
 const kakaoSocialLogin = () => {
   const REST_API_KEY = 'f8156e1595fd76d2b241ad4b4f3c4ca6'; // 카카오 REST API 키
   const REDIRECT_URI = 'http://localhost:5173/user'; // 카카오 리다이렉트 URI
-  const kakaoLoginUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+  const kakaoLoginUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code&prompt=login`;
 
   // 카카오 로그인 URL로 리다이렉트
   window.location.href = kakaoLoginUrl;
@@ -156,14 +156,14 @@ const handleKakaoLogin = async () => {
 };
 
 // 로그인 성공 시 토큰을 저장하고 홈 화면으로 이동하는 함수
-const handleSuccessfulLogin = async(data) => {
+const handleSuccessfulLogin = async (data) => {
   // 토큰을 localStorage에 저장
   //localStorage.setItem('authToken', token);
-  try{
-  userStore.socialLigin(data);
-  // 홈 화면으로 이동
-  router.push('/home');
-  }catch(error){
+  try {
+    userStore.socialLigin(data);
+    // 홈 화면으로 이동
+    router.push('/home');
+  } catch (error) {
     console.log(error);
   }
 };
