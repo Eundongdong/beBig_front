@@ -31,11 +31,10 @@
     <div class="form-group">
       <label>사진 추가하기</label>
       <input type="file" accept="image/*" @change="onFileChange" multiple />
-      <!-- <ul>
-        <li v-for="(fileName, index) in fileNames" :key="index">{{ fileName }}</li>
-      </ul> -->
       <!-- 파일 이름을 쉼표로 구분하여 출력 -->
       <p>{{ fileNames.join(', ') }}</p>
+
+      <!-- 기존 이미지와 새로운 이미지를 미리보기로 함께 보여줍니다 -->
       <div class="image-preview" v-if="imagePreviews.length > 0">
         <img v-for="(image, index) in imagePreviews"
          :key="index"
@@ -44,7 +43,7 @@
          @click="onImageClick(index)" 
         />
       </div>
-      <p class="image-limit-msg">사진은 3개까지만 업로드할 수 있어요.</p>
+      <p class="image-limit-msg">사진은 최대 {{ maxImages }}개까지만 업로드할 수 있어요.</p>
 
     </div>
 
@@ -68,6 +67,7 @@ const route = useRoute();
 const formData=ref({
   title: '',
   content: '',
+  category: '',
   images: []
 });
 
@@ -100,7 +100,7 @@ const fetchPostDetails = async (postId) => {
       formData.value.content = response.postContent || '';
       selectedCategory.value=response.category || '';
       //images 처리
-      processImages(response.postImagePath);
+      processImages(response.postImagePaths);
   }catch(error){
     console.error("게시글을 불러오는 중 오류 발생: ", error);
   }
@@ -118,20 +118,27 @@ const processImages=(images)=>{
   } else if (typeof images === 'string') {
     formData.value.images = images.split(','); //문자열이면 분할
   }
-  imagePreviews.value = formData.value.images.map(img => img); //미리보기 생성
+  // 서버에서 받은 이미지 경로로 미리보기 이미지 배열을 생성
+  imagePreviews.value = formData.value.images.map(img => img); 
+  fileNames.value=formData.value.images.map(img => img.split('/').pop());
 };
+
+const maxImages = 3;
 
 const onFileChange = (event) => {
   const files = Array.from(event.target.files);
-  const maxImages = 3;
+
 
   if (formData.value.images.length + files.length > maxImages) {
-    alert('이미지는 최대 3개까지 업로드 가능합니다.');
+    alert(`이미지는 최대 ${maxImages}개까지 업로드 가능합니다.`);
     return;
   }
 
   files.forEach(file => {
-    if (file.type.startsWith('image/')) {
+    if (!file.type.startsWith('image/')) {
+      alert('사진만 업로드 가능합니다.');
+      return;
+    }
       formData.value.images.push(file);  // formData에 이미지 파일 추가
       fileNames.value.push(file.name); //파일명 추가
 
@@ -140,7 +147,6 @@ const onFileChange = (event) => {
         imagePreviews.value.push(e.target.result);  // 미리보기 URL 저장
       };
       reader.readAsDataURL(file);
-    }
   });
 };
 
@@ -177,8 +183,11 @@ const submitPost = async () => {
   formDataToSubmit.append('category', selectedCategory.value);
 
   formData.value.images.forEach((image, index) => {
-    console.log('추가되는 이미지:', image); // 디버깅용 로그
-    formDataToSubmit.append(`image_${index}`, image);
+    if (image instanceof File) {
+      formDataToSubmit.append(`image_${index}`, image);  // 실제 파일 객체 추가
+    } else {
+      formDataToSubmit.append(`image_${index}_url`, image);  // URL 형태의 이미지를 따로 처리
+    }
   });
 
   try {

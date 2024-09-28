@@ -27,8 +27,21 @@
     <!-- 게시글 내용 -->
     <div class="post-body">
       <p>{{ post.postContent }}</p>
-      <img v-if="post.postImagePath" :src="post.postImagePath" alt="게시글 이미지" />
+      <!-- 이미지 출력 (최대 3장) -->
+      <div v-if="post.postImagePaths && post.postImagePaths.length" class="image-gallery">
+        <img v-for="(image, index) in post.postImagePaths.slice(0, 3)" :key="index" :src="image" alt="게시글 이미지" class="post-image" @click="openImagePopup(index)"/>
+      </div>
     </div>
+
+    <!-- 이미지 팝업 -->
+  <div v-if="isPopupOpen" class="image-popup-overlay" @click="closeImagePopup">
+    <div class="image-popup-content" @click.stop>
+      <img :src="currentPopupImage" alt="팝업 이미지" class="popup-image" />
+      <button class="close-button" @click="closeImagePopup"><i class="fa-solid fa-xmark"></i></button>
+      <button v-if="showPrevButton" class="nav-button prev" @click="changeImage(-1)"><i class="fas fa-arrow-left"></i></button>
+      <button v-if="showNextButton" class="nav-button next" @click="changeImage(1)"><i class="fas fa-arrow-right"></i></button>
+    </div>
+  </div>
 
 
     <!-- 좋아요 버튼 -->
@@ -49,7 +62,7 @@
 
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import communityApi from '@/api/CommunityApi';
 
@@ -85,6 +98,42 @@ const fetchPostDetails = async () => {
     console.error('게시글을 불러오는 중 오류 발생:', error);
   }
 };
+
+// 이미지 팝업 관련
+const isPopupOpen = ref(false);
+const currentImageIndex = ref(0);
+
+const openImagePopup = (index) => {
+  currentImageIndex.value = index;
+  isPopupOpen.value = true;
+};
+
+const closeImagePopup = () => {
+  isPopupOpen.value = false;
+};
+
+const changeImage = (direction) => {
+  if (post.value && post.value.postImagePaths) {
+    const newIndex = currentImageIndex.value + direction;
+    if (newIndex >= 0 && newIndex < post.value.postImagePaths.length) {
+      currentImageIndex.value = newIndex;
+    }
+  }
+};
+
+
+const currentPopupImage = computed(() => {
+  return post.value && post.value.postImagePaths ? post.value.postImagePaths[currentImageIndex.value] : null;
+});
+
+const showPrevButton = computed(() => {
+  return post.value && post.value.postImagePaths && currentImageIndex.value > 0;
+});
+
+const showNextButton = computed(() => {
+  return post.value && post.value.postImagePaths && currentImageIndex.value < post.value.postImagePaths.length - 1;
+});
+
 
 //게시글 수정
 const editPost = () => {
@@ -182,9 +231,11 @@ const checkIfAuthor = (post) => {
 };
 
 // 컴포넌트가 마운트될 때 게시글 정보를 가져옵니다.
-onMounted(()=>{
-  const postId = route.params.postId; // 라우터에서 postId 파라미터 가져오기
-  fetchPostDetails(postId);
+onMounted(() => {
+  const postId = route.params.postId;
+  if (postId) {
+    fetchPostDetails(postId);
+  }
 });
 </script>
 
@@ -273,5 +324,80 @@ onMounted(()=>{
   position: absolute;
   top: 10px;
   left: 10px;
+}
+
+.image-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.post-image {
+  width: calc(33.333% - 7px); /* 3개의 이미지가 한 줄에 들어가도록 설정 */
+  height: 100px; /* 원하는 높이로 설정 */
+  object-fit: cover; /* 이미지 비율 유지하면서 지정된 영역에 맞춤 */
+  border-radius: 8px; /* 이미지 모서리 둥글게 */
+}
+
+
+/* 이미지 팝업 관련 */
+.image-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.image-popup-content {
+  position: relative;
+  width: 300px; /* 뷰포트 너비의 70% */
+  height: 300px; /* 뷰포트 높이의 70% */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000; /* 이미지 주변 배경 */
+}
+
+.popup-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* 이미지 비율 유지하면서 컨테이너에 맞춤 */
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 30px;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 30px;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.prev {
+  left: 10px;
+}
+
+.next {
+  right: 10px;
 }
 </style>
