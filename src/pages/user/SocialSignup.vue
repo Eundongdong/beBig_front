@@ -306,7 +306,7 @@ const goBack = () => {
   background-color: #0056b3;
 }
 
-/* 추가된 스위치 스타일 */
+/* 스위치 슬라이더 스타일 */
 .slider {
   position: relative;
   display: inline-block;
@@ -315,7 +315,7 @@ const goBack = () => {
 }
 
 .slider input {
-  opacity: 0; /* input을 보이지 않게 숨김 */
+  opacity: 0;
   width: 0;
   height: 0;
 }

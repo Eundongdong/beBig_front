@@ -26,7 +26,6 @@
           <button class="button" :disabled="disableSubmit" @click="login">
             로그인
           </button>
-          <button class="button" @click="GoSocialSignup">소셜회원가입</button>
         </li>
         <li>
           <button class="button" @click="GoFindId">아이디 찾기</button>
