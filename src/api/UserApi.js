@@ -26,6 +26,7 @@ export default {
     const { data } = await api.get(
       `${BASE_URL}/login/${userID}`
     );
+    console.log(data);
     return data;
   },
 

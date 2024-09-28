@@ -6,7 +6,7 @@
                 <h1 class="name">{{user.userName}}님,<br> 안녕하세요</h1>
                 <button class="category_button" @click="GoSurvey">
                     <img class="category_img" :src="`../../../public/images/${user.finTypeCode}.png`">
-                    <h5 class="category_tag">{{ user.finTypeCode === '0' ? '유형검사 하러 가기' : '내 유형 보기' }}</h5>
+                    <h5 class="category_tag">{{ user.finTypeCode != '1' ||  user.finTypeCode != '2' || user.finTypeCode != '3' || user.finTypeCode != '4' ? '유형검사 하러 가기' : '내 유형 보기' }}</h5>
                 </button>
             </li>
         </ul>
@@ -114,7 +114,10 @@
     import { useRouter } from 'vue-router';
     import SurveyResult from "./SurveyResult.vue";
     import { useUserStore } from '@/stores/user';
+    import { useHomeStore } from '@/stores/home';
+
     const userStore = useUserStore();
+    const homeStore = useHomeStore();
 
     const logout = async()=>{
         userStore.logout();
@@ -153,6 +156,7 @@ const getUser = async () => {
     //console.log(userInfo);  // userInfo 값 확인
     user.userName = userInfo.userName;
     user.finTypeCode = userInfo.finTypeCode; // 필요한 정보가 어떤건지 확인 필요
+    homeStore.setuserFintype(user.finTypeCode);
   } catch (error) {
     console.error('사용자 정보 가져오는 함수 API 호출 중 오류 발생:', error);
   }
@@ -179,7 +183,7 @@ const getUser = async () => {
     };
 
     onMounted(() => {
-         getUser();
+        getUser();
         // getAsset();
         // getMission();
     });
@@ -192,7 +196,7 @@ const getUser = async () => {
 
     const GoSurvey = () => {
         // userType이 '0'일 때는 /home/survey-start로 이동
-        if (user.userType === '0') {
+        if (user.finTypeCode != '1' ||  user.finTypeCode != '2' || user.finTypeCode != '3' || user.finTypeCode != '4') {
             router.push('/home/survey-start');
         } else {
             // 그 외의 경우에는 모달을 띄움

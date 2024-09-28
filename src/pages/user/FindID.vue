@@ -58,7 +58,7 @@ const errorMessage = ref(''); // 오류 메시지
 
 const findID = async () => {
   try {
-    const response = await UserApi.finduserLoginId({
+    const response = await UserApi.findUserId({
       name: name.value,
       email: email.value,
     });
