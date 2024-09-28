@@ -1,7 +1,59 @@
 <template>
-  <div>
+  <!-- <div>
     <h1>My Page</h1>
     <button @click="testMypageApi">Mypage API 테스트</button>
+  </div> -->
+
+  <div class="mypage">
+    <!-- 상단 부분 -->
+    <header class="header">
+      <button @click="goBack" class="back-button">←</button>
+      <h2>마이페이지</h2>
+      <button class="settings-button" @click="goSettings">⚙️</button>
+    </header>
+
+    <!-- 프로필 영역 -->
+    <section class="profile">
+      <div class="profile-info">
+        <img class="profile-image" :src="user.profileImage" alt="프로필 이미지" />
+        <div class="profile-details">
+          <h3 class="nickname">{{ user.nickname }} 님 🎖️</h3>
+          <p class="achievement">이번달 미션 달성도 상위 30%</p>
+        </div>
+      </div>
+      <p class="bio">{{ user.bio }}</p>
+    </section>
+
+    <!-- 미션 진행상황 -->
+    <section class="mission-progress">
+      <p>현재 미션을 {{ user.missionProgress }}%만큼 달성했어요</p>
+      <div class="progress-bar">
+        <div class="progress" :style="{ width: user.missionProgress + '%' }"></div>
+      </div>
+      <p class="days-left">D-{{ user.daysLeft }}</p>
+    </section>
+
+    <!-- 내가 작성한 글 / 좋아하는 글 탭 -->
+    <section class="posts">
+      <div class="tabs">
+        <button @click="selectTab('myPosts')" :class="{ active: selectedTab === 'myPosts' }">내가 작성한 글</button>
+        <button @click="selectTab('likedPosts')" :class="{ active: selectedTab === 'likedPosts' }">좋아하는 글</button>
+      </div>
+      <ul v-if="selectedTab === 'myPosts'">
+        <li v-for="(post, index) in user.myPosts" :key="index">
+          <p>{{ post.title }}</p>
+          <span>{{ post.date }}</span>
+          <span>❤️ {{ post.likes }}</span>
+        </li>
+      </ul>
+      <ul v-if="selectedTab === 'likedPosts'">
+        <li v-for="(post, index) in user.likedPosts" :key="index">
+          <p>{{ post.title }}</p>
+          <span>{{ post.date }}</span>
+          <span>❤️ {{ post.likes }}</span>
+        </li>
+      </ul>
+    </section>
   </div>
 </template>
 
