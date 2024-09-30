@@ -57,6 +57,7 @@ export default {
     },
     //확인된 계좌 정보들 db에 저장하기
     async addAccount(accountList){
+      console.log(accountList);
       const { data } = await api.post(
         `${BASE_URL}/account/add`,
         accountList,
@@ -79,7 +80,6 @@ export default {
   },
 
   // 계좌 목록 조회
-
     async accountList() {
         const { data } = await api.get(`${BASE_URL}/account/list`);
         return data;
