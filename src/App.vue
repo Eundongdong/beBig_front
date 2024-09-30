@@ -1,7 +1,7 @@
 <template>
-  <div class="app-container">
+  <div class="flex flex-col relative">
     <Header v-if="!isUserPage"/>
-    <div class="content-wrapper">
+    <div class="flex-1 mt-2 mb-2 overflow-y-auto">
       <RouterView/>
     </div>
     <Footer v-if="!isUserPage"/>
@@ -24,18 +24,4 @@ watch(route, (newRoute) => {
 
 </script>
 
-<style scoped>
-    .app-container {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-  }
-
-  .content-wrapper {
-    flex: 1;
-    margin-top: 60px; /* 헤더 높이 */
-    margin-bottom: 60px; /* 푸터 높이 */
-    overflow-y: auto;
-  }
-</style>
+<style scoped> </style>

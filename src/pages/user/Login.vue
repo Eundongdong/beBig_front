@@ -1,53 +1,52 @@
 <template>
-  <div class="Page">
-    <div class="Logo">
-      <h1>beBIG</h1>
+  <div class="w-full min-w-[340px] mx-auto p-5">
+    <div class="flex justify-center mb-8">
+      <img src="/images/logo.png" class="w-[40%]" alt="Logo" />
     </div>
-    <div class="Input">
+    <div class="space-y-4">
       <ul>
         <li>
-          <h3>아이디</h3>
-          <input
-            type="text"
-            v-model="loginUser.userLoginId"
-            placeholder="Enter your ID"
-          />
+          <label for="id" class="label">아이디</label>
+          <input type="text" class="input" v-model="loginUser.userLoginId" placeholder="Enter your ID" id="id" />
         </li>
         <li>
-          <h3>비밀번호</h3>
-          <input
-            type="password"
-            v-model="loginUser.password"
-            placeholder="Enter your password"
-          />
+          <label for="password" class="label">비밀번호</label>
+          <input type="password" class="input" v-model="loginUser.password" placeholder="Enter your password"
+            id="password" />
         </li>
-        <li>
-          <button class="button" @click="GoSignup">회원가입</button>
+        <li class="flex justify-between space-x-2">
+          <button class="button" @click="GoSignup">
+            회원가입
+          </button>
           <button class="button" :disabled="disableSubmit" @click="login">
             로그인
           </button>
         </li>
-        <li>
-          <button class="button" @click="GoFindId">아이디 찾기</button>
-          <button class="button" @click="GoFindPwd">비밀번호 찾기</button>
+        <li class="flex justify-between text-blue-500 text-sm space-x-2">
+          <button class="hover:underline" @click="GoFindId">아이디 찾기</button>
+          <button class="hover:underline" @click="GoFindPwd">비밀번호 찾기</button>
         </li>
       </ul>
     </div>
-    <div class="Button">
+    <div class="space-y-4 mt-6">
       <ul>
         <li>
-          <button class="naver_button" @click="naverSocialLogin">
-            네이버 로그인
+          <button
+            class="w-full py-3 bg-green-500 text-white rounded hover:bg-green-600 flex items-center justify-center space-x-2"
+            @click="naverSocialLogin">
+            <span>네이버 로그인</span>
           </button>
         </li>
         <li>
-          <button class="kakao_button" @click="kakaoSocialLogin">
-            카카오 로그인
+          <button
+            class="w-full py-3 bg-yellow-400 text-black rounded hover:bg-yellow-500 flex items-center justify-center space-x-2"
+            @click="kakaoSocialLogin">
+            <span>카카오 로그인</span>
           </button>
         </li>
         <li>
-          <button class="unsign_button" @click="unsignLogin">
-            가입없이 이용
+          <button class="w-full py-3 bg-blue-600 text-white rounded hover:bg-blue-700" @click="unsignLogin">
+            가입없이 이용하기
           </button>
         </li>
       </ul>
@@ -218,7 +217,8 @@ const GoFindPwd = () => {
 <style scoped>
 .Page {
   width: 100%;
-  min-width: 340px; /*스마트폰 기준 너비 */
+  min-width: 340px;
+  /*스마트폰 기준 너비 */
   margin: 0 auto;
   padding: 20px;
 }
