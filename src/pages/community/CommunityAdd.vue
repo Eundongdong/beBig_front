@@ -94,7 +94,7 @@ const fetchPostDetails = async (postId) => {
     const response = await communityApi.detail(postId);
     formData.value.title = response.postTitle || '';
     formData.value.content = response.postContent || '';
-    selectedCategory.value = response.category || '';
+    selectedCategory.value = response.postCategory || '';
     //images 처리
     processImages(response.postImagePaths);
   } catch (error) {
