@@ -47,9 +47,11 @@
     <!-- 좋아요 버튼 -->
     <div class="post-footer">
           <button @click="likePost(post.postId, post.userId)" class="like-btn">
-            <div class="heart"><i :class="post.isLiked ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i></div>
-            {{ post.postLikeHits }}
-          </button>
+              <span :class="{ 'filled-heart': post.isLiked, 'empty-heart': !post.isLiked }">
+          {{ post.isLiked ? '♥' : '♡' }}
+        </span>
+              {{ post.postLikeHits }}
+            </button>
         </div>
   </div>
 
@@ -308,9 +310,10 @@ onMounted(() => {
   align-items: center;
 }
 
-.heart {
+.filled-heart, .empty-heart {
   color: #ff4d4d;
 }
+
 
 .back-button {
   font-size: 28px;
