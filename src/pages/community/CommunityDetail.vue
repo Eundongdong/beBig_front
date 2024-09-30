@@ -47,7 +47,7 @@
     <!-- 좋아요 버튼 -->
     <div class="post-footer">
           <button @click="likePost(post.postId, post.userId)" class="like-btn">
-            <i :class="post.isLiked ? 'fas fa-heart filled-heart' : 'far fa-heart empty-heart'"></i>
+            <div class="heart"><i :class="post.isLiked ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i></div>
             {{ post.postLikeHits }}
           </button>
         </div>
@@ -199,10 +199,10 @@ console.log(post.value);
 const getProfileIcon = (finTypeCode) => {
   // finTypeCode가 유효한지 확인
   if (finTypeCode && finTypeCode !== 0) {
-    return `images/${finTypeCode}.png`;
+    return `/images/${finTypeCode}.png`;
   }
   // 기본 이미지 반환
-  return 'images/0.png';
+  return '/images/0.png';
 };
 
 //작성자의 프로필을 눌렀을 때
@@ -304,16 +304,12 @@ onMounted(() => {
   border: none;
   cursor: pointer;
   font-size: 24px;
+  display: flex;
+  align-items: center;
 }
 
-.filled-heart {
+.heart {
   color: #ff4d4d;
-  /* 채워진 하트는 빨간색 */
-}
-
-.empty-heart {
-  color: #ff4d4d;
-  /* 빈 하트 테두리만 빨간색 */
 }
 
 .back-button {
