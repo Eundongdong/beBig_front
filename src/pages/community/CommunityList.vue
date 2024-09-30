@@ -1,9 +1,9 @@
 <template>
   <!-- api테스트 -->
-  <div>
+  <!-- <div>
     CommunityList
     <button @click="testCommunityApi">API 테스트</button>
-  </div>
+  </div> -->
 
   <div class="community-list">
     <!-- 상단의 정렬 및 필터 요소 -->
