@@ -1,26 +1,27 @@
 <template>
+    <button @click="handleBackClick" class="back-button">&lt;</button>
     <div class="container">
-      <h1>{{ selectedBank }}은행을 선택하셨군요.</h1>
+      <h1>{{ selectedBank }}을 선택하셨군요.</h1>
       <h3>아이디</h3>
-      <input type="text" v-model="bankAccount.Id" placeholder="Enter your ID" class="input-field"/>
+      <input type="text" v-model="bankAccount.userBankId" placeholder="Enter your ID" class="input-field"/>
       <h3>비밀번호</h3>
-      <input type="password" v-model="bankAccount.pwd" placeholder="Enter your password" class="input-field"/>
+      <input type="password" v-model="bankAccount.bankPassword" placeholder="Enter your password" class="input-field"/>
       <h3 class="count-text">아이디/비밀번호 입력 횟수가 {{ count }}번 남았습니다.</h3>
       <button @click="Connect" class="primary-button">계좌 연결하기</button>
     </div>
   
     <!-- 계좌 목록을 보여주는 섹션 -->
     <div v-if="accountList.length != 0" class="account-list">
-      <div v-for="(account, index) in accountList" :key="index" class="account-info">
-        <img :src="`../../../public/images/bank/${account.bankName}.png`" alt="Bank Logo" class="bank-logo">
+      <div v-for="account in accountList" :key="accountList.resAccount" class="account-info">
+        <img :src="`../../../public/images/bank/${account.bankVo.bankName}.png`" alt="Bank Logo" class="bank-logo">
         <div class="account-details">
-          <p>{{ account.bankName }}은행</p>
-          <p>통장이름: {{ account.accountName }}</p>
-          <p>계좌번호: {{ account.accountNumber }}</p>
-          <p>잔액: {{ account.balance }}</p>
+          <p>{{ account.bankVo.bankName }}</p>
+          <p>통장이름: {{ account.resAccountName }}</p>
+          <p>계좌번호: {{ account.resAccount}}</p>
+          <p>잔액: {{ account.resAccountBalance}}</p>
         </div>
       </div>
-      <button @click="addAccount" class="primary-button">계좌를 추가하시겠습니까?</button>
+      <button @click="addAccount()" class="primary-button">계좌를 추가하시겠습니까?</button>
     </div>
   
   </template>
@@ -28,7 +29,7 @@
   <script setup>
     import { useBankStore } from '@/stores/bank'; // Pinia 스토어 가져오기
     import HomeApi from '@/api/HomeApi';
-    import { ref, reactive, computed, watch } from 'vue';
+    import { ref, reactive, computed} from 'vue';
     import { useRouter } from 'vue-router';
     const router = useRouter();
     
@@ -36,47 +37,27 @@
   
     const bankAccount = reactive({
       bank: '',
-      Id: '',
-      pwd: ''
+      userBankId: '',
+      bankPassword: ''
     });
     const count = ref(3);  // 남은 횟수
     
     // Pinia에서 선택된 은행 이름을 가져옴
     const selectedBank = computed(() => bankStore.selectedBank);
-    bankAccount.bank = selectedBank.value;
+    bankAccount.bank = bankStore.getSelectedBankNum();
 
     // 예시 계좌 목록
-    const accountList = reactive([
-      {
-        bankName: '신한',
-        accountName: '생활비',
-        accountNumber: '110-1234-5678',
-        balance: '1,234,000원'
-      },
-      {
-        bankName: 'KB국민',
-        accountName: '저축예금',
-        accountNumber: '123-4567-8910',
-        balance: '5,678,000원'
-      }
-    ]);
+    const accountList = reactive([]);
   
     // "계좌 연결하기" 버튼 클릭 시 호출될 함수
     const Connect = async() => {
       console.log("계좌 연결 시도");
       try{
-        const connectBank = await HomeApi.getAccountList(bankAccount);
-        console.log(connectBank); //connectBank가 해당 은행의 계좌 정보들 들어오게
-
-        //connectBank에 받아진 계좌 정보들을 accountList에 넣기
-        connectBank.forEach(account => {
-          accountList.push({
-            bankName: account.bankName,  //백에서 받는 값 형식에 맞게 수정필요
-            accountName: account.accountName, 
-            accountNumber: account.accountNumber,
-            balance: account.balance 
-          });
-        });
+        const response = await HomeApi.getAccountList(bankAccount);
+        for(let i=0;i<response.length;i++){
+          accountList[i] = response[i];
+        }
+        console.log(accountList);
       }catch(error){
         //여기서 error 코드에 따라 남은 횟수 수정하기
         console.error('API 호출 중 오류 발생:', error);
@@ -94,6 +75,11 @@
         console.error('API 호출 중 오류 발생:', error);
       }
     }; 
+
+      // 뒤로가기 버튼 클릭 시 실행되는 함수
+  const handleBackClick = () => {
+    router.push('/home/bank');
+  };
     
     const goHome = () => {
       router.push('/home');

@@ -38,10 +38,10 @@
             </li>
         </ul>
         <!-- 계좌 목록 출력 -->
-        <div v-for="(account, index) in accountList" :key="index" class="account-info">
-            <img :src="`../../../public/images/bank/${account.bankName}.png`" alt="Bank Logo" class="bank-logo">
+        <div v-for="account in accountList" :key="accountList.resAccount" class="account-info">
+          <img :src="`../../../public/images/bank/${account.bankVo.bankName}.png`" alt="Bank Logo" class="bank-logo">
             <div class="account-details">
-                <p>잔액: {{ account.amount }}</p>
+              <p>잔액: {{ account.resAccountBalance}}</p>
             </div>
             <button v-if="index ==0" class="details-button" @click="goToAccountDetails(account)">></button>
         </div>
@@ -132,16 +132,7 @@
         finTypeCode: ''  //2로도 바꿔보세요.
     });
 
-    const accountList = reactive([
-        {
-            bankName: '신한',
-            amount: '1,234,000원',
-        },
-        {
-            bankName: 'KB국민',
-            amount: '5,678,000원',
-        },
-    ]);
+    const accountList = reactive([]);
 
     const totalAmount = reactive('1234');
     const mission = reactive({
@@ -166,10 +157,13 @@ const getUser = async () => {
 };
 
     const getAsset = async () => {
-        try {
-            const userAsset = await HomeApi.accountList();
-            console.log(userAsset);
-            totalAmount.value = userAsset.totalAsset; // API 데이터 형식에 맞게 수정 필요
+      try{
+          const response = await HomeApi.accountList();
+          console.log(response);
+          // for(let i=0;i<response.length;i++){
+          //   accountList[i] = response[i];
+          // }
+        console.log(accountList);
         } catch (error) {
             console.error("API 호출 중 오류 발생:", error);
         }
@@ -187,7 +181,7 @@ const getUser = async () => {
 
     onMounted(() => {
         getUser();
-        // getAsset();
+        getAsset();
         // getMission();
     });
 
