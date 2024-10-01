@@ -51,68 +51,31 @@
             <h3 class="mission-title">나의 미션</h3>
             <button @click="goToMission" class="mission-button">미션 보러 가기</button>
         </div>
-        <div v-if="!mission.MonthMission && !mission.dailyMission1 && !mission.dailyMission2">
+        <div v-if="!monthlyMission && !dailyMissions">
             <h2>계좌를 연결하고 미션을 받아보세요</h2>
         </div>
     <div v-else>
-      <h2>
-        {{ mission.MonthMission }}
-        <button
-          :class="{
-            completed: !mission.MonthMissionType,
-          }"
-          :disabled="!mission.MonthMissionType"
-          @click="completeMission('MonthMission')"
-        >
-          {{
-            mission.MonthMissionType
-              ? '완료'
-              : '완료됨'
-          }}
-        </button>
-      </h2>
-      <h2>
-        {{ mission.dailyMission1 }}
-        <button
-          :class="{
-            completed: !mission.dailyMission1Type,
-          }"
-          :disabled="!mission.dailyMission1Type"
-          @click="
-            completeMission('dailyMission1')
-          "
-        >
-          {{
-            mission.dailyMission1Type
-              ? '완료'
-              : '완료됨'
-          }}
-        </button>
-      </h2>
-      <h2>
-        {{ mission.dailyMission2 }}
-        <button
-          :class="{
-            completed: !mission.dailyMission2Type,
-          }"
-          :disabled="!mission.dailyMission2Type"
-          @click="
-            completeMission('dailyMission2')
-          "
-        >
-          {{
-            mission.dailyMission2Type
-              ? '완료'
-              : '완료됨'
-          }}
-        </button>
-      </h2>
+      <h2>{{ monthlyMission.missionTopic }}</h2>
+      <h3 :style="{color: monthlyMission.isRevoked ? 'red' : 'blue',}">
+          {{ monthlyMission.isRevoked ? '성공!' : '도전하세요!' }}
+      </h3>
+      <ul>
+        <li v-for="mission in dailyMissions" :key="mission.personalDailyMissionId">
+          <div class="mission-description">
+            {{ mission.missionTopic || '설명이 없습니다.' }}
+          </div>
+          <h3 :style="{color: mission.personalDailyMissionCompleted ? 'red' : 'blue',}">
+            {{ mission.personalDailyMissionCompleted ? '성공!' : '도전하세요!' }}
+          </h3>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
 
 <script setup>
     import HomeApi from "@/api/HomeApi";
+    import MissionApi from '@/api/MissionApi';
     import { ref, reactive, onMounted } from 'vue';
     import { useRouter } from 'vue-router';
     import SurveyResult from "./SurveyResult.vue";
@@ -135,14 +98,6 @@
     const accountList = reactive([]);
 
     const totalAmount = reactive('1234');
-    const mission = reactive({
-        MonthMission: 'aaa',
-        dailyMission1: 'bbb',
-        dailyMission2: 'ccc',
-        dailyMission1Type: true,
-        dailyMission2Type: false,
-        MonthMissionType: true,
-    });
 
 // 사용자 정보를 가져오는 함수
 const getUser = async () => {
@@ -169,11 +124,18 @@ const getUser = async () => {
         }
     };
 
+    const monthlyMission = ref('');
+    const dailyMissions = reactive([]);
     const getMission = async () => {
         try {
-            const userMission = await HomeApi.missionList();
-            console.log(userMission);
-            Object.assign(mission, userMission); // mission 객체에 API 응답 값 설정
+          const response = await MissionApi.getDailyMission();
+          for (let i = 0; i < 3; i++) {
+            dailyMissions[i] = response[i];
+          }
+          monthlyMission.value = await MissionApi.getMonthMission();
+
+          console.log(monthlyMission);
+          console.log(dailyMissions);
         } catch (error) {
             console.error("API 호출 중 오류 발생:", error);
         }
@@ -181,8 +143,8 @@ const getUser = async () => {
 
     onMounted(() => {
         getUser();
-        getAsset();
-        // getMission();
+       // getAsset();
+        getMission();
     });
 
     const router = useRouter();
@@ -215,15 +177,6 @@ const getUser = async () => {
     router.push({ name: 'mission' });
     };
 
-    const completeMission = (missionType) => {
-        if (missionType === 'MonthMission') {
-            mission.MonthMissionType = false;
-        } else if (missionType === 'dailyMission1') {
-            mission.dailyMission1Type = false;
-        } else if (missionType === 'dailyMission2') {
-            mission.dailyMission2Type = false;
-        }
-    };
 
     const goToAccountDetails = (account) => {
         // /home/account 경로로 이동
