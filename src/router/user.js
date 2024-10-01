@@ -23,10 +23,5 @@ export default[
         path:'/user/findpwd',
         name:'userFindPwd',
         component:()=>import('../pages/user/FindPwd.vue')
-    },
-    {
-        path:'/user/policy',
-        name:'userPolicy',
-        component:()=>import('../pages/user/Policy.vue')
     }
 ];

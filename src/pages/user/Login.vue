@@ -1,68 +1,69 @@
 <template>
-  <div class="w-full mx-auto p-5">
+  <div class="page">
     <div class="flex justify-center mb-8">
       <img src="/images/logo.png" class="w-[45%]" alt="Logo" />
     </div>
-    <div class="space-y-4">
-      <ul>
-        <li>
-          <label for="id" class="label">아이디</label>
-          <input
-            type="text"
-            class="input"
-            v-model="loginUser.userLoginId"
-            placeholder="아이디를 입력하세요"
-            id="id"
-          />
-        </li>
-        <li>
-          <label for="password" class="label">비밀번호</label>
-          <input
-            type="password"
-            class="input"
-            v-model="loginUser.password"
-            placeholder="비밀번호를 입력하세요"
-            id="password"
-          />
-        </li>
-        <li class="flex justify-between space-x-2">
-          <button class="button" @click="GoSignup">회원가입</button>
-          <button class="button" :disabled="disableSubmit" @click="login">
-            로그인
-          </button>
-        </li>
-        <li class="flex justify-center items-center space-x-2">
-          <button class="text-button" @click="GoFindId">아이디 찾기</button>
-          <button class="text-button" @click="GoFindPwd">비밀번호 찾기</button>
-        </li>
-      </ul>
-    </div>
-    <div class="space-y-4 mt-6">
-      <ul>
-        <li>
-          <button
-            class="white-button flex justify-center items-center space-x-2"
-            @click="naverSocialLogin"
-          >
-            <img src="/images/naver.png" class="w-[12%]" />
-            <span>네이버 로그인</span>
-          </button>
-        </li>
-        <li>
-          <button
-            class="white-button flex justify-center items-center space-x-2"
-            @click="kakaoSocialLogin"
-          >
-            <img src="/images/kakao.png" class="w-[12%]" />
-            <span>카카오 로그인</span>
-          </button>
-        </li>
-        <li>
-          <button class="button my-14" @click="unsignLogin">
-            가입없이 이용하기
-          </button>
-        </li>
-      </ul>
+    <div class="container">
+      <div class="input_id">
+        <label for="id" class="label">아이디</label>
+        <input
+          type="text"
+          class="input"
+          v-model="loginUser.userLoginId"
+          placeholder="아이디를 입력하세요"
+          id="id"
+        />
+      </div>
+
+      <div class="input_password">
+        <label for="password" class="label">비밀번호</label>
+        <input
+          type="password"
+          class="input"
+          v-model="loginUser.password"
+          placeholder="비밀번호를 입력하세요"
+          id="password"
+        />
+      </div>
+
+      <div class="flex justify-between space-x-2">
+        <button class="button" @click="GoSignup">회원가입</button>
+        <button class="button" :disabled="disableSubmit" @click="login">
+          로그인
+        </button>
+      </div>
+      <div class="flex justify-center items-center space-x-2">
+        <button class="text-button" @click="GoFindId">아이디 찾기</button>
+        <button class="text-button" @click="GoFindPwd">비밀번호 찾기</button>
+      </div>
+
+      <div class="space-y-4 mt-6">
+        <ul>
+          <li>
+            <button
+              class="white-button flex justify-center items-center space-x-2"
+              @click="naverSocialLogin"
+            >
+              <img src="/images/naver.png" class="w-[12%]" />
+              <span>네이버 로그인</span>
+            </button>
+          </li>
+          <li>
+            <button
+              class="white-button flex justify-center items-center space-x-2"
+              @click="kakaoSocialLogin"
+            >
+              <img src="/images/kakao.png" class="w-[12%]" />
+              <span>카카오 로그인</span>
+            </button>
+          </li>
+          <li>
+            <button class="button my-10" @click="unsignLogin">
+              가입없이 이용하기
+            </button>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -226,17 +227,3 @@ const GoFindPwd = () => {
   router.push("./user/findpwd");
 };
 </script>
-
-<style scoped>
-.Page {
-  width: 100%;
-  min-width: 340px;
-  /*스마트폰 기준 너비 */
-  margin: 0 auto;
-  padding: 20px;
-}
-
-ul {
-  list-style-type: none;
-}
-</style>

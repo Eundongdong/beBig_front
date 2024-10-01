@@ -1,16 +1,17 @@
 <template>
-  <div class="find_id_container">
-    <header class="header-container">
-      <button class="back" @click="goBack">
-        <i class="fa-solid fa-chevron-left"></i>
+  <div class="page">
+    <header class="header">
+      <button class="back-button" @click="goBack">
+        <i class="fa-solid fa-arrow-left"></i>
       </button>
-      <p class="title">아이디 찾기</p>
     </header>
 
-    <form @submit.prevent="findID">
-      <div>
-        <label for="name">이름</label>
+    <form @submit.prevent="findID" class="container">
+      <!-- 이름 -->
+      <div class="input_name">
+        <label class="label" for="name">이름</label>
         <input
+          class="input"
           v-model="name"
           type="text"
           id="name"
@@ -18,9 +19,11 @@
           required
         />
       </div>
-      <div>
-        <label for="email">이메일</label>
+      <!-- 이메일 -->
+      <div class="input_email">
+        <label class="label" for="email">이메일</label>
         <input
+          class="input"
           v-model="email"
           type="email"
           id="email"
@@ -29,32 +32,37 @@
         />
       </div>
 
-      <button type="submit">아이디 찾기</button>
+      <button class="button" type="submit">아이디 찾기</button>
     </form>
 
     <!-- 결과 표시 -->
-    <div v-if="userLoginId" class="result">
+    <div v-if="userLoginId" class="result text-center text-lg mt-10">
       <p>
-        <strong class="highlight">{{ name }}</strong> 님의 아이디는
+        <span class="big-text">{{ name }}</span> 님의 아이디는
         <br />
-        <strong class="highlight">{{ userLoginId }}</strong> 입니다.
+        <span class="big-text">{{ userLoginId }}</span> 입니다.
       </p>
     </div>
-    <div v-else-if="errorMessage" class="error">
+    <div
+      v-else-if="errorMessage"
+      class="result_error text-center text-lg mt-10"
+    >
       <p>{{ errorMessage }}</p>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import UserApi from '@/api/UserApi';
-// import axios from 'axios'; // axios를 import
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import UserApi from "@/api/UserApi";
 
-const name = ref(''); // 사용자 이름
-const email = ref(''); // 사용자 이메일
+const router = useRouter();
+
+const name = ref(""); // 사용자 이름
+const email = ref(""); // 사용자 이메일
 const userLoginId = ref(null); // 찾은 사용자 ID
-const errorMessage = ref(''); // 오류 메시지
+const errorMessage = ref(""); // 오류 메시지
 
 const findID = async () => {
   try {
@@ -63,56 +71,16 @@ const findID = async () => {
       email: email.value,
     });
     userLoginId.value = response; // 성공적으로 받은 아이디
-    errorMessage.value = '';
+    errorMessage.value = "";
   } catch (error) {
-    console.error('API 호출 중 오류 발생:', error);
-    errorMessage.value = '해당 이름과 이메일로 등록된 아이디가 없습니다.';
+    console.error("API 호출 중 오류 발생:", error);
+    errorMessage.value = "해당 이름과 이메일로 등록된 아이디가 없습니다.";
     userLoginId.value = null;
   }
 };
 
 // 뒤로가기 함수
 const goBack = () => {
-  window.history.back(); // 뒤로 가기
+  router.push({ name: "user" });
 };
 </script>
-
-<style>
-.find_id_container {
-  text-align: center;
-  padding: 20px;
-}
-
-.header-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-
-.title {
-  flex: 1;
-  text-align: center;
-  margin-right: 24px; /* 아이콘 크기에 맞게 여백을 추가 */
-}
-
-.back {
-  background: none;
-  border: none;
-  font-size: 24px;
-}
-
-.result,
-.error {
-  margin-top: 20px;
-}
-
-.error {
-  color: red;
-}
-
-.highlight {
-  color: #007bff;
-  font-weight: bold;
-}
-</style>

@@ -12,12 +12,47 @@
   font-family: sans-serif;
 }
 
+.page{
+  @apply w-full mx-auto p-5;
+}
+
+.modal {
+  @apply max-w-lg rounded-lg p-6 fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
+  max-width: 90%;
+  width: auto;
+  max-height: 90vh;
+}
+
+.terms-content {
+  @apply overflow-y-scroll text-sm text-gray-600 border border-gray-300 rounded p-2 max-h-40;
+}
+
+.notification-text{
+  @apply text-red-600 text-sm;
+}
+
+.container{
+  @apply space-y-2.5;
+}
+
+/* .header{
+
+} */
+
+.big-text{
+  @apply text-[#5354ff] text-lg font-semibold;
+}
+
 .button {
-  @apply w-full py-2 mb-2 bg-[#5354ff] text-white rounded hover:bg-[#3435ff];
+  @apply w-full py-2 mb-1 bg-[#5354ff] text-white rounded hover:bg-[#3435ff];
 }
 
 .white-button{
-  @apply w-full py-1.5 mb-2 text-black bg-white rounded hover:bg-gray-200;
+  @apply w-full py-1.5 mb-1 text-black bg-white rounded hover:bg-gray-200;
+}
+
+.gray-button{
+  @apply w-full py-1.5 mb-1 text-black bg-gray-200 rounded hover:bg-gray-300;
 }
 
 .text-button{
@@ -25,11 +60,11 @@
 }
 
 .label {
-  @apply block text-base font-medium;
+  @apply block text-base pb-0 mb-0 font-medium;
 }
 
 .input {
-  @apply w-full px-3 py-2 mb-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500;
+  @apply w-full px-3 py-2 mt-0 mb-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500;
 }
 
 .disabled-input {
