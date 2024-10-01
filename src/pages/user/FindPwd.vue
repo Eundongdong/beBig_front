@@ -47,7 +47,7 @@
 
     <!-- 결과 표시 -->
     <div v-if="message" class="result text-center text-lg mt-10">
-      <p>{{ message }}</p>
+      <p>입력하신 이메일로 <br/>임시 비밀번호를 보냈어요!</p>
     </div>
     <div
       v-else-if="errorMessage"

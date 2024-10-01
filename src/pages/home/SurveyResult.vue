@@ -11,7 +11,7 @@
           <li v-for="advice in advices" :key="advice">{{ advice }}</li>
         </ul>
       </div>
-      <button class="back-button" @click="goBack">홈으로 돌아가기</button>
+      <button class="button" @click="goBack">홈으로 돌아가기</button>
     </div>
   </template>
   

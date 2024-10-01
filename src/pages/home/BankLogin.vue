@@ -12,7 +12,7 @@
     <!-- 계좌 목록을 보여주는 섹션 -->
     <div v-if="accountList.length != 0" class="account-list">
       <div v-for="(account, index) in accountList" :key="index" class="account-info">
-        <img :src="`../../../public/images/bank/${account.bankName}.png`" alt="Bank Logo" class="bank-logo">
+        <img :src="`/images/bank/${account.bankName}.png`" alt="Bank Logo" class="bank-logo">
         <div class="account-details">
           <p>{{ account.bankName }}은행</p>
           <p>통장이름: {{ account.accountName }}</p>

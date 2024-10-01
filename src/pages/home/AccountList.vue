@@ -11,7 +11,7 @@
         </ul>
         <!-- 계좌 목록 출력 -->
         <div v-for="(account, index) in accountList" :key="index" class="account-info">
-            <img :src="`../../../public/images/bank/${account.bankName}.png`" alt="Bank Logo" class="bank-logo">
+            <img :src="`/images/bank/${account.bankName}.png`" alt="Bank Logo" class="bank-logo">
             <div class="account-details">
                 <p>{{ account.accountName }}</p>
                 <p>{{ account.accountNum }}</p>
