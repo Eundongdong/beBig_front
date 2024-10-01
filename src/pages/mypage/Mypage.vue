@@ -29,9 +29,14 @@
       <div class="username">
         {{ userNickname }} 님
       </div>
-      <div class="badge-section">
-        🎖️ {{ badgeCode }}
+
+       <!-- badgeCode가 0이 아닐 때만 배지 이미지가 버튼으로 표시됨 -->
+       <div v-if="badgeCode !== 0">
+        <button class="badge-button" @click="openBadgeModal">
+          <img :src="badgeImage" alt="Badge" class="badge-img" width="5%" />
+        </button>
       </div>
+
       <div>이번달 미션 달성도 상위 {{ userRank }} %</div>
       <div>{{ finTypeInfo }}</div>
       <div class="intro-section">
@@ -41,6 +46,17 @@
         </div>
       </div>
     </section>
+
+     <!-- 모달이 활성화될 때 표시 -->
+     <div v-if="showModal" class="modal-overlay" @click="closeModalOnOverlay">
+      <div class="modal" @click.stop>
+        <button @click="closeModal" class="modal-close-button"><i class="fa-solid fa-xmark"></i></button>
+        <h1>뱃지 이미지</h1>
+        <h2>Badge Information</h2>
+        <p>여기에 배지에 대한 설명을 넣으세요.</p>
+        
+      </div>
+    </div>
 
     <!-- 미션 진행상황 -->
     <section class="mission-section">
@@ -120,11 +136,34 @@ const loginType= ref('');
 const myPosts = ref([]);
 const myLikePosts = ref([]);
 const selectedTab = ref('myPosts');
+const showModal = ref(false); // 모달 표시 여부
 
 // 프로필 사진 동적 경로 설정
 const profileImage = computed(() => {
   return `/images/${finTypeCode.value}.png`; // 이미지 파일명은 finTypeCode 값과 일치
 });
+
+// 뱃지 이미지 동적 경로 설정
+const badgeImage = computed(() => {
+  return `/images/badge/badge${badgeCode.value}.png`; // badgeCode 값에 따라 배지 이미지 설정
+});
+
+// 모달 열기 함수
+const openBadgeModal = () => {
+  showModal.value = true;
+};
+
+// 모달 닫기 함수
+const closeModal = () => {
+  showModal.value = false;
+};
+
+// 모달 외부 클릭 시 닫기 함수
+const closeModalOnOverlay = (e) => {
+  if (e.target === e.currentTarget) {
+    closeModal();
+  }
+};
 
 // API에서 사용자 정보를 가져오는 함수
 const getUserInfo = async () => {
