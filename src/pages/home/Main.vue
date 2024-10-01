@@ -41,20 +41,21 @@
             </li>
         </ul>
         <!-- 계좌 목록 출력 -->
-        <div v-for="account in accountList" :key="accountList.resAccount" class="account-info">
-          <img :src="`../../../public/images/bank/${account.bankVo.bankName}.png`" alt="Bank Logo" class="bank-logo">
+        <div v-for="account in accountList" :key="accountList.accountNum" class="account-info">
+          <img :src="`../../../public/images/bank/${account.bankName}.png`" alt="Bank Logo" class="bank-logo">
             <div class="account-details">
-              <p>잔액: {{ account.resAccountBalance}}</p>
+              <p>{{ account.accountName}}</p>
+              <p>잔액: {{account.transactionBalance}}</p>
             </div>
-            <button v-if="index ==0" class="details-button" @click="goToAccountDetails(account)">></button>
         </div>
+        <button v-if="accountList" class="details-button" @click="goToAccountDetails(account)">></button>
     </div>
     <div class="mission">
         <div class="mission-header">
             <h3 class="mission-title">나의 미션</h3>
-            <button v-if="monthlyMission" @click="goToMission" class="mission-button">미션 보러 가기</button>
+            <button v-if="!monthlyMission" @click="goToMission" class="mission-button">미션 보러 가기</button>
         </div>
-        <div v-if="!monthlyMission || !dailyMissions">
+        <div v-if="monthlyMission">
             <h2>계좌를 연결하고 미션을 받아보세요</h2>
         </div>
     <div v-else>
@@ -118,9 +119,9 @@ const getUser = async () => {
       try{
           const response = await HomeApi.accountList();
           console.log(response);
-          // for(let i=0;i<response.length;i++){
-          //   accountList[i] = response[i];
-          // }
+          for(let i=0;i<response.length;i++){
+            accountList[i] = response[i];
+          }
         console.log(accountList);
         } catch (error) {
             console.error("API 호출 중 오류 발생:", error);
@@ -137,8 +138,8 @@ const getUser = async () => {
           }
           monthlyMission.value = await MissionApi.getMonthMission();
 
-          console.log(monthlyMission);
-          console.log(dailyMissions);
+          // console.log(monthlyMission);
+          // console.log(dailyMissions);
         } catch (error) {
             console.error("API 호출 중 오류 발생:", error);
         }
@@ -146,7 +147,7 @@ const getUser = async () => {
 
     onMounted(() => {
         getUser();
-       // getAsset();
+        getAsset();
         getMission();
     });
 
@@ -317,7 +318,8 @@ li {
     /* 계좌 정보와 이미지 좌우 배치 */
     .account-info {
         display: flex;
-        align-items: center;
+        justify-content: space-between; /* 버튼이 오른쪽으로 가도록 설정 */
+        align-items: center; /* 수직 중앙 정렬 */
         margin-bottom: 10px;
     }
 
@@ -338,6 +340,7 @@ li {
         font-size: 24px;
         color: black;
         cursor: pointer;
+        margin-left: auto;
     }
 
     /* 완료된 버튼 스타일 */
