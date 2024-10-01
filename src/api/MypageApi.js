@@ -63,7 +63,6 @@ export default {
     return data;
   },
 
-  
   // 회원정보 수정에서 기존 정보 가져오기
   async getMyExistingInfo() {
     const { data } = await api.get(`${BASE_URL}/edit-form`);
@@ -71,37 +70,13 @@ export default {
     return data;
   },
 
-
-
-  // 회원정보 수정
-  async edit(userNo, user) {
-    const formData = new FormData();
-    for (const key in user) {
-      formData.append(key, user[key]);
-    }
-
-    const { data } = await api.put(
-      `${BASE_URL}/${userNo}/edit`,
-      formData,
-      { headers }
+  // 회원정보 수정 (일반, 소셜 동일)
+  async edit(user) {
+    const { data } = await api.post(
+      `${BASE_URL}/edit-save`,
+      user // 객체 형태로 전송
     );
-    console.log('MYPAGE PUT EDIT', data);
-    return data;
-  },
-
-  // 소셜 회원정보 수정
-  async socialEdit(userNo, user) {
-    const formData = new FormData();
-    for (const key in user) {
-      formData.append(key, user[key]);
-    }
-
-    const { data } = await api.put(
-      `${BASE_URL}/${userNo}/social-edit`,
-      formData,
-      { headers }
-    );
-    console.log('MYPAGE PUT SOCIAL EDIT', data);
+    console.log('MYPAGE POST EDIT', data);
     return data;
   },
 };
