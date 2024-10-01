@@ -33,7 +33,10 @@
                 <h2>{{totalAmount}}원</h2>
             </li>
             <!-- accountList가 비어있을 경우 계좌 연결하기 버튼 표시 -->
-            <li v-if="accountList.length == 0" class="connect-bank">
+            <li v-if="user.userName == 'NoLogin'" class="connect-bank">
+                <button class="connect-bank-button" @click="goLogin">로그인하고 계좌 연결하기</button>
+            </li>
+            <li v-if="accountList.length == 0 && user.userName !== 'NoLogin'" class="connect-bank">
                 <button class="connect-bank-button" @click="GoAddBank">계좌 연결하기</button>
             </li>
         </ul>
@@ -49,9 +52,9 @@
     <div class="mission">
         <div class="mission-header">
             <h3 class="mission-title">나의 미션</h3>
-            <button @click="goToMission" class="mission-button">미션 보러 가기</button>
+            <button v-if="monthlyMission" @click="goToMission" class="mission-button">미션 보러 가기</button>
         </div>
-        <div v-if="!monthlyMission && !dailyMissions">
+        <div v-if="!monthlyMission || !dailyMissions">
             <h2>계좌를 연결하고 미션을 받아보세요</h2>
         </div>
     <div v-else>
@@ -92,7 +95,7 @@
 
     const user = reactive({
         userName: '',
-        finTypeCode: ''  //2로도 바꿔보세요.
+        finTypeCode: '' 
     });
 
     const accountList = reactive([]);
@@ -177,6 +180,9 @@ const getUser = async () => {
     router.push({ name: 'mission' });
     };
 
+    const goLogin = () => {
+      router.push('/');
+    };
 
     const goToAccountDetails = (account) => {
         // /home/account 경로로 이동
