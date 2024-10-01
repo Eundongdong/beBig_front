@@ -51,7 +51,7 @@
             <h3 class="mission-title">나의 미션</h3>
             <button @click="goToMission" class="mission-button">미션 보러 가기</button>
         </div>
-        <div v-if="!monthlyMission && !dailyMissions">
+        <div v-if="!monthlyMission || !dailyMissions">
             <h2>계좌를 연결하고 미션을 받아보세요</h2>
         </div>
     <div v-else>
