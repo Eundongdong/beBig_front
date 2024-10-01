@@ -85,7 +85,7 @@ export default {
     
     // 거래 내역 조회
     async transactionList(accountNum) {
-        const { data } = await api.get(`${BASE_URL}/account/${accountNum}/detail`);
+        const { data } = await api.get(`${BASE_URL}/account/${accountNum}/transactions`);
         return data;
     }
 };
