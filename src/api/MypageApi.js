@@ -1,5 +1,4 @@
-//import api from "@/api";
-import api from "@/api/ex_index"
+import api from "@/api";
 
 const BASE_URL = "/mypage";
 const headers = { "Content-Type": "multipart/form-data" };
@@ -13,8 +12,8 @@ export default {
   },
 
   // 뱃지 설명 조회
-  async badge(userNo) {
-    const { data } = await api.get(`${BASE_URL}/${userNo}/badge`);
+  async badge() {
+    const { data } = await api.get(`${BASE_URL}/badge`);
     console.log("MYPAGE GET BADGE", data);
     return data;
   },
@@ -27,16 +26,16 @@ export default {
   },
 
   // 작성한 글 조회
-  async myPosts(userNo) {
-    const { data } = await api.get(`${BASE_URL}/${userNo}/myposts`);
-    console.log("MYPAGE GET MYPOSTS", data);
+  async getMyPosts() {
+    const { data } = await api.get(`${BASE_URL}/posts`);
+    console.log("MYPAGE GET MY POSTS", data);
     return data;
   },
 
   // 좋아한 글 조회
-  async myLikeHits(userNo) {
-    const { data } = await api.get(`${BASE_URL}/${userNo}/mylikehits`);
-    console.log("MYPAGE GET MYLIKEHITS", data);
+  async getMyLikePosts() {
+    const { data } = await api.get(`${BASE_URL}/mylikehits`);
+    console.log("MYPAGE GET MY LIKE POSTS", data);
     return data;
   },
 
