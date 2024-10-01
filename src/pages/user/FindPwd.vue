@@ -1,16 +1,17 @@
 <template>
-  <div class="find_pwd_container">
-    <header class="header-container">
-      <button class="back" @click="goBack">
-        <i class="fa-solid fa-chevron-left"></i>
+  <div class="page">
+    <header class="header">
+      <button class="back-button" @click="goBack">
+        <i class="fa-solid fa-arrow-left"></i>
       </button>
-      <p class="title">비밀번호 찾기</p>
     </header>
 
-    <form @submit.prevent="findPassword">
-      <div>
-        <label for="name">이름</label>
+    <form @submit.prevent="findPassword" class="container">
+      <!-- 이름 -->
+      <div class="input_name">
+        <label class="label" for="name">이름</label>
         <input
+          class="input"
           v-model="name"
           type="text"
           id="name"
@@ -18,9 +19,10 @@
           required
         />
       </div>
-      <div>
-        <label for="userLoginId">아이디</label>
-        <input
+      <!-- 아이디 -->
+      <div class="input_id">
+        <label class="label" for="userLoginId">아이디</label>
+        <input class="input"
           v-model="userLoginId"
           type="text"
           id="userLoginId"
@@ -28,9 +30,10 @@
           required
         />
       </div>
-      <div>
-        <label for="email">이메일</label>
-        <input
+      <!-- 이메일 -->
+      <div class="input_email">
+        <label class="label" for="email">이메일</label>
+        <input class="input"
           v-model="email"
           type="email"
           id="email"
@@ -39,22 +42,29 @@
         />
       </div>
 
-      <button type="submit">비밀번호 찾기</button>
+      <button class="button" type="submit">비밀번호 찾기</button>
     </form>
 
     <!-- 결과 표시 -->
-    <div v-if="message" class="result">
+    <div v-if="message" class="result text-center text-lg mt-10">
       <p>{{ message }}</p>
     </div>
-    <div v-else-if="errorMessage" class="error">
+    <div
+      v-else-if="errorMessage"
+      class="result_error text-center text-lg mt-10"
+    >
       <p>{{ errorMessage }}</p>
     </div>
+
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from "vue-router";
 import UserApi from '@/api/UserApi'; // 실제 API 모듈 경로 확인
+
+const router = useRouter();
 
 const name = ref(''); // 사용자 이름
 const userLoginId = ref(''); // 사용자 아이디
@@ -86,47 +96,8 @@ const findPassword = async () => {
   }
 };
 
+// 뒤로가기 함수
 const goBack = () => {
-  window.history.back(); // 뒤로 가기
+  router.push({name: "user"});
 };
 </script>
-
-<style>
-.find_pwd_container {
-  text-align: center;
-  padding: 20px;
-}
-
-.header-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-
-.title {
-  flex: 1;
-  text-align: center;
-  margin-right: 24px; /* 아이콘 크기에 맞게 여백을 추가 */
-}
-
-.back {
-  background: none;
-  border: none;
-  font-size: 24px;
-}
-
-.result,
-.error {
-  margin-top: 20px;
-}
-
-.error {
-  color: red;
-}
-
-.result {
-  color: #007bff;
-  font-weight: bold;
-}
-</style>

@@ -1,234 +1,214 @@
 <template>
-  <div class="Page">
-    <div class="Logo">
-      <ul>
-        <li>
-          <button class="button" @click="GoBack"><</button>
-          <h1>일반 회원가입</h1>
-        </li>
-      </ul>
-    </div>
-    <div class="Input1">
-      <ul>
-        <li>
-          <h3>이름</h3>
-          <input
-            type="text"
-            v-model="User.name"
-            placeholder="Enter your Name"
-          />
-        </li>
-        <li>
-          <h3>아이디</h3>
-          <input
-            type="text"
-            v-model="User.userLoginId"
-            placeholder="Enter your ID"
-            @change="idDupCheckAPI"
-          />
-          <h4 v-if="idDupCheckResult">다른 아이디를 입력해주세요</h4>
-          <h4 v-if="idDupCheckOk">사용가능한 아이디입니다.</h4>
-        </li>
-        <li>
-          <h3>비밀번호</h3>
-          <input
-            type="password"
-            v-model="User.password"
-            placeholder="Enter your password"
-          />
-        </li>
-        <li>
-          <h3>비밀번호 확인</h3>
-          <h4 v-if="pwdChecking">비밀번호가 다릅니다.</h4>
-          <input
-            type="password"
-            v-model="checkPassword"
-            placeholder="Enter your password again"
-          />
-        </li>
-      </ul>
-    </div>
-    <div class="Input2">
-      <ul>
-        <li>
-          <h3>닉네임</h3>
-          <input
-            type="text"
-            v-model="User.nickname"
-            placeholder="Enter your NickName"
-          />
-        </li>
-        <li>
-          <h3>이메일</h3>
-          <input
-            type="text"
-            v-model="User.email"
-            placeholder="Enter your Email"
-            @input="validateEmail"
-          />
-          <p v-if="emailError" style="color: red;">이메일 형식에 맞게 입력해주세요.</p>
-        </li>
-        <li>
-          <h3>성별</h3>
-          <label>
-            <input type="radio" v-model="User.gender" value="false" /> 남성
-          </label>
-          <label>
-            <input type="radio" v-model="User.gender" value="true" /> 여성
-          </label>
-        </li>
-        <li>
-          <h3>생년월일</h3>
-          <div class="birth-selection">
-            <select v-model="year">
-              <option v-for="y in years" :key="y" :value="y">{{ y }}</option>
-            </select>
-            년
-            <select v-model="month">
-              <option v-for="m in months" :key="m" :value="m">{{ m }}</option>
-            </select>
-            월
-            <select v-model="day">
-              <option v-for="d in days" :key="d" :value="d">{{ d }}</option>
-            </select>
-            일
-          </div>
-        </li>
-      </ul>
-    </div>
-
-    <div class="Policy">
-        <div>
-          <p>전체 동의</p>
-          <label class="slider">
-            <input type="checkbox" v-model="allAgree" @change="toggleAll" />
-            <span class="slider-knob"></span>
-          </label>
-        </div>
-        
-        <div v-for="(term, index) in terms" :key="index" class="term_item">
-          <div>
-            <label>{{ term.utilTitle }}</label>
-            <button type="button" @click="toggleShowTermContent(index)">
-              {{ term.showContent ? '▲' : '▼' }}
-            </button>
-          </div>
-          <div v-if="term.showContent">
-            <p>{{ term.utilContent }}</p>
-          </div>
-
-          <p>동의</p>
-          <label class="slider">
-            <input type="checkbox" v-model="term.agreed" />
-            <span class="slider-knob"></span>
-          </label>
-        </div>
-    </div>
-
-    <div class="Button">
-      <button class="signup_button" @click="signup" :disabled="!allAgree">
-        가입하기
+  <div class="page">
+    <header class="header">
+      <button class="back-button" @click="goBack">
+        <i class="fa-solid fa-arrow-left"></i>
       </button>
-    </div>
+    </header>
+
+    <form @submit.prevent class="container">
+      <!-- 이름 -->
+      <div class="input_name">
+        <label class="label" for="name">이름</label>
+        <input
+          id="name"
+          class="input"
+          type="text"
+          v-model="User.name"
+          placeholder="이름을 입력하세요"
+          required
+        />
+      </div>
+      <!-- 아이디 -->
+      <div class="input_id">
+        <label class="label" for="id">아이디</label>
+        <input
+          class="input"
+          id="id"
+          type="text"
+          v-model="User.userLoginId"
+          placeholder="ID를 입력하세요"
+          @change="idDupCheckAPI"
+          required
+        />
+        <p class="notification-text" v-if="idDupCheckResult">
+          다른 아이디를 입력해주세요
+        </p>
+        <p class="notification-text" v-if="idDupCheckOk">
+          사용가능한 아이디입니다.
+        </p>
+      </div>
+
+      <!-- 비밀번호 -->
+      <div class="input_password">
+        <label class="label" for="password">비밀번호</label>
+        <input
+          class="input"
+          id="password"
+          type="password"
+          v-model="User.password"
+          placeholder="비밀번호를 입력하세요"
+          required
+        />
+      </div>
+
+      <!-- 비밀번호 확인 -->
+      <div class="input_password_check">
+        <label class="label" for="password_check">비밀번호</label>
+        <p class="notification-text" v-if="pwdChecking">비밀번호가 다릅니다.</p>
+        <input
+          id="password_check"
+          class="input"
+          type="password"
+          v-model="checkPassword"
+          placeholder="비밀번호를 다시 한번 입력하세요"
+          required
+        />
+      </div>
+
+      <!-- 닉네임 -->
+      <div class="input_nickname">
+        <label class="label" for="nickname">닉네임</label>
+        <input
+          class="input"
+          id="nickname"
+          type="text"
+          v-model="User.nickname"
+          placeholder="닉네임을 입력해주세요"
+          required
+        />
+      </div>
+      <!-- 이메일 -->
+      <div class="input_email">
+        <label class="label" for="email">이메일</label>
+        <input
+          class="input"
+          id="email"
+          type="text"
+          v-model="User.email"
+          placeholder="이메일을 입력해주세요"
+          @input="validateEmail" 
+          required
+        />
+        <p class="notification-text" v-if="emailError">
+          이메일 형식에 맞게 입력해주세요.
+        </p>
+      </div>
+
+      <!-- 성별 -->
+      <div class="input_gender">
+        <label class="label" for="gender">성별</label>
+        <div class="flex items-center space-x-4 mb-3">
+
+        <input
+          class="radio-button"
+          type="radio"
+          v-model="User.gender"
+          :value="false"
+        />
+        남성
+
+        <label class="radio-label">
+          <input
+            class="radio-button"
+            type="radio"
+            v-model="User.gender"
+            :value="true"
+          />
+          여성
+        </label>
+      </div>
+      </div>
+
+      <!-- 생년월일 -->
+      <div class="input_birth">
+        <label class="label" for="birth">생년월일</label>
+        <input
+          class="input"
+          v-model="User.birth"
+          type="text"
+          id="birth"
+          placeholder="YYYY-MM-DD"
+          @input="validateBirthInput"
+          required
+        />
+        <p class="notification-text" v-if="birthError">
+          올바른 생년월일 형식(YYYY-MM-DD)으로 입력해주세요.
+        </p>
+
+      </div>
+
+      <!-- 가입하기 버튼 -->
+      <div class="button_signup">
+        <button
+        @click="openTermsModal"
+          type="submit"
+          class="button"
+          :disabled="!isFormValid"
+        >
+          가입하기
+        </button>
+      </div>
+    </form>
+
+    <!-- 약관 동의 모달 -->
+    <TermsModal
+    v-if="isTermsModalOpen"
+  :isOpen="isTermsModalOpen"
+  :terms="terms"
+  @close="closeTermsModal"
+  @confirm="handleTermsConfirmation"
+    />
   </div>
 </template>
 
 <script setup>
-import UserApi from '@/api/UserApi';
-import { ref, reactive, computed, watch, onMounted } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import UserApi from "@/api/UserApi";
+import { ref, reactive, computed, watch, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import TermsModal from "./TermsModal.vue";
 
-//////변수 선언
 const router = useRouter();
-const route = useRoute();
 
 const User = reactive({
-  name: '',
-  nickname: '',
-  userLoginId: '',
-  password: '',
-  email: '',
-  gender: '',
-  birth: '',
-  userLoginType: 'general',
+  name: "",
+  nickname: "",
+  userLoginId: "",
+  password: "",
+  email: "",
+  gender: "",
+  birth: "",
+  userLoginType: "general",
 });
 
-const year = ref('');
-const month = ref('');
-const day = ref('');
+const year = ref("");
+const month = ref("");
+const day = ref("");
 
 //아이디 비번 중복 체크 변수
 const idDupCheckResult = ref(false);
 const idDupCheckOk = ref(false);
-const checkPassword = ref('');
+const checkPassword = ref("");
 
-// 토글 상태
-const allAgree = ref(false);
-const personalAgree = ref(false);
-const financialAgree = ref(false);
+// 에러 상태 저장
+const emailError = ref(false);
+const birthError = ref(false);
 
 // 약관 데이터 배열
 const terms = ref([]);
+const isTermsModalOpen = ref(false);
 
 // 약관 데이터를 불러오는 함수 (모든 약관의 동의 상태는 false로 초기화)
 const getTerms = async () => {
   try {
-    const response = await UserApi.getTerms(); // API로부터 약관 데이터 불러옴
+    const response = await UserApi.getTerms();
     terms.value = response.map((term) => ({
       ...term,
-      agreed: false, // 모든 약관의 동의 상태를 false로 초기화
-      showContent: false, // 약관 내용 표시 여부
+      agreed: false,
     }));
   } catch (error) {
-    console.error('API 호출 중 오류 발생:', error);
+    console.error("약관 데이터를 불러오는 중 오류 발생:", error);
   }
-};
-
-
-// // 약관 보기 상태
-// const showPersonalTerms = ref(false);
-// const showFinancialTerms = ref(false);
-
-// // 약관 내용을 저장할 변수
-// const personalTermsContent = ref(''); // 개인정보 약관 내용 저장
-// const financialTermsContent = ref(''); // 금융정보 약관 내용 저장
-
-// // 전체 동의 시, 하위 항목도 변경
-// const toggleAll = () => {
-//   personalAgree.value = allAgree.value;
-//   financialAgree.value = allAgree.value;
-// };
-
-// 전체 동의 토글 함수
-const toggleAll = () => {
-  // 약관 모두 동의 상태 반영
-  terms.value.forEach((term) => {
-    term.agreed = allAgree.value;
-  });
-};
-
-// // 모든 약관 동의 상태 업데이트
-// watch([personalAgree, financialAgree], () => {
-//   allAgree.value = personalAgree.value && financialAgree.value;
-// });
-
-// 약관 내용을 토글하는 함수
-const toggleShowTermContent = (index) => {
-  terms.value[index].showContent = !terms.value[index].showContent;
-};
-
-// 약관 상태를 감지하고 전체 동의 상태 업데이트
-watch(terms, (newTerms) => {
-  // 모든 약관이 동의되었는지 확인하여 전체 동의 체크박스를 업데이트
-  allAgree.value = newTerms.every(term => term.agreed);
-}, { deep: true });
-
-// 약관 내용 보이기/숨기기
-const toggleShowPersonalTerms = () => {
-  showPersonalTerms.value = !showPersonalTerms.value;
-};
-const toggleShowFinancialTerms = () => {
-  showFinancialTerms.value = !showFinancialTerms.value;
 };
 
 //비밀번호 체크
@@ -242,18 +222,16 @@ const pwdChecking = computed(() => {
 const idDupCheckAPI = async () => {
   try {
     const idDupCheck = await UserApi.idDuplicateCheck(User.userLoginId);
-    console.log('아이디 중복 체크 성공:', idDupCheck);
+    console.log("아이디 중복 체크 성공:", idDupCheck);
     idDupCheckOk.value = true;
     idDupCheckResult.value = false;
   } catch (error) {
-    console.error('API 호출 중 오류 발생:', error);
+    console.error("API 호출 중 오류 발생:", error);
     idDupCheckOk.value = false;
     idDupCheckResult.value = true;
   }
 };
 
-// 이메일 에러 상태 저장
-const emailError = ref(false);
 
 // 이메일 유효성 검사 함수
 const validateEmail = () => {
@@ -264,25 +242,77 @@ const validateEmail = () => {
   emailError.value = !emailPattern.test(User.email);
 };
 
-//생년월일 받아오기
-// 연도 범위 (1900년부터 현재까지)
-const years = computed(() => {
-  const currentYear = new Date().getFullYear();
-  return Array.from({ length: currentYear - 1900 + 1 }, (_, i) => 1900 + i);
+// 가입 버튼을 누를 때 모달을 열기
+const openTermsModal = () => {
+  isTermsModalOpen.value = true;
+};
+
+// 모달 닫기
+const closeTermsModal = () => {
+  isTermsModalOpen.value = false;
+};
+
+// 약관 동의 확인 처리
+const handleTermsConfirmation = (agreedTerms) => {
+  // 약관 동의 처리
+  isTermsModalOpen.value = false;
+  // 약관에 동의했으면 회원가입 처리
+  signup();
+};
+
+// 생년월일 입력 유효성 검사 함수
+const validateBirthInput = () => {
+  const rawInput = User.birth.replace(/-/g, "");
+  
+  if (!/^\d*$/.test(rawInput)) {
+    alert("숫자만 입력 가능합니다.");
+    User.birth = rawInput.replace(/\D/g, "");
+  }
+  
+  if (rawInput.length > 8) {
+    alert("생년월일은 8자리 숫자로 입력해주세요.");
+    User.birth = rawInput.slice(0, 8);
+  }
+  
+  if (rawInput.length === 8) {
+    const year = rawInput.slice(0, 4);
+    const month = rawInput.slice(4, 6);
+    const day = rawInput.slice(6, 8);
+    User.birth = `${year}-${month}-${day}`;
+  }
+  
+  birthError.value = !isValidDateFormat(User.birth);
+};
+
+// 모든 함수를 최상단에 선언합니다.
+const isValidDateFormat = (dateString) => {
+  const regex = /^\d{4}-\d{2}-\d{2}$/;
+  if (!regex.test(dateString)) return false;
+  
+  const [year, month, day] = dateString.split('-').map(Number);
+  const date = new Date(year, month - 1, day);
+  
+  return date && date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day;
+};
+
+// 폼 유효성 검사
+const isFormValid = computed(() => {
+  return (
+    User.name &&
+    User.userLoginId &&
+    User.password &&
+    checkPassword.value &&
+    User.nickname &&
+    User.email &&
+    User.gender !== "" &&
+    User.birth &&
+    !emailError.value &&
+    !birthError.value &&
+    !idDupCheckResult.value &&
+    !pwdChecking.value
+  );
 });
 
-// 월 선택 (01~12월)
-const months = computed(() => {
-  return Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'));
-});
-
-// 일 선택 (01~31일)
-const days = computed(() => {
-  return Array.from({ length: 31 }, (_, i) => String(i + 1).padStart(2, '0'));
-});
-
-// 비밀번호 확인 체크
-const pwdCheck = computed(() => loginUser.password !== checkPassword.value);
 
 // 생년월일 자동 업데이트
 watch([year, month, day], () => {
@@ -291,97 +321,24 @@ watch([year, month, day], () => {
   }
 });
 
-// //약관 불러오기
-// const getPersonalTerms = async () => {
-//   try {
-//     const response = await UserApi.getPolicy();
-//     personalTermsContent.value = response.data.personalTerms;
-//   } catch (error) {
-//     console.error('API 호출 중 오류 발생:', error);
-//   }
-// };
-// const getFinancialTerms = async () => {
-//   try {
-//     const response = await UserApi.getPolicy();
-//     financialTermsContent.value = response.data.financialTerms;
-//   } catch (error) {
-//     console.error('API 호출 중 오류 발생:', error);
-//   }
-// };
-
 //회원가입
 const signup = async () => {
   console.log(User);
   try {
     const response = await UserApi.signup(User);
-    //console.log(response);
-    router.push('/user');
+    console.log("회원가입 성공: ", response);
+    router.push("/user");
   } catch (error) {
-    console.log('에러 =>', error);
+    console.log("에러 =>", error);
   }
 };
 
 //뒤로가기
-const GoBack = () => {
-  router.push('/user');
+const goBack = () => {
+  router.push({name: "user"});
 };
 
-
-// 페이지 로드 시 약관 데이터 가져오기
 onMounted(() => {
-  getTerms(); // 약관 데이터 로드
+  getTerms();
 });
-
 </script>
-
-<style scoped>
-ul {
-  list-style-type: none;
-}
-
-/* 스위치 슬라이더 스타일 */
-.slider {
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 24px;
-}
-
-.slider input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider-knob {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: 0.4s;
-  border-radius: 34px;
-}
-
-.slider-knob:before {
-  position: absolute;
-  content: '';
-  height: 20px;
-  width: 20px;
-  left: 2px;
-  bottom: 2px;
-  background-color: white;
-  transition: 0.4s;
-  border-radius: 50%;
-}
-
-input:checked + .slider-knob {
-  background-color: #2196f3;
-}
-
-input:checked + .slider-knob:before {
-  transform: translateX(26px);
-}
-</style>

@@ -1,14 +1,14 @@
 <template>
-  <div class="w-full mx-auto p-5">
-    <header>
+  <div class="page">
+    <header class="header">
       <button class="back-button" @click="goBack">
         <i class="fa-solid fa-arrow-left"></i>
       </button>
     </header>
 
-    <form @submit.prevent="submitSignup">
+    <form @submit.prevent="openTermsModal" class="container">
       <!-- 이름 -->
-      <div class="input_group">
+      <div class="input_name">
         <label class="label" for="name">이름</label>
         <input
           class="disabled-input"
@@ -20,7 +20,7 @@
       </div>
 
       <!-- 이메일 -->
-      <div class="input_group">
+      <div class="input_email">
         <label class="label" for="email">이메일</label>
         <input
           class="disabled-input"
@@ -32,7 +32,7 @@
       </div>
 
       <!-- 생년월일 -->
-      <div class="input_group">
+      <div class="input_birth">
         <label class="label" for="birth">생년월일</label>
         <input
           class="input"
@@ -46,9 +46,9 @@
 
       <!-- 성별 -->
 
-              <label class="label">성별</label>
-      <div class="input_group flex items-center space-x-4 mb-3">
-        <div class="flex items-center space-x-4">
+      <div class="input_gender">
+        <label class="label">성별</label>
+        <div class="flex items-center space-x-4 mb-3">
           <label class="flex items-center space-x-2">
             <input
               class="radio-button"
@@ -71,7 +71,7 @@
       </div>
 
       <!-- 닉네임 -->
-      <div class="input_group">
+      <div class="input_nickname">
         <label class="label" for="nickname">닉네임</label>
         <input
           class="input"
@@ -83,45 +83,27 @@
         />
       </div>
 
-      <!-- 정보제공 이용 및 동의 -->
-      <div class="terms_section">
-        <div>
-          <p>가입 약관 및 개인정보 제공 동의</p>
-          <label class="slider">
-            <input type="checkbox" v-model="allAgree" @change="toggleAll" />
-            <span class="slider-knob"></span>
-          </label>
-        </div>
-
-        <div v-for="(term, index) in terms" :key="index" class="term_item">
-          <div>
-            <label>{{ term.utilTitle }}</label>
-            <button type="button" @click="toggleShowTermContent(index)">
-              {{ term.showContent ? "▲" : "▼" }}
-            </button>
-          </div>
-          <div v-if="term.showContent">
-            <p>{{ term.utilContent }}</p>
-          </div>
-
-          <p>동의</p>
-          <label class="slider">
-            <input type="checkbox" v-model="term.agreed" />
-            <span class="slider-knob"></span>
-          </label>
-        </div>
-      </div>
-
       <!-- 가입하기 버튼 -->
-      <button type="submit" class="signup_button">가입하기</button>
+      <div class="button_signup">
+        <button type="submit" class="button">가입하기</button>
+      </div>
     </form>
+    <!-- 약관 동의 모달 -->
+    <TermsModal
+    v-if="isTermsModalOpen"
+  :isOpen="isTermsModalOpen"
+  :terms="terms"
+  @close="closeTermsModal"
+  @confirm="handleTermsConfirmation"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted } from "vue";
 import UserApi from "@/api/UserApi";
 import { useRouter } from "vue-router";
+import TermsModal from "./TermsModal.vue";
 
 // 정규식을 이용한 생년월일 형식 검증
 const isValidDateFormat = (dateString) => {
@@ -150,15 +132,16 @@ const formData = ref({
   password: "kakao",
 });
 
-// 생년월일 입력 유효성 검사 함수(입력할)
+// 생년월일 입력 유효성 검사 함수(input)
 const validateBirthInput = () => {
   // '-' 제외한 순수 숫자만 처리
   const rawInput = formData.value.birth.replace(/-/g, "");
 
   // 숫자가 아닌 문자가 있으면 알림
   if (!/^\d*$/.test(rawInput)) {
-    alert("숫자만 입력 가능합니다.");
     formData.value.birth = rawInput.replace(/\D/g, ""); // 숫자가 아닌 문자는 제거
+    // alert 대신 화면에 오류 메시지를 표시
+    errorMessage.value = "숫자만 입력 가능합니다.";
   }
 
   // 입력이 8자리를 초과하면 알림
@@ -176,11 +159,9 @@ const validateBirthInput = () => {
   }
 };
 
-// 전체 동의 체크박스 상태
-const allAgree = ref(false);
-
 // 약관 데이터 배열
 const terms = ref([]);
+const isTermsModalOpen = ref(false);
 
 // 약관 데이터를 불러오는 함수 (모든 약관의 동의 상태는 false로 초기화)
 const getTerms = async () => {
@@ -191,29 +172,6 @@ const getTerms = async () => {
     showContent: false, // 약관 내용 표시 여부
   }));
 };
-
-// 전체 동의 토글 함수
-const toggleAll = () => {
-  // 약관 모두 동의 상태 반영
-  terms.value.forEach((term) => {
-    term.agreed = allAgree.value;
-  });
-};
-
-// 약관 내용을 토글하는 함수
-const toggleShowTermContent = (index) => {
-  terms.value[index].showContent = !terms.value[index].showContent;
-};
-
-// 약관 상태를 감지하고 전체 동의 상태 업데이트
-watch(
-  terms,
-  (newTerms) => {
-    // 모든 약관이 동의되었는지 확인하여 전체 동의 체크박스를 업데이트
-    allAgree.value = newTerms.every((term) => term.agreed);
-  },
-  { deep: true }
-);
 
 // 소셜 로그인 후 localStorage에 저장된 데이터를 불러오는 함수
 const loadSocialLoginData = () => {
@@ -228,22 +186,30 @@ const loadSocialLoginData = () => {
   }
 };
 
-// 폼 제출 함수
-const submitSignup = async () => {
-  // 생년월일 형식 검증
-  if (!isValidDateFormat(formData.value.birth)) {
-    alert('생년월일은 "YYYY-MM-DD" 형식이어야 합니다.');
-    return;
-  }
+const openTermsModal = () => {
+  isTermsModalOpen.value = true;
+};
+
+const closeTermsModal = () => {
+  isTermsModalOpen.value = false;
+};
+
+const handleTermsConfirmation = async (confirmedTerms) => {
+  terms.value = confirmedTerms;
+  isTermsModalOpen.value = false;
 
   // 모든 필수 약관에 동의했는지 확인
   const allTermsAgreed = terms.value.every((term) => term.agreed);
 
-  if (!allTermsAgreed) {
+  if (allTermsAgreed) {
+    await submitSignup();
+  } else {
     alert("모든 약관에 동의해야 회원가입이 가능합니다.");
-    return;
   }
+};
 
+// 폼 제출 함수
+const submitSignup = async () => {
   try {
     const response = await fetch("http://localhost:8080/user/signup", {
       method: "POST",
@@ -278,5 +244,3 @@ const goBack = () => {
   window.history.back();
 };
 </script>
-
-<style scoped></style>
