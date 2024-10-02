@@ -11,11 +11,11 @@
         </ul>
         <!-- 계좌 목록 출력 -->
         <div v-for="(account, index) in accountList" :key="index" class="account-info">
-            <img :src="`../../../public/images/bank/${account.bankName}.png`" alt="Bank Logo" class="bank-logo">
+            <img :src="`/images/bank/${account.bankName}.png`" alt="Bank Logo" class="bank-logo">
             <div class="account-details">
                 <p>{{ account.accountName }}</p>
                 <p>{{ account.accountNum }}</p>
-                <p>{{ account.amount }}</p>
+                <p>{{ account.transactionBalance}}</p>
             </div>
             <button class="details-button" @click="goBankDetail(account.accountNum)">></button>
         </div>
@@ -23,52 +23,25 @@
 </template>
 
 <script setup>
-import { reactive, onMounted } from 'vue';
+import { reactive, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import HomeApi from '@/api/HomeApi';
 const router = useRouter();
 
-const totalAmount = 1234000; // 총 자산 예시
-const accountList = reactive([
-    {
-        bankName: '신한',
-        accountName: '블라블라',
-        accountNum: '0123045687',
-        amount: '1,234,000',
-    },
-    {
-        bankName: 'KB국민',
-        accountName: '블라블라',
-        accountNum: '9851355687',
-        amount: '5,678,000',
-    },
-    {
-        bankName: '하나',
-        accountName: '블라블라',
-        accountNum: '012304354587',
-        amount: '2,345,000',
-    },
-]);
+const totalAmount = ref(''); // 총 자산 예시
+const accountList = reactive([]);
 
 const getList = async() =>{
     try{
-        const accounts = await HomeApi.accountList();
-        console.log(accounts);
-        accounts.forEach(account => {
-            accountList.push({
-            bankName: account.bankName,  //백에서 받는 값 형식에 맞게 수정필요
-            accountName: account.accountName, 
-            accountNum: account.accountNum,
-            amount: account.amount
-            });
-        });
-
+        const response = await HomeApi.accountList();
+        console.log(response);
+        for(let i=0;i<response.length;i++){
+            accountList[i] = response[i];
+        }
+        console.log(accountList);
         // 총 자산 계산
-        totalAmount.value = accounts.reduce((sum, account) => {
-            // amount 값을 문자열에서 숫자로 변환 (예: "1,234,000원" -> 1234000)
-            const amount = parseInt(account.amount.replace(/[^0-9]/g, ''), 10);
-            return sum + (isNaN(amount) ? 0 : amount); // NaN 방지
-        }, 0);
+        const total = accountList.reduce((acc, account) => acc + account.transactionBalance, 0);
+        totalAmount.value = total;
 
     }catch(error){
         console.error('API 호출 중 오류 발생:', error);
@@ -87,7 +60,7 @@ const goBankDetail = (accountNum) => {
 };
 
 onMounted(() => {
-        //getList();
+        getList();
     });
 
 </script>

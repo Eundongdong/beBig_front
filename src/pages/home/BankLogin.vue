@@ -14,6 +14,7 @@
     <div v-if="accountList.length != 0" class="account-list">
       <div v-for="account in accountList" :key="accountList.resAccount" class="account-info">
         <img :src="`../../../public/images/bank/${account.bankVo.bankName}.png`" alt="Bank Logo" class="bank-logo">
+
         <div class="account-details">
           <p>{{ account.bankVo.bankName }}</p>
           <p>통장이름: {{ account.resAccountName }}</p>

@@ -1,24 +1,53 @@
 <template>
+  <div class="page h-screen">
+    <!-- 사용자 정보 컴포넌트 -->
     <button @click="logout">logout</button>
-    <div class="category">
-        <ul>
-          <li v-if="user.userName !== 'NoLogin'">
-                <h1 class="name">{{user.userName}}님,<br> 안녕하세요</h1>
-                <button class="category_button" @click="GoSurvey">
-                    <img class="category_img" :src="`../../../public/images/${user.finTypeCode}.png`">
-                    <h5 class="category_tag">{{ user.finTypeCode == '1' ||  user.finTypeCode == '2' || user.finTypeCode == '3' || user.finTypeCode == '4' ? '내 유형 보기' : '유형검사 하러 가기' }}</h5>
-                </button>
-            </li>
-            <li v-else>
-            <h1 class="noLogin">안녕하세요.<br>우리는 beBIG입니다.<br>로그인하고 더 많은 기능을 이용해보시겠어요?</h1>
-        </li>
-        </ul>
+    <div class="component">
+      <div
+        class="flex items-center justify-between"
+        v-if="user.userName !== 'NoLogin'"
+      >
+        <!-- 왼쪽 텍스트 영역 -->
+
+        <h1 class="name text-xl text-left">
+          <span class="big-text">{{ user.userName }}</span> 님,<br />
+          안녕하세요.
+        </h1>
+
+        <!-- 오른쪽 이미지+텍스트버튼 영역 -->
+        <div class="flex items-center space-x-4">
+          <button class="text-button" @click="goSurvey">
+            <img
+              :src="`/images/${user.finTypeCode}.png`"
+              class="home-profile"
+            />
+            <h5 class="category_tag">
+              {{
+                user.finTypeCode == "1" ||
+                user.finTypeCode == "2" ||
+                user.finTypeCode == "3" ||
+                user.finTypeCode == "4"
+                  ? "내 유형 보기"
+                  : "유형검사 하러 가기"
+              }}
+            </h5>
+          </button>
+        </div>
+      </div>
+      <div v-else class="text-left text-lg">
+        <p>
+          안녕하세요.<br />우리는
+          <span class="big-text">beBig</span>입니다.<br />로그인하고 더 많은
+          기능을<br />이용해보시겠어요?
+        </p>
+        <button class="text-button" @click="goLogin">로그인 하러 가기</button>
+      </div>
     </div>
 
     <!-- 모달이 활성화될 경우 표시 -->
     <div v-if="showModal" class="modal-overlay" @click="closeModalOnOverlay">
       <div class="modal" @click.stop>
-        <SurveyResult/>
+        <SurveyResult />
         <button @click="closeModal" class="modal-close-button">닫기</button>
       </div>
     </div>
@@ -33,25 +62,31 @@
                 <h2>{{totalAmount}}원</h2>
             </li>
             <!-- accountList가 비어있을 경우 계좌 연결하기 버튼 표시 -->
-            <li v-if="accountList.length == 0" class="connect-bank">
+            <li v-if="user.userName == 'NoLogin'" class="connect-bank">
+                <button class="connect-bank-button" @click="goLogin">로그인하고 계좌 연결하기</button>
+            </li>
+            <li v-if="accountList.length == 0 && user.userName !== 'NoLogin'" class="connect-bank">
                 <button class="connect-bank-button" @click="GoAddBank">계좌 연결하기</button>
             </li>
         </ul>
         <!-- 계좌 목록 출력 -->
-        <div v-for="account in accountList" :key="accountList.resAccount" class="account-info">
-          <img :src="`../../../public/images/bank/${account.bankVo.bankName}.png`" alt="Bank Logo" class="bank-logo">
+        <div v-for="account in accountList" :key="accountList.accountNum" class="account-info">
+          <img :src="`../../../public/images/bank/${account.bankName}.png`" alt="Bank Logo" class="bank-logo">
             <div class="account-details">
-              <p>잔액: {{ account.resAccountBalance}}</p>
+              <p>{{ account.accountName}}</p>
+              <p>잔액: {{account.transactionBalance}}</p>
             </div>
-            <button v-if="index ==0" class="details-button" @click="goToAccountDetails(account)">></button>
         </div>
+        <button v-if="accountList" class="details-button" @click="goToAccountDetails(account)">></button>
     </div>
     <div class="mission">
         <div class="mission-header">
             <h3 class="mission-title">나의 미션</h3>
-            <button @click="goToMission" class="mission-button">미션 보러 가기</button>
+            <button v-if="!monthlyMission" @click="goToMission" class="mission-button">미션 보러 가기</button>
         </div>
-        <div v-if="!monthlyMission || !dailyMissions">
+
+     <div v-if="!monthlyMission || !dailyMissions">
+
             <h2>계좌를 연결하고 미션을 받아보세요</h2>
         </div>
     <div v-else>
@@ -70,6 +105,7 @@
         </li>
       </ul>
     </div>
+  </div>
   </div>
 </template>
 
@@ -92,7 +128,7 @@
 
     const user = reactive({
         userName: '',
-        finTypeCode: ''  //2로도 바꿔보세요.
+        finTypeCode: '' 
     });
 
     const accountList = reactive([]);
@@ -103,11 +139,11 @@
 const getUser = async () => {
   try {
     const userInfo = await HomeApi.getMyInfo(); // /home/info 호출
-      user.userName = userInfo.userName;
-      user.finTypeCode = userInfo.finTypeCode; // 필요한 정보가 어떤건지 확인 필요
-      homeStore.setuserFintype(user.finTypeCode);
+    user.userName = userInfo.userName;
+    user.finTypeCode = userInfo.finTypeCode; // 필요한 정보가 어떤건지 확인 필요
+    homeStore.setuserFintype(user.finTypeCode);
   } catch (error) {
-    console.error('사용자 정보 가져오는 함수 API 호출 중 오류 발생:', error);
+    console.error("사용자 정보 가져오는 함수 API 호출 중 오류 발생:", error);
   }
 };
 
@@ -115,9 +151,9 @@ const getUser = async () => {
       try{
           const response = await HomeApi.accountList();
           console.log(response);
-          // for(let i=0;i<response.length;i++){
-          //   accountList[i] = response[i];
-          // }
+          for(let i=0;i<response.length;i++){
+            accountList[i] = response[i];
+          }
         console.log(accountList);
         } catch (error) {
             console.error("API 호출 중 오류 발생:", error);
@@ -133,9 +169,6 @@ const getUser = async () => {
             dailyMissions[i] = response[i];
           }
           monthlyMission.value = await MissionApi.getMonthMission();
-
-          console.log(monthlyMission);
-          console.log(dailyMissions);
         } catch (error) {
             console.error("API 호출 중 오류 발생:", error);
         }
@@ -143,49 +176,55 @@ const getUser = async () => {
 
     onMounted(() => {
         getUser();
-       // getAsset();
+        getAsset();
         getMission();
     });
 
-    const router = useRouter();
+const router = useRouter();
 
-    const GoAddBank = () => {
-        router.push('/home/bank');
+const GoAddBank = () => {
+  router.push("/home/bank");
+};
+
+const goSurvey = () => {
+  if (
+    user.finTypeCode == "1" ||
+    user.finTypeCode == "2" ||
+    user.finTypeCode == "3" ||
+    user.finTypeCode == "4"
+  ) {
+    showModal.value = true;
+  } else {
+    router.push("/home/survey-start");
+  }
+};
+
+// 모달 닫기 함수
+const closeModal = () => {
+  showModal.value = false;
+};
+// 모달 외부 클릭 시 닫기 함수
+const closeModalOnOverlay = (e) => {
+  if (e.target === e.currentTarget) {
+    closeModal();
+  }
+};
+
+    const goLogin = () => {
+      router.push('/');
     };
 
-    const GoSurvey = () => {
-        if (user.finTypeCode == '1' ||  user.finTypeCode == '2' || user.finTypeCode == '3' || user.finTypeCode == '4') {
-          showModal.value = true;
-        } else {
-            router.push('/home/survey-start');
-        }
-    };
+    const goToMission = ()=>{
+      router.push('/mission');
+    }
 
-        // 모달 닫기 함수
-    const closeModal = () => {
-    showModal.value = false;
-    };
-    // 모달 외부 클릭 시 닫기 함수
-    const closeModalOnOverlay = (e) => {
-        if (e.target === e.currentTarget) {
-            closeModal();
-        }
-    };
+const goToAccountDetails = (account) => {
+  // /home/account 경로로 이동
+  router.push("/home/account");
+};
 
-        // '미션 보러 가기' 버튼 클릭 시 Mission 페이지로 이동
-    const goToMission = () => {
-    router.push({ name: 'mission' });
-    };
-
-
-    const goToAccountDetails = (account) => {
-        // /home/account 경로로 이동
-        router.push('/home/account');
-    };
-
-    // 모달 활성화 상태 변수
-    const showModal = ref(false);
-
+// 모달 활성화 상태 변수
+const showModal = ref(false);
 </script>
 
 <style scoped>
@@ -311,7 +350,8 @@ li {
     /* 계좌 정보와 이미지 좌우 배치 */
     .account-info {
         display: flex;
-        align-items: center;
+        justify-content: space-between; /* 버튼이 오른쪽으로 가도록 설정 */
+        align-items: center; /* 수직 중앙 정렬 */
         margin-bottom: 10px;
     }
 
@@ -332,6 +372,7 @@ li {
         font-size: 24px;
         color: black;
         cursor: pointer;
+        margin-left: auto;
     }
 
     /* 완료된 버튼 스타일 */
@@ -391,3 +432,4 @@ li {
   background-color: #0056b3;
 }
 </style>
+

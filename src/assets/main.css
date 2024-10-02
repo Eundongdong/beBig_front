@@ -1,23 +1,119 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* @import './base.css'; */
+@font-face {
+  font-family: 'NanumSquareNeo';
+  font-weight: 300;
+  font-style: normal;
+  src: url('https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo-aLt.eot');
+  src: url('https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo-aLt.eot?#iefix') format('embedded-opentype'),
+       url('https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo-aLt.woff2') format('woff2'),
+       url('https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo-aLt.woff') format('woff'),
+       url('https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo-aLt.ttf') format("truetype");
+  font-display: swap;
+} 
+@font-face {
+  font-family: 'NanumSquareNeo';
+  font-weight: 400;
+  font-style: normal;
+  src: url('https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo-bRg.eot');
+  src: url('https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo-bRg.eot?#iefix') format('embedded-opentype'),
+       url('https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo-bRg.woff2') format('woff2'),
+       url('https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo-bRg.woff') format('woff'),
+       url('https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo-bRg.ttf') format("truetype");
+  font-display: swap;
+} 
+@font-face {
+  font-family: 'NanumSquareNeo';
+  font-weight: 700;
+  font-style: normal;
+  src: url('https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo-cBd.eot');
+  src: url('https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo-cBd.eot?#iefix') format('embedded-opentype'),
+       url('https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo-cBd.woff2') format('woff2'),
+       url('https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo-cBd.woff') format('woff'),
+       url('https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo-cBd.ttf') format("truetype");
+  font-display: swap;
+} 
+@font-face {
+  font-family: 'NanumSquareNeo';
+  font-weight: 800;
+  font-style: normal;
+  src: url('https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo-dEb.eot');
+  src: url('https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo-dEb.eot?#iefix') format('embedded-opentype'),
+       url('https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo-dEb.woff2') format('woff2'),
+       url('https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo-dEb.woff') format('woff'),
+       url('https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo-dEb.ttf') format("truetype");
+  font-display: swap;
+} 
+@font-face {
+  font-family: 'NanumSquareNeo';
+  font-weight: 900;
+  font-style: normal;
+  src: url('https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo-eHv.eot');
+  src: url('https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo-eHv.eot?#iefix') format('embedded-opentype'),
+       url('https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo-eHv.woff2') format('woff2'),
+       url('https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo-eHv.woff') format('woff'),
+       url('https://webfontworld.github.io/NanumSquareNeo/NanumSquareNeo-eHv.ttf') format("truetype");
+  font-display: swap;
+} 
 
 #app {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   font-weight: normal;
-  font-family: sans-serif;
+  font-family: 'NanumSquareNeo';
+}
+
+.page{
+  @apply w-full mx-auto p-5;
+}
+
+.modal {
+  @apply max-w-lg rounded-lg p-6 fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
+  max-width: 90%;
+  width: auto;
+  max-height: 90vh;
+}
+
+.terms-content {
+  @apply overflow-y-scroll text-sm text-gray-600 border border-gray-300 rounded-lg p-2 max-h-40;
+}
+
+.notification-text{
+  @apply text-red-600 text-sm;
+}
+
+.container{
+  @apply space-y-2.5;
+}
+
+.home-profile{
+  @apply w-[110px] h-[110px] rounded-full;
+}
+
+.component{
+  @apply rounded-2xl p-3 mb-3 bg-gray-100;
+}
+
+.bank-icon{
+  @apply h-[40px];
+}
+
+.big-text{
+  @apply text-[#5354ff] text-lg font-semibold;
 }
 
 .button {
-  @apply w-full py-2 mb-2 bg-[#5354ff] text-white rounded hover:bg-[#3435ff];
+  @apply w-full py-2 mb-1 bg-[#5354ff] text-white rounded-lg hover:bg-[#3435ff];
 }
 
 .white-button{
-  @apply w-full py-1.5 mb-2 text-black bg-white rounded hover:bg-gray-200;
+  @apply w-full py-1.5 mb-1 text-black bg-white rounded-lg hover:bg-gray-200;
+}
+
+.gray-button{
+  @apply w-full py-1.5 mb-1 text-black bg-gray-200 rounded-lg hover:bg-gray-300;
 }
 
 .text-button{
@@ -25,15 +121,15 @@
 }
 
 .label {
-  @apply block text-base font-medium;
+  @apply block text-base pb-0 mb-0 font-medium;
 }
 
 .input {
-  @apply w-full px-3 py-2 mb-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500;
+  @apply w-full px-3 py-2 mt-0 mb-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500;
 }
 
 .disabled-input {
-  @apply w-full px-3 py-2 mb-3 border rounded bg-gray-200;
+  @apply w-full px-3 py-2 mb-3 border rounded-lg bg-gray-200;
 }
 
 .back-button{

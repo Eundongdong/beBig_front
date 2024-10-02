@@ -15,30 +15,28 @@ export default {
 
 
   // 설문조사 가져오기
-  async surveyList(userId) {
-    const { data } = await api.get(`${BASE_URL}/${userId}/survey`);
+  async surveyList() {
+    const { data } = await api.get(`${BASE_URL}/fin-test`);
     return data;
   },
 
   // 설문 결과 보내기
-  async submitSurvey(userId, survey) {
-    const formData = new FormData();
-    for (const key in survey) {
-      formData.append(key, survey[key]);
-    }
-
+  async submitSurvey(survey) {
     const { data } = await api.post(
-      `${BASE_URL}/${userId}/survey`,
-      formData,
-      { headers }
-    );
+      `${BASE_URL}/fin-save`,
+      survey,
+      { 
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
     return data;
   },
 
   // 설문 결과 내용 조회
-  async surveyResult(userId) {
+  async surveyResult() {
     const { data } = await api.get(
-      `${BASE_URL}/${userId}/survey-result`
+      `${BASE_URL}/fin-type`
     );
     return data;
   },
@@ -87,7 +85,7 @@ export default {
     
     // 거래 내역 조회
     async transactionList(accountNum) {
-        const { data } = await api.get(`${BASE_URL}/account/${accountNum}/detail`);
+        const { data } = await api.get(`${BASE_URL}/account/${accountNum}/transactions`);
         return data;
     }
 };

@@ -2,7 +2,7 @@
     <button @click="GoBack"><</button>
     <div class="list">
         <div class="account-info">
-            <img :src="`../../../public/images/bank/${bankName}.png`" alt="Bank Logo" class="bank-logo">
+            <img :src="`/images/bank/${bankName}.png`" alt="Bank Logo" class="bank-logo">
             <div class="account-details">
                 <p>{{ accountName }}</p>
                 <p>{{ accountNum }}</p>
@@ -11,13 +11,17 @@
         </div>
 
         <div v-for="(group, index) in groupedTransactions" :key="index" class="transaction-group">
-            <h4>{{ group.date }}</h4>
+            <h4>{{ group.transactionDate}}</h4>
             <div v-for="(transaction, tIndex) in group.transactions" :key="tIndex" class="transaction-item">
                 <div class="transaction-content">
-                    <p class="transaction-description">{{ transaction.content }}</p>
+                    <p class="transaction-description">{{ transaction.transactionVendor}}</p>
                     <div class="transaction-amounts">
-                        <p class="transaction-amount">{{ transaction.amount }}</p>
-                        <p class="transaction-left-amount">{{ transaction.leftAmount }}</p>
+                        <p 
+                            class="transaction-amount" 
+                            :style="{ color: transaction.transactionType === '출금' ? 'red' : 'blue' }">
+                            {{ transaction.transactionAmount }}
+                        </p>
+                        <p class="transaction-left-amount">{{ transaction.transactionBalance}}</p>
                     </div>
                 </div>
             </div>
@@ -27,7 +31,7 @@
 
 <script setup>
 import { useRoute, useRouter } from 'vue-router';
-import { reactive, onMounted, computed } from 'vue';
+import { reactive, onMounted, computed, ref } from 'vue';
 import HomeApi from '@/api/HomeApi';
 
 const route = useRoute();
@@ -35,62 +39,39 @@ const router = useRouter();
 
 const accountNum = route.query.accountNum;  // 쿼리에서 계좌 번호를 받아옴
 console.log(accountNum);
-const accountName = 'test';
-const bankName = 'KB국민';
-const accountAmount = '6000000';
-const transactions = reactive([
-    {
-        date: '09.12',
-        content: '깍뚝',
-        amount: '-600000',
-        leftAmount: '600000'
-    },
-    {
-        date: '09.12',
-        content: '월급',
-        amount: '400000',
-        leftAmount: '1200000'
-    },
-    {
-        date: '09.11',
-        content: '보너스',
-        amount: '400000',
-        leftAmount: '1700000'
-    },
-    {
-        date: '09.10',
-        content: 'GS 25',
-        amount: '-300000',
-        leftAmount: '1300000'
-    },
-]);
+const accountName = ref('');
+const bankName = ref('');
+const accountAmount = ref('');
+const transactions = reactive([]);
 
 const groupedTransactions = computed(() => {
     const groups = {};
     transactions.forEach(transaction => {
-        if (!groups[transaction.date]) {
-            groups[transaction.date] = [];
+        if (!groups[transaction.transactionDate]) {
+            groups[transaction.transactionDate] = [];
         }
-        groups[transaction.date].push(transaction);
+        groups[transaction.transactionDate].push(transaction);
     });
-    return Object.keys(groups).map(date => ({
-        date,
-        transactions: groups[date],
+    return Object.keys(groups).map(transactionDate => ({
+        transactionDate,
+        transactions: groups[transactionDate],
     }));
 });
 
 const getAccountInfo = async () => {
     try {
         const accountInfo = await HomeApi.transactionList(accountNum);
-        console.log(accountInfo);
-        accountInfo.forEach(account => {
-            transactions.push({
-                date: account.date,  // 백에서 받는 값 형식에 맞게 수정 필요
-                content: account.content,
-                amount: account.amount,
-                leftAmount: account.leftAmount
-            });
-        });
+        bankName.value = accountInfo.bankName;
+        accountName.value = accountInfo.accountName;
+        for(let i=0;i<accountInfo.transactions.length;i++){
+            const transaction = accountInfo.transactions[i];
+            // 타임스탬프를 날짜 형식으로 변환하여 transactionDate에 할당
+            transaction.transactionDate = new Date(transaction.transactionDate).toLocaleDateString();
+            transactions[i] = transaction; // 변환된 transaction을 배열에 추가
+        }
+        console.log(transactions);
+        accountAmount.value = transactions[0].transactionBalance;
+
     } catch (error) {
         console.error('API 호출 중 오류 발생:', error);
     }
@@ -101,7 +82,7 @@ const GoBack = () => {
 };
 
 onMounted(() => {
-    // getAccountInfo(); // 필요 시 호출
+    getAccountInfo(); // 필요 시 호출
 });
 </script>
 
