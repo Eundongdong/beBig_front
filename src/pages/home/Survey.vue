@@ -122,6 +122,7 @@ const sendSurveyResult = async(finType) =>{
             user_fin_type: finType,  
             user_income: income.value
         });
+        router.push("/home/survey-result")
     }catch(error){
         console.error("API 호출 중 오류 발생:", error);
     }
