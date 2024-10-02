@@ -167,9 +167,6 @@ const getUser = async () => {
             dailyMissions[i] = response[i];
           }
           monthlyMission.value = await MissionApi.getMonthMission();
-
-          // console.log(monthlyMission);
-          // console.log(dailyMissions);
         } catch (error) {
             console.error("API 호출 중 오류 발생:", error);
         }
@@ -183,11 +180,7 @@ const getUser = async () => {
 
 const router = useRouter();
 
-const goLogin = () => {
-  router.push({ name: "user" });
-};
-
-const goAddBank = () => {
+const GoAddBank = () => {
   router.push("/home/bank");
 };
 
@@ -219,15 +212,9 @@ const closeModalOnOverlay = (e) => {
       router.push('/');
     };
 
-const completeMission = (missionType) => {
-  if (missionType === "MonthMission") {
-    mission.MonthMissionType = false;
-  } else if (missionType === "dailyMission1") {
-    mission.dailyMission1Type = false;
-  } else if (missionType === "dailyMission2") {
-    mission.dailyMission2Type = false;
-  }
-};
+    const goToMission = ()=>{
+      router.push('/mission');
+    }
 
 const goToAccountDetails = (account) => {
   // /home/account 경로로 이동
