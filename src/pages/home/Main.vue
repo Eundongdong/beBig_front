@@ -1,7 +1,7 @@
 <template>
   <div class="page h-screen">
     <!-- 사용자 정보 컴포넌트 -->
-    <!-- <button class="text-button"@click="logout">logout</button> -->
+    <button class="text-button"@click="logout">logout</button>
     <div class="component">
       <div class="flex items-center justify-between" v-if="user.userName !== 'NoLogin'">
         <!-- 왼쪽 텍스트 영역 -->
