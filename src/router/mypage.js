@@ -1,6 +1,6 @@
 export default[
     {
-        path: '/mypage/:userId', //userNo를 파라미터로 받아야 함
+        path: '/mypage',
         name: 'mypage',
         component:()=>import('../pages/mypage/Mypage.vue')
     },

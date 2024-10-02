@@ -52,149 +52,86 @@
       </div>
     </div>
 
-    <!-- 총자산 컴포넌트 -->
-    <div class="component">
-      <div class="flex items-center justify-between">
-        <h1 class="font-semibold text-lg">총 자산</h1>
-        <!-- 계좌 추가하기 버튼 -->
-        <button class="text-button" @click="goAddBank">
-          {{ accountList.length == 0 ? "계좌 연결하기" : "계좌 추가하기" }}
-        </button>
-      </div>
-      <!-- 총 자산 금액 표시 -->
-      <div class="text-lg ml-2 mt-1">
-        <h2>{{ totalAmount }} 원</h2>
-      </div>
-
-      <!-- 계좌 목록 출력 -->
-      <div
-        v-for="(account, index) in accountList"
-        :key="index"
-        class="account-info flex items-center justify-between p-4 mb-4 rounded-lg"
-      >
-        <!-- 은행 아이콘 -->
-        <img
-          class="bank-icon"
-          :src="`/images/bank/${account.bankName}.png`"
-          alt="Bank Logo"
-        />
-        <!-- 계좌 잔액 -->
-        <div class="account-details flex-grow">
-          <p class="text-sm text-gray-7--">
-            잔액: <span class="font-semibold">{{ account.amount }}</span>
-          </p>
+    <div class="asset">
+        <ul>
+            <li class="asset_total">
+                <h3>총 자산</h3>
+                <button class="add-bank-button" @click="GoAddBank" v-if="accountList.length != 0">계좌 추가하기</button>
+            </li>
+            <li class="asset-sum">
+                <h2>{{totalAmount}}원</h2>
+            </li>
+            <!-- accountList가 비어있을 경우 계좌 연결하기 버튼 표시 -->
+            <li v-if="user.userName == 'NoLogin'" class="connect-bank">
+                <button class="connect-bank-button" @click="goLogin">로그인하고 계좌 연결하기</button>
+            </li>
+            <li v-if="accountList.length == 0 && user.userName !== 'NoLogin'" class="connect-bank">
+                <button class="connect-bank-button" @click="GoAddBank">계좌 연결하기</button>
+            </li>
+        </ul>
+        <!-- 계좌 목록 출력 -->
+        <div v-for="account in accountList" :key="accountList.accountNum" class="account-info">
+          <img :src="`../../../public/images/bank/${account.bankName}.png`" alt="Bank Logo" class="bank-logo">
+            <div class="account-details">
+              <p>{{ account.accountName}}</p>
+              <p>잔액: {{account.transactionBalance}}</p>
+            </div>
         </div>
-        <!-- 자세히 보러 가기 버튼 -->
-        <button
-          v-if="index == 0"
-          class="details-button  text-black p-2"
-          @click="goToAccountDetails(account)"
-        >
-        <i class="fa-solid fa-arrow-right"></i>
-        </button>
-      </div>
+        <button v-if="accountList" class="details-button" @click="goToAccountDetails(account)">></button>
     </div>
-
-
-  <div class="mission">
-    <div class="mission-header">
-      <h3 class="mission-title">나의 미션</h3>
-      <button @click="goToMission" class="mission-button">
-        미션 보러 가기
-      </button>
-    </div>
-    <div
-      v-if="
-        !mission.MonthMission &&
-        !mission.dailyMission1 &&
-        !mission.dailyMission2
-      "
-    >
-      <h2>계좌를 연결하고 미션을 받아보세요</h2>
-    </div>
+    <div class="mission">
+        <div class="mission-header">
+            <h3 class="mission-title">나의 미션</h3>
+            <button v-if="!monthlyMission" @click="goToMission" class="mission-button">미션 보러 가기</button>
+        </div>
+        <div v-if="monthlyMission">
+            <h2>계좌를 연결하고 미션을 받아보세요</h2>
+        </div>
     <div v-else>
-      <h2>
-        {{ mission.MonthMission }}
-        <button
-          :class="{
-            completed: !mission.MonthMissionType,
-          }"
-          :disabled="!mission.MonthMissionType"
-          @click="completeMission('MonthMission')"
-        >
-          {{ mission.MonthMissionType ? "완료" : "완료됨" }}
-        </button>
-      </h2>
-      <h2>
-        {{ mission.dailyMission1 }}
-        <button
-          :class="{
-            completed: !mission.dailyMission1Type,
-          }"
-          :disabled="!mission.dailyMission1Type"
-          @click="completeMission('dailyMission1')"
-        >
-          {{ mission.dailyMission1Type ? "완료" : "완료됨" }}
-        </button>
-      </h2>
-      <h2>
-        {{ mission.dailyMission2 }}
-        <button
-          :class="{
-            completed: !mission.dailyMission2Type,
-          }"
-          :disabled="!mission.dailyMission2Type"
-          @click="completeMission('dailyMission2')"
-        >
-          {{ mission.dailyMission2Type ? "완료" : "완료됨" }}
-        </button>
-      </h2>
+      <h2>{{ monthlyMission.missionTopic }}</h2>
+      <h3 :style="{color: monthlyMission.isRevoked ? 'red' : 'blue',}">
+          {{ monthlyMission.isRevoked ? '성공!' : '도전하세요!' }}
+      </h3>
+      <ul>
+        <li v-for="mission in dailyMissions" :key="mission.personalDailyMissionId">
+          <div class="mission-description">
+            {{ mission.missionTopic || '설명이 없습니다.' }}
+          </div>
+          <h3 :style="{color: mission.personalDailyMissionCompleted ? 'red' : 'blue',}">
+            {{ mission.personalDailyMissionCompleted ? '성공!' : '도전하세요!' }}
+          </h3>
+        </li>
+      </ul>
     </div>
   </div>
   </div>
 </template>
 
 <script setup>
-import HomeApi from "@/api/HomeApi";
-import { ref, reactive, onMounted } from "vue";
-import { useRouter } from "vue-router";
-import SurveyResult from "./SurveyResult.vue";
-import { useUserStore } from "@/stores/user";
-import { useHomeStore } from "@/stores/home";
+    import HomeApi from "@/api/HomeApi";
+    import MissionApi from '@/api/MissionApi';
+    import { ref, reactive, onMounted } from 'vue';
+    import { useRouter } from 'vue-router';
+    import SurveyResult from "./SurveyResult.vue";
+    import { useUserStore } from '@/stores/user';
+    import { useHomeStore } from '@/stores/home';
 
-const userStore = useUserStore();
-const homeStore = useHomeStore();
+    const userStore = useUserStore();
+    const homeStore = useHomeStore();
 
-const logout = async () => {
-  userStore.logout();
-  router.push("/");
-};
+    const logout = async()=>{
+        userStore.logout();
+        router.push('/');
+    }
 
-const user = reactive({
-  userName: "",
-  finTypeCode: "", //2로도 바꿔보세요.
-});
+    const user = reactive({
+        userName: '',
+        finTypeCode: '' 
+    });
 
-const accountList = reactive([
-  {
-    bankName: "신한",
-    amount: "1,234,000원",
-  },
-  {
-    bankName: "KB국민",
-    amount: "5,678,000원",
-  },
-]);
+    const accountList = reactive([]);
 
-const totalAmount = reactive("1234");
-const mission = reactive({
-  MonthMission: "aaa",
-  dailyMission1: "bbb",
-  dailyMission2: "ccc",
-  dailyMission1Type: true,
-  dailyMission2Type: false,
-  MonthMissionType: true,
-});
+    const totalAmount = reactive('1234');
 
 // 사용자 정보를 가져오는 함수
 const getUser = async () => {
@@ -208,31 +145,41 @@ const getUser = async () => {
   }
 };
 
-const getAsset = async () => {
-  try {
-    const userAsset = await HomeApi.accountList();
-    console.log(userAsset);
-    totalAmount.value = userAsset.totalAsset; // API 데이터 형식에 맞게 수정 필요
-  } catch (error) {
-    console.error("API 호출 중 오류 발생:", error);
-  }
-};
+    const getAsset = async () => {
+      try{
+          const response = await HomeApi.accountList();
+          console.log(response);
+          for(let i=0;i<response.length;i++){
+            accountList[i] = response[i];
+          }
+        console.log(accountList);
+        } catch (error) {
+            console.error("API 호출 중 오류 발생:", error);
+        }
+    };
 
-const getMission = async () => {
-  try {
-    const userMission = await HomeApi.missionList();
-    console.log(userMission);
-    Object.assign(mission, userMission); // mission 객체에 API 응답 값 설정
-  } catch (error) {
-    console.error("API 호출 중 오류 발생:", error);
-  }
-};
+    const monthlyMission = ref('');
+    const dailyMissions = reactive([]);
+    const getMission = async () => {
+        try {
+          const response = await MissionApi.getDailyMission();
+          for (let i = 0; i < 3; i++) {
+            dailyMissions[i] = response[i];
+          }
+          monthlyMission.value = await MissionApi.getMonthMission();
 
-onMounted(() => {
-  getUser();
-  // getAsset();
-  // getMission();
-});
+          // console.log(monthlyMission);
+          // console.log(dailyMissions);
+        } catch (error) {
+            console.error("API 호출 중 오류 발생:", error);
+        }
+    };
+
+    onMounted(() => {
+        getUser();
+        getAsset();
+        getMission();
+    });
 
 const router = useRouter();
 
@@ -268,10 +215,9 @@ const closeModalOnOverlay = (e) => {
   }
 };
 
-// '미션 보러 가기' 버튼 클릭 시 Mission 페이지로 이동
-const goToMission = () => {
-  router.push({ name: "mission" });
-};
+    const goLogin = () => {
+      router.push('/');
+    };
 
 const completeMission = (missionType) => {
   if (missionType === "MonthMission") {
@@ -291,3 +237,210 @@ const goToAccountDetails = (account) => {
 // 모달 활성화 상태 변수
 const showModal = ref(false);
 </script>
+
+<style scoped>
+ul {
+  list-style-type: none;
+}
+
+.category,
+.asset,
+.mission {
+  width: 100%;
+  margin-bottom: 10%;
+  background-color: #f3f3f3;
+  border-radius: 10px;
+  padding: 10px;
+  border: none;
+}
+
+.category_button,
+.name {
+  width: 40%;
+}
+.noLogin {
+  color: black;
+  margin-bottom: 10px;
+  text-align: left;
+  font-size: 24px;
+}
+
+h3 {
+  color: black;
+}
+
+.name {
+  width: 100%;
+  color: black;
+}
+
+.category_img {
+  width: 100%;
+}
+
+.category_tag {
+  width: 100%;
+  color: black;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.connect-bank-button {
+  width: 100%;
+  height: 30%;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  margin-top: auto;
+  text-align: center;
+  color: black;
+}
+
+.add-bank-button {
+  background-color: #f3f3f3;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  color: black;
+}
+
+.account-details {
+  color: black;
+  flex-grow: 1;
+}
+
+.connect-bank {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.asset_total {
+  width: 100%;
+  height: 30%;
+}
+
+.asset-sum {
+  width: 100%;
+  height: 20%;
+  color: black;
+}
+
+.mission h3,
+.mission h2 {
+  color: black;
+}
+
+.mission-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mission-title {
+  margin: 0;
+}
+
+.mission-button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.mission-button:hover {
+  background-color: #0056b3;
+}
+
+    /* 계좌 정보와 이미지 좌우 배치 */
+    .account-info {
+        display: flex;
+        justify-content: space-between; /* 버튼이 오른쪽으로 가도록 설정 */
+        align-items: center; /* 수직 중앙 정렬 */
+        margin-bottom: 10px;
+    }
+
+    .bank-logo {
+        width: 50px;
+        height: 50px;
+        margin-right: 15px;
+    }
+
+    .account-details {
+        flex-grow: 1;
+    }
+
+    /* 계좌 상세 페이지로 이동하는 버튼 스타일 */
+    .details-button {
+        background-color: transparent;
+        border: none;
+        font-size: 24px;
+        color: black;
+        cursor: pointer;
+        margin-left: auto;
+    }
+
+    /* 완료된 버튼 스타일 */
+    button.completed {
+        background-color: #d3d3d3;
+        color: #a9a9a9;
+        cursor: not-allowed;
+    }
+
+    /* details-button을 계좌 정보 옆에 배치 */
+    .account-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+/* 모달 관련 스타일 */
+/* 화면 전체를 덮는 반투명한 배경 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* 다른 요소 위에 표시 */
+}
+
+/* 모달 창 스타일 */
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  max-width: 100%;
+  max-height: 80vh; /* 모달 창의 최대 높이 제한 */
+  overflow: auto; /* 스크롤 활성화 */
+  z-index: 1001;
+}
+
+/* 닫기 버튼 스타일 */
+.modal-close-button {
+  margin-top: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.modal-close-button:hover {
+  background-color: #0056b3;
+}
+</style>
+

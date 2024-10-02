@@ -45,7 +45,7 @@ const goCommunity = () => {
     router.push({ name: 'communityList' });
 };
 const goMypage = () => {
-    router.push({ name: 'mypage' });
+    router.push({ name: 'mypage' })
 };
 
 const getButtonClass = (isActive) => {
