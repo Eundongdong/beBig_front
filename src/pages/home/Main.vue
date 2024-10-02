@@ -1,5 +1,5 @@
 <template>
-  <div class="page h-screen">
+  <div class="page">
     <!-- 사용자 정보 컴포넌트 -->
     <button class="text-button"@click="logout">logout</button>
     <div class="component">
@@ -98,7 +98,7 @@
       </div>
 
       <!-- 연결된 계좌가 없는 경우 -->
-      <div v-if="!monthlyMission || !dailyMissions" class="flex items-center justify-center">
+      <div v-if="!monthlyMission || !dailyMissions" class="flex items-center justify-center mt-3">
         <h1 text-xl>계좌를 연결하고 미션을 받아보세요</h1>
       </div>
 

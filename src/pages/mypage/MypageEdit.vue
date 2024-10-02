@@ -1,4 +1,5 @@
 <template>
+  <div class="page">
   <div class="mypage-edit-container">
     <!-- 상단 바 -->
     <header class="header">
@@ -122,6 +123,7 @@
       </button>
     </form>
   </div>
+</div>
 </template>
 
 <script setup>

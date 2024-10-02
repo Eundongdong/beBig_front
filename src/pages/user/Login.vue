@@ -44,7 +44,7 @@
               class="white-button flex justify-center items-center space-x-2"
               @click="naverSocialLogin"
             >
-              <img src="/images/naver.png" class="w-[12%]" />
+              <img src="/images/naver.png" class="w-[40px]" />
               <span>네이버 로그인</span>
             </button>
           </li>
@@ -53,7 +53,7 @@
               class="white-button flex justify-center items-center space-x-2"
               @click="kakaoSocialLogin"
             >
-              <img src="/images/kakao.png" class="w-[12%]" />
+              <img src="/images/kakao.png" class="w-[40px]" />
               <span>카카오 로그인</span>
             </button>
           </li>

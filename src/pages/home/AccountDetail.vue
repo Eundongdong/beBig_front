@@ -1,4 +1,5 @@
 <template>
+    <div class="page">
     <button @click="GoBack"><</button>
     <div class="list">
         <div class="account-info">
@@ -27,6 +28,7 @@
             </div>
         </div>
     </div>
+</div>
 </template>
 
 <script setup>

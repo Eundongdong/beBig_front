@@ -1,4 +1,5 @@
 <template>
+  <div class="page">
   <div class="mypage-container">
     <!-- 상단 헤더 -->
     <header class="header">
@@ -150,6 +151,7 @@
       </ul>
     </section>
   </div>
+</div>
 </template>
 
 <script setup>

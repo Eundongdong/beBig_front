@@ -1,4 +1,5 @@
 <template>
+  <div class="page">
     <header class="header-container">
       <button class="back" @click="goBack">
         <i class="fa-solid fa-chevron-left"></i>
@@ -128,6 +129,7 @@
         </div>
       </div>
     </div>
+  </div>
   </template>
   
   <script setup>

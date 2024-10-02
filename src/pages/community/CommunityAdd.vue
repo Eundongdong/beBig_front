@@ -1,4 +1,5 @@
 <template>
+  <div class="page">
   <!-- 왼쪽 상단에 뒤로가기 버튼 -->
   <button @click="handleBack" class="back-button">
     <i class="fas fa-arrow-left"></i>
@@ -46,6 +47,7 @@
     <!-- 게시글 등록 버튼 -->
     <button @click="submitPost" class="submit-btn">게시글 등록하기</button>
   </div>
+</div>
 </template>
 
 

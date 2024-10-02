@@ -1,4 +1,5 @@
 <template>
+  <div class="page">
     <button @click="handleBackClick" class="back-button">&lt;</button>
     <div class="container">
       <h1>{{ selectedBank }}을 선택하셨군요.</h1>
@@ -24,7 +25,7 @@
       </div>
       <button @click="addAccount()" class="primary-button">계좌를 추가하시겠습니까?</button>
     </div>
-  
+  </div>
   </template>
   
   <script setup>

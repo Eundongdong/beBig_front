@@ -1,4 +1,5 @@
 <template>
+  <div class="page">
   <div class="mission-page">
     <header class="mission-header">
       <button @click="handleBack" class="back-button">
@@ -69,6 +70,7 @@
           </div>
     </div>
   </div>
+</div>
 </template>
 
 <script setup>
