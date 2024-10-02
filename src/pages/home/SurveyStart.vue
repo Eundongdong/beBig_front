@@ -1,4 +1,5 @@
 <template>
+  <div class="page">
     <div class="survey-start">
       <button @click="handleBack" class="back-button">&lt;</button>
       <p>안녕하세요.</p>
@@ -8,6 +9,7 @@
       <p>처음 시작하면 뒤로 가기 어려워요.</p>
       <button @click="goToSurvey" class="start-button">유형 검사 하러 가기</button>
     </div>
+  </div>
   </template>
   
   <script setup>

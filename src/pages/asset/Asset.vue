@@ -1,4 +1,5 @@
 <template>
+  <div class="page">
     <header class="header-container">
       <button class="back" @click="goBack">
         <i class="fa-solid fa-chevron-left"></i>
@@ -61,6 +62,7 @@
         <!-- 연령대별 비교 그래프 추가 -->
       </div>
     </div>
+  </div>
   </template>
   
   <script setup>

@@ -1,4 +1,5 @@
 <template>
+  <div class="page">
     <div class="result-container">
       <h1 class="finType-title">{{ finTypeTitle }}</h1>
       <h2 class="finType-subtitle">{{ finTypeSubtitle }}</h2>
@@ -13,6 +14,7 @@
       </div>
       <button class="button" @click="goBack">홈으로 돌아가기</button>
     </div>
+  </div>
   </template>
   
   <script setup>

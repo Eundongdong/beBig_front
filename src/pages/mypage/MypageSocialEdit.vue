@@ -1,4 +1,5 @@
 <template>
+  <div class="page">
     <div class="mypage-edit-container">
       <!-- 상단 바 -->
       <header class="header">
@@ -49,6 +50,7 @@
         <button type="submit" class="submit-btn">수정하기</button>
       </form>
     </div>
+  </div>
   </template>
   
   <script setup>

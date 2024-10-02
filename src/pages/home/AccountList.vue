@@ -1,4 +1,5 @@
 <template>
+    <div class="page">
     <button @click="GoBack"><</button>
     <div class="asset">
         <ul>
@@ -20,6 +21,7 @@
             <button class="details-button" @click="goBankDetail(account.accountNum)">></button>
         </div>
     </div>
+</div>
 </template>
 
 <script setup>

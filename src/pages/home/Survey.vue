@@ -1,4 +1,5 @@
 <template>
+    <div class="page">
     <div class="survey-container">
         <p>{{ currentQuestion + 1 }} / {{ shuffledQuestions.length }}</p>
         <div v-if="currentQuestion < shuffledQuestions.length - 1">
@@ -12,6 +13,7 @@
             <button @click="submitSurvey">제출하기</button>
         </div>
     </div>
+</div>
 </template>
 
 <script setup>

@@ -1,4 +1,5 @@
 <template>
+  <div class="page">
     <button @click="handleBackClick" class="back-button">&lt;</button>
     <div class="container">
       <!-- 은행 선택 섹션 -->
@@ -16,6 +17,7 @@
         </div>
       </div>
     </div>
+  </div>
   </template>
   
   <script setup>

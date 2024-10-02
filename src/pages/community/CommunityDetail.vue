@@ -1,4 +1,5 @@
 <template>
+  <div class="page">
   <!-- 왼쪽 상단에 뒤로가기 버튼 -->
   <button @click="handleBack" class="back-button">
     <i class="fas fa-arrow-left"></i>
@@ -58,6 +59,7 @@
   <div v-else>
     <p>게시글을 불러오는 중입니다...</p>
   </div>
+</div>
 </template>
 
 

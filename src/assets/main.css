@@ -129,6 +129,10 @@
   @apply overflow-y-scroll text-sm text-gray-600 border border-gray-300 rounded-lg p-2 max-h-40;
 }
 
+.post-content{
+  @apply my-3 p-4 bg-white rounded-lg border border-gray-300;
+}
+
 .mission-text{
   @apply text-[12px] text-gray-600 border border-gray-300 rounded bg-white m-2 p-2;
 }
@@ -149,6 +153,18 @@
   @apply w-[80px] rounded-full;
 }
 
+.community-profile{
+  @apply w-[35px] rounded-full;
+}
+
+.community-title{
+@apply font-bold text-base hover:underline;
+}
+
+.community-content{
+@apply text-sm text-gray-600;
+}
+
 .component{
   @apply rounded-2xl p-3 mb-3 bg-gray-100;
 }
@@ -163,6 +179,10 @@
 
 .button {
   @apply w-full py-2 mb-1 bg-[#5354ff] text-white rounded-lg hover:bg-[#3435ff];
+}
+
+.pagination-button{
+  @apply p-2 bg-[#5354ff] text-white rounded-lg hover:bg-[#3435ff];
 }
 
 .white-button{
@@ -191,6 +211,10 @@
 
 .back-button{
   @apply mt-0 pt-0 mb-4 text-2xl;
+}
+
+.add-button{
+  @apply fixed bottom-28 right-6 w-12 h-12 bg-[#5354ff] hover:bg-[#3435ff] text-2xl text-white rounded-full flex items-center justify-center;
 }
 
 .radio-button{
