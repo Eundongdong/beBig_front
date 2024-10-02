@@ -111,7 +111,11 @@
 }
 
 .page{
-  @apply w-full mx-auto p-5;
+  @apply w-full mx-auto px-3;
+  /* 헤더와 푸터의 높이를 고려한 최소 높이 설정 */
+  min-height: calc(100vh - 8rem); /* 100vh에서 헤더와 푸터의 높이(각 4rem)를 뺌 */
+  padding-top: 2rem; /* 헤더 높이 */
+  padding-bottom: 8rem; /* 푸터 높이 */
 }
 
 .modal {
@@ -125,6 +129,14 @@
   @apply overflow-y-scroll text-sm text-gray-600 border border-gray-300 rounded-lg p-2 max-h-40;
 }
 
+.mission-text{
+  @apply text-[12px] text-gray-600 border border-gray-300 rounded bg-white m-2 p-2;
+}
+
+.mission-status{
+  @apply text-sm font-semibold ml-2;
+}
+
 .notification-text{
   @apply text-red-600 text-sm;
 }
@@ -134,7 +146,7 @@
 }
 
 .home-profile{
-  @apply w-[110px] h-[110px] rounded-full;
+  @apply w-[80px] rounded-full;
 }
 
 .component{
@@ -142,7 +154,7 @@
 }
 
 .bank-icon{
-  @apply h-[40px];
+  @apply h-[30px];
 }
 
 .big-text{
