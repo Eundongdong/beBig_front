@@ -23,16 +23,21 @@
       <div class="profile-picture">
         <img
           :src="profileImage"
-          alt="프로필 사진"
+          alt="`프로필 사진 - ${finTypeCode}`"
         />
       </div>
       <div class="username">
         {{ userNickname }} 님
       </div>
-      <div class="badge-section">
-        🎖️ {{ badgeCode }}
+
+       <!-- badgeCode가 0이 아닐 때만 배지 이미지가 버튼으로 표시됨 -->
+       <div v-if="badgeCode !== 0">
+        <button class="badge-button" @click="openBadgeModal">
+          <img :src="badgeImage" alt="Badge" class="badge-img" width="5%" />
+        </button>
       </div>
-      <div>이번달 미션 달성도 상위 30%</div>
+
+      <div>이번달 미션 달성도 상위 {{ userRank }} %</div>
       <div>{{ finTypeInfo }}</div>
       <div class="intro-section">
         <div class="intro-title">한줄소개</div>
@@ -41,6 +46,17 @@
         </div>
       </div>
     </section>
+
+     <!-- 모달이 활성화될 때 표시 -->
+     <div v-if="showModal" class="modal-overlay" @click="closeModalOnOverlay">
+      <div class="modal" @click.stop>
+        <button @click="closeModal" class="modal-close-button"><i class="fa-solid fa-xmark"></i></button>
+        <h1>뱃지 이미지</h1>
+        <h2>Badge Information</h2>
+        <p>여기에 배지에 대한 설명을 넣으세요.</p>
+        
+      </div>
+    </div>
 
     <!-- 미션 진행상황 -->
     <section class="mission-section">
@@ -104,18 +120,50 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import MypageApi from '@/api/MypageApi'; // HomeApi 대신 MypageApi 사용
+import { ref, onMounted, computed } from 'vue';
+import { useRouter } from 'vue-router'; // useRouter 가져오기
+import MypageApi from '@/api/MypageApi';
 
 // 반응형 변수 선언
+const router = useRouter(); // router 변수 선언
 const userNickname = ref('');
-const profileImage = ref('');
+const finTypeCode = ref('');
 const badgeCode = ref('');
+const userRank = ref('');
 const finTypeInfo = ref('');
 const userIntro = ref('');
+const loginType= ref('');
 const myPosts = ref([]);
 const myLikePosts = ref([]);
 const selectedTab = ref('myPosts');
+const showModal = ref(false); // 모달 표시 여부
+
+// 프로필 사진 동적 경로 설정
+const profileImage = computed(() => {
+  return `/images/${finTypeCode.value}.png`; // 이미지 파일명은 finTypeCode 값과 일치
+});
+
+// 뱃지 이미지 동적 경로 설정
+const badgeImage = computed(() => {
+  return `/images/badge/badge${badgeCode.value}.png`; // badgeCode 값에 따라 배지 이미지 설정
+});
+
+// 모달 열기 함수
+const openBadgeModal = () => {
+  showModal.value = true;
+};
+
+// 모달 닫기 함수
+const closeModal = () => {
+  showModal.value = false;
+};
+
+// 모달 외부 클릭 시 닫기 함수
+const closeModalOnOverlay = (e) => {
+  if (e.target === e.currentTarget) {
+    closeModal();
+  }
+};
 
 // API에서 사용자 정보를 가져오는 함수
 const getUserInfo = async () => {
@@ -128,8 +176,9 @@ const getUserInfo = async () => {
     );
 
     userNickname.value = userInfo.userNickname; //이름
-    profileImage.value = userInfo.profileImage; // 이미지
+    finTypeCode.value = userInfo.finTypeCode; // 핀타입 코드
     badgeCode.value = userInfo.badgeCode; // 뱃지
+    userRank.value = userInfo.userRank; // 
     finTypeInfo.value = userInfo.finTypeInfo; // 유형
     userIntro.value = userInfo.userIntro; // 한줄소개
   } catch (error) {
@@ -137,6 +186,52 @@ const getUserInfo = async () => {
       '사용자 정보 가져오기 실패:',
       error
     );
+  }
+};
+
+// 로그인타입 가져오는 함수
+const getMyLoginType = async () => {
+  try {
+    console.log('로그인 타입 API 호출 시작');
+    const userLoginType = await MypageApi.getMyLoginType(); // 사용자의 정보를 가져오는 API 호출
+    console.log(
+      '로그인 타입 API 호출 성공 :',userLoginType
+    );
+
+    loginType.value = userLoginType;
+
+  } catch (error) {
+    console.error(
+      '사용자 정보 가져오기 실패:',
+      error
+    );
+  }
+};
+
+// // 미션 달성도 가져오는 함수
+// const getUserMissionAchievement = async () => {
+//   try {
+//     console.log('미션 달성도 가져오는 API 호출 시작');
+//     const userMissionAchievement = await MypageApi.getMyMissionAchievement(); // 사용자의 정보를 가져오는 API 호출
+//     console.log(
+//       '미션 달성도 가져오는API 호출 성공 :',userMissionAchievement);
+
+//       missionAchievement.value = userMissionAchievement.currentScore; // 한줄소개
+//   } catch (error) {
+//     console.error(
+//       '미션 달성도 가져오기 실패:',
+//       error
+//     );
+//   }
+// };
+
+// 정보 수정 페이지 이동 함수
+const goSettings = () => {
+  // loginType에 따라 다른 페이지로 이동
+  if (loginType.value === 'kakao') {
+    router.push({ name: 'mypageSocialEdit' });
+  } else if (loginType.value === 'general') {
+    router.push({ name: 'mypageEdit' });
   }
 };
 
@@ -189,7 +284,7 @@ const getUserLikePosts = async () => {
     );
   } catch (error) {
     console.error(
-      '작성한 글 가져오기 실패:',
+      '좋아요한 글 가져오기 실패:',
       error
     );
   }
@@ -198,6 +293,8 @@ const getUserLikePosts = async () => {
 // 페이지가 로드될 때 사용자 정보 가져오기
 onMounted(() => {
   getUserInfo();
+  getMyLoginType();
+  // getUserMissionAchievement();
   getUserPosts();
   getUserLikePosts();
 });
