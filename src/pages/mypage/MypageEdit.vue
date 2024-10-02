@@ -136,10 +136,6 @@ const handleSubmit = async () => {
     const response = await MypageApi.edit(userData); // 백엔드로 정보 전송
     console.log('프로필 수정 완료:', response);
 
-    // 비밀번호와 비밀번호 확인 필드 초기화
-    password.value = '';
-    confirmPassword.value = '';
-
     alert('프로필이 성공적으로 수정되었습니다.');
     router.push({ name: 'mypage' }); // 성공 후 mypage로 이동
   } catch (error) {
