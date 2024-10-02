@@ -30,14 +30,24 @@
         {{ userNickname }} 님
       </div>
 
-       <!-- badgeCode가 0이 아닐 때만 배지 이미지가 버튼으로 표시됨 -->
-       <div v-if="badgeCode !== 0">
-        <button class="badge-button" @click="openBadgeModal">
-          <img :src="badgeImage" alt="Badge" class="badge-img" width="5%" />
+      <!-- badgeCode가 0이 아닐 때만 배지 이미지가 버튼으로 표시됨 -->
+      <div v-if="badgeCode !== 0">
+        <button
+          class="badge-button"
+          @click="openBadgeModal"
+        >
+          <img
+            :src="badgeImage"
+            alt="Badge"
+            class="badge-img"
+            width="10%"
+          />
         </button>
       </div>
 
-      <div>이번달 미션 달성도 상위 {{ userRank }} %</div>
+      <div>
+        이번달 미션 달성도 상위 {{ userRank }} %
+      </div>
       <div>{{ finTypeInfo }}</div>
       <div class="intro-section">
         <div class="intro-title">한줄소개</div>
@@ -47,14 +57,37 @@
       </div>
     </section>
 
-     <!-- 모달이 활성화될 때 표시 -->
-     <div v-if="showModal" class="modal-overlay" @click="closeModalOnOverlay">
+    <!-- 모달이 활성화될 때 표시 -->
+    <div
+      v-if="showModal"
+      class="modal-overlay"
+      @click="closeModalOnOverlay"
+    >
       <div class="modal" @click.stop>
-        <button @click="closeModal" class="modal-close-button"><i class="fa-solid fa-xmark"></i></button>
-        <h1>뱃지 이미지</h1>
-        <h2>Badge Information</h2>
-        <p>여기에 배지에 대한 설명을 넣으세요.</p>
-        
+        <button
+          @click="closeModal"
+          class="modal-close-button"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <img
+          :src="badgeImage"
+          alt="Badge Image"
+          class="modal-badge-img"
+          width="50%"
+        />
+        <h2>잠깐, 메달의 기준이 궁금하신가요?</h2>
+        <p> {{ badgeName }}</p>
+
+        <!-- badgeCode가 0이 아닌 배지 목록만 표시 -->
+        <div
+          v-for="badge in filteredBadgeList"
+          :key="badge.badgeCode"
+          class="badge-item"
+        >
+          <h2>{{ badge.badgeTitle }}</h2>
+          <p>{{ badge.badgeDescription }}</p>
+        </div>
       </div>
     </div>
 
@@ -132,11 +165,23 @@ const badgeCode = ref('');
 const userRank = ref('');
 const finTypeInfo = ref('');
 const userIntro = ref('');
-const loginType= ref('');
+const badgeName = ref('');
+// const badgeDescription = ref(''); // 뱃지 설명
+const loginType = ref('');
 const myPosts = ref([]);
 const myLikePosts = ref([]);
 const selectedTab = ref('myPosts');
 const showModal = ref(false); // 모달 표시 여부
+
+// 뱃지 목록을 저장하는 변수
+const badgeList = ref([]); // 배지 정보 배열
+
+// badgeCode가 0이 아닌 항목만 필터링하여 반환
+const filteredBadgeList = computed(() => {
+  return badgeList.value.filter(
+    (badge) => badge.badgeCode !== 0
+  );
+});
 
 // 프로필 사진 동적 경로 설정
 const profileImage = computed(() => {
@@ -177,8 +222,8 @@ const getUserInfo = async () => {
 
     userNickname.value = userInfo.userNickname; //이름
     finTypeCode.value = userInfo.finTypeCode; // 핀타입 코드
-    badgeCode.value = userInfo.badgeCode; // 뱃지
-    userRank.value = userInfo.userRank; // 
+    badgeCode.value = Number(userInfo.badgeCode); // badgeCode를 숫자로 변환하여 할당
+    userRank.value = userInfo.userRank; //
     finTypeInfo.value = userInfo.finTypeInfo; // 유형
     userIntro.value = userInfo.userIntro; // 한줄소개
   } catch (error) {
@@ -189,17 +234,55 @@ const getUserInfo = async () => {
   }
 };
 
+// 뱃지 정보 가져오는 함수
+const getBadgeDetails = async () => {
+  try {
+    console.log(
+      '뱃지 정보 가져오는 API 호출 시작'
+    );
+    const badgeInfo =
+      await MypageApi.getBadgeInfo(); // 뱃지 정보를 가져오는 API 호출
+    console.log(
+      '뱃지 정보 API 호출 성공, 사용자 정보:',
+      badgeInfo
+    );
+
+    badgeList.value = badgeInfo;
+
+    console.log('현재 badgeCode:', Number(badgeCode.value));
+
+    // badgeCode에 해당하는 배지 이름 설정
+    const foundBadge = badgeList.value.find(
+      (badge) => badge.badgeCode === Number(badgeCode.value)
+    );
+
+    if (foundBadge) {
+      badgeName.value = foundBadge.badgeTitle;
+      console.log("badgeName 설정됨: ", badgeName.value);
+    } else {
+      badgeName.value = "배지를 찾을 수 없습니다.";
+      console.log("해당 badgeCode에 맞는 배지를 찾을 수 없습니다.");
+    }
+  } catch (error) {
+    console.error(
+      '뱃지 정보 가져오기 실패:',
+      error
+    );
+  }
+};
+
 // 로그인타입 가져오는 함수
 const getMyLoginType = async () => {
   try {
     console.log('로그인 타입 API 호출 시작');
-    const userLoginType = await MypageApi.getMyLoginType(); // 사용자의 정보를 가져오는 API 호출
+    const userLoginType =
+      await MypageApi.getMyLoginType(); // 사용자의 정보를 가져오는 API 호출
     console.log(
-      '로그인 타입 API 호출 성공 :',userLoginType
+      '로그인 타입 API 호출 성공 :',
+      userLoginType
     );
 
     loginType.value = userLoginType;
-
   } catch (error) {
     console.error(
       '사용자 정보 가져오기 실패:',
@@ -291,12 +374,17 @@ const getUserLikePosts = async () => {
 };
 
 // 페이지가 로드될 때 사용자 정보 가져오기
-onMounted(() => {
-  getUserInfo();
+onMounted(async () => {
+  await getUserInfo();
   getMyLoginType();
   // getUserMissionAchievement();
   getUserPosts();
   getUserLikePosts();
+  getBadgeDetails();
+  console.log(
+    'Current badgeCode:',
+    badgeCode.value
+  ); // badgeCode 값 확인
 });
 
 // 탭 선택 함수
@@ -351,6 +439,62 @@ const selectTab = (tabName) => {
 .intro-title {
   font-weight: bold;
 }
+
+.modal-badge-img {
+  margin-bottom: 24px; /* 이미지와 텍스트 사이 간격 조정 */
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.modal-badge-title {
+  font-size: 10px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 16px; /* 텍스트와 설명 사이 여백 */
+}
+
+.modal-badge-description {
+  text-align: center;
+  font-size: 10px;
+  line-height: 1.5;
+  color: #333;
+  margin-bottom: 24px; /* 설명과 다른 컨텐츠 사이 여백 */
+}
+
+.modal {
+  padding: 16px;
+  background-color: white;
+  border-radius: 8px;
+  width: 80%; /* 모달의 크기 설정 */
+  max-width: 350px;
+  max-height: 60vh; /* 모달의 최대 높이를 뷰포트 높이의 80%로 설정 */
+  overflow-y: auto; /* 모달 내용이 길어지면 스크롤 가능하도록 설정 */
+  margin:  auto; /* 화면 가운데 정렬 */
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7); /* 배경을 어둡게 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-close-button {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
 
 .mission-section {
   margin-top: 16px;

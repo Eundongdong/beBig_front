@@ -16,7 +16,7 @@ export default {
   },
 
   // 뱃지 설명 조회
-  async badge() {
+  async getBadgeInfo() {
     const { data } = await api.get(
       `${BASE_URL}/badge`
     );
