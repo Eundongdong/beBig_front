@@ -14,9 +14,9 @@ export default[
         name:'mypageSocialEdit',
         component:()=>import('../pages/mypage/MypageSocialEdit.vue')
     },
-    {
-        path:'/mypage/logo',
-        name:'mypageLogo',
-        component:()=>import('../pages/mypage/Logo.vue')
-    }
+    // {
+    //     path:'/mypage/logo',
+    //     name:'mypageLogo',
+    //     component:()=>import('../pages/mypage/Logo.vue')
+    // }
 ];
