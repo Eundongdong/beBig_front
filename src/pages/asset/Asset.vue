@@ -41,6 +41,7 @@
       <!-- 예·적금 추천 섹션 -->
       <div class="savings-recommendation-section">
         <h2>예·적금 추천</h2>
+        <button @click="getRandomRecommendations" class="recommendation-btn">다른 은행 상품 보기</button>
         <p>이 상품은 어떠세요?</p>
         
         <div class="recommendation-carousel">
@@ -82,33 +83,33 @@
             <p>다른 은행 상품</p>
             <p>적금상품</p>
             <ul>
-              <li v-if="depositRecomendations[2]" class="product-item">
-                <img :src="`../../../public/images/bank/${depositRecomendations[2].bankName}.png`">
-                <span>{{ depositRecomendations[2].depositProductName }}</span>
+              <li v-if="depositRecomendations[randomnumber1]" class="product-item">
+                <img :src="`../../../public/images/bank/${depositRecomendations[randomnumber1].bankName}.png`">
+                <span>{{ depositRecomendations[randomnumber1].depositProductName }}</span>
               </li>
-              <li v-if="depositRecomendations[2]"><p>최고우대금리: {{ depositRecomendations[2].depositProductMaxRate}}   기간: {{ depositRecomendations[2].depositProductTerm}}개월</p></li>
-              <li v-if="depositRecomendations[2]"><p>홈페이지 방문하기</p></li>
-              <li v-if="depositRecomendations[3]" class="product-item">
-                <img :src="`../../../public/images/bank/${depositRecomendations[3].bankName}.png`">
-                <span>{{ depositRecomendations[3].depositProductName }}</span>
+              <li v-if="depositRecomendations[randomnumber1]"><p>최고우대금리: {{ depositRecomendations[randomnumber1].depositProductMaxRate}}   기간: {{ depositRecomendations[randomnumber1].depositProductTerm}}개월</p></li>
+              <li v-if="depositRecomendations[randomnumber1]"><p>홈페이지 방문하기</p></li>
+              <li v-if="depositRecomendations[randomnumber2]" class="product-item">
+                <img :src="`../../../public/images/bank/${depositRecomendations[randomnumber2].bankName}.png`">
+                <span>{{ depositRecomendations[randomnumber2].depositProductName }}</span>
               </li>
-              <li v-if="depositRecomendations[3]"><p>최고우대금리: {{ depositRecomendations[3].depositProductMaxRate}}   기간: {{ depositRecomendations[3].depositProductTerm}}개월</p></li>
-              <li v-if="depositRecomendations[3]"><p>홈페이지 방문하기</p></li>
+              <li v-if="depositRecomendations[randomnumber2]"><p>최고우대금리: {{ depositRecomendations[randomnumber2].depositProductMaxRate}}   기간: {{ depositRecomendations[randomnumber2].depositProductTerm}}개월</p></li>
+              <li v-if="depositRecomendations[randomnumber2]"><p>홈페이지 방문하기</p></li>
             </ul>
             <p>예금상품</p>
             <ul>
-              <li v-if="savingsRecommendations[2]" class="product-item">
-                <img :src="`../../../public/images/bank/${savingsRecommendations[2].bankName}.png`">
-                <span>{{ savingsRecommendations[2].savingsProductName }}</span>
+              <li v-if="savingsRecommendations[randomnumber3]" class="product-item">
+                <img :src="`../../../public/images/bank/${savingsRecommendations[randomnumber3].bankName}.png`">
+                <span>{{ savingsRecommendations[randomnumber3].savingsProductName }}</span>
               </li>
-              <li v-if="savingsRecommendations[2]"><p>최고우대금리: {{ savingsRecommendations[2].savingsProductMaxRate}}   기간: {{ savingsRecommendations[2].savingsProductTerm}}개월</p></li>
-              <li v-if="savingsRecommendations[2]"><p>홈페이지 방문하기</p></li>
-              <li v-if="savingsRecommendations[3]" class="product-item">
-                <img :src="`../../../public/images/bank/${savingsRecommendations[3].bankName}.png`">
-                <span>{{ savingsRecommendations[3].savingsProductName }}</span>
+              <li v-if="savingsRecommendations[randomnumber3]"><p>최고우대금리: {{ savingsRecommendations[randomnumber3].savingsProductMaxRate}}   기간: {{ savingsRecommendations[randomnumber3].savingsProductTerm}}개월</p></li>
+              <li v-if="savingsRecommendations[randomnumber3]"><p>홈페이지 방문하기</p></li>
+              <li v-if="savingsRecommendations[randomnumber4]" class="product-item">
+                <img :src="`../../../public/images/bank/${savingsRecommendations[randomnumber4].bankName}.png`">
+                <span>{{ savingsRecommendations[randomnumber4].savingsProductName }}</span>
               </li>
-              <li v-if="savingsRecommendations[3]"><p>최고우대금리: {{ savingsRecommendations[3].savingsProductMaxRate}}   기간: {{ savingsRecommendations[3].savingsProductTerm}}개월</p></li>
-              <li v-if="savingsRecommendations[3]"><p>홈페이지 방문하기</p></li>
+              <li v-if="savingsRecommendations[randomnumber4]"><p>최고우대금리: {{ savingsRecommendations[randomnumber4].savingsProductMaxRate}}   기간: {{ savingsRecommendations[randomnumber4].savingsProductTerm}}개월</p></li>
+              <li v-if="savingsRecommendations[randomnumber4]"><p>홈페이지 방문하기</p></li>
             </ul>
           </div>
         </div>
@@ -210,6 +211,18 @@
   });
 };
 
+//상품 번호 무작위화
+const randomnumber1 = ref('');
+const randomnumber2 = ref('');
+const randomnumber3 = ref('');
+const randomnumber4 = ref('');
+const getRandomRecommendations = () =>{
+  randomnumber1.value = Math.floor(Math.random() * 6) + 2; // 2부터 7까지
+  randomnumber2.value = Math.floor(Math.random() * 6) + 2;
+  randomnumber3.value = Math.floor(Math.random() * 6) + 2;
+  randomnumber4.value = Math.floor(Math.random() * 6) + 2;
+};
+
 // 예·적금 추천 상품
 const depositRecomendations = reactive([]); // 예금 상품
 const savingsRecommendations = reactive([]); //적금상품
@@ -224,7 +237,8 @@ const bankNames = {
 const getProductRecommendations = async() =>{
     try{  
       const response = await AssetApi.showProductRecommendations();
-      for(let i =0;i<4;i++){
+      console.log(response);
+      for(let i =0;i<8;i++){
         // depositRecomendations에 은행 이름 추가
       const depositBankId = response.depositRecommendations[i].bankId;
       depositRecomendations[i] = {
@@ -243,6 +257,7 @@ const getProductRecommendations = async() =>{
       console.log(depositRecomendations);
       console.log(savingsRecommendations);
 
+      getRandomRecommendations();
     }catch(error){
       console.error("API 호출 중 오류 발생:", error);
     }
@@ -521,6 +536,19 @@ li {
     border-top: 2px solid red;
     text-align: center;
     margin-top: 10px;
+  }
+
+  .recommendation-title {
+    display: inline-block;
+  }
+
+  .recommendation-btn {
+    display: inline-block;
+    margin-left: 20px;
+    border: 2px solid black;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
   }
   </style>
   

@@ -1,7 +1,7 @@
 <template>
   <div class="page h-screen">
     <!-- 사용자 정보 컴포넌트 -->
-    <!-- <button class="text-button"@click="logout">logout</button> -->
+    <button class="text-button"@click="logout">logout</button>
     <div class="component">
       <div class="flex items-center justify-between" v-if="user.userName !== 'NoLogin'">
         <!-- 왼쪽 텍스트 영역 -->
@@ -161,7 +161,7 @@ const user = reactive({
 
 const accountList = reactive([]);
 
-const totalAmount = reactive('1234');
+const totalAmount = ref('');
 
 // 사용자 정보를 가져오는 함수
 const getUser = async () => {
@@ -178,6 +178,10 @@ const getUser = async () => {
 const getAsset = async () => {
   try {
     const response = await HomeApi.accountList();
+    // 모든 계좌의 transactionBalance 값을 합산
+    let total = response.reduce((sum, account) => sum + account.transactionBalance, 0);
+    totalAmount.value = total;  // totalAmount에 총합을 저장
+
     // transactionBalance로 내림차순 정렬 후 상위 2개만 추출
     const sortedAccounts = response.sort((a, b) => b.transactionBalance - a.transactionBalance).slice(0, 2);
     sortedAccounts.forEach((account, index) => {

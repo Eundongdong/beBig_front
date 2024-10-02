@@ -22,7 +22,7 @@ export default {
   // 예적금 상품 추천
     async showProductRecommendations() {
         const { data } = await api.get(`${BASE_URL}/product-recommendations`);
-        //console.log("ASSET GET RECOMMENTAIONS", data);
+        // console.log("ASSET GET RECOMMENTAIONS", data);
         return data;
     },
 
