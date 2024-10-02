@@ -10,7 +10,7 @@
             :key="index"
             class="image-button"
             @click="selectBank(bankName)">
-            <img :src="`../../../public/images/bank/${bankName}.png`" :alt="bankName" />
+            <img :src="`/images/bank/${bankName}.png`" :alt="bankName" />
             <span class="bank-name">{{ bankName }}</span>
           </button>
         </div>

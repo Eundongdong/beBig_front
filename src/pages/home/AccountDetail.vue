@@ -2,7 +2,7 @@
     <button @click="GoBack"><</button>
     <div class="list">
         <div class="account-info">
-            <img :src="`../../../public/images/bank/${bankName}.png`" alt="Bank Logo" class="bank-logo">
+            <img :src="`/images/bank/${bankName}.png`" alt="Bank Logo" class="bank-logo">
             <div class="account-details">
                 <p>{{ accountName }}</p>
                 <p>{{ accountNum }}</p>
