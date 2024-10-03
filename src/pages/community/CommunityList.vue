@@ -95,7 +95,7 @@
     </div>
 
     <!-- 새 글 작성 버튼 -->
-    <router-link to="/community/add" class="add-button">
+    <router-link v-if="userName != 'NoLogin'" to="/community/add" class="add-button">
       <i class="fas fa-plus"></i>
     </router-link>
   </div>
@@ -104,6 +104,18 @@
 <script setup>
 import { ref, computed, onMounted, watchEffect } from "vue";
 import communityApi from "@/api/CommunityApi";
+import HomeApi from "@/api/HomeApi";
+
+const userName = ref('');
+// 사용자 정보를 가져오는 함수
+const getUser = async () => {
+  try {
+    const userInfo = await HomeApi.getMyInfo(); // /home/info 호출
+    userName.value = userInfo.userName;
+  } catch (error) {
+    console.error("사용자 정보 가져오는 함수 API 호출 중 오류 발생:", error);
+  }
+};
 
 // 게시글 데이터
 const posts = ref([]); //API로 가져온 게시글 데이터
@@ -258,6 +270,7 @@ const likePost = async (postId, userId) => {
 
 // 컴포넌트가 마운트되면 게시글을 불러옴
 onMounted(() => {
+  getUser();
   fetchPosts();
   window.addEventListener("scroll", handleScroll);
 });

@@ -23,10 +23,26 @@
 
 <script setup>
 import { useRouter, useRoute } from 'vue-router';
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import HomeApi from "@/api/HomeApi";
 
 const router = useRouter();
 const route = useRoute();
+
+// 사용자 정보를 가져오는 함수
+const userName = ref('');
+const getUser = async () => {
+    try {
+        const userInfo = await HomeApi.getMyInfo(); // /home/info 호출
+        userName.value = userInfo.userName;
+    } catch (error) {
+        console.error("사용자 정보 가져오는 함수 API 호출 중 오류 발생:", error);
+    }
+};
+onMounted(() => {
+    getUser();
+
+});
 
 // 라우팅 정보에 따라 버튼 색상 변경
 const isHome = computed(() => route.path === '/home');
@@ -39,13 +55,23 @@ const goHome = () => {
     router.push({ name: 'main' });
 };
 const goAsset = () => {
-    router.push({ name: 'asset' });
+    if(userName.value == 'NoLogin'){
+        alert('로그인 후 이용해주세요.');
+    }
+    else{
+        router.push({ name: 'asset' });
+    }
 };
 const goCommunity = () => {
     router.push({ name: 'communityList' });
 };
 const goMypage = () => {
-    router.push({ name: 'mypage' })
+    if(userName.value == 'NoLogin'){
+        alert('로그인 후 이용해주세요.');
+    }
+    else{
+        router.push({ name: 'mypage' });
+    }
 };
 
 const getButtonClass = (isActive) => {
