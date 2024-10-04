@@ -1,5 +1,5 @@
 <template lang="">
-    Logo
+    Loading
     </template>
     <script>
     
