@@ -7,57 +7,120 @@
         <i class="fa-solid fa-chevron-left"></i>
       </button>
       <h2 class="">일반회원 내 정보 수정</h2>
-      <button class="logout-btn" @click="logout">로그아웃</button>
+      <button class="logout-btn" @click="logout">
+        로그아웃
+      </button>
     </header>
 
     <!-- 입력 폼 -->
     <form @submit.prevent="handleSubmit">
       <div class="input_group">
         <label>한줄 소개</label>
-        <input type="text" v-model="intro" class="input-field" />
+        <input
+          type="text"
+          v-model="intro"
+          class="input-field"
+        />
       </div>
 
       <div class="input_group">
         <label>닉네임</label>
-        <input type="text" v-model="nickname" class="input-field" />
+        <input
+          type="text"
+          v-model="nickname"
+          class="input-field"
+        />
       </div>
 
       <div class="input_group">
         <label>이름</label>
-        <input type="text" v-model="name" class="input-field" disabled />
+        <input
+          type="text"
+          v-model="name"
+          class="input-field"
+          disabled
+        />
       </div>
 
       <div class="input_group">
         <label>아이디</label>
-        <input type="text" v-model="loginId" class="input-field" disabled />
+        <input
+          type="text"
+          v-model="loginId"
+          class="input-field"
+          disabled
+        />
       </div>
 
       <div class="input_group">
-        <label>비밀번호</label>
-        <input type="password" v-model="password" class="input-field" />
+        <label>기존 비밀번호</label>
+        <input
+          type="password"
+          v-model="currentPassword"
+          class="input-field"
+        />
+        <button
+          type="button"
+          @click="checkCurrentPassword"
+          class="password-check-btn"
+        >
+          확인
+        </button>
       </div>
 
       <div class="input_group">
-        <label>비밀번호 확인</label>
-        <input type="password" v-model="confirmPassword" class="input-field" />
+        <label>새 비밀번호</label>
+        <input
+          type="password"
+          v-model="newPassword"
+          class="input-field"
+          :disabled="!isPasswordConfirmed"
+        />
+      </div>
+
+      <div class="input_group">
+        <label>새 비밀번호 확인</label>
+        <input
+          type="password"
+          v-model="confirmNewPassword"
+          class="input-field"
+          :disabled="!isPasswordConfirmed"
+        />
       </div>
 
       <div class="input_group">
         <label>이메일</label>
-        <input type="email" v-model="email" class="input-field" disabled />
+        <input
+          type="email"
+          v-model="email"
+          class="input-field"
+          disabled
+        />
       </div>
 
       <div class="input_group">
         <label>성별</label>
-        <input type="text" v-model="gender" class="input-field" disabled />
+        <input
+          type="text"
+          v-model="gender"
+          class="input-field"
+          disabled
+        />
       </div>
 
       <div class="input_group">
         <label>생년월일</label>
-        <input type="text" v-model="birth" class="input-field" disabled />
+        <input
+          type="text"
+          v-model="birth"
+          class="input-field"
+          disabled
+        />
       </div>
 
-      <button type="submit" class="submit-btn">수정하기</button>
+      <button type="submit" class="submit-btn">
+        수정하기
+      </button>
     </form>
   </div>
 </div>
@@ -74,11 +137,15 @@ const intro = ref('');
 const nickname = ref('');
 const name = ref('');
 const loginId = ref('');
-const password = ref(''); // 비밀번호 필드 추가
-const confirmPassword = ref(''); // 비밀번호 확인 필드 추가
+const currentPassword = ref(''); // 기존 비밀번호 필드 추가
+const newPassword = ref('');
+const confirmNewPassword = ref('');
 const email = ref('');
 const gender = ref('');
 const birth = ref('');
+
+// 새 비밀번호 입력창 활성화 상태 관리 변수 (처음엔 false로 비활성화)
+const isPasswordConfirmed = ref(false);
 
 const router = useRouter(); // router 사용을 위한 선언
 const userStore = useUserStore(); // userStore 사용을 위한 선언
@@ -97,45 +164,102 @@ const logout = () => {
 // 기존 정보 불러오는 함수
 const getUserExistingInfo = async () => {
   try {
-    console.log('회원 기존정보 불러오는 API 호출 시작');
-    const userExistingInfo = await MypageApi.getMyExistingInfo(); // 사용자의 정보를 가져오는 API 호출
-    console.log('회원 기존정보 불러오는 API 호출 성공:', userExistingInfo);
+    console.log(
+      '회원 기존정보 불러오는 API 호출 시작'
+    );
+    const userExistingInfo =
+      await MypageApi.getMyExistingInfo(); // 사용자의 정보를 가져오는 API 호출
+    console.log(
+      '회원 기존정보 불러오는 API 호출 성공:',
+      userExistingInfo
+    );
 
     // 받아온 데이터를 변수에 저장
     intro.value = userExistingInfo.userIntro;
-    nickname.value = userExistingInfo.userNickname;
+    nickname.value =
+      userExistingInfo.userNickname;
     name.value = userExistingInfo.userName;
     loginId.value = userExistingInfo.userLoginId;
     email.value = userExistingInfo.userEmail;
-    gender.value = userExistingInfo.userGender === 1 ? '여성' : '남성'; // 성별은 숫자로 올 가능성이 있으니 변환
+    gender.value =
+      userExistingInfo.userGender === 1
+        ? '여성'
+        : '남성'; // 성별은 숫자로 올 가능성이 있으니 변환
     birth.value = userExistingInfo.userBirth2; // 포맷된 생일
   } catch (error) {
-    console.error('회원 기존정보 가져오기 실패:', error);
+    console.error(
+      '회원 기존정보 가져오기 실패:',
+      error
+    );
+  }
+};
+
+// 비밀번호 확인 함수
+const checkCurrentPassword = async () => {
+  try {
+    const result = await MypageApi.checkPassword(
+      currentPassword.value
+    ); // 비밀번호 확인 API 호출
+    console.log('API 응답 결과:', result); // 응답 데이터 구조 확인
+
+    if (result === 'password match') {
+      alert('비밀번호가 일치합니다.');
+      isPasswordConfirmed.value = true; // 비밀번호 일치 시 새 비밀번호 입력창 활성화
+    } else if (
+      result === 'password does not match'
+    ) {
+      alert('기존 비밀번호와 일치하지 않습니다.');
+      isPasswordConfirmed.value = false; // 비밀번호 불일치 시 새 비밀번호 입력창 비활성화
+    }
+  } catch (error) {
+    console.error(
+      '비밀번호 확인 중 오류 발생:',
+      error
+    );
+    alert(
+      '기존 비밀번호와 일치하지 않습니다.(오류)'
+    );
+    isPasswordConfirmed.value = false; // 오류 발생 시 비활성화
   }
 };
 
 // 수정한 정보 백엔드로 전송하는 함수
 const handleSubmit = async () => {
+  // 새 비밀번호 또는 새 비밀번호 확인 필드가 비어있으면 경고창 띄우기
+  if (
+    !newPassword.value ||
+    !confirmNewPassword.value
+  ) {
+    alert(
+      '새 비밀번호와 새 비밀번호 확인 필드를 모두 입력해 주세요.'
+    );
+    return; // 제출 중단
+  }
+
+  // 새비밀번호와 새비밀번호 확인이 일치하는지 확인
+  if (
+    newPassword.value !== confirmNewPassword.value
+  ) {
+    alert('새 비밀번호가 일치하지 않습니다.');
+
+    // 비밀번호와 비밀번호 확인 필드 초기화
+    newPassword.value = '';
+    confirmNewPassword.value = '';
+    return; // 제출 중단
+  }
+
   try {
-    // 비밀번호와 비밀번호 확인이 일치하는지 확인
-    if (password.value !== confirmPassword.value) {
-      alert('비밀번호가 일치하지 않습니다.');
-
-      // 비밀번호와 비밀번호 확인 필드 초기화
-      password.value = '';
-      confirmPassword.value = '';
-      return;
-    }
-
     // 수정된 정보 전송
     const userData = {
       user_intro: intro.value,
       user_nickname: nickname.value,
-      user_password: password.value, // 일반 회원의 경우 비밀번호도 전송
+      user_password: newPassword.value, // 일반 회원의 경우 비밀번호도 전송
       user_login_type: 'general', // 일반 로그인으로 설정
     };
 
-    const response = await MypageApi.edit(userData); // 백엔드로 정보 전송
+    const response = await MypageApi.edit(
+      userData
+    ); // 백엔드로 정보 전송
     console.log('프로필 수정 완료:', response);
 
     alert('프로필이 성공적으로 수정되었습니다.');

@@ -16,7 +16,7 @@ export default {
   },
 
   // 뱃지 설명 조회
-  async badge() {
+  async getBadgeInfo() {
     const { data } = await api.get(
       `${BASE_URL}/badge`
     );
@@ -63,12 +63,19 @@ export default {
     return data;
   },
 
-  // 회원정보 수정에서 기존 정보 가져오기
+  // 회원정보 수정에서 기존 정보 가져오기 (일반, 소셜 동일)
   async getMyExistingInfo() {
     const { data } = await api.get(`${BASE_URL}/edit-form`);
     console.log('MYPAGE GET Existing My Profile', data);
     return data;
   },
+
+  // 기존 비밀번호 확인
+async checkPassword(password) {
+  const { data } = await api.post(`${BASE_URL}/check-password`, { password });
+  console.log('MYPAGE CURRENT PASSWORD CHECK', data);
+  return data;
+},
 
   // 회원정보 수정 (일반, 소셜 동일)
   async edit(user) {
@@ -76,7 +83,7 @@ export default {
       `${BASE_URL}/edit-save`,
       user // 객체 형태로 전송
     );
-    console.log('MYPAGE POST EDIT', data);
+    console.log('MYPAGE USER INFO EDIT', data);
     return data;
   },
 };
