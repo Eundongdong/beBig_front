@@ -1,13 +1,12 @@
 import api from "@/api";
-//import api from "@/api/ex_index"
 
 const BASE_URL = "/asset";
 const headers = { "Content-Type": "multipart/form-data" };
 
 export default {
   // 총 자산 분석
-    async showAnalysis(userNo) {
-        const { data } = await api.get(`${BASE_URL}/${userNo}/analysis`);
+    async showAnalysis() {
+        const { data } = await api.get(`${BASE_URL}/analysis`);
         //console.log("ASSET GET LIST", data);
         return data;
     },

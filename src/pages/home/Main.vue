@@ -54,7 +54,6 @@
         <h1 class="font-semibold text-lg">총 자산</h1>
 
         <!-- 계좌 추가하기 버튼 -->
-        <button v-if="user.userName == 'NoLogin'" class="text-bank" @click="goLogin">로그인하고 계좌 연결하기</button>
         <button v-if="user.userName !== 'NoLogin'" class="text-button" @click="goAddBank">
           {{ accountList.length == 0 ? "계좌 연결하기" : "계좌 추가하기" }}
         </button>
@@ -98,11 +97,18 @@
       </div>
 
       <!-- 연결된 계좌가 없는 경우 -->
-      <div v-if="!monthlyMission || !dailyMissions" class="flex items-center justify-center mt-3">
-        <h1 text-xl>계좌를 연결하고 미션을 받아보세요</h1>
+      <div v-if="user.userName != 'NoLogin'">
+        <div v-if="!monthlyMission || !dailyMissions" class="flex items-center justify-center mt-3">
+          <h1 text-xl>계좌를 연결하고 미션을 받아보세요</h1>
+        </div>
       </div>
 
-      <div v-else>
+      <!-- 가입없이 이용인 경우 -->
+      <div v-if="user.userName == 'NoLogin'" class="flex items-center justify-center mt-3">
+        <button class="text-button" @click="goLogin">로그인하고 계좌 연결하기</button>
+      </div>
+
+      <div v-if="monthlyMission && dailyMissions">
         <!-- 월간 미션 -->
         <div class="flex items-center justify-between">
           <label class="label ml-2">월간 미션</label>

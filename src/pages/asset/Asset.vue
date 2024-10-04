@@ -1,26 +1,31 @@
 <template>
   <div class="page">
-    <header class="header-container">
-      <button class="back" @click="goBack">
-        <i class="fa-solid fa-chevron-left"></i>
-      </button>
-    </header>
 
     <div class="analysis-page">
       <!-- 총자산 분석 섹션 -->
       <div class="total-asset-section">
         <h2>총자산 분석</h2>
-        <h1>{{ totalAsset }} 원</h1>
-        <div>[차트 들어가는 부분]</div>
-        <!-- <div class="asset-breakdown">
-          <div class="bar bank"></div>
-          <div class="bar savings"></div>
+        <h1>{{ totalBalance }}원</h1>
+        <div class="bar-chart">
+        <div
+            class="bar-segment cash"
+            :style="{ width: cashPercentage + '%' }"
+          ></div>
+          <div
+            class="bar-segment deposit-savings"
+            :style="{ width: depositSavingsPercentage + '%' }"
+          ></div>
         </div>
+        <!-- 범례 -->
         <div class="legend">
-          <span>계좌·현금</span>
-          <span>예·적금</span>
-        </div> -->
-      </div>
+          <div class="legend-item">
+            <span class="legend-color cash"></span> 입출금 자산
+          </div>
+          <div class="legend-item">
+            <span class="legend-color deposit-savings"></span> 예적금 자산
+          </div>
+        </div>
+    </div>
   
       <!-- 소비 분석 섹션 -->
       <div class="spending-analysis-section">
@@ -55,13 +60,13 @@
                 <span>{{ depositRecomendations[0].depositProductName}}</span>
               </li>
               <li v-if="depositRecomendations[0]"><p>최고우대금리: {{ depositRecomendations[0].depositProductMaxRate}}   기간: {{ depositRecomendations[0].depositProductTerm}}개월</p></li>
-              <li v-if="depositRecomendations[0]"><p>홈페이지 방문하기</p></li>
+              <li v-if="depositRecomendations[0]"><a :href="depositRecomendations[0].bankUrl" target="_blank">홈페이지 방문하기</a></li>
               <li v-if="depositRecomendations[1]" class="product-item">
                 <img :src="`../../../public/images/bank/${depositRecomendations[1].bankName}.png`">
                 <span>{{ depositRecomendations[1].depositProductName }}</span>
               </li>
               <li v-if="depositRecomendations[1]"><p>최고우대금리: {{ depositRecomendations[1].depositProductMaxRate}}   기간: {{ depositRecomendations[1].depositProductTerm}}개월</p></li>
-              <li v-if="depositRecomendations[1]"><p>홈페이지 방문하기</p></li>
+              <li v-if="depositRecomendations[1]"><a :href="depositRecomendations[1].bankUrl" target="_blank">홈페이지 방문하기</a></li>
             </ul>
             <p>예금상품</p>
             <ul>
@@ -70,13 +75,13 @@
                 <span>{{ savingsRecommendations[0].savingsProductName }}</span>
               </li>
               <li v-if="savingsRecommendations[0]"><p>최고우대금리: {{ savingsRecommendations[0].savingsProductMaxRate}}   기간: {{ savingsRecommendations[0].savingsProductTerm}}개월</p></li>
-              <li v-if="savingsRecommendations[0]"><p>홈페이지 방문하기</p></li>
+              <li v-if="savingsRecommendations[0]"><a :href="savingsRecommendations[0].bankUrl" target="_blank">홈페이지 방문하기</a></li>
               <li v-if="savingsRecommendations[1]" class="product-item">
                 <img :src="`../../../public/images/bank/${savingsRecommendations[1].bankName}.png`">
                 <span>{{ savingsRecommendations[1].savingsProductName }}</span>
               </li>
               <li v-if="savingsRecommendations[1]"><p>최고우대금리: {{ savingsRecommendations[1].savingsProductMaxRate}}   기간: {{ savingsRecommendations[1].savingsProductTerm}}개월</p></li>
-              <li v-if="savingsRecommendations[1]"><p>홈페이지 방문하기</p></li>
+              <li v-if="savingsRecommendations[1]"><a :href="savingsRecommendations[1].bankUrl" target="_blank">홈페이지 방문하기</a></li>
             </ul>
           </div>
 
@@ -89,13 +94,13 @@
                 <span>{{ depositRecomendations[randomnumber1].depositProductName }}</span>
               </li>
               <li v-if="depositRecomendations[randomnumber1]"><p>최고우대금리: {{ depositRecomendations[randomnumber1].depositProductMaxRate}}   기간: {{ depositRecomendations[randomnumber1].depositProductTerm}}개월</p></li>
-              <li v-if="depositRecomendations[randomnumber1]"><p>홈페이지 방문하기</p></li>
+              <li v-if="depositRecomendations[randomnumber1]"><a :href="depositRecomendations[randomnumber1].bankUrl" target="_blank">홈페이지 방문하기</a></li>
               <li v-if="depositRecomendations[randomnumber2]" class="product-item">
                 <img :src="`../../../public/images/bank/${depositRecomendations[randomnumber2].bankName}.png`">
                 <span>{{ depositRecomendations[randomnumber2].depositProductName }}</span>
               </li>
               <li v-if="depositRecomendations[randomnumber2]"><p>최고우대금리: {{ depositRecomendations[randomnumber2].depositProductMaxRate}}   기간: {{ depositRecomendations[randomnumber2].depositProductTerm}}개월</p></li>
-              <li v-if="depositRecomendations[randomnumber2]"><p>홈페이지 방문하기</p></li>
+              <li v-if="depositRecomendations[randomnumber2]"><a :href="depositRecomendations[randomnumber2].bankUrl" target="_blank">홈페이지 방문하기</a></li>
             </ul>
             <p>예금상품</p>
             <ul>
@@ -104,13 +109,13 @@
                 <span>{{ savingsRecommendations[randomnumber3].savingsProductName }}</span>
               </li>
               <li v-if="savingsRecommendations[randomnumber3]"><p>최고우대금리: {{ savingsRecommendations[randomnumber3].savingsProductMaxRate}}   기간: {{ savingsRecommendations[randomnumber3].savingsProductTerm}}개월</p></li>
-              <li v-if="savingsRecommendations[randomnumber3]"><p>홈페이지 방문하기</p></li>
+              <li v-if="savingsRecommendations[randomnumber3]"><a :href="savingsRecommendations[randomnumber3].bankUrl" target="_blank">홈페이지 방문하기</a></li>
               <li v-if="savingsRecommendations[randomnumber4]" class="product-item">
                 <img :src="`../../../public/images/bank/${savingsRecommendations[randomnumber4].bankName}.png`">
                 <span>{{ savingsRecommendations[randomnumber4].savingsProductName }}</span>
               </li>
               <li v-if="savingsRecommendations[randomnumber4]"><p>최고우대금리: {{ savingsRecommendations[randomnumber4].savingsProductMaxRate}}   기간: {{ savingsRecommendations[randomnumber4].savingsProductTerm}}개월</p></li>
-              <li v-if="savingsRecommendations[randomnumber4]"><p>홈페이지 방문하기</p></li>
+              <li v-if="savingsRecommendations[randomnumber4]"><a :href="savingsRecommendations[randomnumber4].bankUrl" target="_blank">홈페이지 방문하기</a></li>
             </ul>
           </div>
         </div>
@@ -133,11 +138,39 @@
   </template>
   
   <script setup>
-  import { onMounted, ref, reactive } from 'vue';
+  import { onMounted, ref, reactive, computed } from 'vue';
   import AssetApi from "@/api/AssetApi";
   import Chart from 'chart.js/auto';
   import annotationPlugin from 'chartjs-plugin-annotation';  // Chart.js annotation 플러그인
   Chart.register(annotationPlugin);
+
+
+
+//총 자산 분석
+const totalBalance = ref('');
+const totalCashBalance = ref('');
+const totalDepositSavingsBalance = ref('');
+
+// 총 자산 비율 계산하는 computed
+const cashPercentage = computed(() => {
+      return ((totalCashBalance.value / totalBalance.value) * 100).toFixed(2);
+    });
+
+    const depositSavingsPercentage = computed(() => {
+      return ((totalDepositSavingsBalance.value / totalBalance.value) * 100).toFixed(2);
+    });
+    
+const getAnalysis = async() =>{
+  try{
+    const response = await AssetApi.showAnalysis();
+    totalBalance.value = response.totalBalance;
+    totalCashBalance.value = response.totalCashBalance;
+    totalDepositSavingsBalance.value = response.totalDepositSavingsBalance;
+  }catch(error){
+    console.error("API 호출 중 오류 발생:", error);
+  }
+}
+
 
 
 //소비 분석 부분
@@ -153,7 +186,7 @@
     try{  
       const response = await AssetApi.showSpendingPatterns(selectedYear.value);
       spendings.previousMonthDiff = response.previousMonthDiff;
-      console.log(response);
+
       // 현재 월에 해당하는 개수만큼 데이터를 받아옴 (예: 9월이면 9개의 값)
       spendings.monthlySum = response.monthlySum.slice(0, currentMonth);
       spendings.monthlyAverage = response.monthlyAverage;
@@ -255,9 +288,6 @@ const getProductRecommendations = async() =>{
         bankName: bankNames[savingsBankId] || '알 수 없는 은행'
       };
       }
-      
-      console.log(depositRecomendations);
-      console.log(savingsRecommendations);
 
       getRandomRecommendations();
     }catch(error){
@@ -299,7 +329,7 @@ const scrollToSlide = (index) => {
   const getAgeComparison = async() =>{
     try{  
       const response = await AssetApi.showAgeComparison();
-      console.log(response);
+
       rank.value = response.rank;
       totalSameUser.value = response.totalSameAgeRangeUsers;
       ageRange.value = response.ageRange;
@@ -323,18 +353,67 @@ const scrollToSlide = (index) => {
 
 
   onMounted(() => {
-        getSpendingPatterns();
-        getProductRecommendations();
-        getAgeComparison();
+      getAnalysis();
+      getSpendingPatterns();
+      getProductRecommendations();
+      getAgeComparison();
     });
-  // 총자산 정보
-  const totalAsset = ref(20000000); // 총 자산을 20,000,000원으로 설정
+
     
 
   
   </script>
   
   <style scoped>
+  /* 총 자산 분석 css */
+  .bar-chart {
+  display: flex;
+  width: 100%;
+  height: 30px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  margin-top: 20px;
+}
+
+.bar-segment {
+  height: 100%;
+}
+
+.cash {
+  background-color: #4CAF50; /* 입출금 자산 색 */
+}
+
+.deposit-savings {
+  background-color: #2196F3; /* 예적금 자산 색 */
+}
+/* 범례 스타일 */
+.legend {
+  margin-top: 20px;
+  display: flex;
+  gap: 20px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+}
+
+.legend-color {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+.legend-color.cash {
+  background-color: #4CAF50;
+}
+
+.legend-color.deposit-savings {
+  background-color: #2196F3;
+}
+
+
   /* 상품 추천 css */
   .recommendation-carousel {
   display: flex;
