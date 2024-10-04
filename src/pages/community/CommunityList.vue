@@ -1,41 +1,99 @@
 <template>
   <div class="page" @scroll="handleScroll">
     <!-- 상단 정렬 및 필터 -->
-    <div class="filter-sort-bar">
+    <div>
       <!-- 정렬 버튼: 좋아요순, 최신순 -->
-      <div class="sort-options">
+      <div class="flex items-start space-x-4 text-xs ml-1">
         <button
           @click="sortBy('likeHits')"
-          :class="{ active: sortType === 'likeHits' }"
+          :class="['small-buttons', { active: sortType === 'likeHits', 'font-bold': sortType === 'likeHits' }]"
         >
           좋아요순
         </button>
         <button
           @click="sortBy('latest')"
-          :class="{ active: sortType === 'latest' }"
+          :class="['small-buttons', { active: sortType === 'latest', 'font-bold': sortType === 'latest' }]"
         >
           최신순
         </button>
       </div>
 
       <!-- 필터 드롭다운: 카테고리, 자산유형 -->
-      <div class="filter-options">
+      <div>
         <!--카테고리 필터-->
-        <select v-model="selectedCategory" @change="fetchPosts">
-          <option value="-1">카테고리 전체</option>
-          <option value="1">예적금</option>
-          <option value="2">재테크</option>
-          <option value="3">정보공유</option>
-          <option value="4">절약팁</option>
-        </select>
-        <!--자산유형(FinType) 필터-->
-        <select v-model="selectedFinType" @change="fetchPosts">
-          <option value="-1">유형 전체</option>
-          <option value="1">꿀벌</option>
-          <option value="2">호랑이</option>
-          <option value="3">다람쥐</option>
-          <option value="4">나무늘보</option>
-        </select>
+        <div
+          @change="fetchPosts"
+          class="flex items-center justify-between space-x-1 m-1"
+        >
+          <label class="text-xs font-semibold">카테고리</label>
+          <button
+            @click="selectCategory(-1)"
+            :class="['small-buttons', { active: selectedCategory === -1, selected: selectedCategory === -1 }]"
+          >
+            전체
+          </button>
+          <button
+            @click="selectCategory(1)"
+            :class="['small-buttons', { active: selectedCategory === 1, selected: selectedCategory === 1 }]"
+          >
+            예적금
+          </button>
+          <button
+            @click="selectCategory(2)"
+            :class="['small-buttons', { active: selectedCategory === 2, selected: selectedCategory === 2 }]"
+          >
+            재테크
+          </button>
+          <button
+            @click="selectCategory(3)"
+            :class="['small-buttons', { active: selectedCategory === 3, selected: selectedCategory === 3 }]"
+          >
+            정보공유
+          </button>
+          <button
+            @click="selectCategory(4)"
+            :class="['small-buttons', { active: selectedCategory === 4, selected: selectedCategory === 4 }]"
+          >
+            절약팁
+          </button>
+        </div>
+        <!-- 자산유형(FinType) 필터 -->
+        <div
+          @change="fetchPosts"
+          class="flex items-center justify-between space-x-0.5 m-1"
+        >
+          <label class="text-xs font-semibold">자산유형</label>
+          <button
+            @click="selectFinType(-1)"
+            :class="['small-buttons', { active: selectedFinType === -1, selected: selectedFinType === -1 }]"
+          >
+            전체
+          </button>
+          <button
+            @click="selectFinType(1)"
+            :class="['small-buttons', { active: selectedFinType === 1, selected: selectedFinType === 1 }]"
+          >
+            꿀벌
+          </button>
+          <button
+            @click="selectFinType(2)"
+            :class="['small-buttons', { active: selectedFinType === 2, selected: selectedFinType === 2 }]"
+          >
+            호랑이
+          </button>
+          <button
+            @click="selectFinType(3)"
+            :class="['small-buttons', { active: selectedFinType === 3, selected: selectedFinType === 3 }]"
+          >
+            다람쥐
+          </button>
+          <button
+            @click="selectFinType(4)"
+            :class="['small-buttons', { active: selectedFinType === 4, selected: selectedFinType === 4 }]"
+          >
+            나무늘보
+          </button>
+        </div>
       </div>
     </div>
 
@@ -89,13 +147,17 @@
     <!-- 로딩 인디케이터 -->
     <div v-if="isFetching" class="loading">게시글을 더 불러오는 중...</div>
 
-<!-- 더 이상 게시글이 없을 때 메시지 -->
-<div v-if="!hasMorePosts && posts.length > 0" class="no-more-posts">
+    <!-- 더 이상 게시글이 없을 때 메시지 -->
+    <div v-if="!hasMorePosts && posts.length > 0" class="loading">
       더 이상 불러올 게시글이 없습니다
     </div>
 
     <!-- 새 글 작성 버튼 -->
-    <router-link v-if="userName != 'NoLogin'" to="/community/add" class="add-button">
+    <router-link
+      v-if="userName != 'NoLogin'"
+      to="/community/add"
+      class="add-button"
+    >
       <i class="fas fa-plus"></i>
     </router-link>
   </div>
@@ -106,7 +168,7 @@ import { ref, computed, onMounted, watchEffect } from "vue";
 import communityApi from "@/api/CommunityApi";
 import HomeApi from "@/api/HomeApi";
 
-const userName = ref('');
+const userName = ref("");
 // 사용자 정보를 가져오는 함수
 const getUser = async () => {
   try {
@@ -147,10 +209,20 @@ const sortBy = (type) => {
   window.scrollTo(0, 0);
 };
 
+const selectCategory = (categoryId) => {
+  selectedCategory.value = categoryId;
+  resetPosts(); // 카테고리 선택 후 게시글 목록 초기화
+};
+
+const selectFinType = (finTypeCode) => {
+  selectedFinType.value = finTypeCode;
+  resetPosts(); // 자산 유형 선택 후 게시글 목록 초기화
+};
+
 // 스크롤 끝에 도달했는지 확인
 const handleScroll = () => {
   const bottomOfWindow =
-  document.documentElement.scrollTop + window.innerHeight >=
+    document.documentElement.scrollTop + window.innerHeight >=
     document.documentElement.offsetHeight - 100;
   if (bottomOfWindow && !isFetching.value && hasMorePosts.value) {
     fetchPosts(); // 스크롤이 끝에 도달하면 새로운 게시글을 가져옴
@@ -179,7 +251,7 @@ const formatDate = (dateString) => {
 const fetchPosts = async () => {
   try {
     if (isFetching.value || !hasMorePosts.value) return;
-    isFetching.value=true;
+    isFetching.value = true;
     // 선택된 값이 빈 문자열일 경우 -1로 변경
     const category =
       selectedCategory.value === "-1" ? -1 : parseInt(selectedCategory.value);
@@ -203,9 +275,9 @@ const fetchPosts = async () => {
         ...post,
         isLiked: false, // 기본적으로 좋아요 상태를 false로 설정
       }));
-      posts.value=[...posts.value, ...newPosts];
-      currentPage.value +=1;
-      hasMorePosts.value=newPosts.length===pageSize.value;
+      posts.value = [...posts.value, ...newPosts];
+      currentPage.value += 1;
+      hasMorePosts.value = newPosts.length === pageSize.value;
     } else {
       console.error("유효하지 않은 데이터 형식:", response.data);
       hasMorePosts.value = false;
@@ -213,8 +285,8 @@ const fetchPosts = async () => {
   } catch (error) {
     console.error("게시글 목록을 불러오는 중 오류 발생:", error);
     hasMorePosts.value = false;
-  } finally{
-    isFetching.value=false;
+  } finally {
+    isFetching.value = false;
   }
 };
 
@@ -222,7 +294,7 @@ const fetchPosts = async () => {
 const resetPosts = () => {
   posts.value = [];
   currentPage.value = 0;
-  hasMorePosts.value=true;
+  hasMorePosts.value = true;
   fetchPosts();
 };
 
@@ -232,8 +304,6 @@ watchEffect(() => {
     resetPosts();
   }
 });
-
-
 
 // 좋아요 기능
 const likePost = async (postId, userId) => {
