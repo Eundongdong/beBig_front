@@ -18,8 +18,8 @@
         <p class="post-date">{{ formatDate(post.postCreatedTime) }}</p>
       </div>
       <!-- 수정 및 삭제 버튼 -->
-      <!-- <div v-if="isAuthor" class="edit-delete-buttons"> -->
-      <div class="edit-delete-buttons">
+      <div v-if="isAuthor">
+      <!-- <div class="edit-delete-buttons"> -->
         <button @click="editPost" class="edit-button">수정</button>
         <button @click="deletePost" class="delete-button">삭제</button>
       </div>
@@ -66,9 +66,12 @@
 
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import communityApi from '@/api/CommunityApi';
+import { useUserStore } from '@/stores/user';
+
+const userStore = useUserStore();
 
 //Route를 통해 postId를 얻어옴
 const route = useRoute();
@@ -76,7 +79,6 @@ const router = useRouter();  // useRouter를 통해 router 인스턴스 가져�
 const postId = route.params.postId;
 
 const post = ref({});  // 게시글 데이터를 저장할 post 객체 초기화
-const isAuthor = ref(false);
 
 const handleBack = () => {
   router.push({ name: 'communityList' });
@@ -97,7 +99,7 @@ const fetchPostDetails = async () => {
       userId: response.userId
     };
     
-    isAuthor.value = checkIfAuthor(post.value); // 작성자 확인 함수 호출
+    isAuthor.value = checkIfAuthor(); // 작성자 확인 함수 호출
   } catch (error) {
     console.error('게시글을 불러오는 중 오류 발생:', error);
   }
@@ -224,21 +226,43 @@ const profileClick = async (writerNo) => {
   }
 };
 
-
-
-// 현재 사용자와 게시글 작성자가 같은지 확인하는 로직 (예시로 id 비교)
-const checkIfAuthor = (post) => {
-  // 현재 사용자 ID와 게시글 작성자 ID 비교 로직을 구현하세요.
-  // 예를 들어:
-  const currentUserId = 1; // 현재 사용자 ID (임시 값)
-  return post.authorId === currentUserId; // post.authorId가 게시글 작성자 ID라고 가정
+// 현재 사용자와 게시글 작성자가 같은지 확인하는 함수
+const checkIfAuthor = () => {
+  console.log('현재 사용자 ID: ', userStore.state.user.userId, '게시글 작성자 ID: ', post.value.userId);
+  return userStore.state.user.userId && userStore.state.user.userId === post.value.userId;
 };
 
+// userStore의 user 정보가 변경될 때 작성자 여부 재확인
+watch(
+  () => userStore.user,
+  (newUser) => {
+    if (newUser?.userId && post.value?.userId) {
+      isAuthor.value = newUser.userId === post.value.userId;
+    }
+  },
+  { immediate: true } // 즉시 실행
+);
+
+const isAuthor = ref(false);
+
 // 컴포넌트가 마운트될 때 게시글 정보를 가져옵니다.
-onMounted(() => {
+onMounted(async () => {
   const postId = route.params.postId;
   if (postId) {
-    fetchPostDetails(postId);
+    await fetchPostDetails(postId);
+
+    // userStore의 load() 함수 호출
+    await userStore.load();
+
+    console.log("userStore 상태:", userStore.state); // userStore 상태 확인
+    console.log("userStore.userId:", userStore.state.user.userId); // userStore id 값 확인
+
+    // 사용자 정보가 있는지 확인
+    if (userStore.state.user.userId) {
+      isAuthor.value = checkIfAuthor(); // 작성자 확인
+    } else {
+      console.log("현재 사용자의 정보를 불러오지 못했습니다.");
+    }
   }
 });
 </script>

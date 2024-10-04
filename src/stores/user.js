@@ -65,5 +65,5 @@ export const useUserStore=defineStore('user', () => {
 
     load();
 
-    return{state, id, isLogin, login, socialLigin, logout, getToken};
+    return{state, id, isLogin, login, socialLigin, logout, getToken, load};
 });
