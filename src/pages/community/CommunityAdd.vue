@@ -5,47 +5,47 @@
     <i class="fas fa-arrow-left"></i>
   </button>
 
-  <div class="community-add">
+  <div class="component space-y-3">
     <!-- 제목 입력 -->
-    <div class="form-group">
-      <label for="title">제목</label>
-      <input v-model="formData.title" type="text" id="title" placeholder="제목을 입력해주세요" />
+    <div>
+      <label class="label" for="title">제목</label>
+      <input class="input" v-model="formData.title" type="text" id="title" placeholder="제목을 입력해주세요" />
     </div>
 
     <!-- 카테고리 선택 -->
-    <div class="form-group">
-      <label for="category">카테고리 선택:</label>
-      <select v-model="selectedCategory" id="category">
+    <div>
+      <label class="label" for="category">카테고리</label>
+      <select v-model="selectedCategory" id="category" class="flex items-center justify-center drop-down">
         <option value="" disabled>카테고리를 선택해주세요</option> <!-- Placeholder 추가 -->
         <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
       </select>
     </div>
 
     <!-- 본문 입력 -->
-    <div class="form-group">
-      <label for="content">본문</label>
-      <textarea v-model="formData.content" id="content"
+    <div>
+      <label class="label" for="content">본문</label>
+      <textarea class="input h-[150px]" v-model="formData.content" id="content"
         placeholder="다른 사용자에게 유용한 정보를 제공해주세요. 광고성 & 홍보성 게시글은 안돼요."></textarea>
     </div>
 
     <!-- 사진 추가하기 -->
     <div class="form-group">
-      <label>사진 추가하기</label>
-      <input type="file" accept="image/*" @change="onFileChange" multiple />
+      <label class="label">사진 추가하기</label>
+      <input type="file" accept="image/*" @change="onFileChange" multiple style="display: none;" />
       <!-- 파일 이름을 쉼표로 구분하여 출력 -->
-      <p>{{ fileNames.join(', ') }}</p>
+      <p class="text-sm">{{ fileNames.join(', ') }}</p>
 
       <!-- 기존 이미지와 새로운 이미지를 미리보기로 함께 보여줍니다 -->
       <div class="image-preview" v-if="imagePreviews.length > 0">
         <img v-for="(image, index) in imagePreviews" :key="index" :src="image" class="preview-img"
           @click="onImageClick(index)" />
       </div>
-      <p class="image-limit-msg">사진은 최대 {{ maxImages }}개까지만 업로드할 수 있어요.</p>
+      <p class="notification-text mt-1">사진은 최대 {{ maxImages }}개까지만 업로드할 수 있어요.</p>
 
     </div>
 
     <!-- 게시글 등록 버튼 -->
-    <button @click="submitPost" class="submit-btn">게시글 등록하기</button>
+    <button @click="submitPost" class="button">게시글 등록하기</button>
   </div>
 </div>
 </template>
@@ -217,82 +217,3 @@ onMounted(() => {
 
 });
 </script>
-
-
-
-
-<style scoped>
-.community-add {
-  padding: 16px;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: bold;
-}
-
-input[type="text"],
-select,
-textarea {
-  width: 100%;
-  padding: 8px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
-
-textarea {
-  height: 150px;
-  resize: none;
-}
-
-.image-preview {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.preview-img {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-.image-limit-msg {
-  color: #ff6b6b;
-  font-size: 12px;
-  margin-top: 10px;
-}
-
-.submit-btn {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.submit-btn:hover {
-  background-color: #0056b3;
-}
-
-.back-button {
-  font-size: 28px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  position: absolute;
-  top: 10px;
-  left: 10px;
-}
-</style>
