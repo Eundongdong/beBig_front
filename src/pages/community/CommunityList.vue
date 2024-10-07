@@ -106,8 +106,9 @@
             class="community-profile"
             :src="getProfileIcon(post.finTypeCode)"
             alt="Profile"
+            @click="goToUserProfile"
           />
-          <span>nickname</span>
+          <span>{{post.userNickname}}</span>
         </div>
         <p class="community-content">{{ formatDate(post.postCreatedTime) }}</p>
       </div>
@@ -167,12 +168,17 @@
 import { ref, computed, onMounted, watchEffect } from "vue";
 import communityApi from "@/api/CommunityApi";
 import HomeApi from "@/api/HomeApi";
+import { useRouter } from 'vue-router';
 
 const userName = ref("");
+const router = useRouter();
+
 // 사용자 정보를 가져오는 함수
 const getUser = async () => {
   try {
     const userInfo = await HomeApi.getMyInfo(); // /home/info 호출
+
+    console.log("사용자 정보 가져오기 성공, ", userInfo)
     userName.value = userInfo.userName;
   } catch (error) {
     console.error("사용자 정보 가져오는 함수 API 호출 중 오류 발생:", error);
@@ -227,6 +233,11 @@ const handleScroll = () => {
   if (bottomOfWindow && !isFetching.value && hasMorePosts.value) {
     fetchPosts(); // 스크롤이 끝에 도달하면 새로운 게시글을 가져옴
   }
+};
+
+// 프로필 페이지로 이동하는 함수
+const goToUserProfile = (userId) => {
+  router.push({ name: 'mypage', params: { userId } });
 };
 
 // 프로필 사진 가져오는 함수
