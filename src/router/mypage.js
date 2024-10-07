@@ -5,10 +5,11 @@ export default[
         component:()=>import('../pages/mypage/Mypage.vue')
     },
     {
-        path: '/profile/:userId', // 다른 사용자의 프로필
-        name: 'profile',
-        component: () => import('../pages/mypage/Mypage.vue') // 같은 Mypage.vue 컴포넌트 사용
-    },    
+        path: '/mypage/:userId',
+        name: 'userMypage',
+        component:()=>import('../pages/mypage/Mypage.vue')
+    },
+
     {
         path:'/mypage/edit',
         name:'mypageEdit',

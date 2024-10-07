@@ -85,4 +85,11 @@ export default {
     console.log('MYPAGE USER INFO EDIT', data);
     return data;
   },
+
+  // 특정 사용자의 프로필 정보 조회
+async getUserProfile(userId) {
+  const { data } = await api.get(`${BASE_URL}/info/${userId}`);
+  console.log('MYPAGE GET USER PROFILE', data);
+  return data;
+}
 };
