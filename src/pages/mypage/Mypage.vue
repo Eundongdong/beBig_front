@@ -1,157 +1,131 @@
 <template>
   <div class="page">
-  <div class="mypage-container">
     <!-- 상단 헤더 -->
-    <header class="header">
-      <button
-        class="settings-button"
-        @click="goSettings"
-      >
+    <header v-if="isOwner" class="flex items-center justify-between">
+      <!-- 공개/비공개 버튼 (본인일 경우에만 표시) -->
+      <div class="flex items-center justify-end">
+        <div class="flex bg-gray-300 rounded-full relative">
+          <button @click="setPublic(true)" :class="{ 'bg-primary text-white': isPublic, 'text-black': !isPublic }" class="w-14 h-8 rounded-full transition-all duration-300 relative z-10">
+            공개
+          </button>
+          <button
+            @click="setPublic(false)"
+            :class="{
+              'bg-primary text-white': !isPublic,
+              'text-black': isPublic,
+            }"
+            class="w-14 h-8 rounded-full transition-all duration-300 relative z-10 -ml-2"
+          >
+            비공개
+          </button>
+        </div>
+      </div>
+
+      <button class="text-2xl cursor-pointer justify-end" @click="goSettings">
         <i class="fa-solid fa-gear"></i>
       </button>
     </header>
 
     <!-- 프로필 영역 -->
-    <section class="profile-section">
-      <div>
-        <button class="visibility-btn">
-          공개
-        </button>
-        <button class="visibility-btn">
-          비공개
-        </button>
-      </div>
-      <div class="profile-picture">
-        <img
-          :src="profileImage"
-          alt="`프로필 사진 - ${finTypeCode}`"
-        />
-      </div>
-      <div class="username">
-        {{ userNickname }} 님
-      </div>
+    <section class="section-style !mt-2">
+      <div class="flex items-start">
+        <div class="flex items-center">
+          <div>
+            <img :src="profileImage" alt="`프로필 사진 - ${finTypeCode}`" class="w-20 h-20 rounded-full" />
+          </div>
 
-      <!-- badgeCode가 0이 아닐 때만 배지 이미지가 버튼으로 표시됨 -->
-      <div v-if="badgeCode !== 0">
-        <button
-          class="badge-button"
-          @click="openBadgeModal"
-        >
-          <img
-            :src="badgeImage"
-            alt="Badge"
-            class="badge-img"
-            width="10%"
-          />
-        </button>
-      </div>
+          <div class="ml-4">
+            <div class="flex items-center">
+              <div class="text-sm font-bold mr-1">{{ userNickname }} 님</div>
 
-      <div>
-        이번달 미션 달성도 상위 {{ userRank }} %
-      </div>
-      <div>{{ finTypeInfo }}</div>
-      <div class="intro-section">
-        <div class="intro-title">한줄소개</div>
-        <div class="intro-content">
-          {{ userIntro }}
+              <!-- badgeCode가 0이 아닐 때만 배지 이미지가 버튼으로 표시됨 -->
+              <button v-if="badgeCode !== 0" @click="openBadgeModal">
+                <img :src="badgeImage" alt="Badge" class="w-6 h-6" />
+              </button>
+            </div>
+
+            <div class="mt-2">
+              <p>이번달 미션 달성도 상위 {{ userRank }} %</p>
+              <p class="mt-1">{{ finTypeInfo }}</p>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <!-- 한줄 소개는 항상 표시 -->
+      <div class="mt-2 pt-2 px-2">
+        <p class="font-bold">한줄소개</p>
+        <p class="pt-1">{{ userIntro }}</p>
       </div>
     </section>
 
+    <!-- 공개 상태이거나 본인일 경우 모든 정보 표시 -->
+    <div v-if="isPublic || isOwner">
+      <!-- 미션 진행상황 -->
+      <section class="section-style">
+        <p>gif 이미지 들어가야함</p>
+      </section>
+
+      <!-- 내가 작성한 글 & 좋아요한 글 -->
+      <section class="section-style">
+        <div class="flex border-b-2 border-gray-300">
+          <button @click="selectTab('myPosts')" :class="selectedTab === 'myPosts' ? 'border-b-4 border-black font-bold' : 'text-gray-500'" class="w-1/2 pb-2 text-center">
+            작성한 글
+          </button>
+          <button @click="selectTab('likedPosts')" :class="selectedTab === 'likedPosts' ? 'border-b-4 border-black font-bold' : 'text-gray-500'" class="w-1/2 pb-2 text-center">
+            좋아하는 글
+          </button>
+        </div>
+
+        <!-- 작성한 글 리스트 -->
+        <ul v-if="selectedTab === 'myPosts'" class="mt-4">
+          <li v-for="(post, index) in myPosts" :key="index" class="flex justify-between items-center px-3 py-2 border-b border-gray-200">
+            <div class="w-1/2 truncate">{{ post.title }}</div>
+            <div class="w-1/6 text-gray-500 whitespace-nowrap">{{ formatDate(post.postTime) }}</div>
+            <div class="w-1/6 flex items-center text-red-500 justify-end">
+              ♥
+              <div class="pl-1">{{ post.postLikeHits }}</div>
+            </div>
+          </li>
+        </ul>
+
+        <!-- 좋아요한 글 리스트 -->
+        <ul v-if="selectedTab === 'likedPosts'" class="mt-4">
+          <li v-for="(post, index) in myLikePosts" :key="index" class="flex justify-between items-center px-3 py-2 border-b border-gray-200">
+            <div class="w-1/2 truncate">{{ post.title }}</div>
+            <div class="w-1/6 text-gray-500 whitespace-nowrap">{{ formatDate(post.postTime) }}</div>
+            <div class="w-1/6 flex items-center text-red-500 justify-end">
+              ♥
+              <div class="pl-1">{{ post.postLikeHits }}</div>
+            </div>
+          </li>
+        </ul>
+      </section>
+    </div>
+
+    <!-- 비공개 상태이면서 다른 사용자가 볼 때 -->
+    <div v-else>
+      <p>이 사용자의 프로필은 비공개 상태입니다.</p>
+    </div>
+
     <!-- 모달이 활성화될 때 표시 -->
-    <div
-      v-if="showModal"
-      class="modal-overlay"
-      @click="closeModalOnOverlay"
-    >
-      <div class="modal" @click.stop>
-        <button
-          @click="closeModal"
-          class="modal-close-button"
-        >
+    <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" @click="closeModalOnOverlay">
+      <div class="bg-white rounded-lg max-w-md w-80 mx-10 p-6 relative" @click.stop>
+        <button @click="closeModal" class="absolute top-4 right-4">
           <i class="fa-solid fa-xmark"></i>
         </button>
-        <img
-          :src="badgeImage"
-          alt="Badge Image"
-          class="modal-badge-img"
-          width="50%"
-        />
-        <h2>잠깐, 메달의 기준이 궁금하신가요?</h2>
-        <p> {{ badgeName }}</p>
+        <img :src="badgeImage" alt="Badge Image" class="mx-auto w-32 h-32 m-4" />
+        <p class="text-center text-lg font-semibold mb-4">{{ badgeName }}</p>
 
+        <h2 class="font-semibold text-center mb-2">메달의 기준이 궁금하신가요?</h2>
         <!-- badgeCode가 0이 아닌 배지 목록만 표시 -->
-        <div
-          v-for="badge in filteredBadgeList"
-          :key="badge.badgeCode"
-          class="badge-item"
-        >
-          <h2>{{ badge.badgeTitle }}</h2>
-          <p>{{ badge.badgeDescription }}</p>
+        <div v-for="badge in filteredBadgeList" :key="badge.badgeCode" class="flex justify-between border-t px-4 pt-4 mt-4">
+          <h2 class="text-[10px] font-semibold">{{ badge.badgeTitle }}</h2>
+          <p class="text-[10px]">{{ badge.badgeDescription }}</p>
         </div>
       </div>
     </div>
-
-    <!-- 미션 진행상황 -->
-    <section class="mission-section">
-      <p>git 이미지 들어가야함</p>
-    </section>
-
-    <!-- 내가 작성한 글 & 좋아요한 글 -->
-    <section class="posts-section">
-      <div class="tabs">
-        <button
-          @click="selectTab('myPosts')"
-          :class="{
-            active: selectedTab === 'myPosts',
-          }"
-        >
-          작성한 글
-        </button>
-        <button
-          @click="selectTab('likedPosts')"
-          :class="{
-            active: selectedTab === 'likedPosts',
-          }"
-        >
-          좋아하는 글
-        </button>
-      </div>
-
-      <!-- 작성한 글 리스트 -->
-      <ul v-if="selectedTab === 'myPosts'">
-        <li
-          v-for="(post, index) in myPosts"
-          :key="index"
-        >
-          {{ post.title }}
-          {{
-            new Date(
-              post.postTime
-            ).toLocaleDateString()
-          }}
-          {{ post.postLikeHits }}
-        </li>
-      </ul>
-
-      <!-- 좋아요한 글 리스트 -->
-      <ul v-if="selectedTab === 'likedPosts'">
-        <li
-          v-for="(post, index) in myLikePosts"
-          :key="index"
-        >
-          {{ post.title }}
-          {{
-            new Date(
-              post.postTime
-            ).toLocaleDateString()
-          }}
-          {{ post.postLikeHits }}
-        </li>
-      </ul>
-    </section>
   </div>
-</div>
 </template>
 
 <script setup>
@@ -160,6 +134,8 @@ import { useRouter } from 'vue-router'; // useRouter 가져오기
 import MypageApi from '@/api/MypageApi';
 
 // 반응형 변수 선언
+const isOwner = ref(false); // 본인 여부 확인
+const isPublic = ref(true); // 공개 여부 확인
 const router = useRouter(); // router 변수 선언
 const userNickname = ref('');
 const finTypeCode = ref('');
@@ -180,9 +156,7 @@ const badgeList = ref([]); // 배지 정보 배열
 
 // badgeCode가 0이 아닌 항목만 필터링하여 반환
 const filteredBadgeList = computed(() => {
-  return badgeList.value.filter(
-    (badge) => badge.badgeCode !== 0
-  );
+  return badgeList.value.filter((badge) => badge.badgeCode !== 0);
 });
 
 // 프로필 사진 동적 경로 설정
@@ -217,10 +191,7 @@ const getUserInfo = async () => {
   try {
     console.log('API 호출 시작');
     const userInfo = await MypageApi.getMypage(); // 사용자의 정보를 가져오는 API 호출
-    console.log(
-      'API 호출 성공, 사용자 정보:',
-      userInfo
-    );
+    console.log('API 호출 성공, 사용자 정보:', userInfo);
 
     userNickname.value = userInfo.userNickname; //이름
     finTypeCode.value = userInfo.finTypeCode; // 핀타입 코드
@@ -228,48 +199,39 @@ const getUserInfo = async () => {
     userRank.value = userInfo.userRank; //
     finTypeInfo.value = userInfo.finTypeInfo; // 유형
     userIntro.value = userInfo.userIntro; // 한줄소개
+    isPublic.value = userInfo.userVisibility === 1;
+
+    // 로그인한 사용자와 페이지 소유자가 같은지 확인
+    const loggedInUserId = await MypageApi.getLoggedInUserId();
+    isOwner.value = loggedInUserId === userInfo.userId;
   } catch (error) {
-    console.error(
-      '사용자 정보 가져오기 실패:',
-      error
-    );
+    console.error('사용자 정보 가져오기 실패:', error);
   }
 };
 
 // 뱃지 정보 가져오는 함수
 const getBadgeDetails = async () => {
   try {
-    console.log(
-      '뱃지 정보 가져오는 API 호출 시작'
-    );
-    const badgeInfo =
-      await MypageApi.getBadgeInfo(); // 뱃지 정보를 가져오는 API 호출
-    console.log(
-      '뱃지 정보 API 호출 성공, 사용자 정보:',
-      badgeInfo
-    );
+    console.log('뱃지 정보 가져오는 API 호출 시작');
+    const badgeInfo = await MypageApi.getBadgeInfo(); // 뱃지 정보를 가져오는 API 호출
+    console.log('뱃지 정보 API 호출 성공, 사용자 정보:', badgeInfo);
 
     badgeList.value = badgeInfo;
 
     console.log('현재 badgeCode:', Number(badgeCode.value));
 
     // badgeCode에 해당하는 배지 이름 설정
-    const foundBadge = badgeList.value.find(
-      (badge) => badge.badgeCode === Number(badgeCode.value)
-    );
+    const foundBadge = badgeList.value.find((badge) => badge.badgeCode === Number(badgeCode.value));
 
     if (foundBadge) {
       badgeName.value = foundBadge.badgeTitle;
-      console.log("badgeName 설정됨: ", badgeName.value);
+      console.log('badgeName 설정됨: ', badgeName.value);
     } else {
-      badgeName.value = "배지를 찾을 수 없습니다.";
-      console.log("해당 badgeCode에 맞는 배지를 찾을 수 없습니다.");
+      badgeName.value = '배지를 찾을 수 없습니다.';
+      console.log('해당 badgeCode에 맞는 배지를 찾을 수 없습니다.');
     }
   } catch (error) {
-    console.error(
-      '뱃지 정보 가져오기 실패:',
-      error
-    );
+    console.error('뱃지 정보 가져오기 실패:', error);
   }
 };
 
@@ -277,19 +239,25 @@ const getBadgeDetails = async () => {
 const getMyLoginType = async () => {
   try {
     console.log('로그인 타입 API 호출 시작');
-    const userLoginType =
-      await MypageApi.getMyLoginType(); // 사용자의 정보를 가져오는 API 호출
-    console.log(
-      '로그인 타입 API 호출 성공 :',
-      userLoginType
-    );
+    const userLoginType = await MypageApi.getMyLoginType(); // 사용자의 정보를 가져오는 API 호출
+    console.log('로그인 타입 API 호출 성공 :', userLoginType);
 
     loginType.value = userLoginType;
   } catch (error) {
-    console.error(
-      '사용자 정보 가져오기 실패:',
-      error
-    );
+    console.error('사용자 정보 가져오기 실패:', error);
+  }
+};
+
+const setPublic = async (publicStatus) => {
+  try {
+    isPublic.value = publicStatus;
+
+    // 서버에 공개/비공개 상태 업데이트 요청
+    await MypageApi.updateVisibility(publicStatus ? 1 : 0);
+
+    console.log('사용자 공개/비공개 상태 업데이트 성공', publicStatus);
+  } catch (error) {
+    console.error('사용자 공개/비공개 상태 업데이트 실패:', error);
   }
 };
 
@@ -323,56 +291,42 @@ const goSettings = () => {
 // 작성한 글 가져오는 함수
 const getUserPosts = async () => {
   try {
-    console.log(
-      '작성한 글 가져오기 API 호출 시작'
-    );
-    const userPosts =
-      await MypageApi.getMyPosts(); // 사용자의 정보를 가져오는 API 호출
-    console.log(
-      '작성한 글 가져오기 API 호출 성공 :',
-      myPosts
-    );
+    console.log('작성한 글 가져오기 API 호출 시작');
+    const userPosts = await MypageApi.getMyPosts(); // 사용자의 정보를 가져오는 API 호출
+    console.log('작성한 글 가져오기 API 호출 성공 :', myPosts);
 
     // 작성 시간 기준으로 내림차순 정렬하여 최신 글이 먼저 나오게 처리
-    myPosts.value = userPosts.sort(
-      (a, b) => b.postTime - a.postTime
-    );
+    myPosts.value = userPosts.sort((a, b) => b.postTime - a.postTime);
   } catch (error) {
-    console.error(
-      '작성한 글 가져오기 실패:',
-      error
-    );
+    console.error('작성한 글 가져오기 실패:', error);
   }
 };
 
 // 좋아요한 글 가져오는 함수
 const getUserLikePosts = async () => {
   try {
-    console.log(
-      '좋아요한 글 가져오기 API 호출 시작'
-    );
-    const userLikePosts =
-      await MypageApi.getMyLikePosts(); // 사용자의 정보를 가져오는 API 호출
-    console.log(
-      '좋아요한 글 가져오기 API 호출 성공 :',
-      userLikePosts
-    );
+    console.log('좋아요한 글 가져오기 API 호출 시작');
+    const userLikePosts = await MypageApi.getMyLikePosts(); // 사용자의 정보를 가져오는 API 호출
+    console.log('좋아요한 글 가져오기 API 호출 성공 :', userLikePosts);
 
     // 좋아요 수를 기준으로 내림차순, 좋아요가 같으면 작성 시간 기준으로 내림차순 정렬
-    myLikePosts.value = userLikePosts.sort(
-      (a, b) => {
-        if (b.postLikeHits === a.postLikeHits) {
-          return b.postTime - a.postTime; // 날짜 최신순
-        }
-        return b.postLikeHits - a.postLikeHits; // 좋아요 순
+    myLikePosts.value = userLikePosts.sort((a, b) => {
+      if (b.postLikeHits === a.postLikeHits) {
+        return b.postTime - a.postTime; // 날짜 최신순
       }
-    );
+      return b.postLikeHits - a.postLikeHits; // 좋아요 순
+    });
   } catch (error) {
-    console.error(
-      '좋아요한 글 가져오기 실패:',
-      error
-    );
+    console.error('좋아요한 글 가져오기 실패:', error);
   }
+};
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // 월을 2자리로 맞춤
+  const day = String(date.getDate()).padStart(2, '0'); // 일을 2자리로 맞춤
+  return `${year}.${month}.${day}`;
 };
 
 // 페이지가 로드될 때 사용자 정보 가져오기
@@ -383,10 +337,7 @@ onMounted(async () => {
   getUserPosts();
   getUserLikePosts();
   getBadgeDetails();
-  console.log(
-    'Current badgeCode:',
-    badgeCode.value
-  ); // badgeCode 값 확인
+  console.log('Current badgeCode:', badgeCode.value); // badgeCode 값 확인
 });
 
 // 탭 선택 함수
@@ -396,18 +347,6 @@ const selectTab = (tabName) => {
 </script>
 
 <style>
-.mypage-container {
-  padding: 16px;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid #ddd;
-}
-
 .settings-button {
   font-size: 24px;
   background: none;
@@ -415,126 +354,7 @@ const selectTab = (tabName) => {
   cursor: pointer;
 }
 
-.profile-section {
-  margin-top: 16px;
-}
-
-.profile-picture img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-}
-
-.username {
-  font-size: 20px;
-  margin-top: 8px;
-}
-
-.badge-section {
-  margin-top: 8px;
-}
-
-.intro-section {
-  margin-top: 16px;
-}
-
-.intro-title {
-  font-weight: bold;
-}
-
-.modal-badge-img {
-  margin-bottom: 24px; /* 이미지와 텍스트 사이 간격 조정 */
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.modal-badge-title {
-  font-size: 10px;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 16px; /* 텍스트와 설명 사이 여백 */
-}
-
-.modal-badge-description {
-  text-align: center;
-  font-size: 10px;
-  line-height: 1.5;
-  color: #333;
-  margin-bottom: 24px; /* 설명과 다른 컨텐츠 사이 여백 */
-}
-
-.modal {
-  padding: 16px;
-  background-color: white;
-  border-radius: 8px;
-  width: 80%; /* 모달의 크기 설정 */
-  max-width: 350px;
-  max-height: 60vh; /* 모달의 최대 높이를 뷰포트 높이의 80%로 설정 */
-  overflow-y: auto; /* 모달 내용이 길어지면 스크롤 가능하도록 설정 */
-  margin:  auto; /* 화면 가운데 정렬 */
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7); /* 배경을 어둡게 */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-close-button {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-}
-
-
-.mission-section {
-  margin-top: 16px;
-}
-
-.progress-bar {
-  width: 100%;
-  height: 10px;
-  background-color: #e0e0e0;
-  border-radius: 5px;
-  margin-top: 8px;
-}
-
-.progress {
-  height: 10px;
-  background-color: #4caf50;
-  border-radius: 5px;
-}
-
-.posts-section {
-  margin-top: 16px;
-}
-
-.tabs {
-  display: flex;
-  justify-content: space-between;
-}
-
 button.active {
   font-weight: bold;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-ul li {
-  margin: 8px 0;
 }
 </style>

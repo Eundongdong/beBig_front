@@ -105,17 +105,17 @@
 #app {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+  padding: 1rem;
+  font-size: small;
   font-family: 'Pretendard';
 }
 
 .page{
-  @apply w-full mx-auto px-3;
+  @apply w-full mx-auto;
   /* 헤더와 푸터의 높이를 고려한 최소 높이 설정 */
   min-height: calc(100vh - 8rem); /* 100vh에서 헤더와 푸터의 높이(각 4rem)를 뺌 */
-  padding-top: 2rem; /* 헤더 높이 */
-  padding-bottom: 8rem; /* 푸터 높이 */
+  padding-top: 0.5rem; /* 헤더 높이 */
+  padding-bottom: 6rem; /* 푸터 높이 */
 }
 
 .modal {
@@ -146,7 +146,7 @@
 }
 
 .container{
-  @apply space-y-2.5;
+  @apply space-y-2.5 px-3;
 }
 
 .home-profile{
@@ -198,11 +198,11 @@
 }
 
 .label {
-  @apply block text-base pb-0 mb-0 font-medium;
+  @apply block pb-0 mb-1 font-semibold;
 }
 
 .input {
-  @apply w-full px-3 py-2 mt-0 mb-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500;
+  @apply w-full px-3 py-2 mt-0 mb-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500;
 }
 
 .drop-down{
@@ -244,6 +244,11 @@
 .selected{
   @apply text-xs px-1 text-white font-semibold bg-[#5354ff];
 }
+
+.section-style {
+  @apply mt-4 p-4 rounded-xl bg-[#F3F3F3];
+}
+
 
 
 @media (hover: hover) {
