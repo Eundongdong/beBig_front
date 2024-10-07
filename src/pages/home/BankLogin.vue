@@ -13,13 +13,7 @@
   
     <!-- 계좌 목록을 보여주는 섹션 -->
     <div v-if="accountList.length != 0" class="account-list">
-      <div 
-        v-for="account in accountList" 
-        :key="account.resAccount" 
-        @click="toggleSelectAccount(account)" 
-        :class="{'account-info': true, 'selected': selectedAccounts.includes(account)}"
-        class="account-info"
-      >
+      <div v-for="account in accountList" :key="account.resAccount" class="account-info">
         <img :src="`../../../public/images/bank/${account.bankVo.bankName}.png`" alt="Bank Logo" class="bank-logo">
 
         <div class="account-details">
@@ -70,32 +64,24 @@
       }catch(error){
         //여기서 error 코드에 따라 남은 횟수 수정하기
         console.error('API 호출 중 오류 발생:', error);
-        if(error.response.data == "비밀번호 오류입니다. 확인 후 거래하시기 바랍니다."){
+        console.log(error.response.data);
+        if(error.response.data == "아이디/비밀번호를 확인하세요."){
           if(count.value ==1){
             alert("은행 홈페이지에 방문하여 아이디/비밀번호를 확인하시기 바랍니다.");
             router.push('/home');
           }
           else{
+            alert(error.response.data);
             checkCount.value = true;
             count.value = count.value-1;
-            alert(error.response.data);
           }
         }
-      }
-    };
+        else{
+            alert(error.response.data);
+            router.push('/home/bank');
+          }
+        }
 
-     // 선택된 계좌들을 추적하는 배열
-    const selectedAccounts = ref([]);
-    // 선택 상태를 토글하는 함수
-    const toggleSelectAccount = (account) => {
-      const index = selectedAccounts.value.indexOf(account);
-      if (index === -1) {
-        // 계좌가 선택되지 않은 경우 추가
-        selectedAccounts.value.push(account);
-      } else {
-        // 이미 선택된 계좌라면 제거
-        selectedAccounts.value.splice(index, 1);
-      }
     };
 
   
@@ -103,8 +89,8 @@
     const addAccount = async() => {
       console.log("계좌 추가 시도");
       try{
-        const response = await HomeApi.addAccount(selectedAccounts.value);
-        goHome;
+        const response = await HomeApi.addAccount(accountList);
+        router.push('/home');
       }catch(error){
       //  console.error('API 호출 중 오류 발생:', error);
       }
@@ -115,9 +101,6 @@
     router.push('/home/bank');
   };
     
-    const goHome = () => {
-      router.push('/home');
-    };
   </script>
   
   <style scoped>
@@ -169,22 +152,7 @@
     display: flex;
     align-items: center;
     margin-bottom: 10px;
-    cursor: pointer;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    transition: background-color 0.3s ease;
   }
-
-  .account-info:hover {
-    background-color: #e0e0e0;
-  }
-
-  .account-info.selected {
-    background-color: #d1e7ff;
-    border-color: #007bff;
-  }
-  
     .bank-logo {
       width: 50px;
       height: 50px;

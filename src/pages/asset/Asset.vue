@@ -211,7 +211,7 @@ const getAnalysis = async() =>{
       // 현재 월에 맞춰 레이블을 동적으로 생성 (예: ['1월', ..., '9월'])
       labels: Array.from({ length: currentMonth }, (_, i) => `${i + 1}월`),
       datasets: [{
-        label: 'Monthly Spending',
+        label: '',
         data: spendings.monthlySum,  // 현재 월까지의 데이터만 사용
         backgroundColor: 'rgba(54, 162, 235, 0.2)',
         borderColor: 'rgba(54, 162, 235, 1)',
@@ -226,6 +226,9 @@ const getAnalysis = async() =>{
           beginAtZero: true,
           grid: {
             display: false // 격자 지우기
+          },
+          ticks: {
+            display: false // Y축 숫자 제거
           }
         },
         x: {
@@ -235,6 +238,9 @@ const getAnalysis = async() =>{
         }
       },
       plugins: {
+        legend: {
+          display: false // 범례 숨기기
+        },
         annotation: {
           annotations: {
             averageLine: {
