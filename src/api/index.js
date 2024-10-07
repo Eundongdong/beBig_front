@@ -18,11 +18,9 @@ instance.interceptors.request.use(
   (config) => {
     const { getToken } = useUserStore();
     const token = getToken();
-    //console.log("token: "+token);
     // Authorization 헤더에 토큰 추가
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
-      //console.log('Authorization 헤더에 토큰 추가:', config.headers.Authorization);
     }
     return config;
   },
@@ -47,7 +45,7 @@ instance.interceptors.response.use(
   async (error) => {
     // 401 Unauthorized 처리
     if (error.response?.status === 401) {
-      const { logout } = userStore();
+      const { logout } = useUserStore();
       await logout();
       
       // 로그인 페이지로 리다이렉트

@@ -1,4 +1,5 @@
 import api from "@/api";
+import refreshToken from './refreshToken';
 
 const BASE_URL = "/asset";
 const headers = { "Content-Type": "multipart/form-data" };
@@ -6,6 +7,7 @@ const headers = { "Content-Type": "multipart/form-data" };
 export default {
   // 총 자산 분석
     async showAnalysis() {
+      const response = await refreshToken.checkToken();
         const { data } = await api.get(`${BASE_URL}/analysis`);
         //console.log("ASSET GET LIST", data);
         return data;

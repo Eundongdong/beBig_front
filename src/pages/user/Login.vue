@@ -100,7 +100,9 @@ const login = async () => {
     router.push("/home");
   } catch (error) {
     console.log("에러 =>", error.message); // 에러 로그 출력
-    alert(error.message); // 경고창으로 에러 메시지 표시
+    if(error.response?.status === 401){
+      alert("올바른 아이디, 비밀번호를 입력해주세요."); // 경고창으로 에러 메시지 표시
+    }
   }
 };
 
