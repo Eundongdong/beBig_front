@@ -189,6 +189,15 @@
   @apply w-full py-1.5 mb-1 text-black bg-white rounded-lg hover:bg-gray-200;
 }
 
+.answer-button{
+  @apply w-full px-3 mb-1 text-lg text-black bg-white rounded-lg hover:bg-gray-200 border;
+  white-space: normal;
+  word-break: keep-all;
+  text-align: center;
+  line-height: 1.5;
+  height: 150px;
+}
+
 .gray-button{
   @apply w-full py-1.5 mb-1 text-black bg-gray-200 rounded-lg hover:bg-gray-300;
 }

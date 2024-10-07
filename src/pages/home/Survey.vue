@@ -4,25 +4,25 @@
       <p class="flex items-end justify-end text-sm">
         <span class="font-semibold mr-2">{{ currentQuestion + 1 }}</span> / {{ shuffledQuestions.length }}
       </p>
-      <div v-if="currentQuestion < shuffledQuestions.length - 1" class="space-y-4">
-        <h2>{{ shuffledQuestions[currentQuestion].finTestQuestion }}</h2>
+      <div v-if="currentQuestion < shuffledQuestions.length - 1" class="space-y-4 mt-5">
+        <h2 class="flex items-center justify-center font-semibold">{{ shuffledQuestions[currentQuestion].finTestQuestion }}</h2>
         <button
           @click="
             selectAnswer(1, shuffledQuestions[currentQuestion].finTestType)
-          "
+          " class="answer-button"
         >
           {{ shuffledQuestions[currentQuestion].finTestAnswer1 }}
         </button>
         <button
           @click="
             selectAnswer(2, shuffledQuestions[currentQuestion].finTestType)
-          "
+          " class="answer-button"
         >
           {{ shuffledQuestions[currentQuestion].finTestAnswer2 }}
         </button>
       </div>
-      <div v-else class="space-y-4">
-        <h2>{{ shuffledQuestions[currentQuestion].finTestQuestion }}</h2>
+      <div v-else class="space-y-4 mt-5">
+        <h2 class="flex items-center justify-center font-semibold">{{ shuffledQuestions[currentQuestion].finTestQuestion }}</h2>
         <div class="flex items-center">
           <input
             class="input mr-2"
