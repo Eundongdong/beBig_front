@@ -25,18 +25,17 @@ export default {
             }
             else if(response.data.accessToken){
                 const newAccessToken = response.data.accessToken;
-                console.log("new" + newAccessToken);
                 setToken(newAccessToken);
             }
             } catch (error) {
             // 401 오류 외의 다른 오류 처리
                 if (error.response && error.response.status === 401) {
-                    console.log('401 오류 발생: 인증 실패');
                     await this.logouting(); // 로그아웃 처리
                     alert('로그인 후 이용해주세요.');
                     router.push('/user'); // 로그인 페이지로 리디렉션
                 } else {
-                    console.error('토큰 검사 중 다른 오류 발생:', error);
+                    alert('로그인 후 이용해주세요.');
+                    router.push('/user'); // 로그인 페이지로 리디렉션
                     throw error; // 그 외 오류는 예외로 처리
                 }
             }
@@ -56,7 +55,7 @@ export default {
                 });
                 logout();
             }catch(error){
-                console.log(error);
+                // console.log(error);
             }
         }
 };

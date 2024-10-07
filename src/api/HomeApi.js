@@ -23,6 +23,7 @@ export default {
 
   // 설문조사 가져오기
   async surveyList() {
+    const response = await refreshToken.checkToken();
     const { data } = await api.get(`${BASE_URL}/fin-test`);
     return data;
   },
@@ -42,6 +43,7 @@ export default {
 
   // 설문 결과 내용 조회
   async surveyResult() {
+    const response = await refreshToken.checkToken();
     const { data } = await api.get(
       `${BASE_URL}/fin-type`
     );
@@ -62,7 +64,7 @@ export default {
     },
     //확인된 계좌 정보들 db에 저장하기
     async addAccount(accountList){
-      console.log(accountList);
+     // console.log(accountList);
       const { data } = await api.post(
         `${BASE_URL}/account/add`,
         accountList,
@@ -77,21 +79,29 @@ export default {
 
   // 미션보기
   async missionList(userId) {
+    const response = await refreshToken.checkToken();
     const { data } = await api.get(
       `${BASE_URL}/${userId}/mission`
     );
-    console.log('HOME GET MISSIONLIST', data);
+ //   console.log('HOME GET MISSIONLIST', data);
     return data;
   },
 
   // 계좌 목록 조회
     async accountList() {
+      const response = await refreshToken.checkToken();
         const { data } = await api.get(`${BASE_URL}/account/list`);
         return data;
     },
+
+    async accountListFooter() {
+      const { data } = await api.get(`${BASE_URL}/account/list`);
+      return data;
+  },
     
     // 거래 내역 조회
     async transactionList(accountNum) {
+      const response = await refreshToken.checkToken();
         const { data } = await api.get(`${BASE_URL}/account/${accountNum}/transactions`);
         return data;
     }
