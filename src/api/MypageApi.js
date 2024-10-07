@@ -8,57 +8,56 @@ const headers = {
 export default {
   // 마이페이지 조회
   async getMypage() {
-    const { data } = await api.get(
-      `${BASE_URL}/info`
-    );
+    const { data } = await api.get(`${BASE_URL}/info`);
     console.log('MYPAGE GET INFO', data);
+    return data;
+  },
+
+  // 로그인된 사용자 ID 조회
+  async getLoggedInUserId() {
+    const { data } = await api.get(`${BASE_URL}/logged-in-user-id`);
+    console.log('LOGGED IN USER ID:', data);
+    return data.userId; // 서버에서 반환하는 사용자 ID를 사용
+  },
+
+  // 사용자 공개/비공개 상태 업데이트 API
+  async updateVisibility(visibility) {
+    const { data } = await api.post('/mypage/update-visibility', { visibility });
+    console.log('MYPAGE VISIBILITY UPDATE', data);
     return data;
   },
 
   // 뱃지 설명 조회
   async getBadgeInfo() {
-    const { data } = await api.get(
-      `${BASE_URL}/badge`
-    );
+    const { data } = await api.get(`${BASE_URL}/badge`);
     console.log('MYPAGE GET BADGE', data);
     return data;
   },
 
   // 미션 달성률 조회
   async getMyMissionAchievement() {
-    const { data } = await api.get(
-      `${BASE_URL}/mission`
-    );
-    console.log(
-      'MYPAGE GET MISSION ACHIEVEMENT',
-      data
-    );
+    const { data } = await api.get(`${BASE_URL}/mission`);
+    console.log('MYPAGE GET MISSION ACHIEVEMENT', data);
     return data;
   },
 
   // 작성한 글 조회
   async getMyPosts() {
-    const { data } = await api.get(
-      `${BASE_URL}/posts`
-    );
+    const { data } = await api.get(`${BASE_URL}/posts`);
     console.log('MYPAGE GET MY POSTS', data);
     return data;
   },
 
   // 좋아한 글 조회
   async getMyLikePosts() {
-    const { data } = await api.get(
-      `${BASE_URL}/mylikehits`
-    );
+    const { data } = await api.get(`${BASE_URL}/mylikehits`);
     console.log('MYPAGE GET MY LIKE POSTS', data);
     return data;
   },
 
   // 로그인 타입 조회
   async getMyLoginType() {
-    const { data } = await api.get(
-      `${BASE_URL}/login-type`
-    );
+    const { data } = await api.get(`${BASE_URL}/login-type`);
     console.log('MYPAGE GET LOGIN TYPE', data);
     return data;
   },
@@ -71,11 +70,11 @@ export default {
   },
 
   // 기존 비밀번호 확인
-async checkPassword(password) {
-  const { data } = await api.post(`${BASE_URL}/check-password`, { password });
-  console.log('MYPAGE CURRENT PASSWORD CHECK', data);
-  return data;
-},
+  async checkPassword(password) {
+    const { data } = await api.post(`${BASE_URL}/check-password`, { password });
+    console.log('MYPAGE CURRENT PASSWORD CHECK', data);
+    return data;
+  },
 
   // 회원정보 수정 (일반, 소셜 동일)
   async edit(user) {
