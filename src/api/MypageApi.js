@@ -15,11 +15,11 @@ export default {
 
   // 로그인된 사용자 ID 조회
   async getLoggedInUserId() {
-    const { data } = await api.get(`${BASE_URL}/logged-in-user-id`);
-    console.log('LOGGED IN USER ID:', data);
-    return data.userId; // 서버에서 반환하는 사용자 ID를 사용
+    const response = await api.get(`${BASE_URL}/logged-in-user-id`);
+    console.log('LOGGED IN USER ID:', response); // 전체 응답을 로그로 확인
+    return response.data; // 서버에서 반환하는 전체 데이터 객체
   },
-
+  
   // 사용자 공개/비공개 상태 업데이트 API
   async updateVisibility(visibility) {
     const { data } = await api.post('/mypage/update-visibility', { visibility });

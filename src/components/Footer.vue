@@ -48,7 +48,7 @@ onMounted(() => {
 const isHome = computed(() => route.path === '/home');
 const isAsset = computed(() => route.path.startsWith('/asset'));
 const isCommunity = computed(() => route.path.startsWith('/community'));
-const isMypage = computed(() => route.path.startsWith('/mypage'));
+const isMypage = computed(() => route.path === '/mypage');
 
 // 라우터 이동 함수
 const goHome = () => {

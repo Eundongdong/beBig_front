@@ -187,12 +187,11 @@
         </ul>
       </section>
     </div>
-
-    <!-- 비공개 상태이면서 다른 사용자가 볼 때 -->
-    <div v-else>
-      <p>
-        이 사용자의 프로필은 비공개 상태입니다.
-      </p>
+ <!-- 비공개 상태이면서 다른 사용자가 볼 때 -->
+ <div v-else class="flex flex-col items-center justify-center mt-16">
+      <!-- <i class="fa-solid fa-lock"></i> -->
+      <i class="fa-solid fa-user-lock text-6xl text-gray mb-4"></i>
+      <p class="text-gray-600 text-sm">이 사용자의 프로필은 비공개 상태입니다.</p>
     </div>
 
     <!-- 모달이 활성화될 때 표시 -->
@@ -269,9 +268,7 @@ const myPosts = ref([]);
 const myLikePosts = ref([]);
 const selectedTab = ref('myPosts');
 const showModal = ref(false); // 모달 표시 여부
-
-// 뱃지 목록을 저장하는 변수
-const badgeList = ref([]); // 배지 정보 배열
+const badgeList = ref([]); // 뱃지 정보 배열
 
 // URL에서 userId를 가져오기
 const userId = ref(route.params.userId);
@@ -313,12 +310,9 @@ const closeModalOnOverlay = (e) => {
 // API에서 사용자 정보를 가져오는 함수
 const getLoggedInUserInfo = async () => {
   try {
-    console.log('API 호출 시작');
+    console.log('내 정보 API 호출 시작');
     const userInfo = await MypageApi.getMypage(); // 사용자의 정보를 가져오는 API 호출
-    console.log(
-      'API 호출 성공, 사용자 정보:',
-      userInfo
-    );
+    console.log('내 정보 API 호출 성공, 사용자 정보:', userInfo);
 
     userNickname.value = userInfo.userNickname; //이름
     finTypeCode.value = userInfo.finTypeCode; // 핀타입 코드
@@ -345,15 +339,9 @@ const getLoggedInUserInfo = async () => {
 // 특정 userId에 따른 사용자 정보를 불러오는 함수
 const getUserInfoByUserId = async () => {
   try {
-    console.log('특정 userId정보 API 호출 시작');
-    const userInfo =
-      await MypageApi.getUserProfile(
-        userId.value
-      ); // 특정 userId의 정보를 가져오는 API 호출
-    console.log(
-      '특정 userId정보 API 호출 성공, 사용자 정보:',
-      userInfo
-    );
+    console.log('API 호출 시작');
+    const userInfo = await MypageApi.getUserProfile(userId.value); // 특정 userId의 정보를 가져오는 API 호출
+    console.log('API 호출 성공, 사용자 정보:', userInfo);
 
     userNickname.value = userInfo.userNickname;
     finTypeCode.value = userInfo.finTypeCode;
@@ -361,19 +349,13 @@ const getUserInfoByUserId = async () => {
     userRank.value = userInfo.userRank;
     finTypeInfo.value = userInfo.finTypeInfo;
     userIntro.value = userInfo.userIntro;
-    isPublic.value =
-      userInfo.userVisibility === 1;
+    isPublic.value = userInfo.userVisibility === 1;
 
     // 로그인한 사용자와 페이지 소유자가 같은지 확인
-    const loggedInUserId =
-      await MypageApi.getLoggedInUserId();
-    isOwner.value =
-      loggedInUserId === userId.value;
+    const loggedInUserId = await MypageApi.getLoggedInUserId();
+    isOwner.value = loggedInUserId === userId.value;
   } catch (error) {
-    console.error(
-      '사용자 정보 가져오기 실패:',
-      error
-    );
+    console.error('사용자 정보 가져오기 실패:', error);
   }
 };
 
@@ -564,13 +546,14 @@ const formatDate = (dateString) => {
 
 // 페이지가 로드될 때 사용자 정보 가져오기
 onMounted(async () => {
-  const loggedInUserId =
-    await MypageApi.getLoggedInUserId(); // 로그인한 사용자 ID를 먼저 가져옴
+  const loggedInUserId = await MypageApi.getLoggedInUserId(); // 로그인한 사용자 ID를 먼저 가져옴
   // 페이지의 userId가 로그인한 사용자와 같다면 내 정보를 불러옴
-  if (loggedInUserId === userId.value) {
+  if (!userId.value || userId.value === loggedInUserId) {
     await getLoggedInUserInfo();
+    isOwner.value = true;  // 내 정보일 경우 isOwner를 true로 설정
   } else {
     await getUserInfoByUserId(); // 다르면 해당 userId에 맞는 사용자 정보를 불러옴
+    isOwner.value = false;
   }
   getMyLoginType();
   getUserPosts();
