@@ -34,7 +34,7 @@
         <p class="notification-text" v-if="idDupCheckResult">
           다른 아이디를 입력해주세요
         </p>
-        <p class="notification-text" v-if="idDupCheckOk">
+        <p class="notification-text" v-if="idDupCheckOk" style="color: blue;" >
           사용가능한 아이디입니다.
         </p>
       </div>
@@ -207,7 +207,7 @@ const getTerms = async () => {
       agreed: false,
     }));
   } catch (error) {
-    console.error("약관 데이터를 불러오는 중 오류 발생:", error);
+    //console.error("약관 데이터를 불러오는 중 오류 발생:", error);
   }
 };
 
@@ -222,11 +222,9 @@ const pwdChecking = computed(() => {
 const idDupCheckAPI = async () => {
   try {
     const idDupCheck = await UserApi.idDuplicateCheck(User.userLoginId);
-    console.log("아이디 중복 체크 성공:", idDupCheck);
     idDupCheckOk.value = true;
     idDupCheckResult.value = false;
   } catch (error) {
-    console.error("API 호출 중 오류 발생:", error);
     idDupCheckOk.value = false;
     idDupCheckResult.value = true;
   }
@@ -323,13 +321,13 @@ watch([year, month, day], () => {
 
 //회원가입
 const signup = async () => {
-  console.log(User);
+  //console.log(User);
   try {
     const response = await UserApi.signup(User);
-    console.log("회원가입 성공: ", response);
+    //console.log("회원가입 성공: ", response);
     router.push("/user");
   } catch (error) {
-    console.log("에러 =>", error);
+   // console.log("에러 =>", error);
   }
 };
 

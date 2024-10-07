@@ -36,17 +36,16 @@ const accountList = reactive([]);
 const getList = async() =>{
     try{
         const response = await HomeApi.accountList();
-        console.log(response);
         for(let i=0;i<response.length;i++){
             accountList[i] = response[i];
         }
-        console.log(accountList);
+      //  console.log(accountList);
         // 총 자산 계산
         const total = accountList.reduce((acc, account) => acc + account.transactionBalance, 0);
         totalAmount.value = total;
 
     }catch(error){
-        console.error('API 호출 중 오류 발생:', error);
+  //      console.error('API 호출 중 오류 발생:', error);
     }
 }
 

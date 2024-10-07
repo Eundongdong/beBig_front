@@ -40,7 +40,6 @@ const route = useRoute();
 const router = useRouter();
 
 const accountNum = route.query.accountNum;  // 쿼리에서 계좌 번호를 받아옴
-console.log(accountNum);
 const accountName = ref('');
 const bankName = ref('');
 const accountAmount = ref('');
@@ -71,11 +70,11 @@ const getAccountInfo = async () => {
             transaction.transactionDate = new Date(transaction.transactionDate).toLocaleDateString();
             transactions[i] = transaction; // 변환된 transaction을 배열에 추가
         }
-        console.log(transactions);
+       // console.log(transactions);
         accountAmount.value = transactions[0].transactionBalance;
 
     } catch (error) {
-        console.error('API 호출 중 오류 발생:', error);
+      //  console.error('API 호출 중 오류 발생:', error);
     }
 };
 

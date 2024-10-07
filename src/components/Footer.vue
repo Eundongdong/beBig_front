@@ -36,12 +36,21 @@ const getUser = async () => {
         const userInfo = await HomeApi.getMyInfoFooter(); // /home/info 호출
         userName.value = userInfo.userName;
     } catch (error) {
-        console.error("사용자 정보 가져오는 함수 API 호출 중 오류 발생:", error);
+       // console.error("사용자 정보 가져오는 함수 API 호출 중 오류 발생:", error);
+    }
+};
+const assetFlag = ref(false);
+const getAsset = async () => {
+    try {
+        const response = await HomeApi.accountListFooter();
+        assetFlag.value = true;
+    } catch (error) {
+        assetFlag.value = false;
     }
 };
 onMounted(() => {
     getUser();
-
+    getAsset();
 });
 
 // 라우팅 정보에 따라 버튼 색상 변경
@@ -57,6 +66,9 @@ const goHome = () => {
 const goAsset = () => {
     if(userName.value == 'NoLogin'){
         alert('로그인 후 이용해주세요.');
+    }
+    else if(assetFlag.value == false){
+        alert('계좌 연결 후 이용해주세요.');
     }
     else{
         router.push({ name: 'asset' });

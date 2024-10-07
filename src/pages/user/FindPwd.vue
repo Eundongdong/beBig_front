@@ -55,6 +55,9 @@
     >
       <p>{{ errorMessage }}</p>
     </div>
+    <div v-else-if="flag == true" class="result text-center text-lg mt-10">
+      <p>이메일 보내는중...</p>
+    </div>
 
   </div>
 </template>
@@ -71,9 +74,11 @@ const userLoginId = ref(''); // 사용자 아이디
 const email = ref(''); // 사용자 이메일
 const message = ref(null); // 성공 메시지
 const errorMessage = ref(null); // 오류 메시지
+const flag = ref(false);
 
 const findPassword = async () => {
   try {
+    flag.value = true;
     const response = await UserApi.findUserPwd({
       name: name.value,
       userLoginId: userLoginId.value,

@@ -40,7 +40,7 @@
   // 은행 선택 시 실행되는 함수
   const selectBank = (bankName) => {
     bankStore.setSelectedBank(bankName); // Pinia 스토어에 선택된 은행 저장
-    console.log("선택된 은행:", bankName); // 테스트용 콘솔 출력
+  //  console.log("선택된 은행:", bankName); // 테스트용 콘솔 출력
     
     // 은행 선택 후 /home/bank-login 경로로 이동
     router.push('/home/bank-login');

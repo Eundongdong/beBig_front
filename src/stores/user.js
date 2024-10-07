@@ -21,7 +21,6 @@ export const useUserStore=defineStore('user', () => {
     const login=async(loginUser)=>{
         try{
             const data=await userApi.login(loginUser);
-            console.log(data);
             // 토큰이 없거나 에러 메시지인 경우 에러 처리
             if (typeof data.accessToken !== 'string' || !data.accessToken.startsWith('eyJ')) {
                 throw new Error('올바른 아이디 또는 비밀번호를 입력하세요.'); // 에러 메시지 던지기
@@ -31,9 +30,7 @@ export const useUserStore=defineStore('user', () => {
             state.value.user.userId = loginUser.userLoginId;
 
             localStorage.setItem('user', JSON.stringify(state.value));
-            console.log("localstorage: " +localStorage.getItem('user'))
         }catch(error){
-            console.log('로그인 에러:', error.message);
             throw error;  // 에러를 호출한 쪽으로 다시 던지기
         }
         
@@ -44,16 +41,13 @@ export const useUserStore=defineStore('user', () => {
             state.value.token = data.token;
             state.value.user.userId = data.uerId;
             localStorage.setItem('user', JSON.stringify(state.value));
-            console.log("localstorage: " +localStorage.getItem('user'));
         }catch(error){
-            console.log('소셜로그인 에러:', error.message);
             throw error;  // 에러를 호출한 쪽으로 다시 던지기
         }
     };
 
     const logout=()=>{
         localStorage.clear();
-        console.log("After localstorage: " + localStorage.getItem('user'));
         state.value={...initState};
     };
 

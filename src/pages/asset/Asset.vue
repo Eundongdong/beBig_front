@@ -167,7 +167,7 @@ const getAnalysis = async() =>{
     totalCashBalance.value = response.totalCashBalance;
     totalDepositSavingsBalance.value = response.totalDepositSavingsBalance;
   }catch(error){
-    console.error("API 호출 중 오류 발생:", error);
+   // console.error("API 호출 중 오류 발생:", error);
   }
 }
 
@@ -192,7 +192,7 @@ const getAnalysis = async() =>{
       spendings.monthlyAverage = response.monthlyAverage;
       renderChart();
     }catch(error){
-      console.error("API 호출 중 오류 발생:", error);
+    //  console.error("API 호출 중 오류 발생:", error);
     }
   }
   let spendingChart; // 차트 인스턴스를 전역적으로 저장
@@ -272,7 +272,7 @@ const bankNames = {
 const getProductRecommendations = async() =>{
     try{  
       const response = await AssetApi.showProductRecommendations();
-      console.log(response);
+   //   console.log(response);
       for(let i =0;i<8;i++){
         // depositRecomendations에 은행 이름 추가
       const depositBankId = response.depositRecommendations[i].bankId;
@@ -291,7 +291,7 @@ const getProductRecommendations = async() =>{
 
       getRandomRecommendations();
     }catch(error){
-      console.error("API 호출 중 오류 발생:", error);
+   //   console.error("API 호출 중 오류 발생:", error);
     }
   }
 
@@ -336,7 +336,7 @@ const scrollToSlide = (index) => {
       // 그래프를 그리는 로직
       drawTriangleGraph();
     }catch(error){
-      console.error("API 호출 중 오류 발생:", error);
+  //    console.error("API 호출 중 오류 발생:", error);
     }
   }
   const drawTriangleGraph = () => {

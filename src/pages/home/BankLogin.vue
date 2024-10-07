@@ -7,7 +7,7 @@
       <input type="text" v-model="bankAccount.userBankId" placeholder="Enter your ID" class="input-field"/>
       <h3>비밀번호</h3>
       <input type="password" v-model="bankAccount.bankPassword" placeholder="Enter your password" class="input-field"/>
-      <h3 class="count-text">아이디/비밀번호 입력 횟수가 {{ count }}번 남았습니다.</h3>
+      <h3 v-if="checkCount" class="count-text">아이디/비밀번호 입력 횟수가 {{ count }}번 남았습니다.</h3>
       <button @click="Connect" class="primary-button">계좌 연결하기</button>
     </div>
   
@@ -43,6 +43,7 @@
       bankPassword: ''
     });
     const count = ref(3);  // 남은 횟수
+    const checkCount = ref(false);
     
     // Pinia에서 선택된 은행 이름을 가져옴
     const selectedBank = computed(() => bankStore.selectedBank);
@@ -53,16 +54,27 @@
   
     // "계좌 연결하기" 버튼 클릭 시 호출될 함수
     const Connect = async() => {
-      console.log("계좌 연결 시도");
       try{
         const response = await HomeApi.getAccountList(bankAccount);
         for(let i=0;i<response.length;i++){
           accountList[i] = response[i];
         }
-        console.log(accountList);
+        checkCount.value = false;
+      //  console.log(accountList);
       }catch(error){
         //여기서 error 코드에 따라 남은 횟수 수정하기
         console.error('API 호출 중 오류 발생:', error);
+        if(error.response.data == "비밀번호 오류입니다. 확인 후 거래하시기 바랍니다."){
+          if(count.value ==1){
+            alert("은행 홈페이지에 방문하여 아이디/비밀번호를 확인하시기 바랍니다.");
+            router.push('/home');
+          }
+          else{
+            checkCount.value = true;
+            count.value = count.value-1;
+            alert(error.response.data);
+          }
+        }
       }
     };
 
@@ -74,7 +86,7 @@
         const response = await HomeApi.addAccount(accountList);
         goHome;
       }catch(error){
-        console.error('API 호출 중 오류 발생:', error);
+      //  console.error('API 호출 중 오류 발생:', error);
       }
     }; 
 

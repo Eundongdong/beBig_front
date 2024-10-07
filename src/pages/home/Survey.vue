@@ -71,7 +71,7 @@ const getQuestion = async () => {
     }
     shuffle();
   } catch (error) {
-    console.error("API 호출 중 오류 발생:", error);
+    //console.error("API 호출 중 오류 발생:", error);
   }
 };
 
@@ -142,21 +142,21 @@ const submitSurvey = () => {
     finType = 4; // b, d이면 finType4
   }
 
-  console.log("결정된 자산 유형:", finType);
+ // console.log("결정된 자산 유형:", finType);
 
   sendSurveyResult(finType);
 };
 
 const sendSurveyResult = async (finType) => {
   try {
-    console.log(income.value);
+   // console.log(income.value);
     const response = await HomeApi.submitSurvey({
       user_fin_type: finType,
       user_income: income.value,
     });
     router.push("/home/survey-result");
   } catch (error) {
-    console.error("API 호출 중 오류 발생:", error);
+  //  console.error("API 호출 중 오류 발생:", error);
   }
 };
 </script>

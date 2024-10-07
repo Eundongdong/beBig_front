@@ -34,7 +34,7 @@
   const getSurveyResult = async() => {
     try{
       const surveyResults = await HomeApi.surveyResult();
-      console.log(surveyResults);
+     // console.log(surveyResults);
       finTypeTitle.value = surveyResults.finTypeAnimal;
       finTypeSubtitle.value = surveyResults.finTypeTitle;
       finTypeCode.value = surveyResults.finTypeCode;
@@ -43,16 +43,16 @@
       finTypeHabit2.value = surveyResults.finTypeHabit2;
       finTypeTitleDescription.value = surveyResults.finTypeTitleDescription;
     }catch(error){
-      console.error("API 호출 중 오류 발생:", error);
+    //  console.error("API 호출 중 오류 발생:", error);
     }
   }
   const getUser = async()=>{
     try{
       const response = await HomeApi.getMyInfo();
       userName.value = response.userName;
-      console.log(userName.value);
+    //  console.log(userName.value);
     }catch(error){
-      console.error("API 호출 중 오류 발생:", error);
+    //  console.error("API 호출 중 오류 발생:", error);
     }
   }
   // 페이지가 마운트될 때 finType에 맞는 데이터를 설정

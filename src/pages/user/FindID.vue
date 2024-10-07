@@ -73,7 +73,7 @@ const findID = async () => {
     userLoginId.value = response; // 성공적으로 받은 아이디
     errorMessage.value = "";
   } catch (error) {
-    console.error("API 호출 중 오류 발생:", error);
+    //console.error("API 호출 중 오류 발생:", error);
     errorMessage.value = "해당 이름과 이메일로 등록된 아이디가 없습니다.";
     userLoginId.value = null;
   }

@@ -99,7 +99,7 @@ const getUser = async () => {
       user.userName = userInfo.userName;
       user.finTypeCode = userInfo.finTypeCode; // 필요한 정보가 어떤건지 확인 필요
   } catch (error) {
-    console.error('사용자 정보 가져오는 함수 API 호출 중 오류 발생:', error);
+   // console.error('사용자 정보 가져오는 함수 API 호출 중 오류 발생:', error);
   }
 };
 
@@ -137,7 +137,7 @@ const setAchievement = async () => {
     monthlyProgress.value = achievement.currentScore;
     remainingDays.value = achievement.restDays;
   } catch (error) {
-    console.error("미션 성취도 불러오는중 에러 발생 :", error);
+   // console.error("미션 성취도 불러오는중 에러 발생 :", error);
   }
 };
 
@@ -145,12 +145,12 @@ const setAchievement = async () => {
 const daillyMission = async () =>{
   try{
     const response = await MissionApi.getDailyMission();
-    console.log(response);
+  //  console.log(response);
     for (let i = 0; i < 3; i++) {
       dailyMissions[i] = response[i];
     }
   }catch(error){
-    console.error("daily mission 불러오는중 에러 발생:", error);
+    //console.error("daily mission 불러오는중 에러 발생:", error);
   }
 }
 
@@ -159,7 +159,7 @@ const getMonthlyMission = async () =>{
   try{
     monthlyMission.value = await MissionApi.getMonthMission();
   }catch(error){
-    console.error("daily mission 불러오는중 에러 발생:", error);
+  //  console.error("daily mission 불러오는중 에러 발생:", error);
   }
 }
 
@@ -175,14 +175,13 @@ onMounted(() => {
 const completeMission = async (mission) => {
   try {
     mission.personalDailyMissionCompleted = !mission.personalDailyMissionCompleted;
-    console.log(mission);
     const missionData = {
       personalMissionId: mission.personalDailyMissionId,
       missionType: mission.missionType,
     };
     await MissionApi.updateMission(missionData);
   } catch (error) {
-    console.error("미션 업데이트 중 오류 발생", error);
+  //  console.error("미션 업데이트 중 오류 발생", error);
   }
 };
 
