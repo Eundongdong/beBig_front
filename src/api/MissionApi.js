@@ -1,6 +1,5 @@
 import api from "@/api";
-import user from "@/router/user";
-//import api from "@/api/ex_index"
+import refreshToken from './refreshToken';
 
 const BASE_URL = "/mission";
 const headers = { "Content-Type": "multipart/form-data" };
@@ -8,6 +7,7 @@ const headers = { "Content-Type": "multipart/form-data" };
 export default {
   // 미션 성취도 조회
   async getAchievement() {
+    const response = await refreshToken.checkToken();
     const { data } = await api.get(`${BASE_URL}/total`);
     return data;
   },

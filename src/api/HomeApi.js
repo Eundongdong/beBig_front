@@ -1,5 +1,6 @@
 import api from '@/api';
-//import api from "@/api/ex_index"
+import refreshToken from './refreshToken';
+
 
 const BASE_URL = '/home';
 const headers = {
@@ -9,10 +10,16 @@ const headers = {
 export default {
   // 내 정보 가져오기
   async getMyInfo() {
+    const response = await refreshToken.checkToken();
     const { data } = await api.get(`${BASE_URL}/info`);
     return data;
 },
 
+//foote용 내 정보 가져오기(refresh 확인 안함)
+  async getMyInfoFooter() {
+    const { data } = await api.get(`${BASE_URL}/info`);
+    return data;
+},
 
   // 설문조사 가져오기
   async surveyList() {

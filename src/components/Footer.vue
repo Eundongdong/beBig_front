@@ -33,7 +33,7 @@ const route = useRoute();
 const userName = ref('');
 const getUser = async () => {
     try {
-        const userInfo = await HomeApi.getMyInfo(); // /home/info 호출
+        const userInfo = await HomeApi.getMyInfoFooter(); // /home/info 호출
         userName.value = userInfo.userName;
     } catch (error) {
         console.error("사용자 정보 가져오는 함수 API 호출 중 오류 발생:", error);

@@ -151,12 +151,17 @@ import { useRouter } from 'vue-router';
 import SurveyResult from "./SurveyResult.vue";
 import { useUserStore } from '@/stores/user';
 import { useHomeStore } from '@/stores/home';
+import refreshToken from "@/api/refreshToken";
 
 const userStore = useUserStore();
 const homeStore = useHomeStore();
 
 const logout = async () => {
-  userStore.logout();
+  try{
+    const response = refreshToken.logouting();
+  }catch(error){
+    console.log(error);
+  }
   router.push('/');
 }
 
