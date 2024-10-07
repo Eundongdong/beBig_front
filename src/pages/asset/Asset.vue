@@ -219,9 +219,19 @@ const getAnalysis = async() =>{
       }]
     },
     options: {
+      responsive: true,
+      maintainAspectRatio: false, // 차트의 비율 유지 안 함
       scales: {
         y: {
-          beginAtZero: true
+          beginAtZero: true,
+          grid: {
+            display: false // 격자 지우기
+          }
+        },
+        x: {
+          grid: {
+            display: false // 격자 지우기
+          }
         }
       },
       plugins: {
@@ -380,37 +390,41 @@ const scrollToSlide = (index) => {
 }
 
 .cash {
-  background-color: #4CAF50; /* 입출금 자산 색 */
+  background-color:  #8485FF; /* 입출금 자산 색 */
 }
 
 .deposit-savings {
-  background-color: #2196F3; /* 예적금 자산 색 */
+  background-color: #3F40FF; /* 예적금 자산 색 */
 }
 /* 범례 스타일 */
 .legend {
-  margin-top: 20px;
   display: flex;
-  gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+    flex-direction: row;
 }
 
 .legend-item {
   display: flex;
-  align-items: center;
+    align-items: center;
+    margin-right: 5px;
+    font-size: 14px;
 }
 
 .legend-color {
   display: inline-block;
-  width: 20px;
-  height: 20px;
-  margin-right: 8px;
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
+    border-radius: 50%;
 }
 
 .legend-color.cash {
-  background-color: #4CAF50;
+  background-color: #8485FF;
 }
 
 .legend-color.deposit-savings {
-  background-color: #2196F3;
+  background-color: #3F40FF;
 }
 
 
@@ -544,8 +558,8 @@ li {
   }
   /* 그래프 css */
   canvas {
-  max-width: 600px;
-  margin: 20px auto;
+  width: 100%;
+  height: 300px;
 }
   .analysis-page {
     padding: 20px;

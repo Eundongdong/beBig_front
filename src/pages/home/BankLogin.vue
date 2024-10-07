@@ -13,14 +13,20 @@
   
     <!-- 계좌 목록을 보여주는 섹션 -->
     <div v-if="accountList.length != 0" class="account-list">
-      <div v-for="account in accountList" :key="accountList.resAccount" class="account-info">
+      <div 
+        v-for="account in accountList" 
+        :key="account.resAccount" 
+        @click="toggleSelectAccount(account)" 
+        :class="{'account-info': true, 'selected': selectedAccounts.includes(account)}"
+        class="account-info"
+      >
         <img :src="`../../../public/images/bank/${account.bankVo.bankName}.png`" alt="Bank Logo" class="bank-logo">
 
         <div class="account-details">
           <p>{{ account.bankVo.bankName }}</p>
           <p>통장이름: {{ account.resAccountName }}</p>
-          <p>계좌번호: {{ account.resAccount}}</p>
-          <p>잔액: {{ account.resAccountBalance}}</p>
+          <p>계좌번호: {{ account.resAccount }}</p>
+          <p>잔액: {{ account.resAccountBalance }}</p>
         </div>
       </div>
       <button @click="addAccount()" class="primary-button">계좌를 추가하시겠습니까?</button>
@@ -78,12 +84,26 @@
       }
     };
 
+     // 선택된 계좌들을 추적하는 배열
+    const selectedAccounts = ref([]);
+    // 선택 상태를 토글하는 함수
+    const toggleSelectAccount = (account) => {
+      const index = selectedAccounts.value.indexOf(account);
+      if (index === -1) {
+        // 계좌가 선택되지 않은 경우 추가
+        selectedAccounts.value.push(account);
+      } else {
+        // 이미 선택된 계좌라면 제거
+        selectedAccounts.value.splice(index, 1);
+      }
+    };
+
   
     // "계좌를 추가하시겠습니까?" 버튼 클릭 시 호출될 함수
     const addAccount = async() => {
       console.log("계좌 추가 시도");
       try{
-        const response = await HomeApi.addAccount(accountList);
+        const response = await HomeApi.addAccount(selectedAccounts.value);
         goHome;
       }catch(error){
       //  console.error('API 호출 중 오류 발생:', error);
@@ -146,10 +166,24 @@
     }
   
     .account-info {
-      display: flex;
-      align-items: center;
-      margin-bottom: 10px;
-    }
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    transition: background-color 0.3s ease;
+  }
+
+  .account-info:hover {
+    background-color: #e0e0e0;
+  }
+
+  .account-info.selected {
+    background-color: #d1e7ff;
+    border-color: #007bff;
+  }
   
     .bank-logo {
       width: 50px;
