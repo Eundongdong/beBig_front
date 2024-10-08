@@ -1,24 +1,28 @@
 <template>
   <div class="page">
-    <div class="result-container">
-      <h1 class="finType-title">{{ finTypeTitle }}</h1>
-      <h2 class="finType-subtitle">{{ finTypeSubtitle }}</h2>
-      <img :src="`/images/${finTypeCode}.png`" alt="finType 이미지" class="finType-image" />
-      <div class="finType-description">
-        <div ><p>{{ userName }} 님은 {{ finTypeTitleDescription}}</p></div>
-        <div ><p>{{ finTypeAnimalDescription}}</p></div>
-        <ul>
+    <div class="component space-y-2">
+      <h1 class="giant-text text-center">{{ finTypeTitle }}</h1>
+      <h2 class="text-xl text-center">{{ finTypeSubtitle }}</h2>
+      <div class="flex items-center justify-center">
+      <img :src="`/images/${finTypeCode}.png`" alt="finType 이미지" class="w-[150px] h-auto rounded-full" />
+    </div>
+
+
+      <div class="fintype-description">
+        <div><p class="text-justify"><span class="font-semibold">{{ userName }}</span> 님은 {{ finTypeTitleDescription}}</p></div>
+        <div><p class="text-justify">{{ finTypeAnimalDescription}}</p></div>
+        <ul class="list-none text-justify mt-4">
           <li :key="advice">{{ finTypeHabit1}}</li>
           <li :key="advice">{{ finTypeHabit2}}</li>
         </ul>
       </div>
-      <button class="button" @click="goBack">홈으로 돌아가기</button>
+      <button class="button mt-5" @click="handleButtonClick">{{ buttonText }}</button>
     </div>
   </div>
   </template>
   
   <script setup>
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, computed } from 'vue';
   import { useRouter } from 'vue-router';
   import HomeApi from "@/api/HomeApi";
   const router = useRouter();
@@ -61,76 +65,25 @@
     getUser();
   });
   
-  // 홈으로 돌아가는 함수
-  const goBack = () => {
+  const props = defineProps({
+  isModal: {
+    type: Boolean,
+    default: false
+  }
+});
+
+  const buttonText = computed(() => props.isModal ? '닫기' : '홈으로 돌아가기');
+
+// 버튼 클릭 처리 함수
+const handleButtonClick = () => {
+  if (props.isModal) {
+    emit('close-modal');
+  } else {
     router.push({ name: 'main' });
-  };
+  }
+};
+
+// emit 정의
+const emit = defineEmits(['close-modal']);
+
   </script>
-  
-  <style scoped>
-  .result-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    background-color: #f9f9f9;
-    height: 100vh;
-  }
-  
-  .finType-title {
-    font-size: 24px;
-    color: #1a73e8;
-    margin-bottom: 10px;
-    text-align: center;
-  }
-  
-  .finType-subtitle {
-    font-size: 20px;
-    color: #333;
-    margin-bottom: 20px;
-    text-align: center;
-  }
-  
-  .finType-image {
-    width: 150px;
-    height: auto;
-    margin-bottom: 20px;
-  }
-  
-  .finType-description {
-    text-align: left;
-    margin-bottom: 30px;
-    max-width: 400px;
-  }
-  
-  .finType-description p {
-    font-size: 16px;
-    color: #555;
-    margin-bottom: 10px;
-  }
-  
-  .finType-description ul {
-    list-style-type: disc;
-    margin-left: 20px;
-  }
-  
-  .finType-description ul li {
-    font-size: 14px;
-    color: #777;
-    margin-bottom: 5px;
-  }
-  
-  .back-button {
-    background-color: #1a73e8;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  .back-button:hover {
-    background-color: #1558c0;
-  }
-  </style>
