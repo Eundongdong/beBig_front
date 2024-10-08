@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col relative">
     <Header v-if="!isUserPage"/>
-    <div class="flex-1 mt-[50px] mb-2 overflow-y-auto">
+    <div class="flex-1 mt-[50px] lg:mt-0 mb-2 overflow-y-auto">
       <RouterView/>
     </div>
     <Footer v-if="!isUserPage"/>
