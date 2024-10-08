@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && node copy-images.js",
-    "preview": "vite preview --port 80 --host 0.0.0.0 --mode production"
+    "preview": "vite preview --port 5173 --host 0.0.0.0 --mode production"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.6.0",
