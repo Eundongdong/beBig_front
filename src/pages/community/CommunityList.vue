@@ -33,10 +33,7 @@
       <!-- 필터 드롭다운: 카테고리, 자산유형 -->
       <div>
         <!--카테고리 필터-->
-        <div
-          @change="fetchPosts"
-          class="flex items-center justify-between space-x-1 m-1"
-        >
+        <div @change="fetchPosts" class="flex items-center justify-between space-x-1 m-1">
           <label class="text-xs font-semibold">카테고리</label>
           <button
             @click="selectCategory(-1)"
@@ -100,10 +97,7 @@
           </button>
         </div>
         <!-- 자산유형(FinType) 필터 -->
-        <div
-          @change="fetchPosts"
-          class="flex items-center justify-between space-x-0.5 m-1"
-        >
+        <div @change="fetchPosts" class="flex items-center justify-between space-x-0.5 m-1">
           <label class="text-xs font-semibold">자산유형</label>
           <button
             @click="selectFinType(-1)"
@@ -175,14 +169,14 @@
       <!-- 프로필, 작성자, 날짜 -->
       <div class="flex justify-between items-center">
         <div class="flex items-center space-x-3">
-          <img
-            class="community-profile"
-            :src="getProfileIcon(post.finTypeCode)"
-            alt="Profile"
-          />
-          <span>{{post.userNickname}}</span>
+
+          <img class="community-profile" :src="getProfileIcon(post.finTypeCode)" alt="Profile" @click="() => goToUserProfile(post.userId)" />
+          <span>{{ post.userNickname }}</span>
+
         </div>
-        <p class="community-content">{{ formatDate(post.postCreatedTime) }}</p>
+        <p class="community-content">
+          {{ formatDate(post.postCreatedTime) }}
+        </p>
       </div>
       <!-- 글 제목 -->
       <div class="community-title mt-1">
@@ -193,11 +187,7 @@
           }"
           class="post-title"
           >{{ post.postTitle }}
-          <i
-            v-if="post.postImagePaths && post.postImagePaths.length"
-            class="fa-regular fa-image ml-1"
-            style="color: #5354ff"
-          ></i>
+          <i v-if="post.postImagePaths && post.postImagePaths.length" class="fa-regular fa-image ml-1" style="color: #5354ff"></i>
         </router-link>
       </div>
 
@@ -210,7 +200,7 @@
       <div class="mt-1 ml-2 text-[18px]">
         <button @click="likePost(post.postId, post.userId)">
           <span class="text-red-500">
-            {{ post.isLiked ? "♥" : "♡" }}
+            {{ post.isLiked ? '♥' : '♡' }}
           </span>
           {{ post.postLikeHits }}
         </button>
@@ -218,16 +208,17 @@
     </div>
   </div>
 
+
+
+
+
   <div v-else>
       <p class="loading">게시글이 없습니다.</p>
     </div>
 
+
     <!-- 새 글 작성 버튼 -->
-    <router-link
-      v-if="userName != 'NoLogin'"
-      to="/community/add"
-      class="add-button"
-    >
+    <router-link v-if="userName != 'NoLogin'" to="/community/add" class="add-button">
       <i class="fas fa-plus"></i>
     </router-link>
 
@@ -270,41 +261,68 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from "vue";
-import communityApi from "@/api/CommunityApi";
-import HomeApi from "@/api/HomeApi";
 
-// 사용자 및 게시글 데이터 상태 관리
-const userName = ref("");
+import { ref, computed, onMounted, watchEffect, watch } from 'vue';
+import communityApi from '@/api/CommunityApi';
+import HomeApi from '@/api/HomeApi';
+import MypageApi from '@/api/MypageApi';
+import { useRouter } from 'vue-router';
+
+const userName = ref('');
+const router = useRouter();
+const loggedInUserId = ref(null);
+
+// 로그인된 사용자 ID를 미리 가져오는 함수
+const fetchLoggedInUserId = async () => {
+  try {
+    const userId = await MypageApi.getLoggedInUserId();
+    if (userId) {
+      loggedInUserId.value = userId;
+      console.log('로그인된 사용자 ID:', loggedInUserId.value);
+    } else {
+      console.error('유효한 사용자 ID를 가져오지 못했습니다.');
+    }
+  } catch (error) {
+    console.error('로그인된 사용자 ID를 가져오는 중 오류 발생:', error);
+  }
+};
+
+// 게시글 데이터 상태 관리
 const posts = ref([]); //API로 가져온 게시글 데이터
 const currentPage = ref(1); //현재 페이지 번호
 const totalPage = ref(1); //총 페이지 수를 1로 초기화
 const pageSize=ref(10);
 const isFetching = ref(false); //데이터 로딩 상태 관리
+const hasMorePosts = ref(true);
 
 //정렬 및 필터 상태 관리
 const sortType = ref("latest"); // 기본 정렬은 최신순
 const selectedCategory = ref("-1"); // 초기값을 '-1'로 설정
 const selectedFinType = ref("-1"); // 초기값을 '-1'로 설정
 
+
 // 사용자 정보를 가져오는 함수
 const getUser = async () => {
   try {
     const userInfo = await HomeApi.getMyInfo(); // /home/info 호출
+
+
+    console.log('사용자 정보 가져오기 성공, ', userInfo);
+
     userName.value = userInfo.userName;
   } catch (error) {
-    console.error("사용자 정보 가져오는 함수 API 호출 중 오류 발생:", error);
+    console.error('사용자 정보 가져오는 함수 API 호출 중 오류 발생:', error);
   }
 };
 
+
+
 // 게시글 정렬 기능
 const sortedPosts = computed(() => {
-  if (sortType.value === "likeHits") {
+  if (sortType.value === 'likeHits') {
     return [...posts.value].sort((a, b) => b.postLikeHits - a.postLikeHits);
-  } else if (sortType.value === "latest") {
-    return [...posts.value].sort(
-      (a, b) => new Date(b.postCreatedTime) - new Date(a.postCreatedTime)
-    );
+  } else if (sortType.value === 'latest') {
+    return [...posts.value].sort((a, b) => new Date(b.postCreatedTime) - new Date(a.postCreatedTime));
   }
   return posts.value;
 });
@@ -322,6 +340,33 @@ const selectFinType = (finTypeCode) => {
   selectedFinType.value = finTypeCode;
 };
 
+// 프로필 페이지로 이동하는 함수
+const goToUserProfile = async (userId) => {
+  try {
+    if (!loggedInUserId.value) {
+      console.log('로그인된 사용자 ID를 가져오는 중...');
+      await fetchLoggedInUserId(); // 여기서 fetch 이후 로그 찍기
+      console.log('fetch 후 로그인된 사용자 ID:', loggedInUserId.value);
+    }
+
+    // 현재 로그인된 사용자 정보 가져오기
+    console.log('프로필 이동 함수 호출 시작'); // 호출 시점 확인
+    console.log(`로그인한 사용자 ID: ${loggedInUserId.value}, 클릭한 프로필 사용자 ID: ${userId}`);
+
+    // userId가 같은지 확인
+    if (Number(userId) === Number(loggedInUserId.value)) {
+      console.log('본인의 프로필로 이동');
+      router.push({ name: 'mypage' });
+    } else {
+      console.log('다른 사용자의 프로필로 이동');
+      router.push({ name: 'userMypage', params: { userId } });
+    }
+  } catch (error) {
+    console.error('프로필 이동 중 오류 발생:', error);
+  }
+
+};
+
 // 프로필 사진 가져오는 함수
 const getProfileIcon = (finTypeCode) => {
   // finTypeCode가 유효한지 확인
@@ -329,15 +374,13 @@ const getProfileIcon = (finTypeCode) => {
     return `images/${finTypeCode}.png`;
   }
   // 기본 이미지 반환
-  return "images/0.png";
+  return 'images/0.png';
 };
 
 // 날짜 포맷 함수
 const formatDate = (dateString) => {
   const date = new Date(dateString);
-  return `${date.getFullYear()}-${(date.getMonth() + 1)
-    .toString()
-    .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+  return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
 };
 
 // 게시글 목록을 API에서 가져오는 함수
@@ -377,19 +420,20 @@ const fetchPosts = async () => {
   }
 };
 
+
 // 좋아요 기능
 const likePost = async (postId, userId) => {
   //postId와 userId를 콘솔에 찍어서 확인
   console.log(`PostID: ${postId}, userID: ${userId}`);
   try {
     if (!postId || !userId) {
-      console.error("게시글번호 또는 작성자번호가 없습니다");
+      console.error('게시글번호 또는 작성자번호가 없습니다');
       return;
     }
 
     //좋아요 API 호출
     const response = await communityApi.likePost(postId, userId);
-    console.log("Response:", response);
+    console.log('Response:', response);
 
     /// 좋아요 상태를 업데이트 (post 객체에 직접 접근하지 않고 posts 배열에서 해당 게시글을 찾아 업데이트)
     const postIndex = posts.value.findIndex((post) => post.postId === postId);
@@ -400,13 +444,11 @@ const likePost = async (postId, userId) => {
         posts.value[postIndex].postLikeHits = response.postLikeHits;
       } else {
         // 서버 응답이 없으면 로컬에서 값을 증가/감소
-        posts.value[postIndex].postLikeHits += posts.value[postIndex].isLiked
-          ? 1
-          : -1;
+        posts.value[postIndex].postLikeHits += posts.value[postIndex].isLiked ? 1 : -1;
       }
     }
   } catch (error) {
-    console.error("Error:", error);
+    console.error('Error:', error);
   }
 };
 
@@ -440,8 +482,23 @@ watch([selectedCategory, selectedFinType], () => {
 });
 
 // 컴포넌트가 마운트되면 게시글을 불러옴
-onMounted(() => {
-  getUser();
-  fetchPosts();
+
+onMounted(async () => {
+    console.log('onMounted: 로그인된 사용자 정보를 가져오기 시작');
+    await fetchLoggedInUserId();  // 이 부분에서 API 호출이 완료될 때까지 기다림
+    console.log('onMounted: 로그인된 사용자 정보 가져오기 완료', loggedInUserId.value);
+
+    if (loggedInUserId.value) {
+        await getUser();
+        console.log('onMounted: 사용자 정보를 가져오기 완료');
+    } else {
+        console.error('로그인된 사용자 ID를 가져오지 못했습니다.');
+    }
+  await fetchPosts();
+  console.log('onMounted: 게시글 가져오기 완료');
+  
+ // window.addEventListener('scroll', handleScroll);
+
 });
+
 </script>
