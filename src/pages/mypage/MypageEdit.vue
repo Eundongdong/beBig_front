@@ -5,8 +5,10 @@
       <button class="text-xl" @click="goBack">
         <i class="fa-solid fa-chevron-left"></i>
       </button>
-      <h2 class="font-bold text-sm">내 정보 수정</h2>
-      <button class="logout-btn" @click="logout">로그아웃</button>
+      <h2 class="font-bold text-sm absolute left-1/2 transform -translate-x-1/2">내 정보 수정</h2>
+      <button class="text-xl" @click="logout">
+        <i class="fa-solid fa-power-off"></i>
+      </button>
     </header>
 
     <!-- 입력 폼 -->
@@ -35,7 +37,13 @@
         <label class="label">기존 비밀번호</label>
         <div class="flex">
           <input type="password" v-model="currentPassword" class="input" />
-          <button type="button" @click="checkCurrentPassword" class="w-1/5 ml-2 mb-3 border-primary rounded-lg bg-primary text-white">확인</button>
+          <button
+            type="button"
+            @click="checkCurrentPassword"
+            class="w-1/5 ml-2 mb-3 border-primary rounded-lg bg-primary text-white"
+          >
+            확인
+          </button>
         </div>
       </div>
 
@@ -169,7 +177,7 @@ const handleSubmit = async () => {
       return; // 제출 중단
     }
   }
-  
+
   // 수정된 정보 전송
   try {
     const userData = {
@@ -180,7 +188,7 @@ const handleSubmit = async () => {
 
     // 비밀번호 변경을 원할 경우에만 비밀번호 전송
     if (currentPassword.value && newPassword.value && confirmNewPassword.value) {
-      userData.user_password = newPassword.value;  // 새 비밀번호가 있는 경우에만 전송
+      userData.user_password = newPassword.value; // 새 비밀번호가 있는 경우에만 전송
     }
 
     const response = await MypageApi.edit(userData); // 백엔드로 정보 전송

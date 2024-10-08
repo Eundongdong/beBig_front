@@ -1,126 +1,125 @@
 <template>
   <div class="page">
-  <div class="mission-page">
-    <header class="mission-header">
-      <button @click="handleBack" class="back-button">
-        <i class="fas fa-arrow-left"></i>
-      </button>
-    </header>
-
-    <!-- 월간 미션 진행 상태 -->
-      <div class="mission-status">
-        <div class="mission-progress">
-          <!-- "현재 미션을 달성했어요" 텍스트와 D-day를 포함하는 영역 -->
-          <div class="mission-info">
-            <span>현재 미션을 {{ monthlyProgress }}% 달성했어요</span>
-            <!-- D-day는 이곳으로 이동 -->
-            <div class="d-day">
-              D-{{ remainingDays }}
-            </div>
-          </div>
-
-          <!-- 진행 바 -->
-          <div class="progress-bar">
-            <!-- 캐릭터 이미지 (진행된 만큼 왼쪽으로 배치) -->
-            <img :src="characterImage" alt="달리는 캐릭터 이미지" class="progress-character"
-              :style="{ left: monthlyProgress + '%' }" />
-
-            <!-- 진행 바 채움 -->
-            <div class="progress-fill" :style="{ width: monthlyProgress + '%' }"></div>
-
-            <!-- 깃발은 오른쪽 끝에 고정 -->
-            <img src="/images/flag.png" alt="깃발 이미지" class="flag-image" />
-          </div>
+    <div class="container">
+      <!-- 현재 달성도 -->
+      <div class="component">
+        <h1 class="font-semibold text-lg">현재 달성도</h1>
+        <div class="flex justify-between items-center">
+          <span class="ml-2">미션을 {{ monthlyProgress }}% 달성했어요</span>
+          <span class="ml-auto">D-{{ remainingDays }}</span>
         </div>
-    </div>
-
-    <!-- 월간 미션 -->
-      <div class="mission-list">
-        <div class="mission-card">
-          <div class="title-wrapper">
-            <div class="mission-title">
-              <h3>월간 미션</h3>
-            </div>
-            <span class="mission-date">{{ currentMonth }}</span>
-          </div>
-          <div class="mission-description">
-            <span>{{ monthlyMission.missionTopic || '설명이 없습니다.' }}</span>
-            <input type="checkbox" v-model="monthlyMission.IsRevoked"/>
+        <div class="progress-bar relative h-5 flex items-center mt-10">
+          <div
+            class="progress-fill relative flex-1 h-2 mx-2"
+            :style="{ width: monthlyProgress + '%' }"
+          >
+            <img
+              :src="characterImage"
+              class="w-[50px] absolute transition-transform duration-200"
+              :style="{
+                left: 'calc(' + monthlyProgress + '% + 45px)',
+                top: '-40px',
+              }"
+            />
           </div>
         </div>
       </div>
 
-      <!-- 일간 미션 리스트 -->
-        <div class="mission-list">
-          <div class="mission-card">
-            <div class="title-wrapper">
-              <div class="mission-title">
-                <h3>일간 미션</h3>
-              </div>
-              <span class="today-date">{{ todayDate }}</span>
-            </div>
-            <ul>
-              <li v-for="mission in dailyMissions" :key="mission.personalDailyMissionId">
-                <div class="mission-description">
-                  {{ mission.missionTopic || '설명이 없습니다.' }}
-                </div>
-                <input type="checkbox" :checked="mission.personalDailyMissionCompleted" @change="completeMission(mission)" />
-              </li>
-            </ul>
+      <!-- 월간 미션 -->
+      <div class="component">
+        <h1 class="font-semibold text-lg">월간 미션</h1>
+        <div class="flex justify-between">
+          <span class="ml-2">{{ currentMonth }}</span>
+          <div
+            class="mission-status"
+            :style="{ color: monthlyMission.isRevoked ? 'red' : '#5354ff' }"
+          >
+            {{ monthlyMission.isRevoked ? "미션 완료" : "미션 진행 중" }}
+
           </div>
+        </div>
+        <div class="mission-text">
+          <span>{{ monthlyMission.missionTopic || "설명이 없습니다." }}</span>
+        </div>
+      </div>
+
+      <!-- 일간 미션 -->
+      <div class="component">
+        <h1 class="font-semibold text-lg">일간 미션</h1>
+        <div class="flex justify-between">
+          <span class="ml-2">{{ todayDate }}</span>
+          <div
+            class="mission-status"
+            :style="{ color: allDailyMissionsCompleted ? 'red' : '#5354ff' }"
+          >
+            {{ allDailyMissionsCompleted ? "미션 완료!" : "미션 진행 중" }}
+          </div>
+        </div>
+        <ul>
+          <li
+            v-for="mission in dailyMissions"
+            :key="mission.personalDailyMissionId"
+            class="flex justify-between mission-text"
+          >
+            <div
+              :class="{ 'line-through': mission.personalDailyMissionCompleted }"
+            >
+              {{ mission.missionTopic || "설명이 없습니다." }}
+            </div>
+            <input
+              type="checkbox"
+              :checked="mission.personalDailyMissionCompleted"
+              @change="completeMission(mission)"
+            />
+          </li>
+        </ul>
+
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <script setup>
-import MissionApi from '@/api/MissionApi';
-import { ref, onMounted, computed, reactive } from 'vue';
-import { useRouter } from 'vue-router';
-import HomeApi from "@/api/HomeApi";  //사용자 Fintype을 불러오기 위함
+
+import MissionApi from "@/api/MissionApi";
+import { ref, onMounted, computed, reactive } from "vue";
+import { useRouter } from "vue-router";
+import HomeApi from "@/api/HomeApi"; //사용자 Fintype을 불러오기 위함
+
 
 const router = useRouter();
-const todayDate = computed(() => new Date().toISOString().split('T')[0]);
+const todayDate = computed(() => new Date().toISOString().split("T")[0]);
 const currentMonth = computed(() => {
   const date = new Date();
   return `${date.getFullYear()}년 ${date.getMonth() + 1}월`;
 });
+const isRunning = ref(false); // 캐릭터 애니메이션 상태
 
 // 페이지 상태
-const monthlyProgress = ref('');  // 월간 미션 진척률
-const remainingDays = ref('');       // 남은 일수
-const dailyMissions = reactive([]);  //일간 미션 목록
-const monthlyMission = ref(''); // 월간 미션 정보
+
+const monthlyProgress = ref(""); // 월간 미션 진척률
+const remainingDays = ref(""); // 남은 일수
+const dailyMissions = reactive([]); //일간 미션 목록
+const monthlyMission = ref(""); // 월간 미션 정보
+
 
 //사용자 Fintype 불러오기
 const getUser = async () => {
   try {
     const userInfo = await HomeApi.getMyInfo(); // /home/info 호출
-      user.userName = userInfo.userName;
-      user.finTypeCode = userInfo.finTypeCode; // 필요한 정보가 어떤건지 확인 필요
+    user.userName = userInfo.userName;
+    user.finTypeCode = userInfo.finTypeCode; // 필요한 정보가 어떤건지 확인 필요
   } catch (error) {
-   // console.error('사용자 정보 가져오는 함수 API 호출 중 오류 발생:', error);
+    // console.error('사용자 정보 가져오는 함수 API 호출 중 오류 발생:', error);
   }
 };
 
 // 사용자 자산유형에 따른 캐릭터 이미지 설정
 const user = reactive({
-        userName: '',
-        finTypeCode: '' 
-    });
-const characterImage = computed(() => {
-  switch (user.finTypeCode) {
-    case 1:
-      return '/images/character1.png';
-    case 2:
-      return '/images/character2.png';
-    case 3:
-      return '/images/character3.png';
-    case 4:
-      return '/images/character4.png';
-    default:
-      return '/images/0.png';
-  }
+
+  userName: "",
+  finTypeCode: "",
+
 });
 
 // 미션 진행률 계산 함수
@@ -137,148 +136,68 @@ const setAchievement = async () => {
     monthlyProgress.value = achievement.currentScore;
     remainingDays.value = achievement.restDays;
   } catch (error) {
-   // console.error("미션 성취도 불러오는중 에러 발생 :", error);
+    // console.error("미션 성취도 불러오는중 에러 발생 :", error);
   }
 };
 
 //일간 미션 받아오기
-const daillyMission = async () =>{
-  try{
+const daillyMission = async () => {
+  try {
     const response = await MissionApi.getDailyMission();
-  //  console.log(response);
+    //  console.log(response);
     for (let i = 0; i < 3; i++) {
       dailyMissions[i] = response[i];
     }
-  }catch(error){
+  } catch (error) {
     //console.error("daily mission 불러오는중 에러 발생:", error);
   }
-}
+};
 
 //월간 미션 받아오기
-const getMonthlyMission = async () =>{
-  try{
+const getMonthlyMission = async () => {
+  try {
     monthlyMission.value = await MissionApi.getMonthMission();
-  }catch(error){
-  //  console.error("daily mission 불러오는중 에러 발생:", error);
+  } catch (error) {
+    //  console.error("daily mission 불러오는중 에러 발생:", error);
   }
-}
+};
 
 onMounted(() => {
   getUser();
   setAchievement();
   daillyMission();
   getMonthlyMission();
+  startAnimation();
 });
-
 
 // 미션 완료 처리
 const completeMission = async (mission) => {
   try {
-    mission.personalDailyMissionCompleted = !mission.personalDailyMissionCompleted;
+    mission.personalDailyMissionCompleted =
+      !mission.personalDailyMissionCompleted;
     const missionData = {
       personalMissionId: mission.personalDailyMissionId,
       missionType: mission.missionType,
     };
     await MissionApi.updateMission(missionData);
   } catch (error) {
-  //  console.error("미션 업데이트 중 오류 발생", error);
+    //  console.error("미션 업데이트 중 오류 발생", error);
   }
 };
 
-// 뒤로 가기 버튼 기능
-const handleBack = () => {
-  router.push({ name: 'main' });
+const allDailyMissionsCompleted = computed(() => {
+  return dailyMissions.length > 0 && dailyMissions.every(mission => mission.personalDailyMissionCompleted);
+});
+
+const startAnimation = () => {
+  setInterval(() => {
+    isRunning.value = !isRunning.value; // 상태를 반전시켜 이미지 변경
+  }, 500); // 0.5초마다 상태 변경
 };
 
+const characterImage = computed(() => {
+  const baseImage = `/images/character${user.finTypeCode}.png`;
+  return isRunning.value ? baseImage.replace(".png", "-ani.png") : baseImage;
+});
 </script>
 
-
-<style scoped>
-ul {
-  list-style-type: none;
-}
-
-.mission-page {
-  padding: 16px;
-  font-family: 'Roboto', sans-serif;
-}
-
-.mission-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 12px;
-}
-
-.back-button {
-  background: none;
-  border: none;
-  font-size: 24px;
-}
-
-.mission-list, .mission-status{
-  width: 100%;
-  margin-bottom: 5%;
-  background-color: #f3f3f3;
-  color: black;
-  border-radius: 10px;
-  padding: 10px;
-  border: none;
-}
-
-.mission-status {
-  display: flex;
-  align-items: center;
-}
-
-.mission-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.d-day {
-  font-size: 16px;
-  color: red;
-  padding-top: 8px;
-}
-
-.progress-bar {
-  flex-grow: 1;
-  margin-top: 15%;
-  height: 8px;
-  background-color: #f0f0f0;
-  border-radius: 4px;
-  margin-left: 8px;
-  position: relative;
-}
-
-.progress-fill {
-  height: 100%;
-  background-color: #4caf50;
-  border-radius: 4px;
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 1;
-  transition: width 0.3s ease;
-}
-
-.progress-character {
-  position: absolute;
-  bottom: 10px;
-  width: 50px;
-  height: auto;
-  z-index: 2;
-  transition: left 0.3s ease;
-  transform: translateX(-50%);
-}
-
-.flag-image {
-  position: absolute;
-  right: 0;
-  bottom: 10px;
-  width: 30px;
-  height: auto;
-}
-</style>
