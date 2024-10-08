@@ -209,13 +209,8 @@
   </div>
 
 
-<!--
-    <!-- 로딩 인디케이터 -->
-    <div v-if="isFetching" class="loading">게시글을 더 불러오는 중...</div>
 
-    <!-- 더 이상 게시글이 없을 때 메시지 -->
-    <div v-if="!hasMorePosts && posts.length > 0" class="loading">더 이상 불러올 게시글이 없습니다</div>
-    -->
+
 
   <div v-else>
       <p class="loading">게시글이 없습니다.</p>
@@ -267,7 +262,7 @@
 
 <script setup>
 
-import { ref, computed, onMounted, watchEffect } from 'vue';
+import { ref, computed, onMounted, watchEffect, watch } from 'vue';
 import communityApi from '@/api/CommunityApi';
 import HomeApi from '@/api/HomeApi';
 import MypageApi from '@/api/MypageApi';
@@ -343,7 +338,7 @@ const selectCategory = (categoryId) => {
 
 const selectFinType = (finTypeCode) => {
   selectedFinType.value = finTypeCode;
-
+};
 
 // 프로필 페이지로 이동하는 함수
 const goToUserProfile = async (userId) => {
@@ -502,7 +497,8 @@ onMounted(async () => {
   await fetchPosts();
   console.log('onMounted: 게시글 가져오기 완료');
   
-  window.addEventListener('scroll', handleScroll);
+ // window.addEventListener('scroll', handleScroll);
 
 });
+
 </script>
