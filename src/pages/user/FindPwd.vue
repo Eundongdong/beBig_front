@@ -1,0 +1,108 @@
+<template>
+  <div class="page">
+    <header class="header">
+      <button class="back-button" @click="goBack">
+        <i class="fa-solid fa-arrow-left"></i>
+      </button>
+    </header>
+
+    <form @submit.prevent="findPassword" class="container">
+      <!-- 이름 -->
+      <div class="input_name">
+        <label class="label" for="name">이름</label>
+        <input
+          class="input"
+          v-model="name"
+          type="text"
+          id="name"
+          autocomplete="name"
+          required
+        />
+      </div>
+      <!-- 아이디 -->
+      <div class="input_id">
+        <label class="label" for="userLoginId">아이디</label>
+        <input class="input"
+          v-model="userLoginId"
+          type="text"
+          id="userLoginId"
+          autocomplete="username"
+          required
+        />
+      </div>
+      <!-- 이메일 -->
+      <div class="input_email">
+        <label class="label" for="email">이메일</label>
+        <input class="input"
+          v-model="email"
+          type="email"
+          id="email"
+          autocomplete="email"
+          required
+        />
+      </div>
+
+      <button class="button" type="submit">비밀번호 찾기</button>
+    </form>
+
+    <!-- 결과 표시 -->
+    <div v-if="message" class="result text-center text-lg mt-10">
+      <p>입력하신 이메일로 <br/>임시 비밀번호를 보냈어요!</p>
+    </div>
+    <div
+      v-else-if="errorMessage"
+      class="result_error text-center text-lg mt-10"
+    >
+      <p>{{ errorMessage }}</p>
+    </div>
+    <div v-else-if="flag == true" class="result text-center text-lg mt-10">
+      <p>이메일 보내는중...</p>
+    </div>
+
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue';
+import { useRouter } from "vue-router";
+import UserApi from '@/api/UserApi'; // 실제 API 모듈 경로 확인
+
+const router = useRouter();
+
+const name = ref(''); // 사용자 이름
+const userLoginId = ref(''); // 사용자 아이디
+const email = ref(''); // 사용자 이메일
+const message = ref(null); // 성공 메시지
+const errorMessage = ref(null); // 오류 메시지
+const flag = ref(false);
+
+const findPassword = async () => {
+  try {
+    flag.value = true;
+    const response = await UserApi.findUserPwd({
+      name: name.value,
+      userLoginId: userLoginId.value,
+      email: email.value,
+    });
+
+    name.value = '';
+    userLoginId.value = '';
+    email.value = '';
+
+    message.value = '임시 비밀번호를 입력하신 이메일로 보냈어요!';
+  } catch (error) {
+    console.error('API 호출 중 오류 발생:', error);
+    if (error.response && error.response.status === 404) {
+      errorMessage.value = '해당 정보로 등록된 계정을 찾을 수 없습니다.';
+    } else {
+      errorMessage.value = '서버와 통신 중 오류가 발생했습니다.';
+    }
+    message.value = null;
+  }
+};
+
+// 뒤로가기 함수
+const goBack = () => {
+  router.push({name: "user"});
+};
+</script>

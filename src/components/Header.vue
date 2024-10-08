@@ -1,19 +1,24 @@
-<template lang="">
-    <div>
-        Header
-    </div>
+<template>
+    <header class="top-0 left-0  z-50 fixed w-full bg-white shadow-md">
+        <div class="container mx-auto px-4 py-4 sm:px-4 sm:py-2 md:px-6 md:py-4">
+            <img src="/images/logo.png" alt="Logo" @click="goHome" class="w-24 h-auto max-w-full" />
+        </div>
+    </header>
 </template>
-<script>
-export default {
 
+<script setup>
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
+const goHome = () => {
+    router.push({ name: 'main' })
 }
+
 </script>
+
 <style scoped>
-*{
-    box-sizing: border-box;
-}
-header{
-    border:1px solid;
-    height: 100px;
+/* 헤더 높이를 고정 */
+header {
+  height: 60px; /* 헤더의 고정된 높이 */
 }
 </style>
