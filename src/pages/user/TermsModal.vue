@@ -1,7 +1,8 @@
 <!-- TermsModal.vue -->
 <template>
-  <div class="modal" v-if="isOpen">
-      <div class="bg-white rounded-lg p-6">
+  <div class="modal-overlay" v-if="isOpen">
+    <div class="modal">
+      <div class="modal-content">
         <h2 class="text-lg font-bold mb-4">개인정보 제공 및 약관 동의</h2>
 
         <!-- 전체 동의 -->
@@ -32,11 +33,12 @@
           </div>
         </div>
 
-        <div class="mt-6 flex justify-end">
+        <div class="mt-6 flex justify-end space-x-2">
           <button @click="closeModal" class="gray-button">취소</button>
           <button @click="confirmAgreement" class="button">확인</button>
         </div>
       </div>
+    </div>
   </div>
 </template>
 

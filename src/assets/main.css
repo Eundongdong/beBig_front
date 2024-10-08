@@ -118,15 +118,24 @@
   padding-bottom: 6rem; /* 푸터 높이 */
 }
 
+.modal-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40;
+}
+
 .modal {
-  @apply max-w-lg rounded-lg p-6 fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
+  @apply relative bg-white rounded-lg p-6 z-50;
+  width: 80%;
   max-width: 90%;
-  width: auto;
-  max-height: 90vh;
+  max-height: 80vh;
+}
+
+.modal-content{
+  @apply overflow-y-auto;
+  max-height: calc(80vh - 3rem);
 }
 
 .terms-content {
-  @apply overflow-y-scroll text-sm text-gray-600 border border-gray-300 rounded-lg p-2 max-h-40;
+  @apply overflow-y-scroll text-sm text-gray-600 border border-gray-300 rounded-lg p-2 max-h-36;
 }
 
 .post-content{
@@ -153,6 +162,15 @@
   @apply w-[80px] rounded-full;
 }
 
+.finType-description {
+  @apply text-lg mx-auto p-4;
+  max-width: 400px;
+  white-space: normal;
+  word-break: keep-all;
+  text-align: justify;
+  line-height: 1.8;
+}
+
 .community-profile{
   @apply w-[35px] rounded-full;
 }
@@ -166,11 +184,15 @@
 }
 
 .component{
-  @apply rounded-2xl p-3 mb-3 bg-gray-100;
+  @apply w-full rounded-2xl p-3 mb-3 bg-gray-100;
 }
 
 .bank-icon{
   @apply h-[30px];
+}
+
+.giant-text{
+  @apply text-[#5354ff] text-2xl font-semibold;
 }
 
 .big-text{

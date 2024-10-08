@@ -1,9 +1,12 @@
 <template>
   <div class="page">
+    <button class="text-button" @click="logout">logout</button>
     <!-- 사용자 정보 컴포넌트 -->
-    <button class="text-button"@click="logout">logout</button>
     <div class="component">
-      <div class="flex items-center justify-between" v-if="user.userName !== 'NoLogin'">
+      <div
+        class="flex items-center justify-between"
+        v-if="user.userName !== 'NoLogin'"
+      >
         <!-- 왼쪽 텍스트 영역 -->
 
         <h1 class="text-xl text-left ml-3">
@@ -14,13 +17,16 @@
         <!-- 오른쪽 이미지+텍스트버튼 영역 -->
         <div class="flex items-center space-x-4">
           <button class="text-button" @click="goSurvey">
-            <img :src="`/images/${user.finTypeCode}.png`" class="home-profile" />
+            <img
+              :src="`/images/${user.finTypeCode}.png`"
+              class="home-profile"
+            />
             <h5 class="category_tag">
               {{
                 user.finTypeCode == "1" ||
-                  user.finTypeCode == "2" ||
-                  user.finTypeCode == "3" ||
-                  user.finTypeCode == "4"
+                user.finTypeCode == "2" ||
+                user.finTypeCode == "3" ||
+                user.finTypeCode == "4"
                   ? "내 유형 보기"
                   : "유형검사 하러 가기"
               }}
@@ -40,13 +46,12 @@
       <!-- 모달이 활성화될 경우 표시 -->
       <div v-if="showModal" class="modal-overlay" @click="closeModalOnOverlay">
         <div class="modal" @click.stop>
-          <SurveyResult />
-          <button @click="closeModal" class="modal-close-button">닫기</button>
+          <div class="modal-content">
+            <SurveyResult @close-modal="closeModal" :isModal="true" />
+          </div>
         </div>
       </div>
     </div>
-
-
 
     <!-- 총자산 컴포넌트 -->
     <div class="component">
@@ -54,37 +59,58 @@
         <h1 class="font-semibold text-lg">총 자산</h1>
 
         <!-- 계좌 추가하기 버튼 -->
-        <button v-if="user.userName !== 'NoLogin'" class="text-button" @click="goAddBank">
+        <button
+          v-if="user.userName !== 'NoLogin'"
+          class="text-button"
+          @click="goAddBank"
+        >
           {{ accountList.length == 0 ? "계좌 연결하기" : "계좌 추가하기" }}
         </button>
-        <button v-if="user.userName == 'NoLogin'" class="text-button" @click="goLogin">
-          로그인하고 계좌 연결하기</button>
+        <button
+          v-if="user.userName == 'NoLogin'"
+          class="text-button"
+          @click="goLogin"
+        >
+          로그인하고 계좌 연결하기
+        </button>
       </div>
 
       <!-- 총 자산 금액 표시 -->
       <div class="flex items-center justify-between mt-1 relative">
         <h2 class="text-lg ml-2 mt-1">{{ formatCurrency(totalAmount) }} 원</h2>
         <!-- 자세히 보러 가기 버튼 -->
-        <button v-if="accountList.length > 0"
+        <button
+          v-if="accountList.length > 0"
           class="back-button text-black p-2 absolute right-0 top-1/2 transform -translate-y-1/2 z-10"
-          @click="goToAccountDetails">
+          @click="goToAccountDetails"
+        >
           <i class="fa-solid fa-arrow-right"></i>
         </button>
       </div>
 
       <!-- 계좌 목록 출력 -->
-      <div v-for="account in accountList" :key="accountList.accountNum"
-        class="account-info flex items-center justify-between p-4 mb-0 rounded-lg">
+      <div
+        v-for="account in accountList"
+        :key="accountList.accountNum"
+        class="account-info flex items-center justify-between p-4 mb-0 rounded-lg"
+      >
         <!-- 은행 아이콘 -->
-        <img class="bank-icon" :src="`/images/bank/${account.bankName}.png`" alt="Bank Logo" />
+        <img
+          class="bank-icon"
+          :src="`/images/bank/${account.bankName}.png`"
+          alt="Bank Logo"
+        />
         <!-- 계좌 잔액 -->
         <div class="account-details flex-grow ml-2">
-          <p class="text-sm text-gray-7--">
-          <p>{{ account.accountName }}</p>
-          잔액: <span class="font-semibold">{{ formatCurrency(account.transactionBalance) }}</span> 원
-          </p>
+          <div class="text-sm text-gray-7--">
+            <p>{{ account.accountName }}</p>
+            잔액:
+            <span class="font-semibold">{{
+              formatCurrency(account.transactionBalance)
+            }}</span>
+            원
+          </div>
         </div>
-
       </div>
     </div>
 
@@ -93,84 +119,112 @@
       <div class="flex items-center justify-between">
         <h1 class="font-semibold text-lg">나의 미션</h1>
         <!-- 미션 보러가기 버튼 -->
-        <button v-if="monthlyMission && dailyMissions" class="text-button" @click="goToMission">미션 전체 보기</button>
+        <button
+          v-if="monthlyMission && dailyMissions"
+          class="text-button"
+          @click="goToMission"
+        >
+          미션 전체 보기
+        </button>
       </div>
 
       <!-- 연결된 계좌가 없는 경우 -->
       <div v-if="user.userName != 'NoLogin'">
-        <div v-if="!monthlyMission || !dailyMissions" class="flex items-center justify-center mt-3">
+        <div
+          v-if="!monthlyMission || !dailyMissions"
+          class="flex items-center justify-center mt-3"
+        >
           <h1 text-xl>계좌를 연결하고 미션을 받아보세요</h1>
         </div>
       </div>
 
       <!-- 가입없이 이용인 경우 -->
-      <div v-if="user.userName == 'NoLogin'" class="flex items-center justify-center mt-3">
-        <button class="text-button" @click="goLogin">로그인하고 계좌 연결하기</button>
+      <div
+        v-if="user.userName == 'NoLogin'"
+        class="flex items-center justify-center mt-3"
+      >
+        <button class="text-button" @click="goLogin">
+          로그인하고 계좌 연결하기
+        </button>
       </div>
 
       <div v-if="monthlyMission && dailyMissions">
         <!-- 월간 미션 -->
         <div class="flex items-center justify-between">
           <label class="label ml-2">월간 미션</label>
-          <div class="mission-status" :style="{ color: monthlyMission.isRevoked ? 'red' : '#5354ff' }"> {{
-            monthlyMission.isRevoked ? '미션 완료' : '미션 진행 중' }}</div>
+          <div
+            class="mission-status"
+            :style="{ color: monthlyMission.isRevoked ? 'red' : '#5354ff' }"
+          >
+            {{ monthlyMission.isRevoked ? "미션 완료" : "미션 진행 중" }}
+          </div>
         </div>
 
-        <div :class="['mission-text', { 'line-through': monthlyMission.isRevoked }]">
+        <div
+          :class="[
+            'mission-text',
+            { 'line-through': monthlyMission.isRevoked },
+          ]"
+        >
           {{ monthlyMission.missionTopic }}
         </div>
 
         <!-- 일간 미션 -->
         <div class="flex items-center justify-between mt-2">
           <label class="label ml-2">일간 미션</label>
-          <div class="mission-status"
-            :style="{ color: allDailyMissionsCompleted ? 'red' : '#5354ff' }">
-            {{ allDailyMissionsCompleted ? '미션 완료!' : '미션 진행 중' }}
+          <div
+            class="mission-status"
+            :style="{ color: allDailyMissionsCompleted ? 'red' : '#5354ff' }"
+          >
+            {{ allDailyMissionsCompleted ? "미션 완료!" : "미션 진행 중" }}
           </div>
         </div>
 
         <div class="mission-text">
-          <div v-for="mission in dailyMissions" :key="mission.personalDailyMissionId"
-            :class="['my-2', { 'line-through': mission.personalDailyMissionCompleted }]">
-            {{ mission.missionTopic || '설명이 없습니다.' }}
+          <div
+            v-for="mission in dailyMissions"
+            :key="mission.personalDailyMissionId"
+            :class="[
+              'my-2',
+              { 'line-through': mission.personalDailyMissionCompleted },
+            ]"
+          >
+            {{ mission.missionTopic || "설명이 없습니다." }}
           </div>
         </div>
-
-
       </div>
     </div>
   </div>
-
 </template>
 
 <script setup>
 import HomeApi from "@/api/HomeApi";
-import MissionApi from '@/api/MissionApi';
-import { ref, reactive, onMounted, computed } from 'vue';
-import { useRouter } from 'vue-router';
+import MissionApi from "@/api/MissionApi";
+import { ref, reactive, onMounted, computed } from "vue";
+import { useRouter } from "vue-router";
 import SurveyResult from "./SurveyResult.vue";
-import { useHomeStore } from '@/stores/home';
+import { useHomeStore } from "@/stores/home";
 import refreshToken from "@/api/refreshToken";
 
 const homeStore = useHomeStore();
 
 const logout = async () => {
-  try{
+  try {
     const response = refreshToken.logouting();
-  }catch(error){
-   // console.log(error);
+  } catch (error) {
+    // console.log(error);
   }
-  router.push('/');
-}
+  router.push("/");
+};
 
 const user = reactive({
-  userName: '',
-  finTypeCode: ''
+  userName: "",
+  finTypeCode: "",
 });
 
 const accountList = reactive([]);
 
-const totalAmount = ref('');
+const totalAmount = ref("");
 
 // 사용자 정보를 가져오는 함수
 const getUser = async () => {
@@ -180,7 +234,7 @@ const getUser = async () => {
     user.finTypeCode = userInfo.finTypeCode; // 필요한 정보가 어떤건지 확인 필요
     homeStore.setuserFintype(user.finTypeCode);
   } catch (error) {
-   // console.error("사용자 정보 가져오는 함수 API 호출 중 오류 발생:", error);
+    // console.error("사용자 정보 가져오는 함수 API 호출 중 오류 발생:", error);
   }
 };
 
@@ -188,21 +242,26 @@ const getAsset = async () => {
   try {
     const response = await HomeApi.accountList();
     // 모든 계좌의 transactionBalance 값을 합산
-    let total = response.reduce((sum, account) => sum + account.transactionBalance, 0);
-    totalAmount.value = total;  // totalAmount에 총합을 저장
+    let total = response.reduce(
+      (sum, account) => sum + account.transactionBalance,
+      0
+    );
+    totalAmount.value = total; // totalAmount에 총합을 저장
 
     // transactionBalance로 내림차순 정렬 후 상위 2개만 추출
-    const sortedAccounts = response.sort((a, b) => b.transactionBalance - a.transactionBalance).slice(0, 2);
+    const sortedAccounts = response
+      .sort((a, b) => b.transactionBalance - a.transactionBalance)
+      .slice(0, 2);
     sortedAccounts.forEach((account, index) => {
       accountList[index] = account;
     });
-   // console.log(accountList);
+    // console.log(accountList);
   } catch (error) {
-   // console.error("API 호출 중 오류 발생:", error);
+    // console.error("API 호출 중 오류 발생:", error);
   }
 };
 
-const monthlyMission = ref('');
+const monthlyMission = ref("");
 const dailyMissions = reactive([]);
 const getMission = async () => {
   try {
@@ -212,23 +271,25 @@ const getMission = async () => {
     }
     monthlyMission.value = await MissionApi.getMonthMission();
   } catch (error) {
-   // console.error("API 호출 중 오류 발생:", error);
+    // console.error("API 호출 중 오류 발생:", error);
   }
 };
 
 const allDailyMissionsCompleted = computed(() =>
-  dailyMissions.every(mission => mission.personalDailyMissionCompleted)
+  dailyMissions.every((mission) => mission.personalDailyMissionCompleted)
 );
 
 // 숫자를 0,000원 형식으로 포맷팅하는 함수
 const formatCurrency = (value) => {
-  return new Intl.NumberFormat('ko-KR', {
-    style: 'currency',
-    currency: 'KRW',
+  return new Intl.NumberFormat("ko-KR", {
+    style: "currency",
+    currency: "KRW",
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-    currencyDisplay: 'narrowSymbol'
-  }).format(value).replace('₩', '');
+    currencyDisplay: "narrowSymbol",
+  })
+    .format(value)
+    .replace("₩", "");
 };
 
 onMounted(() => {
@@ -268,12 +329,12 @@ const closeModalOnOverlay = (e) => {
 };
 
 const goLogin = () => {
-  router.push('/');
+  router.push("/");
 };
 
 const goToMission = () => {
-  router.push('/mission');
-}
+  router.push("/mission");
+};
 
 const goToAccountDetails = (account) => {
   // /home/account 경로로 이동
