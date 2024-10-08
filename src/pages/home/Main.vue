@@ -292,7 +292,7 @@ const changeName = (name) => {
     return "KakaoBank";
   } else if (name == '하나은행') {
     return "Hana";
-  } else if (name == 'IBK기업은행') {
+  } else if (name == '기업은행') {
     return "IBK";
   } else if (name == 'IM') {
     return "IM";

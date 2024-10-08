@@ -21,4 +21,6 @@ export default[
         component:()=>import('../pages/mypage/MypageSocialEdit.vue')
     }
 
+
+
 ];

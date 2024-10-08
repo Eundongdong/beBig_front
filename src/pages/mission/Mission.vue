@@ -35,6 +35,7 @@
             :style="{ color: monthlyMission.isRevoked ? 'red' : '#5354ff' }"
           >
             {{ monthlyMission.isRevoked ? "미션 완료" : "미션 진행 중" }}
+
           </div>
         </div>
         <div class="mission-text">
@@ -72,16 +73,19 @@
             />
           </li>
         </ul>
+
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+
 import MissionApi from "@/api/MissionApi";
 import { ref, onMounted, computed, reactive } from "vue";
 import { useRouter } from "vue-router";
 import HomeApi from "@/api/HomeApi"; //사용자 Fintype을 불러오기 위함
+
 
 const router = useRouter();
 const todayDate = computed(() => new Date().toISOString().split("T")[0]);
@@ -92,10 +96,12 @@ const currentMonth = computed(() => {
 const isRunning = ref(false); // 캐릭터 애니메이션 상태
 
 // 페이지 상태
+
 const monthlyProgress = ref(""); // 월간 미션 진척률
 const remainingDays = ref(""); // 남은 일수
 const dailyMissions = reactive([]); //일간 미션 목록
 const monthlyMission = ref(""); // 월간 미션 정보
+
 
 //사용자 Fintype 불러오기
 const getUser = async () => {
@@ -110,8 +116,10 @@ const getUser = async () => {
 
 // 사용자 자산유형에 따른 캐릭터 이미지 설정
 const user = reactive({
+
   userName: "",
   finTypeCode: "",
+
 });
 
 // 미션 진행률 계산 함수
@@ -192,3 +200,4 @@ const characterImage = computed(() => {
   return isRunning.value ? baseImage.replace(".png", "-ani.png") : baseImage;
 });
 </script>
+
