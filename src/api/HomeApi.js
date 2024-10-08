@@ -104,6 +104,14 @@ export default {
       const response = await refreshToken.checkToken();
         const { data } = await api.get(`${BASE_URL}/account/${accountNum}/transactions`);
         return data;
+    },
+
+    // 미션 생성
+    async createMission() {
+        const { data } = await api.get(`/mission/update-mission`);
+        return data;
     }
+
+
 };
 

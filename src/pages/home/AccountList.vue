@@ -38,6 +38,8 @@ const getList = async() =>{
         const response = await HomeApi.accountList();
         for(let i=0;i<response.length;i++){
             accountList[i] = response[i];
+            const newName = changeName(accountList[i].bankName);
+            accountList[i].bankName = newName;
         }
       //  console.log(accountList);
         // 총 자산 계산
@@ -46,6 +48,49 @@ const getList = async() =>{
 
     }catch(error){
   //      console.error('API 호출 중 오류 발생:', error);
+    }
+}
+const changeName = (name) => {
+    if (name == '경남은행') {
+        return "Gyeongnam";
+    } else if (name == '광주은행') {
+        return "Gwangju";
+    } else if (name == '부산은행') {
+        return "Busan";
+    } else if (name == '산업은행') {
+        return "IndustrialBank";
+    } else if (name == '새마을금고은행') {
+        return "SaemaulGeumgo";
+    } else if (name == '수협은행') {
+        return "Suhyup";
+    } else if (name == '신한은행') {
+        return "Shinhan";
+    } else if (name == '신협은행') {
+        return "Shinhyup";
+    } else if (name == '씨티은행') {
+        return "Citi";
+    } else if (name == '우리은행') {
+        return "Woori";
+    } else if (name == '우체국은행') {
+        return "PostOfficeBank";
+    } else if (name == '전북은행') {
+        return "Jeonbuk";
+    } else if (name == '제주은행') {
+        return "Jeju";
+    } else if (name == '카카오뱅크') {
+        return "KakaoBank";
+    } else if (name == '하나은행') {
+        return "Hana";
+    } else if (name == '기업은행') {
+        return "IBK";
+    } else if (name == 'IM') {
+        return "IM";
+    } else if (name == 'K뱅크') {
+        return "KBank";
+    } else if (name == '국민은행') {
+        return "KB";
+    } else if (name == '농협은행') {
+        return "NH";
     }
 }
 
