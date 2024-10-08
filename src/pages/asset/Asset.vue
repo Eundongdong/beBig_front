@@ -303,7 +303,7 @@ const getAnalysis = async() =>{
               label: {
                 content: `평균: ${spendings.monthlyAverage}`,  // 평균값 레이블 추가
                 enabled: true,
-                position: 'start',
+                position: 'center',
                 //backgroundColor: 'rgba(255, 99, 132, 0.5)',
                 font: {
                   size: 14,
@@ -607,7 +607,7 @@ li {
     height: 0;
     border-left: 100px solid transparent;
     border-right: 100px solid transparent;
-    border-bottom: 300px solid lightblue;
+    border-bottom: 300px solid #8485FF;
     position: relative;
   }
 

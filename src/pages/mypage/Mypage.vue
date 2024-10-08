@@ -39,8 +39,8 @@
         <div class="flex items-center">
           <div>
             <img :src="profileImage" alt="`프로필 사진 - ${finTypeCode}`" class="w-20 h-20 rounded-full" />
+            <button @click="goSurvey">유형검사 다시하기</button>
           </div>
-
           <div class="ml-4">
             <div class="flex items-center">
               <div class="text-sm font-bold mr-1">{{ userNickname }} 님</div>
@@ -242,6 +242,11 @@ const myLikePosts = ref([]);
 const selectedTab = ref('myPosts');
 const showModal = ref(false); // 모달 표시 여부
 const badgeList = ref([]); // 뱃지 정보 배열
+
+//유형검사 다시하기
+const goSurvey = ()=>{
+  router.push("/home/survey-start");
+}
 
 // URL에서 userId를 가져오기
 const userId = ref(route.params.userId);

@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <div class="survey-start">
-      <button @click="goHome" class="back-button">
+      <button @click="goBack" class="back-button">
         <i class="fas fa-arrow-left"></i>
       </button>
       <div class="text-lg mt-3">
@@ -23,8 +23,9 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 
-const goHome = () => {
-  router.push({name: 'main'});
+const goBack = () => {
+  // router.push({name: 'main'});
+  router.back();
 };
 
 const goToSurvey = () => {

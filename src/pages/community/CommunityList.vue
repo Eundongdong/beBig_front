@@ -165,12 +165,12 @@
 
     <!-- 게시글 목록 -->
     <div v-if="posts.length >0">
-    <div class="post-content" v-for="post in sortedPosts" :key="post.postId">
+    <div class="post-content" v-for="post in sortedPosts" :key="post.postId" @click="goToPostDetail(post.postId)">
       <!-- 프로필, 작성자, 날짜 -->
       <div class="flex justify-between items-center">
         <div class="flex items-center space-x-3">
 
-          <img class="community-profile" :src="getProfileIcon(post.finTypeCode)" alt="Profile" @click="() => goToUserProfile(post.userId)" />
+          <img class="community-profile" :src="getProfileIcon(post.finTypeCode)" alt="Profile" @click.stop="goToUserProfile(post.userId)" />
           <span>{{ post.userNickname }}</span>
 
         </div>
@@ -198,7 +198,7 @@
 
       <!-- 좋아요 버튼 -->
       <div class="mt-1 ml-2 text-[18px]">
-        <button @click="likePost(post.postId, post.userId)">
+        <button @click.stop="likePost(post.postId, post.userId)">
           <span class="text-red-500">
             {{ post.isLiked ? '♥' : '♡' }}
           </span>
@@ -273,6 +273,13 @@ const communityStore = useCommunityStore();
 const userName = ref('');
 const router = useRouter();
 const loggedInUserId = ref(null);
+
+const goToPostDetail = (postId) => {
+  router.push({
+    name: 'communityDetail',
+    params: { postId }
+  });
+};
 
 // 로그인된 사용자 ID를 미리 가져오는 함수
 const fetchLoggedInUserId = async () => {
@@ -473,3 +480,13 @@ onMounted(async () => {
 });
 
 </script>
+<style scoped>
+.post-content {
+  transition: background-color 0.3s ease; /* 애니메이션 추가 */
+}
+
+.post-content:hover {
+  background-color: #f0f0f0; /* 마우스 올렸을 때 배경색 */
+  cursor: pointer; /* 클릭 가능한 느낌을 주는 커서 */
+}
+</style>
