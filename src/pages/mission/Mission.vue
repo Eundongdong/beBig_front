@@ -1,29 +1,31 @@
 <template>
   <div class="page">
-  <div class="mission-page">
-    <header class="mission-header">
-      <button @click="handleBack" class="back-button">
-        <i class="fas fa-arrow-left"></i>
-      </button>
-    </header>
+    <div class="mission-page">
+      <header class="mission-header">
+        <button @click="handleBack" class="back-button">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+      </header>
 
-    <!-- 월간 미션 진행 상태 -->
+      <!-- 월간 미션 진행 상태 -->
       <div class="mission-status">
         <div class="mission-progress">
           <!-- "현재 미션을 달성했어요" 텍스트와 D-day를 포함하는 영역 -->
           <div class="mission-info">
             <span>현재 미션을 {{ monthlyProgress }}% 달성했어요</span>
             <!-- D-day는 이곳으로 이동 -->
-            <div class="d-day">
-              D-{{ remainingDays }}
-            </div>
+            <div class="d-day">D-{{ remainingDays }}</div>
           </div>
 
           <!-- 진행 바 -->
           <div class="progress-bar">
             <!-- 캐릭터 이미지 (진행된 만큼 왼쪽으로 배치) -->
-            <img :src="characterImage" alt="달리는 캐릭터 이미지" class="progress-character"
-              :style="{ left: monthlyProgress + '%' }" />
+            <img
+              :src="characterImage"
+              alt="달리는 캐릭터 이미지"
+              class="progress-character"
+              :style="{ left: monthlyProgress + '%' }"
+            />
 
             <!-- 진행 바 채움 -->
             <div class="progress-fill" :style="{ width: monthlyProgress + '%' }"></div>
@@ -32,9 +34,9 @@
             <img src="/images/flag.png" alt="깃발 이미지" class="flag-image" />
           </div>
         </div>
-    </div>
+      </div>
 
-    <!-- 월간 미션 -->
+      <!-- 월간 미션 -->
       <div class="mission-list">
         <div class="mission-card">
           <div class="title-wrapper">
@@ -45,39 +47,43 @@
           </div>
           <div class="mission-description">
             <span>{{ monthlyMission.missionTopic || '설명이 없습니다.' }}</span>
-            <input type="checkbox" v-model="monthlyMission.IsRevoked"/>
+            <input type="checkbox" v-model="monthlyMission.IsRevoked" />
           </div>
         </div>
       </div>
 
       <!-- 일간 미션 리스트 -->
-        <div class="mission-list">
-          <div class="mission-card">
-            <div class="title-wrapper">
-              <div class="mission-title">
-                <h3>일간 미션</h3>
-              </div>
-              <span class="today-date">{{ todayDate }}</span>
+      <div class="mission-list">
+        <div class="mission-card">
+          <div class="title-wrapper">
+            <div class="mission-title">
+              <h3>일간 미션</h3>
             </div>
-            <ul>
-              <li v-for="mission in dailyMissions" :key="mission.personalDailyMissionId">
-                <div class="mission-description">
-                  {{ mission.missionTopic || '설명이 없습니다.' }}
-                </div>
-                <input type="checkbox" :checked="mission.personalDailyMissionCompleted" @change="completeMission(mission)" />
-              </li>
-            </ul>
+            <span class="today-date">{{ todayDate }}</span>
           </div>
+          <ul>
+            <li v-for="mission in dailyMissions" :key="mission.personalDailyMissionId">
+              <div class="mission-description">
+                {{ mission.missionTopic || '설명이 없습니다.' }}
+              </div>
+              <input
+                type="checkbox"
+                :checked="mission.personalDailyMissionCompleted"
+                @change="completeMission(mission)"
+              />
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <script setup>
 import MissionApi from '@/api/MissionApi';
 import { ref, onMounted, computed, reactive } from 'vue';
 import { useRouter } from 'vue-router';
-import HomeApi from "@/api/HomeApi";  //사용자 Fintype을 불러오기 위함
+import HomeApi from '@/api/HomeApi'; //사용자 Fintype을 불러오기 위함
 
 const router = useRouter();
 const todayDate = computed(() => new Date().toISOString().split('T')[0]);
@@ -87,27 +93,27 @@ const currentMonth = computed(() => {
 });
 
 // 페이지 상태
-const monthlyProgress = ref('');  // 월간 미션 진척률
-const remainingDays = ref('');       // 남은 일수
-const dailyMissions = reactive([]);  //일간 미션 목록
+const monthlyProgress = ref(''); // 월간 미션 진척률
+const remainingDays = ref(''); // 남은 일수
+const dailyMissions = reactive([]); //일간 미션 목록
 const monthlyMission = ref(''); // 월간 미션 정보
 
 //사용자 Fintype 불러오기
 const getUser = async () => {
   try {
     const userInfo = await HomeApi.getMyInfo(); // /home/info 호출
-      user.userName = userInfo.userName;
-      user.finTypeCode = userInfo.finTypeCode; // 필요한 정보가 어떤건지 확인 필요
+    user.userName = userInfo.userName;
+    user.finTypeCode = userInfo.finTypeCode; // 필요한 정보가 어떤건지 확인 필요
   } catch (error) {
-   // console.error('사용자 정보 가져오는 함수 API 호출 중 오류 발생:', error);
+    // console.error('사용자 정보 가져오는 함수 API 호출 중 오류 발생:', error);
   }
 };
 
 // 사용자 자산유형에 따른 캐릭터 이미지 설정
 const user = reactive({
-        userName: '',
-        finTypeCode: '' 
-    });
+  userName: '',
+  finTypeCode: '',
+});
 const characterImage = computed(() => {
   switch (user.finTypeCode) {
     case 1:
@@ -137,31 +143,31 @@ const setAchievement = async () => {
     monthlyProgress.value = achievement.currentScore;
     remainingDays.value = achievement.restDays;
   } catch (error) {
-   // console.error("미션 성취도 불러오는중 에러 발생 :", error);
+    // console.error("미션 성취도 불러오는중 에러 발생 :", error);
   }
 };
 
 //일간 미션 받아오기
-const daillyMission = async () =>{
-  try{
+const daillyMission = async () => {
+  try {
     const response = await MissionApi.getDailyMission();
-  //  console.log(response);
+    //  console.log(response);
     for (let i = 0; i < 3; i++) {
       dailyMissions[i] = response[i];
     }
-  }catch(error){
+  } catch (error) {
     //console.error("daily mission 불러오는중 에러 발생:", error);
   }
-}
+};
 
 //월간 미션 받아오기
-const getMonthlyMission = async () =>{
-  try{
+const getMonthlyMission = async () => {
+  try {
     monthlyMission.value = await MissionApi.getMonthMission();
-  }catch(error){
-  //  console.error("daily mission 불러오는중 에러 발생:", error);
+  } catch (error) {
+    //  console.error("daily mission 불러오는중 에러 발생:", error);
   }
-}
+};
 
 onMounted(() => {
   getUser();
@@ -169,7 +175,6 @@ onMounted(() => {
   daillyMission();
   getMonthlyMission();
 });
-
 
 // 미션 완료 처리
 const completeMission = async (mission) => {
@@ -181,7 +186,7 @@ const completeMission = async (mission) => {
     };
     await MissionApi.updateMission(missionData);
   } catch (error) {
-  //  console.error("미션 업데이트 중 오류 발생", error);
+    //  console.error("미션 업데이트 중 오류 발생", error);
   }
 };
 
@@ -189,9 +194,7 @@ const completeMission = async (mission) => {
 const handleBack = () => {
   router.push({ name: 'main' });
 };
-
 </script>
-
 
 <style scoped>
 ul {
@@ -216,7 +219,8 @@ ul {
   font-size: 24px;
 }
 
-.mission-list, .mission-status{
+.mission-list,
+.mission-status {
   width: 100%;
   margin-bottom: 5%;
   background-color: #f3f3f3;
