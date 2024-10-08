@@ -278,12 +278,11 @@ const fetchLoggedInUserId = async () => {
     const userId = await MypageApi.getLoggedInUserId();
     if (userId) {
       loggedInUserId.value = userId;
-      console.log('로그인된 사용자 ID:', loggedInUserId.value);
     } else {
-      console.error('유효한 사용자 ID를 가져오지 못했습니다.');
+    //  console.error('유효한 사용자 ID를 가져오지 못했습니다.');
     }
   } catch (error) {
-    console.error('로그인된 사용자 ID를 가져오는 중 오류 발생:', error);
+//    console.error('로그인된 사용자 ID를 가져오는 중 오류 발생:', error);
   }
 };
 
@@ -305,13 +304,9 @@ const selectedFinType = ref("-1"); // 초기값을 '-1'로 설정
 const getUser = async () => {
   try {
     const userInfo = await HomeApi.getMyInfo(); // /home/info 호출
-
-
-    console.log('사용자 정보 가져오기 성공, ', userInfo);
-
     userName.value = userInfo.userName;
   } catch (error) {
-    console.error('사용자 정보 가져오는 함수 API 호출 중 오류 발생:', error);
+  //  console.error('사용자 정보 가져오는 함수 API 호출 중 오류 발생:', error);
   }
 };
 
@@ -346,19 +341,12 @@ const goToUserProfile = async (userId) => {
     if (!loggedInUserId.value) {
       console.log('로그인된 사용자 ID를 가져오는 중...');
       await fetchLoggedInUserId(); // 여기서 fetch 이후 로그 찍기
-      console.log('fetch 후 로그인된 사용자 ID:', loggedInUserId.value);
     }
-
-    // 현재 로그인된 사용자 정보 가져오기
-    console.log('프로필 이동 함수 호출 시작'); // 호출 시점 확인
-    console.log(`로그인한 사용자 ID: ${loggedInUserId.value}, 클릭한 프로필 사용자 ID: ${userId}`);
 
     // userId가 같은지 확인
     if (Number(userId) === Number(loggedInUserId.value)) {
-      console.log('본인의 프로필로 이동');
       router.push({ name: 'mypage' });
     } else {
-      console.log('다른 사용자의 프로필로 이동');
       router.push({ name: 'userMypage', params: { userId } });
     }
   } catch (error) {
@@ -392,27 +380,19 @@ const fetchPosts = async () => {
     const category = selectedCategory.value;
     const finType = selectedFinType.value;
 
-    console.log(`Fetching posts: Page: ${currentPage.value}, Category: ${category}, FinType: ${finType}`);
-
     const response = await communityApi.list(category, finType, currentPage.value-1, pageSize.value);
 
-    console.log('API Response:', response);
 
     if (response && response.data) {
       posts.value=[];
       posts.value = response.data.list || [];
       totalPage.value = response.data.totalPage || 1;
-
-      console.log('Fetched posts:', posts.value);
-      console.log(`Total page: ${totalPage.value}`);
-      console.log(`Current page: ${currentPage.value}`);
-      console.log(`Posts count: ${posts.value.length}`);
     } else {
       posts.value = [];
       totalPage.value=1;
     }
   } catch (error) {
-    console.error("게시글 불러오기 실패:", error);
+ //   console.error("게시글 불러오기 실패:", error);
     posts.value = [];
     totalPage.value=1;
   } finally {
@@ -423,17 +403,14 @@ const fetchPosts = async () => {
 
 // 좋아요 기능
 const likePost = async (postId, userId) => {
-  //postId와 userId를 콘솔에 찍어서 확인
-  console.log(`PostID: ${postId}, userID: ${userId}`);
   try {
     if (!postId || !userId) {
-      console.error('게시글번호 또는 작성자번호가 없습니다');
+ //     console.error('게시글번호 또는 작성자번호가 없습니다');
       return;
     }
 
     //좋아요 API 호출
     const response = await communityApi.likePost(postId, userId);
-    console.log('Response:', response);
 
     /// 좋아요 상태를 업데이트 (post 객체에 직접 접근하지 않고 posts 배열에서 해당 게시글을 찾아 업데이트)
     const postIndex = posts.value.findIndex((post) => post.postId === postId);
@@ -448,20 +425,18 @@ const likePost = async (postId, userId) => {
       }
     }
   } catch (error) {
-    console.error('Error:', error);
+  //  console.error('Error:', error);
   }
 };
 
 const goToPage = (pageNumber) => {
   if (pageNumber < 1 || pageNumber > totalPage.value) return;
-  console.log(`Navigating to page ${pageNumber}`);
   currentPage.value = pageNumber;
   fetchPosts();
 };
 
 const goToPreviousPage = () => {
   if (currentPage.value > 1) {
-    console.log('Going to previous page');
     currentPage.value-=1;
     fetchPosts();
   }
@@ -469,14 +444,12 @@ const goToPreviousPage = () => {
 
 const goToNextPage = () => {
   if (currentPage.value < totalPage.value) {
-    console.log('Going to next page');
     currentPage.value+=1;
     fetchPosts();
   }
 };
 
 watch([selectedCategory, selectedFinType], () => {
-  console.log(`Category or FinType changed - Category: ${selectedCategory.value}, FinType: ${selectedFinType.value}`);
   currentPage.value = 1;
   fetchPosts();
 });
@@ -484,21 +457,13 @@ watch([selectedCategory, selectedFinType], () => {
 // 컴포넌트가 마운트되면 게시글을 불러옴
 
 onMounted(async () => {
-    console.log('onMounted: 로그인된 사용자 정보를 가져오기 시작');
     await fetchLoggedInUserId();  // 이 부분에서 API 호출이 완료될 때까지 기다림
-    console.log('onMounted: 로그인된 사용자 정보 가져오기 완료', loggedInUserId.value);
-
     if (loggedInUserId.value) {
         await getUser();
-        console.log('onMounted: 사용자 정보를 가져오기 완료');
     } else {
-        console.error('로그인된 사용자 ID를 가져오지 못했습니다.');
+  //      console.error('로그인된 사용자 ID를 가져오지 못했습니다.');
     }
   await fetchPosts();
-  console.log('onMounted: 게시글 가져오기 완료');
-  
- // window.addEventListener('scroll', handleScroll);
-
 });
 
 </script>
