@@ -1,55 +1,54 @@
 <template>
   <div class="page">
-    <div class="mypage-edit-container">
       <!-- 상단 바 -->
-      <header class="header">
-        <button class="" @click="goBack">
+      <header class="flex justify-between items-center mb-3">
+        <button class="text-xl" @click="goBack">
           <i class="fa-solid fa-chevron-left"></i>
         </button>
-        <h2 class="">소셜회원 내 정보 수정</h2>
+        <h2 class="font-bold text-sm">소셜회원 내 정보 수정</h2>
         <button class="logout-btn" @click="logout">로그아웃</button>
       </header>
   
       <!-- 입력 폼 -->
-      <form @submit.prevent="handleSubmit">
-        <div class="input_group">
-          <label>한줄 소개</label>
-          <input type="text" v-model="intro" class="input-field" />
+      <form @submit.prevent="handleSubmit" class="px-2">
+        <div class="">
+          <label class="label">한줄 소개</label>
+          <input type="text" v-model="intro" class="input" />
         </div>
   
         <div class="input_group">
-          <label>닉네임</label>
-          <input type="text" v-model="nickname" class="input-field" />
+          <label class="label">닉네임</label>
+          <input type="text" v-model="nickname" class="input" />
         </div>
   
         <div class="input_group">
-          <label>이름</label>
-          <input type="text" v-model="name" class="input-field" disabled />
+          <label class="label">이름</label>
+          <input type="text" v-model="name" class="input" disabled />
         </div>
   
         <div class="input_group">
-          <label>아이디</label>
-          <input type="text" v-model="loginId" class="input-field" disabled />
+          <label class="label">아이디</label>
+          <input type="text" v-model="loginId" class="input" disabled />
         </div>
   
         <div class="input_group">
-          <label>이메일</label>
-          <input type="email" v-model="email" class="input-field" disabled />
+          <label class="label">이메일</label>
+          <input type="email" v-model="email" class="input" disabled />
         </div>
   
         <div class="input_group">
-          <label>성별</label>
-          <input type="text" v-model="gender" class="input-field" disabled />
+          <label class="label">성별</label>
+          <input type="text" v-model="gender" class="input" disabled />
         </div>
   
         <div class="input_group">
-          <label>생년월일</label>
-          <input type="text" v-model="birth" class="input-field" disabled />
+          <label class="label">생년월일</label>
+          <input type="text" v-model="birth" class="input" disabled />
         </div>
   
-        <button type="submit" class="submit-btn">수정하기</button>
+        <button type="submit" class="button">수정하기</button>
       </form>
-    </div>
+
   </div>
   </template>
   

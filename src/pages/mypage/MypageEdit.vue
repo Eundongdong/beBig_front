@@ -11,7 +11,7 @@
 
     <!-- 입력 폼 -->
     <form @submit.prevent="handleSubmit" class="px-2">
-      <div class="">
+      <div class="input_group">
         <label class="label">한줄 소개</label>
         <input type="text" v-model="intro" class="input" />
       </div>
