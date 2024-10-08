@@ -10,7 +10,7 @@ export default {
   async list(
     category,
     type,
-    currentPage = 0,
+    currentPage,
     pageSize = 10
   ) {
     const formData = new FormData(); // FormData 객체 생성
@@ -19,7 +19,7 @@ export default {
     if (type !== -1)
       formData.append('type', type);
 
-    formData.append('currentPage', currentPage);
+    formData.append('offset', currentPage);
     formData.append('pageSize', pageSize);
 
     const response = await api.post(
@@ -27,7 +27,6 @@ export default {
       formData,
       { headers }
     );
-    console.log('COMMUNITY GET LIST', response.data); // API에서 반환되는 데이터를 로그로 확인
     return response; //data 속성을 반환하지 않고 전체 응답을 반환
   },
 
