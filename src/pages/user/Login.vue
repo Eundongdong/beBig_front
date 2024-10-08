@@ -42,15 +42,6 @@
           <li>
             <button
               class="white-button flex justify-center items-center space-x-2"
-              @click="naverSocialLogin"
-            >
-              <img src="/images/naver.png" class="w-[40px]" />
-              <span>네이버 로그인</span>
-            </button>
-          </li>
-          <li>
-            <button
-              class="white-button flex justify-center items-center space-x-2"
               @click="kakaoSocialLogin"
             >
               <img src="/images/kakao.png" class="w-[40px]" />
@@ -69,7 +60,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from "vue";
+import { reactive, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user";
 
@@ -94,12 +85,10 @@ const disableSubmit = computed(
 
 // 로그인
 const login = async () => {
-  console.log(loginUser);
   try {
     await userStore.login(loginUser);
     router.push("/home");
   } catch (error) {
-    console.log("에러 =>", error.message); // 에러 로그 출력
     if(error.response?.status === 401){
       alert("올바른 아이디, 비밀번호를 입력해주세요."); // 경고창으로 에러 메시지 표시
     }
@@ -112,7 +101,7 @@ const unsignLogin = async () => {
     await userStore.login(noLogin);
     router.push("/home");
   } catch (error) {
-    console.log("에러 =>", error);
+    // console.log("에러 =>", error);
   }
 };
 
@@ -152,8 +141,6 @@ const handleKakaoLogin = async () => {
 
       const data = await response.json();
 
-      console.log("카카오 로그인 사용자 정보:", data);
-
       if (data.existingUser === false) {
         // 소셜 회원가입 페이지로 이동하면서 user 데이터를 전달
         GoSocialSignup(data.user);
@@ -162,11 +149,10 @@ const handleKakaoLogin = async () => {
         handleSuccessfulLogin(data);
       }
     } catch (error) {
-      console.error("카카오 로그인 처리 중 오류:", error);
       alert(`로그인 처리 중 오류가 발생했습니다: ${error.message}`);
     }
   } else {
-    console.error("카카오 인가 코드가 URL에 없습니다.");
+    //console.error("카카오 인가 코드가 URL에 없습니다.");
   }
 };
 
@@ -179,7 +165,7 @@ const handleSuccessfulLogin = async (data) => {
     // 홈 화면으로 이동
     router.push("/home");
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 };
 
@@ -208,12 +194,7 @@ const loadUserFromStorage = () => {
 
 // 페이지 로드 시 localStorage에서 데이터 로드
 const user = loadUserFromStorage();
-console.log("로드된 사용자 정보:", user);
-
-// 네이버 소셜 로그인
-const naverSocialLogin = () => {
-  // 네이버 소셜 로그인 구현
-};
+//console.log("로드된 사용자 정보:", user);
 
 ///// 라우터 이동
 // 회원가입 이동

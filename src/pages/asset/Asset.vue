@@ -167,7 +167,7 @@ const getAnalysis = async() =>{
     totalCashBalance.value = response.totalCashBalance;
     totalDepositSavingsBalance.value = response.totalDepositSavingsBalance;
   }catch(error){
-    console.error("API 호출 중 오류 발생:", error);
+   // console.error("API 호출 중 오류 발생:", error);
   }
 }
 
@@ -192,7 +192,7 @@ const getAnalysis = async() =>{
       spendings.monthlyAverage = response.monthlyAverage;
       renderChart();
     }catch(error){
-      console.error("API 호출 중 오류 발생:", error);
+    //  console.error("API 호출 중 오류 발생:", error);
     }
   }
   let spendingChart; // 차트 인스턴스를 전역적으로 저장
@@ -211,7 +211,7 @@ const getAnalysis = async() =>{
       // 현재 월에 맞춰 레이블을 동적으로 생성 (예: ['1월', ..., '9월'])
       labels: Array.from({ length: currentMonth }, (_, i) => `${i + 1}월`),
       datasets: [{
-        label: 'Monthly Spending',
+        label: '',
         data: spendings.monthlySum,  // 현재 월까지의 데이터만 사용
         backgroundColor: 'rgba(54, 162, 235, 0.2)',
         borderColor: 'rgba(54, 162, 235, 1)',
@@ -219,12 +219,28 @@ const getAnalysis = async() =>{
       }]
     },
     options: {
+      responsive: true,
+      maintainAspectRatio: false, // 차트의 비율 유지 안 함
       scales: {
         y: {
-          beginAtZero: true
+          beginAtZero: true,
+          grid: {
+            display: false // 격자 지우기
+          },
+          ticks: {
+            display: false // Y축 숫자 제거
+          }
+        },
+        x: {
+          grid: {
+            display: false // 격자 지우기
+          }
         }
       },
       plugins: {
+        legend: {
+          display: false // 범례 숨기기
+        },
         annotation: {
           annotations: {
             averageLine: {
@@ -272,7 +288,7 @@ const bankNames = {
 const getProductRecommendations = async() =>{
     try{  
       const response = await AssetApi.showProductRecommendations();
-      console.log(response);
+   //   console.log(response);
       for(let i =0;i<8;i++){
         // depositRecomendations에 은행 이름 추가
       const depositBankId = response.depositRecommendations[i].bankId;
@@ -291,7 +307,7 @@ const getProductRecommendations = async() =>{
 
       getRandomRecommendations();
     }catch(error){
-      console.error("API 호출 중 오류 발생:", error);
+   //   console.error("API 호출 중 오류 발생:", error);
     }
   }
 
@@ -336,7 +352,7 @@ const scrollToSlide = (index) => {
       // 그래프를 그리는 로직
       drawTriangleGraph();
     }catch(error){
-      console.error("API 호출 중 오류 발생:", error);
+  //    console.error("API 호출 중 오류 발생:", error);
     }
   }
   const drawTriangleGraph = () => {
@@ -380,37 +396,41 @@ const scrollToSlide = (index) => {
 }
 
 .cash {
-  background-color: #4CAF50; /* 입출금 자산 색 */
+  background-color:  #8485FF; /* 입출금 자산 색 */
 }
 
 .deposit-savings {
-  background-color: #2196F3; /* 예적금 자산 색 */
+  background-color: #3F40FF; /* 예적금 자산 색 */
 }
 /* 범례 스타일 */
 .legend {
-  margin-top: 20px;
   display: flex;
-  gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+    flex-direction: row;
 }
 
 .legend-item {
   display: flex;
-  align-items: center;
+    align-items: center;
+    margin-right: 5px;
+    font-size: 14px;
 }
 
 .legend-color {
   display: inline-block;
-  width: 20px;
-  height: 20px;
-  margin-right: 8px;
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
+    border-radius: 50%;
 }
 
 .legend-color.cash {
-  background-color: #4CAF50;
+  background-color: #8485FF;
 }
 
 .legend-color.deposit-savings {
-  background-color: #2196F3;
+  background-color: #3F40FF;
 }
 
 
@@ -544,8 +564,8 @@ li {
   }
   /* 그래프 css */
   canvas {
-  max-width: 600px;
-  margin: 20px auto;
+  width: 100%;
+  height: 300px;
 }
   .analysis-page {
     padding: 20px;

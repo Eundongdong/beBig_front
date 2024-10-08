@@ -149,18 +149,16 @@ import MissionApi from '@/api/MissionApi';
 import { ref, reactive, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import SurveyResult from "./SurveyResult.vue";
-import { useUserStore } from '@/stores/user';
 import { useHomeStore } from '@/stores/home';
 import refreshToken from "@/api/refreshToken";
 
-const userStore = useUserStore();
 const homeStore = useHomeStore();
 
 const logout = async () => {
   try{
     const response = refreshToken.logouting();
   }catch(error){
-    console.log(error);
+   // console.log(error);
   }
   router.push('/');
 }
@@ -182,7 +180,7 @@ const getUser = async () => {
     user.finTypeCode = userInfo.finTypeCode; // 필요한 정보가 어떤건지 확인 필요
     homeStore.setuserFintype(user.finTypeCode);
   } catch (error) {
-    console.error("사용자 정보 가져오는 함수 API 호출 중 오류 발생:", error);
+   // console.error("사용자 정보 가져오는 함수 API 호출 중 오류 발생:", error);
   }
 };
 
@@ -198,9 +196,9 @@ const getAsset = async () => {
     sortedAccounts.forEach((account, index) => {
       accountList[index] = account;
     });
-    console.log(accountList);
+   // console.log(accountList);
   } catch (error) {
-    console.error("API 호출 중 오류 발생:", error);
+   // console.error("API 호출 중 오류 발생:", error);
   }
 };
 
@@ -214,7 +212,7 @@ const getMission = async () => {
     }
     monthlyMission.value = await MissionApi.getMonthMission();
   } catch (error) {
-    console.error("API 호출 중 오류 발생:", error);
+   // console.error("API 호출 중 오류 발생:", error);
   }
 };
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="page" @scroll="handleScroll">
+  <div class="page">
     <!-- 상단 정렬 및 필터 -->
     <div>
       <!-- 정렬 버튼: 좋아요순, 최신순 -->
@@ -164,12 +164,15 @@
     </div>
 
     <!-- 게시글 목록 -->
+    <div v-if="posts.length >0">
     <div class="post-content" v-for="post in sortedPosts" :key="post.postId">
       <!-- 프로필, 작성자, 날짜 -->
       <div class="flex justify-between items-center">
         <div class="flex items-center space-x-3">
+
           <img class="community-profile" :src="getProfileIcon(post.finTypeCode)" alt="Profile" @click="() => goToUserProfile(post.userId)" />
           <span>{{ post.userNickname }}</span>
+
         </div>
         <p class="community-content">
           {{ formatDate(post.postCreatedTime) }}
@@ -203,21 +206,67 @@
         </button>
       </div>
     </div>
+  </div>
 
+
+<!--
     <!-- 로딩 인디케이터 -->
     <div v-if="isFetching" class="loading">게시글을 더 불러오는 중...</div>
 
     <!-- 더 이상 게시글이 없을 때 메시지 -->
     <div v-if="!hasMorePosts && posts.length > 0" class="loading">더 이상 불러올 게시글이 없습니다</div>
+    -->
+
+  <div v-else>
+      <p class="loading">게시글이 없습니다.</p>
+    </div>
+
 
     <!-- 새 글 작성 버튼 -->
     <router-link v-if="userName != 'NoLogin'" to="/community/add" class="add-button">
       <i class="fas fa-plus"></i>
     </router-link>
+
+    <div class="pagination flex justify-center items-center space-x-4">
+  <button
+    @click="goToPage(1)"
+    :disabled="currentPage === 1"
+    class="disabled:opacity-50"
+  >
+    <i class="fas fa-angle-double-left"></i>
+  </button>
+
+  <button
+    @click="goToPreviousPage"
+    :disabled="currentPage === 1"
+    class="disabled:opacity-50"
+  >
+    <i class="fas fa-angle-left"></i>
+  </button>
+
+  <span>페이지 {{ currentPage }} / {{ totalPage }}</span>
+
+  <button
+    @click="goToNextPage"
+    :disabled="currentPage === totalPage"
+    class="disabled:opacity-50"
+  >
+    <i class="fas fa-angle-right"></i>
+  </button>
+
+  <button
+    @click="goToPage(totalPage)"
+    :disabled="currentPage === totalPage"
+    class="disabled:opacity-50"
+  >
+    <i class="fas fa-angle-double-right"></i>
+  </button>
+</div>
   </div>
 </template>
 
 <script setup>
+
 import { ref, computed, onMounted, watchEffect } from 'vue';
 import communityApi from '@/api/CommunityApi';
 import HomeApi from '@/api/HomeApi';
@@ -243,28 +292,35 @@ const fetchLoggedInUserId = async () => {
   }
 };
 
+// 게시글 데이터 상태 관리
+const posts = ref([]); //API로 가져온 게시글 데이터
+const currentPage = ref(1); //현재 페이지 번호
+const totalPage = ref(1); //총 페이지 수를 1로 초기화
+const pageSize=ref(10);
+const isFetching = ref(false); //데이터 로딩 상태 관리
+const hasMorePosts = ref(true);
+
+//정렬 및 필터 상태 관리
+const sortType = ref("latest"); // 기본 정렬은 최신순
+const selectedCategory = ref("-1"); // 초기값을 '-1'로 설정
+const selectedFinType = ref("-1"); // 초기값을 '-1'로 설정
+
+
 // 사용자 정보를 가져오는 함수
 const getUser = async () => {
   try {
     const userInfo = await HomeApi.getMyInfo(); // /home/info 호출
 
+
     console.log('사용자 정보 가져오기 성공, ', userInfo);
+
     userName.value = userInfo.userName;
   } catch (error) {
     console.error('사용자 정보 가져오는 함수 API 호출 중 오류 발생:', error);
   }
 };
 
-// 게시글 데이터
-const posts = ref([]); //API로 가져온 게시글 데이터
-const pageSize = 10; //페이지당 게시글 수
-const currentPage = ref(0); //현재 페이지 번호
-const isFetching = ref(false); //데이터 로딩 상태 관리
-const hasMorePosts = ref(true);
 
-const sortType = ref('latest'); // 기본 정렬은 최신순
-const selectedCategory = ref('-1'); // 초기값을 '-1'로 설정
-const selectedFinType = ref('-1'); // 초기값을 '-1'로 설정
 
 // 게시글 정렬 기능
 const sortedPosts = computed(() => {
@@ -279,27 +335,15 @@ const sortedPosts = computed(() => {
 // 정렬 변경 함수
 const sortBy = (type) => {
   sortType.value = type;
-  // 정렬 후에 화면을 다시 그리도록 Vue에 알림
-  window.scrollTo(0, 0);
 };
 
 const selectCategory = (categoryId) => {
   selectedCategory.value = categoryId;
-  resetPosts(); // 카테고리 선택 후 게시글 목록 초기화
 };
 
 const selectFinType = (finTypeCode) => {
   selectedFinType.value = finTypeCode;
-  resetPosts(); // 자산 유형 선택 후 게시글 목록 초기화
-};
 
-// 스크롤 끝에 도달했는지 확인
-const handleScroll = () => {
-  const bottomOfWindow = document.documentElement.scrollTop + window.innerHeight >= document.documentElement.offsetHeight - 100;
-  if (bottomOfWindow && !isFetching.value && hasMorePosts.value) {
-    fetchPosts(); // 스크롤이 끝에 도달하면 새로운 게시글을 가져옴
-  }
-};
 
 // 프로필 페이지로 이동하는 함수
 const goToUserProfile = async (userId) => {
@@ -325,6 +369,7 @@ const goToUserProfile = async (userId) => {
   } catch (error) {
     console.error('프로필 이동 중 오류 발생:', error);
   }
+
 };
 
 // 프로필 사진 가져오는 함수
@@ -346,53 +391,40 @@ const formatDate = (dateString) => {
 // 게시글 목록을 API에서 가져오는 함수
 const fetchPosts = async () => {
   try {
-    if (isFetching.value || !hasMorePosts.value) return;
+    if (isFetching.value) return;
     isFetching.value = true;
-    // 선택된 값이 빈 문자열일 경우 -1로 변경
-    const category = selectedCategory.value === '-1' ? -1 : parseInt(selectedCategory.value);
-    const type = selectedFinType.value === '-1' ? -1 : parseInt(selectedFinType.value);
 
-    const response = await communityApi.list(category, type, currentPage.value, pageSize); //필터링 값 전달
+    const category = selectedCategory.value;
+    const finType = selectedFinType.value;
 
-    console.log('API 전체 응답: ', response); // 응답 전체를 출력하여 확인
-    console.log('API 응답 데이터: ', response.data);
-    console.log('Total Posts: ', response.data.totalPosts);
-    console.log('Fetched Posts: ', response.data.posts);
+    console.log(`Fetching posts: Page: ${currentPage.value}, Category: ${category}, FinType: ${finType}`);
 
-    if (response.data && Array.isArray(response.data)) {
-      const newPosts = response.data.map((post) => ({
-        ...post,
-        isLiked: false, // 기본적으로 좋아요 상태를 false로 설정
-      }));
-      posts.value = [...posts.value, ...newPosts];
-      currentPage.value += 1;
-      hasMorePosts.value = newPosts.length === pageSize.value;
+    const response = await communityApi.list(category, finType, currentPage.value-1, pageSize.value);
+
+    console.log('API Response:', response);
+
+    if (response && response.data) {
+      posts.value=[];
+      posts.value = response.data.list || [];
+      totalPage.value = response.data.totalPage || 1;
+
+      console.log('Fetched posts:', posts.value);
+      console.log(`Total page: ${totalPage.value}`);
+      console.log(`Current page: ${currentPage.value}`);
+      console.log(`Posts count: ${posts.value.length}`);
     } else {
-      console.error('유효하지 않은 데이터 형식:', response.data);
-      hasMorePosts.value = false;
+      posts.value = [];
+      totalPage.value=1;
     }
   } catch (error) {
-    console.error('게시글 목록을 불러오는 중 오류 발생:', error);
-    hasMorePosts.value = false;
+    console.error("게시글 불러오기 실패:", error);
+    posts.value = [];
+    totalPage.value=1;
   } finally {
     isFetching.value = false;
   }
 };
 
-// 정렬 및 필터 변경 시 게시글 목록을 초기화하고 다시 로드
-const resetPosts = () => {
-  posts.value = [];
-  currentPage.value = 0;
-  hasMorePosts.value = true;
-  fetchPosts();
-};
-
-// 필터 변경 감지
-watchEffect(() => {
-  if (selectedCategory.value !== '-1' || selectedFinType.value !== '-1') {
-    resetPosts();
-  }
-});
 
 // 좋아요 기능
 const likePost = async (postId, userId) => {
@@ -425,7 +457,37 @@ const likePost = async (postId, userId) => {
   }
 };
 
+const goToPage = (pageNumber) => {
+  if (pageNumber < 1 || pageNumber > totalPage.value) return;
+  console.log(`Navigating to page ${pageNumber}`);
+  currentPage.value = pageNumber;
+  fetchPosts();
+};
+
+const goToPreviousPage = () => {
+  if (currentPage.value > 1) {
+    console.log('Going to previous page');
+    currentPage.value-=1;
+    fetchPosts();
+  }
+};
+
+const goToNextPage = () => {
+  if (currentPage.value < totalPage.value) {
+    console.log('Going to next page');
+    currentPage.value+=1;
+    fetchPosts();
+  }
+};
+
+watch([selectedCategory, selectedFinType], () => {
+  console.log(`Category or FinType changed - Category: ${selectedCategory.value}, FinType: ${selectedFinType.value}`);
+  currentPage.value = 1;
+  fetchPosts();
+});
+
 // 컴포넌트가 마운트되면 게시글을 불러옴
+
 onMounted(async () => {
     console.log('onMounted: 로그인된 사용자 정보를 가져오기 시작');
     await fetchLoggedInUserId();  // 이 부분에서 API 호출이 완료될 때까지 기다림
@@ -441,5 +503,6 @@ onMounted(async () => {
   console.log('onMounted: 게시글 가져오기 완료');
   
   window.addEventListener('scroll', handleScroll);
+
 });
 </script>

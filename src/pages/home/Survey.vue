@@ -4,25 +4,25 @@
       <p class="flex items-end justify-end text-sm">
         <span class="font-semibold mr-2">{{ currentQuestion + 1 }}</span> / {{ shuffledQuestions.length }}
       </p>
-      <div v-if="currentQuestion < shuffledQuestions.length - 1" class="space-y-4">
-        <h2>{{ shuffledQuestions[currentQuestion].finTestQuestion }}</h2>
+      <div v-if="currentQuestion < shuffledQuestions.length - 1" class="space-y-4 mt-5">
+        <h2 class="flex items-center justify-center font-semibold">{{ shuffledQuestions[currentQuestion].finTestQuestion }}</h2>
         <button
           @click="
             selectAnswer(1, shuffledQuestions[currentQuestion].finTestType)
-          "
+          " class="answer-button"
         >
           {{ shuffledQuestions[currentQuestion].finTestAnswer1 }}
         </button>
         <button
           @click="
             selectAnswer(2, shuffledQuestions[currentQuestion].finTestType)
-          "
+          " class="answer-button"
         >
           {{ shuffledQuestions[currentQuestion].finTestAnswer2 }}
         </button>
       </div>
-      <div v-else class="space-y-4">
-        <h2>{{ shuffledQuestions[currentQuestion].finTestQuestion }}</h2>
+      <div v-else class="space-y-4 mt-5">
+        <h2 class="flex items-center justify-center font-semibold">{{ shuffledQuestions[currentQuestion].finTestQuestion }}</h2>
         <div class="flex items-center">
           <input
             class="input mr-2"
@@ -71,7 +71,7 @@ const getQuestion = async () => {
     }
     shuffle();
   } catch (error) {
-    console.error("API 호출 중 오류 발생:", error);
+    //console.error("API 호출 중 오류 발생:", error);
   }
 };
 
@@ -142,21 +142,21 @@ const submitSurvey = () => {
     finType = 4; // b, d이면 finType4
   }
 
-  console.log("결정된 자산 유형:", finType);
+ // console.log("결정된 자산 유형:", finType);
 
   sendSurveyResult(finType);
 };
 
 const sendSurveyResult = async (finType) => {
   try {
-    console.log(income.value);
+   // console.log(income.value);
     const response = await HomeApi.submitSurvey({
       user_fin_type: finType,
       user_income: income.value,
     });
     router.push("/home/survey-result");
   } catch (error) {
-    console.error("API 호출 중 오류 발생:", error);
+  //  console.error("API 호출 중 오류 발생:", error);
   }
 };
 </script>

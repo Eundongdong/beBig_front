@@ -26,7 +26,6 @@ export default {
 
   // 미션 완료
   async updateMission(mission) {
-    console.log(mission);
     const { data } = await api.post(
       `${BASE_URL}/complete`,
       mission, 
@@ -36,7 +35,7 @@ export default {
         },
       }
     );
-    console.log("MISSION POST UPDATE", data);
+    //console.log("MISSION POST UPDATE", data);
     return data;
   }
 };
