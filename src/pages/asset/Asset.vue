@@ -343,7 +343,7 @@ const renderChart = () => {
               label: {
                 content: `평균: ${spendings.monthlyAverage}`, // 평균값 레이블 추가
                 enabled: true,
-                position: "start",
+                position: 'center',
                 //backgroundColor: 'rgba(255, 99, 132, 0.5)',
                 font: {
                   size: 14,
@@ -634,14 +634,14 @@ li {
   margin: 50px auto;
 }
 
-.triangle {
-  width: 0;
-  height: 0;
-  border-left: 100px solid transparent;
-  border-right: 100px solid transparent;
-  border-bottom: 300px solid lightblue;
-  position: relative;
-}
+  .triangle {
+    width: 0;
+    height: 0;
+    border-left: 100px solid transparent;
+    border-right: 100px solid transparent;
+    border-bottom: 300px solid #8485FF;
+    position: relative;
+  }
 
 .rank-line {
   position: absolute;

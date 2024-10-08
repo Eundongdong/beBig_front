@@ -1,70 +1,57 @@
 <template>
-  <div class="page">
-    <header class="header">
-      <button class="back-button" @click="goBack">
-        <i class="fa-solid fa-arrow-left"></i>
-      </button>
-    </header>
-
-    <form @submit.prevent="findPassword" class="container">
-      <!-- 이름 -->
-      <div class="input_name">
-        <label class="label" for="name">이름</label>
-        <input
-          class="input"
-          v-model="name"
-          type="text"
-          id="name"
-          autocomplete="name"
-          required
-        />
-      </div>
-      <!-- 아이디 -->
-      <div class="input_id">
-        <label class="label" for="userLoginId">아이디</label>
-        <input class="input"
-          v-model="userLoginId"
-          type="text"
-          id="userLoginId"
-          autocomplete="username"
-          required
-        />
-      </div>
-      <!-- 이메일 -->
-      <div class="input_email">
-        <label class="label" for="email">이메일</label>
-        <input class="input"
-          v-model="email"
-          type="email"
-          id="email"
-          autocomplete="email"
-          required
-        />
-      </div>
-
-      <button class="button" type="submit">비밀번호 찾기</button>
-    </form>
-
-    <!-- 결과 표시 -->
-    <div v-if="message" class="result text-center text-lg mt-10">
-      <p>입력하신 이메일로 <br/>임시 비밀번호를 보냈어요!</p>
-    </div>
-    <div
-      v-else-if="errorMessage"
-      class="result_error text-center text-lg mt-10"
-    >
-      <p>{{ errorMessage }}</p>
-    </div>
-    <div v-else-if="flag == true" class="result text-center text-lg mt-10">
-      <p>이메일 보내는중...</p>
+  <div class="lg:grid lg:grid-cols-3 lg:h-screen">
+    <!-- 왼쪽 파란 배경 (웹에서만 적용) -->
+    <div class="hidden lg:flex lg:bg-[#5354ff] lg:items-center lg:justify-center">
+      <img src="/images/logo.png" class="w-[50%]" alt="Logo" />
     </div>
 
+    <div class="flex justify-center items-start lg:col-span-2 lg:mt-32">
+      <div class="container max-w-lg w-full px-6 ">
+        <header class="flex justify-between items-center mb-3 relative">
+          <button class="text-xl" @click="goBack">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          <span class="font-bold text-base absolute left-1/2 transform -translate-x-1/2">비밀번호 찾기</span>
+        </header>
+
+        <form @submit.prevent="findPassword" class="container py-10">
+          <!-- 이름 -->
+          <div class="input_name">
+            <label class="label" for="name">이름</label>
+            <input class="input" v-model="name" type="text" id="name" autocomplete="name" required />
+          </div>
+          <!-- 아이디 -->
+          <div class="input_id">
+            <label class="label" for="userLoginId">아이디</label>
+            <input class="input" v-model="userLoginId" type="text" id="userLoginId" autocomplete="username" required />
+          </div>
+          <!-- 이메일 -->
+          <div class="input_email">
+            <label class="label" for="email">이메일</label>
+            <input class="input" v-model="email" type="email" id="email" autocomplete="email" required />
+          </div>
+
+          <button class="button !mt-6" type="submit">비밀번호 찾기</button>
+        </form>
+
+        <!-- 결과 표시 -->
+        <div v-if="message" class="result text-center text-base mt-10">
+          <p>입력하신 이메일로 <br />임시 비밀번호를 보냈어요!</p>
+        </div>
+        <div v-else-if="errorMessage" class="result_error text-center text-base mt-10">
+          <p>{{ errorMessage }}</p>
+        </div>
+        <div v-else-if="flag == true" class="result text-center text-base mt-10">
+          <p>이메일 보내는중...</p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from "vue-router";
+import { useRouter } from 'vue-router';
 import UserApi from '@/api/UserApi'; // 실제 API 모듈 경로 확인
 
 const router = useRouter();
@@ -103,6 +90,6 @@ const findPassword = async () => {
 
 // 뒤로가기 함수
 const goBack = () => {
-  router.push({name: "user"});
+  router.push({ name: 'user' });
 };
 </script>
