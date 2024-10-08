@@ -25,6 +25,9 @@
 import { useRouter, useRoute } from 'vue-router';
 import { computed, onMounted, ref } from 'vue';
 import HomeApi from "@/api/HomeApi";
+import { useCommunityStore } from "@/stores/community";
+
+const communityStore = useCommunityStore();
 
 const router = useRouter();
 const route = useRoute();
@@ -75,6 +78,7 @@ const goAsset = () => {
     }
 };
 const goCommunity = () => {
+    communityStore.setCurrentPage(1);
     router.push({ name: 'communityList' });
 };
 const goMypage = () => {

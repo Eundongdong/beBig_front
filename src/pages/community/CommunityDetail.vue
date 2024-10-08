@@ -112,7 +112,7 @@ const isAuthor = ref(false); //사용자가 작성자인지 여부를 저장하�
 const post = ref({}); // 게시글 데이터를 저장할 post 객체 초기화
 
 const handleBack = () => {
-  router.push({ name: "communityList" });
+  router.back();
 };
 
 const fetchPostDetails = async (postId) => {
@@ -120,7 +120,7 @@ const fetchPostDetails = async (postId) => {
     const response = await communityApi.detail(postId);
 
     //응답을 콘솔에 출력하여 확인
-    console.log("API 응답: ", response);
+    //console.log("API 응답: ", response);
 
     post.value = {
       ...response, //서버에서 받은 응답 데이터를 모두 복사
@@ -193,6 +193,7 @@ const editPost = () => {
       content: post.value.postContent,
       images: post.value.postImagePath ? [post.value.postImagePath] : [],
       userId: post.value.userId,
+      flag: true
     },
   });
 };

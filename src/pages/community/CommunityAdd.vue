@@ -66,7 +66,7 @@ const formData = ref({
   title: '',
   content: '',
   category: '',
-  images: []
+  images: [],
 });
 
 
@@ -156,7 +156,8 @@ const onImageClick = (index) => {
 };
 
 
-
+const rebuildCheck = ref(false);
+const rebuildID = ref('');
 const submitPost = async () => {
   // 필수값 검증
   if (!formData.value.title || !selectedCategory.value || !formData.value.content) {
@@ -184,12 +185,23 @@ const submitPost = async () => {
   }
 
   try {
+    console.log(rebuildCheck.value);
     // API 요청: 게시글 작성 (이미지 포함)
-    const response = await communityApi.write(formDataToSubmit);
-    console.log('서버 응답:', response);
+    if(rebuildCheck.value){
+      console.log("go");
+      const response = await communityApi.update(rebuildID.value,formDataToSubmit);
+      console.log('서버 응답:', response);
 
-    alert('게시글이 성공적으로 작성되었습니다.');
-    router.push({ name: 'communityList' });
+      alert('게시글이 성공적으로 작성되었습니다.');
+      router.push({ name: 'communityList' });
+    }
+    else{
+      const response = await communityApi.write(formDataToSubmit);
+      console.log('서버 응답:', response);
+
+      alert('게시글이 성공적으로 작성되었습니다.');
+      router.push({ name: 'communityList' });
+    }
 
   } catch (error) {
     console.error('게시글 업로드 실패:', error);
@@ -207,12 +219,17 @@ const submitPost = async () => {
 
 
 
+const setFlag = (flag, postId)=>{
+  rebuildCheck.value = flag;
+  rebuildID.value = postId;
+}
 
 // 컴포넌트가 마운트될 때 게시글 세부정보를 가져옵니다.
 onMounted(() => {
   if (route.query.postId) {
     // 수정 모드인 경우
     fetchPostDetails(route.query.postId); //게시글 세부 정보 가져오기
+    setFlag(route.query.flag, route.query.postId);
   }
 
 });

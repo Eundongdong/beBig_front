@@ -267,7 +267,9 @@ import communityApi from '@/api/CommunityApi';
 import HomeApi from '@/api/HomeApi';
 import MypageApi from '@/api/MypageApi';
 import { useRouter } from 'vue-router';
+import { useCommunityStore } from "@/stores/community";
 
+const communityStore = useCommunityStore();
 const userName = ref('');
 const router = useRouter();
 const loggedInUserId = ref(null);
@@ -288,7 +290,7 @@ const fetchLoggedInUserId = async () => {
 
 // 게시글 데이터 상태 관리
 const posts = ref([]); //API로 가져온 게시글 데이터
-const currentPage = ref(1); //현재 페이지 번호
+const currentPage = ref(communityStore.getCurrentPage()); //현재 페이지 번호
 const totalPage = ref(1); //총 페이지 수를 1로 초기화
 const pageSize=ref(10);
 const isFetching = ref(false); //데이터 로딩 상태 관리
@@ -381,7 +383,7 @@ const fetchPosts = async () => {
     const finType = selectedFinType.value;
 
     const response = await communityApi.list(category, finType, currentPage.value-1, pageSize.value);
-
+    console.log(response);
 
     if (response && response.data) {
       posts.value=[];
@@ -432,12 +434,14 @@ const likePost = async (postId, userId) => {
 const goToPage = (pageNumber) => {
   if (pageNumber < 1 || pageNumber > totalPage.value) return;
   currentPage.value = pageNumber;
+  communityStore.setCurrentPage(currentPage.value);
   fetchPosts();
 };
 
 const goToPreviousPage = () => {
   if (currentPage.value > 1) {
     currentPage.value-=1;
+    communityStore.setCurrentPage(currentPage.value);
     fetchPosts();
   }
 };
@@ -445,12 +449,14 @@ const goToPreviousPage = () => {
 const goToNextPage = () => {
   if (currentPage.value < totalPage.value) {
     currentPage.value+=1;
+    communityStore.setCurrentPage(currentPage.value);
     fetchPosts();
   }
 };
 
 watch([selectedCategory, selectedFinType], () => {
   currentPage.value = 1;
+  communityStore.setCurrentPage(currentPage.value);
   fetchPosts();
 });
 
