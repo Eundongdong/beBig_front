@@ -3,10 +3,7 @@
     <button class="text-button" @click="logout">logout</button>
     <!-- 사용자 정보 컴포넌트 -->
     <div class="component">
-      <div
-        class="flex items-center justify-between"
-        v-if="user.userName !== 'NoLogin'"
-      >
+      <div class="flex items-center justify-between" v-if="user.userName !== 'NoLogin'">
         <!-- 왼쪽 텍스트 영역 -->
 
         <h1 class="text-xl text-left ml-3">
@@ -17,16 +14,10 @@
         <!-- 오른쪽 이미지+텍스트버튼 영역 -->
         <div class="flex items-center space-x-4">
           <button class="text-button" @click="goSurvey">
-            <img
-              :src="`/images/${user.finTypeCode}.png`"
-              class="home-profile"
-            />
+            <img :src="`/images/${user.finTypeCode}.png`" class="home-profile" />
             <h5 class="category_tag">
               {{
-                user.finTypeCode == "1" ||
-                user.finTypeCode == "2" ||
-                user.finTypeCode == "3" ||
-                user.finTypeCode == "4"
+                user.finTypeCode == "1" || user.finTypeCode == "2" || user.finTypeCode == "3" || user.finTypeCode == "4"
                   ? "내 유형 보기"
                   : "유형검사 하러 가기"
               }}
@@ -36,9 +27,7 @@
       </div>
       <div v-else class="text-left text-lg">
         <p>
-          안녕하세요.<br />우리는
-          <span class="big-text">beBig</span>입니다.<br />로그인하고 더 많은
-          기능을<br />이용해보시겠어요?
+          안녕하세요.<br />우리는 <span class="big-text">beBig</span>입니다.<br />로그인하고 더 많은 기능을<br />이용해보시겠어요?
         </p>
         <button class="text-button" @click="goLogin">로그인 하러 가기</button>
       </div>
@@ -59,20 +48,10 @@
         <h1 class="font-semibold text-lg">총 자산</h1>
 
         <!-- 계좌 추가하기 버튼 -->
-        <button
-          v-if="user.userName !== 'NoLogin'"
-          class="text-button"
-          @click="goAddBank"
-        >
+        <button v-if="user.userName !== 'NoLogin'" class="text-button" @click="goAddBank">
           {{ accountList.length == 0 ? "계좌 연결하기" : "계좌 추가하기" }}
         </button>
-        <button
-          v-if="user.userName == 'NoLogin'"
-          class="text-button"
-          @click="goLogin"
-        >
-          로그인하고 계좌 연결하기
-        </button>
+        <button v-if="user.userName == 'NoLogin'" class="text-button" @click="goLogin">로그인하고 계좌 연결하기</button>
       </div>
 
       <!-- 총 자산 금액 표시 -->
@@ -95,16 +74,14 @@
         class="account-info flex items-center justify-between p-4 mb-0 rounded-lg"
       >
         <!-- 은행 아이콘 -->
-        <img class="bank-icon" :src="`/public/images/bank/${account.bankName}.png`" alt="Bank Logo" />
+        <img class="bank-icon" :src="`/images/bank/${account.bankName}.png`" alt="Bank Logo" />
 
         <!-- 계좌 잔액 -->
         <div class="account-details flex-grow ml-2">
           <div class="text-sm text-gray-7--">
             <p>{{ account.accountName }}</p>
             잔액:
-            <span class="font-semibold">{{
-              formatCurrency(account.transactionBalance)
-            }}</span>
+            <span class="font-semibold">{{ formatCurrency(account.transactionBalance) }}</span>
             원
           </div>
         </div>
@@ -116,63 +93,38 @@
       <div class="flex items-center justify-between">
         <h1 class="font-semibold text-lg">나의 미션</h1>
         <!-- 미션 보러가기 버튼 -->
-        <button
-          v-if="monthlyMission && dailyMissions"
-          class="text-button"
-          @click="goToMission"
-        >
-          미션 전체 보기
-        </button>
+        <button v-if="monthlyMission && dailyMissions" class="text-button" @click="goToMission">미션 전체 보기</button>
       </div>
 
       <!-- 연결된 계좌가 없는 경우 -->
       <div v-if="user.userName != 'NoLogin'">
-        <div
-          v-if="!monthlyMission || !dailyMissions"
-          class="flex items-center justify-center mt-3"
-        >
+        <div v-if="!monthlyMission || !dailyMissions" class="flex items-center justify-center mt-3">
           <h1 text-xl>계좌를 연결하고 미션을 받아보세요</h1>
         </div>
       </div>
 
       <!-- 가입없이 이용인 경우 -->
-      <div
-        v-if="user.userName == 'NoLogin'"
-        class="flex items-center justify-center mt-3"
-      >
-        <button class="text-button" @click="goLogin">
-          로그인하고 계좌 연결하기
-        </button>
+      <div v-if="user.userName == 'NoLogin'" class="flex items-center justify-center mt-3">
+        <button class="text-button" @click="goLogin">로그인하고 계좌 연결하기</button>
       </div>
 
       <div v-if="monthlyMission && dailyMissions">
         <!-- 월간 미션 -->
         <div class="flex items-center justify-between">
           <label class="label ml-2">월간 미션</label>
-          <div
-            class="mission-status"
-            :style="{ color: monthlyMission.isRevoked ? 'red' : '#5354ff' }"
-          >
+          <div class="mission-status" :style="{ color: monthlyMission.isRevoked ? 'red' : '#5354ff' }">
             {{ monthlyMission.isRevoked ? "미션 완료" : "미션 진행 중" }}
           </div>
         </div>
 
-        <div
-          :class="[
-            'mission-text',
-            { 'line-through': monthlyMission.isRevoked },
-          ]"
-        >
+        <div :class="['mission-text', { 'line-through': monthlyMission.isRevoked }]">
           {{ monthlyMission.missionTopic }}
         </div>
 
         <!-- 일간 미션 -->
         <div class="flex items-center justify-between mt-2">
           <label class="label ml-2">일간 미션</label>
-          <div
-            class="mission-status"
-            :style="{ color: allDailyMissionsCompleted ? 'red' : '#5354ff' }"
-          >
+          <div class="mission-status" :style="{ color: allDailyMissionsCompleted ? 'red' : '#5354ff' }">
             {{ allDailyMissionsCompleted ? "미션 완료!" : "미션 진행 중" }}
           </div>
         </div>
@@ -181,10 +133,7 @@
           <div
             v-for="mission in dailyMissions"
             :key="mission.personalDailyMissionId"
-            :class="[
-              'my-2',
-              { 'line-through': mission.personalDailyMissionCompleted },
-            ]"
+            :class="['my-2', { 'line-through': mission.personalDailyMissionCompleted }]"
           >
             {{ mission.missionTopic || "설명이 없습니다." }}
           </div>
@@ -239,73 +188,66 @@ const getAsset = async () => {
   try {
     const response = await HomeApi.accountList();
     // 모든 계좌의 transactionBalance 값을 합산
-    let total = response.reduce(
-      (sum, account) => sum + account.transactionBalance,
-      0
-    );
+    let total = response.reduce((sum, account) => sum + account.transactionBalance, 0);
     totalAmount.value = total; // totalAmount에 총합을 저장
 
     // transactionBalance로 내림차순 정렬 후 상위 2개만 추출
-    const sortedAccounts = response
-      .sort((a, b) => b.transactionBalance - a.transactionBalance)
-      .slice(0, 2);
+    const sortedAccounts = response.sort((a, b) => b.transactionBalance - a.transactionBalance).slice(0, 2);
     sortedAccounts.forEach((account, index) => {
       accountList[index] = account;
       const newName = changeName(accountList[index].bankName);
       accountList[index].bankName = newName;
     });
-
   } catch (error) {
     // console.error("API 호출 중 오류 발생:", error);
   }
 };
 
-
 const changeName = (name) => {
-  if (name == '경남은행') {
+  if (name == "경남은행") {
     return "Gyeongnam";
-  } else if (name == '광주은행') {
+  } else if (name == "광주은행") {
     return "Gwangju";
-  } else if (name == '부산은행') {
+  } else if (name == "부산은행") {
     return "Busan";
-  } else if (name == '산업은행') {
+  } else if (name == "산업은행") {
     return "IndustrialBank";
-  } else if (name == '새마을금고은행') {
+  } else if (name == "새마을금고은행") {
     return "SaemaulGeumgo";
-  } else if (name == '수협은행') {
+  } else if (name == "수협은행") {
     return "Suhyup";
-  } else if (name == '신한은행') {
+  } else if (name == "신한은행") {
     return "Shinhan";
-  } else if (name == '신협은행') {
+  } else if (name == "신협은행") {
     return "Shinhyup";
-  } else if (name == '씨티은행') {
+  } else if (name == "씨티은행") {
     return "Citi";
-  } else if (name == '우리은행') {
+  } else if (name == "우리은행") {
     return "Woori";
-  } else if (name == '우체국은행') {
+  } else if (name == "우체국은행") {
     return "PostOfficeBank";
-  } else if (name == '전북은행') {
+  } else if (name == "전북은행") {
     return "Jeonbuk";
-  } else if (name == '제주은행') {
+  } else if (name == "제주은행") {
     return "Jeju";
-  } else if (name == '카카오뱅크') {
+  } else if (name == "카카오뱅크") {
     return "KakaoBank";
-  } else if (name == '하나은행') {
+  } else if (name == "하나은행") {
     return "Hana";
-  } else if (name == '기업은행') {
+  } else if (name == "기업은행") {
     return "IBK";
-  } else if (name == 'IM') {
+  } else if (name == "IM") {
     return "IM";
-  } else if (name == 'K뱅크') {
+  } else if (name == "K뱅크") {
     return "KBank";
-  } else if (name == '국민은행') {
+  } else if (name == "국민은행") {
     return "KB";
-  } else if (name == '농협은행') {
+  } else if (name == "농협은행") {
     return "NH";
   }
-}
+};
 
-const monthlyMission = ref('');
+const monthlyMission = ref("");
 
 const dailyMissions = reactive([]);
 const getMission = async () => {
@@ -350,12 +292,7 @@ const goAddBank = () => {
 };
 
 const goSurvey = () => {
-  if (
-    user.finTypeCode == "1" ||
-    user.finTypeCode == "2" ||
-    user.finTypeCode == "3" ||
-    user.finTypeCode == "4"
-  ) {
+  if (user.finTypeCode == "1" || user.finTypeCode == "2" || user.finTypeCode == "3" || user.finTypeCode == "4") {
     showModal.value = true;
   } else {
     router.push("/home/survey-start");
