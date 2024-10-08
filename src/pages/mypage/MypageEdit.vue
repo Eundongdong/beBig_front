@@ -82,6 +82,7 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import MypageApi from '@/api/MypageApi';
+import refreshToken from "@/api/refreshToken";
 
 // 데이터 저장 변수
 const intro = ref('');
@@ -107,9 +108,13 @@ const goBack = () => {
 };
 
 // 로그아웃 함수 추가
-const logout = () => {
-  userStore.logout(); // 로그아웃 처리
-  router.push('/'); // 홈으로 이동
+const logout = async () => {
+  try {
+    const response = refreshToken.logouting();
+  } catch (error) {
+    // console.log(error);
+  }
+  router.push("/");
 };
 
 // 기존 정보 불러오는 함수
