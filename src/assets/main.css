@@ -178,7 +178,16 @@
   line-height: 1.8;
 }
 
-.community-profile {
+
+.progress-bar {
+  @apply relative h-5 bg-white;
+}
+
+.progress-fill {
+  @apply h-full bg-[#5354ff] absolute top-0 left-0;
+}
+
+.community-profile{
   @apply w-[35px] rounded-full;
 }
 

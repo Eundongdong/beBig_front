@@ -35,24 +35,16 @@ export default {
     const response = await api.get(
       `${BASE_URL}/${postId}`
     );
-    console.log(
-      'COMMUNITY GET DETAIL',
-      response.data
-    ); //받아온 데이터 출력
+    // console.log(
+    //   'COMMUNITY GET DETAIL',
+    //   response.data
+    // ); //받아온 데이터 출력
     return response.data;
   },
 
   //게시글작성
   async write(formData) {
     try {
-      console.log('서버로 보내는 데이터:');
-      for (let [
-        key,
-        value,
-      ] of formData.entries()) {
-        console.log(`${key}: ${value}`);
-      }
-
       const response = await api.post(
         `${BASE_URL}/write`,
         formData,
@@ -87,20 +79,8 @@ export default {
   },
 
   // 게시글 수정
-  async update(postId, post) {
-    const formData = new FormData();
-    for (const key in post) {
-      if (
-        post[key] !== null &&
-        post[key] !== undefined
-      ) {
-        formData.append(key, post[key]);
-      } else {
-        console.log(
-          `${key} is null or undefined`
-        ); //디버깅 전용 로그
-      }
-    }
+  async update(postId, formData) {
+    console.log(postId);
     const response = await api.post(
       `${BASE_URL}/${postId}/update`,
       formData,
@@ -114,6 +94,7 @@ export default {
     );
     return response.data;
   },
+
 
   // 게시글 삭제
   async delete(postId) {
