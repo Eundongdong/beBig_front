@@ -6,13 +6,7 @@
     <div class="container">
       <div class="input_id">
         <label for="id" class="label">아이디</label>
-        <input
-          type="text"
-          class="input"
-          v-model="loginUser.userLoginId"
-          placeholder="아이디를 입력하세요"
-          id="id"
-        />
+        <input type="text" class="input" v-model="loginUser.userLoginId" placeholder="아이디를 입력하세요" id="id" />
       </div>
 
       <div class="input_password">
@@ -28,9 +22,7 @@
 
       <div class="flex justify-between space-x-2">
         <button class="button" @click="GoSignup">회원가입</button>
-        <button class="button" :disabled="disableSubmit" @click="login">
-          로그인
-        </button>
+        <button class="button" :disabled="disableSubmit" @click="login">로그인</button>
       </div>
       <div class="flex justify-center items-center space-x-2">
         <button class="text-button" @click="GoFindId">아이디 찾기</button>
@@ -40,18 +32,13 @@
       <div class="space-y-4 mt-6">
         <ul>
           <li>
-            <button
-              class="white-button flex justify-center items-center space-x-2"
-              @click="kakaoSocialLogin"
-            >
+            <button class="white-button flex justify-center items-center space-x-2" @click="kakaoSocialLogin">
               <img src="/images/kakao.png" class="w-[40px]" />
               <span>카카오 로그인</span>
             </button>
           </li>
           <li>
-            <button class="button my-10" @click="unsignLogin">
-              가입없이 이용하기
-            </button>
+            <button class="button my-10" @click="unsignLogin">가입없이 이용하기</button>
           </li>
         </ul>
       </div>
@@ -79,9 +66,7 @@ const noLogin = reactive({
 });
 
 // id, password 입력 확인 => id, password 입력 시 버튼 활성화
-const disableSubmit = computed(
-  () => !(loginUser.userLoginId && loginUser.password)
-);
+const disableSubmit = computed(() => !(loginUser.userLoginId && loginUser.password));
 
 // 로그인
 const login = async () => {
@@ -89,7 +74,7 @@ const login = async () => {
     await userStore.login(loginUser);
     router.push("/home");
   } catch (error) {
-    if(error.response?.status === 401){
+    if (error.response?.status === 401) {
       alert("올바른 아이디, 비밀번호를 입력해주세요."); // 경고창으로 에러 메시지 표시
     }
   }
@@ -108,7 +93,7 @@ const unsignLogin = async () => {
 // 카카오 소셜 로그인
 const kakaoSocialLogin = () => {
   const REST_API_KEY = "f8156e1595fd76d2b241ad4b4f3c4ca6"; // 카카오 REST API 키
-  const REDIRECT_URI = "http://localhost:5173/user"; // 카카오 리다이렉트 URI
+  const REDIRECT_URI = "http://3.35.68.38:80/user"; // 카카오 리다이렉트 URI
   const kakaoLoginUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code&prompt=login`;
 
   // 카카오 로그인 URL로 리다이렉트
@@ -124,15 +109,12 @@ const handleKakaoLogin = async () => {
   if (code) {
     try {
       // 서버로 인가 코드를 전송하여 액세스 토큰 및 사용자 정보 가져오기
-      const response = await fetch(
-        `http://localhost:8080/user/social-kakao?code=${code}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`http://3.35.68.38:8080/user/social-kakao?code=${code}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       // 응답 상태 확인
       if (!response.ok) {
