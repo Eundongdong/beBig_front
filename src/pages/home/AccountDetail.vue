@@ -7,7 +7,7 @@
             <div class="account-details">
                 <p>{{ accountName }}</p>
                 <p>{{ accountNum }}</p>
-                <p>{{ accountAmount }}</p>
+                <p>{{ accountAmount.toLocaleString() }}</p>
             </div>
         </div>
 
@@ -20,9 +20,9 @@
                         <p 
                             class="transaction-amount" 
                             :style="{ color: transaction.transactionType === '출금' ? 'red' : 'blue' }">
-                            {{ transaction.transactionAmount }}
+                            {{ transaction.transactionAmount.toLocaleString() }}
                         </p>
-                        <p class="transaction-left-amount">{{ transaction.transactionBalance}}</p>
+                        <p class="transaction-left-amount">{{ transaction.transactionBalance.toLocaleString()}}</p>
                     </div>
                 </div>
             </div>

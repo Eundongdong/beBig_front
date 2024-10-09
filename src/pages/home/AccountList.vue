@@ -7,7 +7,7 @@
                 <h3>총 자산</h3>
             </li>
             <li class="asset-sum">
-                <h2>{{ totalAmount }}원</h2>
+                <h2>{{ totalAmount.toLocaleString() }}원</h2>
             </li>
         </ul>
         <!-- 계좌 목록 출력 -->
@@ -16,7 +16,7 @@
             <div class="account-details">
                 <p>{{ account.accountName }}</p>
                 <p>{{ account.accountNum }}</p>
-                <p>{{ account.transactionBalance}}</p>
+                <p>{{ account.transactionBalance.toLocaleString()}}</p>
             </div>
             <button class="details-button" @click="goBankDetail(account.accountNum)">></button>
         </div>

@@ -20,7 +20,7 @@
           <p>{{ account.bankVo.bankName }}</p>
           <p>통장이름: {{ account.resAccountName }}</p>
           <p>계좌번호: {{ account.resAccount }}</p>
-          <p>잔액: {{ account.resAccountBalance }}</p>
+          <p>잔액: {{ account.resAccountBalance.toLocaleString() }}</p>
         </div>
       </div>
       <button @click="addAccount()" class="primary-button">계좌를 추가하시겠습니까?</button>
