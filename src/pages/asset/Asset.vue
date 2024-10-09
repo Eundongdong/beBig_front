@@ -5,7 +5,7 @@
       <!-- 총자산 분석 섹션 -->
       <div class="total-asset-section">
         <h2>총자산 분석</h2>
-        <h1>{{ totalBalance }}원</h1>
+        <h1>{{ totalBalance.toLocaleString() }}원</h1>
         <div class="bar-chart">
         <div
             class="bar-segment cash"
@@ -38,10 +38,12 @@
         </select>
       </div>
         <p>
-          지난달보다 {{spendings.previousMonthDiff}} 더
-          썼어요.
+          지난달보다 {{ Math.abs(spendings.previousMonthDiff).toLocaleString()}} 
+        {{ spendings.previousMonthDiff >= 0 ? '원 더 썼어요.' : '원 덜 썼어요.' }}
         </p>
-        <div><canvas id="spendingChart"></canvas></div>
+        <div>
+          <canvas id="spendingChart"></canvas>
+        </div>
       </div>
   
       <!-- 예·적금 추천 섹션 -->
@@ -221,7 +223,7 @@ const getAnalysis = async() =>{
   const spendings = reactive({})
   const selectedYear = ref(new Date().getFullYear()); // 현재 연도로 기본 설정
   const availableYears = ref([2022, 2023, 2024]); // 선택 가능한 년도 리스트
-
+  
   // 현재 월을 계산
   const currentMonth = new Date().getMonth() + 1;  // 0부터 시작하므로 1을 더함
 
@@ -230,8 +232,13 @@ const getAnalysis = async() =>{
       const response = await AssetApi.showSpendingPatterns(selectedYear.value);
       spendings.previousMonthDiff = response.previousMonthDiff;
 
-      // 현재 월에 해당하는 개수만큼 데이터를 받아옴 (예: 9월이면 9개의 값)
-      spendings.monthlySum = response.monthlySum.slice(0, currentMonth);
+      // selectedYear가 현재 연도인 경우 currentMonth에 해당하는 개수만큼 데이터 수집
+      // 이전 연도인 경우 12개월 모두 수집
+      if (selectedYear.value === new Date().getFullYear()) {
+        spendings.monthlySum = response.monthlySum.slice(0, currentMonth);
+      } else {
+        spendings.monthlySum = response.monthlySum; // 전체 12개월 데이터 사용
+      }
       spendings.monthlyAverage = response.monthlyAverage;
       renderChart();
     }catch(error){
@@ -257,7 +264,10 @@ const getAnalysis = async() =>{
   spendingChart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: Array.from({ length: currentMonth }, (_, i) => `${i + 1}월`),
+      labels: Array.from(
+        { length: selectedYear.value === new Date().getFullYear() ? currentMonth : 12 },
+        (_, i) => `${i + 1}월`
+      ),
       datasets: [{
         label: '',
         data: spendings.monthlySum,  // 현재 월까지의 데이터만 사용
@@ -272,6 +282,7 @@ const getAnalysis = async() =>{
       scales: {
         y: {
           beginAtZero: true,
+          display: false,
           grid: {
             display: false // 격자 지우기
           },
@@ -285,9 +296,16 @@ const getAnalysis = async() =>{
           },
           ticks: {
             max: currentMonth + 0.5,  // X축에 여백 추가
-          }
+          },
+          offset: true
         }
       },
+      layout: {
+            padding: {
+                left: 30,
+                right: 30,
+            }
+        },
       plugins: {
         legend: {
           display: false // 범례 숨기기
@@ -299,20 +317,16 @@ const getAnalysis = async() =>{
               scaleID: 'y',
               value: spendings.monthlyAverage,  // 평균 값
               borderColor: 'red',
-              borderWidth: 2,
-              label: {
-                content: `평균: ${spendings.monthlyAverage}`,  // 평균값 레이블 추가
-                enabled: true,
-                position: 'center',
-                //backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                font: {
-                  size: 14,
-                  style: 'bold'
-                },
-                color: 'black',
-                backgroundColor: 'rgba(255, 255, 255, 0.7)',
-                xAdjust: 0,
-                yAdjust: -10
+              borderWidth: 2
+            },
+            label1: {
+              type: 'label',
+              xValue: 0.2,
+              yValue: spendings.monthlyAverage,
+              yAdjust: -9,
+              content: "평균: "+spendings.monthlyAverage.toLocaleString()+ "원",
+              font: {
+                size: 14
               }
             }
           }
@@ -620,8 +634,10 @@ li {
 
   .rank-text {
     position: absolute;
-    left: 50%;
+    left: 120%;
+    top: 50%;
     transform: translateX(-50%);
+    white-space: nowrap;
     color: black;
     font-size: 14px;
   }
