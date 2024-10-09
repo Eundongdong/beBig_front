@@ -12,6 +12,13 @@ export default {
     return data;
   },
 
+  //다른 사용자 미션 성취도 조회
+  async getAchievementByUser(userId) {
+    const response = await refreshToken.checkToken();
+    const { data } = await api.get(`${BASE_URL}/total/${userId}`);
+    return data;
+  },
+
   //월간 미션 조회
   async getMonthMission() {
     const { data } = await api.get(`${BASE_URL}/monthly`);
