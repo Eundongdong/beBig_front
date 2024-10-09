@@ -412,22 +412,17 @@ const setAchievement = async () => {
   }
 };
 
-// // 미션 달성도 가져오는 함수
-// const getUserMissionAchievement = async () => {
-//   try {
-//     console.log('미션 달성도 가져오는 API 호출 시작');
-//     const userMissionAchievement = await MypageApi.getMyMissionAchievement(); // 사용자의 정보를 가져오는 API 호출
-//     console.log(
-//       '미션 달성도 가져오는API 호출 성공 :',userMissionAchievement);
+// 특정 userId에 따른 미션 성취도를 불러오는 함수
+const setAchievementByUserId = async () => {
+  try {
+    const achievement = await MissionApi.getAchievementByUser(userId.value);
+    monthlyProgress.value = achievement.currentScore;
+    remainingDays.value = achievement.restDays;
+  } catch (error) {
+    console.error('미션 성취도 불러오는 중 에러 발생 :', error);
+  }
+};
 
-//       missionAchievement.value = userMissionAchievement.currentScore; // 한줄소개
-//   } catch (error) {
-//     console.error(
-//       '미션 달성도 가져오기 실패:',
-//       error
-//     );
-//   }
-// };
 
 // 정보 수정 페이지 이동 함수
 const goSettings = () => {
@@ -452,10 +447,38 @@ const getUserPosts = async () => {
   }
 };
 
+//특정 userId에 따른 작성한 글 가져오는 함수
+const getUserPostsByUserId = async () => {
+  try {
+    const userPosts = await MypageApi.getMyPostsUserId(userId.value); // 사용자의 정보를 가져오는 API 호출
+    console.log('작성한 글 가져오기 API 호출 성공 :', myPosts);
+
+    // 작성 시간 기준으로 내림차순 정렬하여 최신 글이 먼저 나오게 처리
+    myPosts.value = userPosts.sort((a, b) => b.postTime - a.postTime);
+  } catch (error) {
+    console.error('작성한 글 가져오기 실패:', error);
+  }
+};
+
 // 좋아요한 글 가져오는 함수
 const getUserLikePosts = async () => {
   try {
     const userLikePosts = await MypageApi.getMyLikePosts(); // 사용자의 정보를 가져오는 API 호출
+    console.log('좋아요한 글 가져오기 API 호출 성공 :', userLikePosts);
+
+    // 작성 시간 기준으로 내림차순 정렬하여 최신 글이 먼저 나오게 처리
+    myLikePosts.value = userLikePosts.sort(
+      (a, b) => b.postTime - a.postTime // 날짜 최신순
+    );
+  } catch (error) {
+    console.error('좋아요한 글 가져오기 실패:', error);
+  }
+};
+
+//특정 userId에 따른 좋아요한 글 가져오는 함수
+const getUserLikePostsByUserId = async () => {
+  try {
+    const userLikePosts = await MypageApi.getMyLikePostsUserId(userId.value); // 사용자의 정보를 가져오는 API 호출
     console.log('좋아요한 글 가져오기 API 호출 성공 :', userLikePosts);
 
     // 작성 시간 기준으로 내림차순 정렬하여 최신 글이 먼저 나오게 처리
@@ -490,16 +513,19 @@ onMounted(async () => {
   // 페이지의 userId가 로그인한 사용자와 같다면 내 정보를 불러옴
   if (!userId.value || userId.value === loggedInUserId) {
     await getLoggedInUserInfo();
+    await getUserPosts();
+    await getUserLikePosts();
+    await setAchievement();
     isOwner.value = true; // 내 정보일 경우 isOwner를 true로 설정
   } else {
     await getUserInfoByUserId(); // 다르면 해당 userId에 맞는 사용자 정보를 불러옴
+    await setAchievementByUserId();
+    await getUserPostsByUserId();
+    await getUserLikePostsByUserId();
     isOwner.value = false;
   }
   getMyLoginType();
-  getUserPosts();
-  getUserLikePosts();
   getBadgeDetails();
-  setAchievement();
 });
 
 // 탭 선택 함수

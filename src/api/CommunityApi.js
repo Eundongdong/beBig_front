@@ -10,6 +10,7 @@ export default {
   async list(
     category,
     type,
+    sort,
     currentPage,
     pageSize = 10
   ) {
@@ -18,7 +19,7 @@ export default {
       formData.append('category', category);
     if (type !== -1)
       formData.append('type', type);
-
+    formData.append('sort', sort);
     formData.append('offset', currentPage);
     formData.append('pageSize', pageSize);
 

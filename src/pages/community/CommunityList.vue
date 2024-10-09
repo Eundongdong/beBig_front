@@ -3,7 +3,7 @@
     <!-- 상단 정렬 및 필터 -->
     <div>
       <!-- 정렬 버튼: 좋아요순, 최신순 -->
-      <div class="flex items-start space-x-4 text-xs ml-1">
+      <div @click="fetchPosts" class="flex items-start space-x-4 text-xs ml-1">
         <button
           @click="sortBy('likeHits')"
           :class="[
@@ -388,9 +388,9 @@ const fetchPosts = async () => {
 
     const category = selectedCategory.value;
     const finType = selectedFinType.value;
+    const nowSortType = sortType.value;
 
-    const response = await communityApi.list(category, finType, currentPage.value-1, pageSize.value);
-    console.log(response);
+    const response = await communityApi.list(category, finType, nowSortType, currentPage.value-1, pageSize.value);
 
     if (response && response.data) {
       posts.value=[];
@@ -400,6 +400,10 @@ const fetchPosts = async () => {
       posts.value = [];
       totalPage.value=1;
     }
+
+    console.log(posts);
+    await getLike();
+
   } catch (error) {
  //   console.error("게시글 불러오기 실패:", error);
     posts.value = [];
@@ -408,6 +412,26 @@ const fetchPosts = async () => {
     isFetching.value = false;
   }
 };
+
+//사용자가 좋아요 한 게시글 표시
+const getLike = async()=>{
+  try{
+    const userLikePosts = await MypageApi.getMyLikePosts();
+    console.log(userLikePosts);
+    const likedPostIds = userLikePosts.map(post => post.postId); // 좋아요 누른 게시글의 postId 목록 추출
+
+    // fetchPosts로 가져온 posts 배열에서 좋아요한 게시글들을 찾아서 isLiked를 true로 설정
+    posts.value.forEach(post => {
+      if (likedPostIds.includes(post.postId)) {
+        post.isLiked = true;
+      } else {
+        post.isLiked = false;
+      }
+    });
+  }catch(error){
+    //console.log(error);
+  }
+}
 
 
 // 좋아요 기능

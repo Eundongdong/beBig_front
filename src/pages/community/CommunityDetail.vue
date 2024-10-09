@@ -130,11 +130,31 @@ const fetchPostDetails = async (postId) => {
       userId: response.userId,
     };
 
+    await getLike();
+
     isAuthor.value = checkIfAuthor(post.value); // 작성자 확인 함수 호출
   } catch (error) {
     console.error("게시글을 불러오는 중 오류 발생:", error);
   }
 };
+
+//사용자가 좋아요 한 게시글 표시
+const getLike = async()=>{
+  try{
+    const userLikePosts = await MypageApi.getMyLikePosts();
+    console.log(userLikePosts);
+    const likedPostIds = userLikePosts.map(post => post.postId); // 좋아요 누른 게시글의 postId 목록 추출
+
+    // 현재 게시글이 사용자가 좋아요한 목록에 있는지 확인하여 isLiked 설정
+      if (likedPostIds.includes(post.value.postId)) {
+        post.value.isLiked = true;
+      } else {
+        post.value.isLiked = false;
+      }
+  }catch(error){
+    // console.log(error);
+  }
+}
 
 // 작성자 확인 함수
 const checkIfAuthor = (post) => {
@@ -242,7 +262,7 @@ const formatDate = (dateString) => {
     .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
 };
 
-console.log(post.value);
+//console.log(post.value);
 
 // 작성자 아이콘을 가져오는 함수
 const getProfileIcon = (finTypeCode) => {
