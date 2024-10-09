@@ -5,15 +5,15 @@
       <img src="/images/logo.png" class="w-[50%]" alt="Logo" />
     </div>
 
-    <div class="flex justify-center items-start lg:col-span-2 lg:mt-32">
-      <div class="container max-w-lg w-full px-6 ">
-        <header class="flex justify-between items-center mb-3 relative">
-          <button class="text-xl" @click="goBack">
-            <i class="fa-solid fa-chevron-left"></i>
-          </button>
-          <span class="font-bold text-base absolute left-1/2 transform -translate-x-1/2">비밀번호 찾기</span>
-        </header>
+    <div class="flex flex-col justify-start items-center lg:col-span-2 mt-6">
+      <header class="w-full flex justify-between items-center mb-6 px-6 relative">
+        <button class="text-xl" @click="goBack">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <span class="font-bold text-base absolute left-1/2 transform -translate-x-1/2">비밀번호 찾기</span>
+      </header>
 
+      <div class="container max-w-lg w-full px-6">
         <form @submit.prevent="findPassword" class="container py-10">
           <!-- 이름 -->
           <div class="input_name">

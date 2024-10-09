@@ -1,52 +1,43 @@
 <!-- TermsModal.vue -->
 <template>
-  <div class="modal-overlay" v-if="isOpen">
-    <div class="modal">
-      <div class="modal-content">
-        <h2 class="text-lg font-bold mb-4">개인정보 제공 및 약관 동의</h2>
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white rounded-lg w-full max-w-lg mx-8 p-6 md:mx-0">
+      <h2 class="text-lg font-bold mb-4 text-center">개인정보 제공 및 약관 동의</h2>
 
-        <!-- 전체 동의 -->
-        <div class="toggle_all mb-4">
-          <label class="label flex items-center">
-            <input
-              type="checkbox"
-              v-model="allAgree"
-              @change="toggleAll"
-              class="mr-2"
-            />
-            <span>전체 동의하기</span>
-          </label>
-        </div>
+      <!-- 전체 동의 -->
+      <div class="flex items-center mb-4">
+        <input type="checkbox" v-model="allAgree" @change="toggleAll" class="form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out mr-2" />
+        <span class="text-sm font-semibold">전체 동의하기</span>
+      </div>
 
-        <!-- 개별 약관 -->
-        <div class="toggle_each">
-          <div v-for="(term, index) in localTerms" :key="index" class="mb-4">
-            <label class="flex items-center ml-2">
-              <input type="checkbox" v-model="term.agreed" class="mr-2" />
-              <span>{{ term.utilTitle }}</span>
-            </label>
+      <!-- 개별 약관 -->
+      <div class="divide-y divide-gray-200 max-h-64 overflow-y-auto">
+        <div v-for="(term, index) in localTerms" :key="index" class="py-4">
+          <div class="flex items-center ml-2">
+            <input type="checkbox" v-model="term.agreed" class="form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out mr-2" />
+            <span class="text-sm font-semibold">{{ term.utilTitle }}</span>
+          </div>
 
-            <!-- 스크롤 가능한 약관 내용 -->
-            <div class="terms-content">
-              {{ term.utilContent }}
-            </div>
+          <!-- 스크롤 가능한 약관 내용 -->
+          <div class="bg-gray-100 p-3 rounded-lg mt-2 max-h-40 overflow-y-auto text-sm text-gray-600">
+            {{ term.utilContent }}
           </div>
         </div>
+      </div>
 
-        <div class="mt-6 flex justify-end space-x-2">
-          <button @click="closeModal" class="gray-button">취소</button>
-          <button @click="confirmAgreement" class="button">확인</button>
-        </div>
+      <div class="mt-6 flex justify-end space-x-2">
+        <button @click="closeModal" class="gray-button">취소</button>
+        <button @click="confirmAgreement" class="button">확인</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch } from 'vue';
 
-const props = defineProps(["isOpen", "terms"]);
-const emit = defineEmits(["close", "confirm"]);
+const props = defineProps(['isOpen', 'terms']);
+const emit = defineEmits(['close', 'confirm']);
 
 const allAgree = ref(false);
 const localTerms = ref([]);
@@ -85,15 +76,15 @@ const toggleAll = () => {
 
 //모달 닫기
 const closeModal = () => {
-  emit("close");
+  emit('close');
 };
 
 //약관 동의 확인
 const confirmAgreement = () => {
   if (!allAgreed.value) {
-    alert("모든 약관에 동의해야 가입이 가능합니다.");
+    alert('모든 약관에 동의해야 가입이 가능합니다.');
     return;
   }
-  emit("confirm", localTerms.value);
+  emit('confirm', localTerms.value);
 };
 </script>
