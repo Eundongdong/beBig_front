@@ -526,19 +526,6 @@ const scrollToSlide = (index) => {
     }
   }
   const drawTriangleGraph = () => {
-    const triangleHeight = 300;
-    const rankPosition = (rank.value / totalSameUser.value) * triangleHeight;
-
-    const rankLine = document.getElementById('rankLine');
-    const rankText = document.getElementById('rankText');
-
-    rankLine.style.top = `${rankPosition}px`;
-    rankText.style.top = `${rankPosition - 8}px`;
-    rankText.style.left = `${rankPosition -20}px`;
-    rankText.textContent = `${rank.value}위`;
-  }
-};
-const drawTriangleGraph = () => {
   const triangleHeight = 300;
   const rankPosition = (rank.value / totalSameUser.value) * triangleHeight;
 
