@@ -273,6 +273,10 @@
   @apply text-xs px-1 text-white font-semibold bg-[#5354ff];
 }
 
+.flag-image{
+  @apply w-[40px];
+}
+
 /* @media (hover: hover) {
   a:hover {
     background-color: hsla(160, 100%, 37%, 0.2);
