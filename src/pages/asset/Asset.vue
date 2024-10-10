@@ -59,8 +59,8 @@
     <!-- 상품 리스트를 flex로 나란히 배치 -->
     <!-- <div class="flex mt-4">
       <div class="flex-1 mr-4 border border-gray-300 p-4 rounded-lg"> -->
-    <div class="mt-4">
-      <div class="mr-4 border border-gray-300 p-4 rounded-lg mb-4">
+    <div class="mt-4 lg:flex">
+      <div class="mr-4 border border-gray-300 p-4 rounded-lg mb-4 lg:flex-1 mb-0">
         <h3 class="font-medium text-base mb-2">적금상품</h3>
         <ul class="list-none p-0">
           <li v-if="depositRecomendations[0]" class="product-item flex items-center mb-2">
@@ -87,7 +87,7 @@
       </div>
 
       <!-- <div class="flex-1 mr-4 border border-gray-300 p-4 rounded-lg"> -->
-      <div class="mr-4 border border-gray-300 p-4 rounded-lg">
+      <div class="mr-4 border border-gray-300 p-4 rounded-lg mb-4 lg:flex-1 mb-0">
         <h3 class="font-medium text-base mb-2">예금상품</h3>
         <ul class="list-none p-0">
           <li v-if="savingsRecommendations[0]" class="product-item flex items-center mb-2">
@@ -127,8 +127,8 @@
     <!-- 상품 리스트를 flex로 나란히 배치 -->
     <!-- <div class="flex"> -->
       <!-- <div class="flex-1 mr-4 border border-gray-300 p-4 rounded-lg"> -->
-    <div>
-      <div class="mr-4 border border-gray-300 p-4 rounded-lg mb-4">
+    <div class="lg:flex">
+      <div class="mr-4 border border-gray-300 p-4 rounded-lg mb-4 lg:flex-1 mb-0">
         <p class="font-medium text-base mb-2">적금상품</p>
         <ul class="list-none p-0">
           <li v-if="depositRecomendations[randomnumber1]" class="product-item flex items-center mb-2">
@@ -155,7 +155,7 @@
       </div>
 
       <!-- <div class="flex-1 mr-4 border border-gray-300 p-4 rounded-lg"> -->
-      <div class="mr-4 border border-gray-300 p-4 rounded-lg">
+      <div class="mr-4 border border-gray-300 p-4 rounded-lg mb-4 lg:flex-1 mb-0">
         <p class="font-medium text-base mb-2">예금상품</p>
         <ul class="list-none p-0">
           <li v-if="savingsRecommendations[randomnumber3]" class="product-item flex items-center mb-2">
