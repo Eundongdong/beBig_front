@@ -2,11 +2,11 @@ export default[
     {
         path:'/util/error',
         name:'error',
-        component:()=>import('../pages/Error.vue')
+        component:()=>import('../components/Error.vue')
     },
     {
         path:'/util/loading',
         name:'loading',
-        component:()=>import('../pages/Loading.vue')
+        component:()=>import('../components/Loading.vue')
     }
 ]
