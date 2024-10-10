@@ -21,7 +21,6 @@ export const useUserStore=defineStore('user', () => {
     const login=async(loginUser)=>{
         try{
             const data=await userApi.login(loginUser);
-            console.log(data);
             // 토큰이 없거나 에러 메시지인 경우 에러 처리
             if (typeof data.accessToken !== 'string' || !data.accessToken.startsWith('eyJ')) {
                 throw new Error('올바른 아이디 또는 비밀번호를 입력하세요.'); // 에러 메시지 던지기

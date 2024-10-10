@@ -1,6 +1,6 @@
 <template>
   <div class="page flex flex-col lg:flex-row lg:gap-4">
-    <!-- <button class="text-button" @click="logout">logout</button> -->
+    <button class="text-button" @click="logout">logout</button>
     <div class="flex flex-col lg:w-1/2 lg:gap-4">
       <!-- 프로필 영역 -->
       <div class="section-style lg:mb-0">

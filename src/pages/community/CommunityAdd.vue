@@ -35,6 +35,7 @@
       <input id="file-upload" class="file-input" type="file" accept="image/*" @change="onFileChange" multiple />
       <label for="file-upload" class="file-label">파일 선택</label>
     </div>
+
       <!-- 파일 이름을 쉼표로 구분하여 출력 -->
       <p class="text-xs">{{ fileNames.join(', ') }}</p>
 
