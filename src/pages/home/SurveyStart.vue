@@ -4,11 +4,12 @@
       <button class="text-lg" @click="goBack">
         <i class="fa-solid fa-chevron-left"></i>
       </button>
-      <p class="font-bold text-base absolute left-1/2 transform -translate-x-1/2">유형 검사</p>
+      <p class="font-bold text-base absolute left-1/2 transform -translate-x-1/2">자산 유형 검사</p>
     </header>
 
-    <div class="text-center mt-10 px-4">
-      <div class="text-base">
+    <div class="flex flex-col items-center justify-center mt-10 px-4">
+      <img src="/images/friends-logo.png" class="w-[250px] h-auto" />
+      <div class="text-base mt-4">
         <p>내가 어떤 자산 관리 유형인지</p>
         <p>확인해보시겠어요?</p>
         <p>검사는 2분 정도 걸려요.</p>
