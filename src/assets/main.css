@@ -165,7 +165,7 @@
 }
 
 .home-profile {
-  @apply w-[100px] h-[100px] bg-white rounded-full overflow-hidden;
+  @apply w-[100px] h-[100px] bg-white rounded-full;
 }
 
 .home-profile img {
@@ -275,7 +275,7 @@
 }
 
 .file-label{
-  @apply cursor-pointer px-2 text-white text-xs px-2 bg-[#5354ff] rounded-lg hover:bg-[#3435ff];
+  @apply cursor-pointer text-white text-xs px-2 bg-[#5354ff] rounded-lg hover:bg-[#3435ff];
 }
 
 .small-buttons {

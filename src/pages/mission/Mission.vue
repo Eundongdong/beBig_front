@@ -5,13 +5,13 @@
       <div class="section-style">
         <h1 class="font-semibold text-lg">현재 달성도</h1>
         <div class="flex justify-between items-center">
-          <span class="ml-2"
-            >미션을
-            <span class="font-semibold text-[#5354ff]">
-              {{ monthlyProgress }}%</span
+          <span class="ml-2">
+            미션을
+            <span class="font-semibold text-[#5354ff]"
+              >{{ monthlyProgress }}%</span
             >
-            달성했어요!</span
-          >
+            달성했어요!
+          </span>
           <span class="ml-auto">D-{{ remainingDays }}</span>
         </div>
         <div
@@ -21,16 +21,12 @@
           <img
             :src="runningImage"
             class="w-[50px] absolute duration-200 bottom-3 transform -translate-x-1/2 transition-all ease-linear"
-            :style="{
-              left: monthlyProgress + '%',
-            }"
+            :style="{ left: monthlyProgress + '%' }"
           />
           <!-- 진행 바 채움 -->
           <div
             class="progress-fill bg-[#5354ff] h-full rounded-md absolute top-0 left-0 transition-width duration-300"
-            :style="{
-              width: monthlyProgress + '%',
-            }"
+            :style="{ width: monthlyProgress + '%' }"
           ></div>
 
           <!-- 깃발은 오른쪽 끝에 고정 -->
@@ -51,9 +47,22 @@
             <span class="ml-2">{{ currentMonth }}</span>
             <div
               class="mission-status"
-              :style="{ color: monthlyMission.isRevoked ? 'red' : '#5354ff' }"
+              :style="{
+                color:
+                  monthlyMission.personalMonthlyMissionCompleted === -1
+                    ? 'red'
+                    : monthlyMission.personalMonthlyMissionCompleted === 1
+                    ? 'green'
+                    : '#5354ff',
+              }"
             >
-              {{ monthlyMission.isRevoked ? '미션 완료' : '미션 진행 중' }}
+              {{
+                monthlyMission.personalMonthlyMissionCompleted === -1
+                  ? '미션 실패'
+                  : monthlyMission.personalMonthlyMissionCompleted === 1
+                  ? '미션 완료'
+                  : '미션 진행 중'
+              }}
             </div>
           </div>
           <div class="mission-text">
@@ -172,6 +181,7 @@ const daillyMission = async () => {
 const getMonthlyMission = async () => {
   try {
     monthlyMission.value = await MissionApi.getMonthMission();
+    console.log(monthlyMission.value);
   } catch (error) {
     //  console.error("daily mission 불러오는중 에러 발생:", error);
   }
