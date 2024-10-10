@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <div class="component">
+    <div class="section-style">
       <p class="flex items-end justify-end text-sm">
         <span class="font-semibold mr-2">{{ currentQuestion + 1 }}</span> / {{ shuffledQuestions.length }}
       </p>
@@ -9,14 +9,14 @@
         <button
           @click="
             selectAnswer(1, shuffledQuestions[currentQuestion].finTestType)
-          " class="answer-button"
+          " class="answer-button lg:hover:bg-gray-200"
         >
           {{ shuffledQuestions[currentQuestion].finTestAnswer1 }}
         </button>
         <button
           @click="
             selectAnswer(2, shuffledQuestions[currentQuestion].finTestType)
-          " class="answer-button"
+          " class="answer-button lg:hover:bg-gray-200"
         >
           {{ shuffledQuestions[currentQuestion].finTestAnswer2 }}
         </button>

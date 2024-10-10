@@ -7,8 +7,8 @@
       <p class="font-bold text-base absolute left-1/2 transform -translate-x-1/2">계좌 연결하기</p>
     </header>
 
-    <div class="section-style mx-4 lg:mx-20">
-      <div class="text-center m-4">
+    <div class="section-style mx-4 lg:mx-20 lg:pt-4">
+      <div class="text-center mt-2 mb-4 lg:mb-4">
         <p class="font-bold text-base">은행 선택</p>
       </div>
       <!-- 은행 선택 섹션 -->
