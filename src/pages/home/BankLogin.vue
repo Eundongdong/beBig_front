@@ -1,5 +1,3 @@
-BankLogin.vue
-
 <template>
   <div class="page">
     <header class="w-full flex justify-between items-center mb-6 px-2 relative">
@@ -14,7 +12,7 @@ BankLogin.vue
       <div class="mt-8 mx-6">
         <div>
           <p class="label">아이디</p>
-          <input type="text" v-model="bankAccount.userBankId" placeholder="은행 아이디를 입력하세요" class="input" />
+          <input type="text" v-model="bankAccount.userBankId" placeholder="은행 아이디를 입력하세요." class="input" />
         </div>
         <div>
           <p class="label">비밀번호</p>
@@ -24,31 +22,65 @@ BankLogin.vue
             placeholder="은행 비밀번호를 입력하세요."
             class="input"
           />
+          <p v-if="checkCount" class="text-red-500 pl-2">아이디/비밀번호 입력 제한 횟수가 {{ count }}번 남았습니다.</p>
         </div>
-
-        <p v-if="checkCount" class="text-red-500 text-sm">아이디/비밀번호 입력 횟수가 {{ count }}번 남았습니다.</p>
         <button @click="Connect" class="button !mt-6">계좌 연결하기</button>
       </div>
     </div>
 
     <!-- 계좌 목록을 보여주는 섹션 -->
-    <div v-if="accountList.length != 0" class="flex mt-8 mx-4 lg:mx-20">
-      <div v-for="account in accountList" :key="account.resAccount" class="flex items-center justify-between mb-4 bg-white
-      p-4 rounded-lg shadow" >
-      <div class="flex items-center">
-        <img :src="`/images/bank/${account.bankVo.bankName}.png`" alt="Bank Logo" class="bank-icon" />
-        <div class="ml-4">
-          <p class="font-bold text-base">{{ account.bankVo.bankName }}</p>
-          <p class="text-sm">통장이름 : {{ account.resAccountName }}</p>
-          <p class="text-sm">계좌번호 : {{ account.resAccount }}</p>
-          <p class="text-sm">잔액 : {{ account.resAccountBalance.toLocaleString() }} 원</p>
+    <div v-if="accountList.length != 0" class="mt-8 mx-12 lg:mx-20 space-y-4">
+      <div>
+        <p class="font-semibold text-lg text-center">아래 계좌를 성공적으로 연결했습니다.</p>
+      </div>
+      <div class="">
+        <div
+          v-for="account in accountList"
+          :key="account.resAccount"
+          :class="['flex items-center', index !== accountList.length - 1 ? 'border-b border-gray-300 pb-4' : '']"
+          class="space-y-4 mt-4 "
+        >
+          <div class="flex items-center">
+            <img
+              :src="`/images/bank/${changeNameToEnglish(account.bankVo.bankName)}.png`"
+              alt="Bank Logo"
+              class="bank-icon"
+            />
+            <div class="ml-4">
+              <p class="font-bold text-base">{{ account.bankVo.bankName }}</p>
+              <p class="text-sm">{{ account.resAccount }}</p>
+              <p class="text-sm">{{ account.resAccountName }}</p>
+              <p class="text-sm">잔액 : {{ account.resAccountBalance.toLocaleString() }} 원</p>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="flex items-center">
-        <button @click="addAccount()" class="button ml-auto">계좌 추가</button>
+
+      <div class="flex justify-center mt-4">
+        <button @click="goHome" class="button">홈으로 이동</button>
       </div>
     </div>
-    </div>
+
+    <!-- <div v-if="accountList.length != 0" class="flex mt-8 mx-4 lg:mx-20">
+      <div
+        v-for="account in accountList"
+        :key="account.resAccount"
+        class="flex items-center justify-between mb-4 bg-white p-4 rounded-lg shadow"
+      >
+        <div class="flex items-center">
+          <img :src="`../../public/images/bank/${account.bankVo.bankName}.png`" alt="Bank Logo" class="bank-icon" />
+          <div class="ml-4">
+            <p class="font-bold text-base">{{ account.bankVo.bankName }}</p>
+            <p class="text-sm">통장이름 : {{ account.resAccountName }}</p>
+            <p class="text-sm">계좌번호 : {{ account.resAccount }}</p>
+            <p class="text-sm">잔액 : {{ account.resAccountBalance.toLocaleString() }} 원</p>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <button @click="addAccount()" class="button ml-auto">계좌 추가</button>
+        </div>
+      </div>
+    </div> -->
   </div>
 </template>
 
@@ -73,8 +105,52 @@ const checkCount = ref(false);
 const selectedBank = computed(() => bankStore.selectedBank);
 bankAccount.bank = bankStore.getSelectedBankNum();
 
-// 예시 계좌 목록
+const changeNameToEnglish = (bankName) => {
+  const bankNames = {
+    국민은행: 'KB',
+    신한은행: 'Shinhan',
+    기업은행: 'IBK',
+    우리은행: 'Woori',
+    농협은행: 'NH',
+    하나은행: 'Hana',
+    카카오뱅크: 'KakaoBank',
+    K뱅크: 'KBank',
+    우체국: 'PostOfficeBank',
+    신협: 'Shinhyup',
+    새마을금고: 'SaemaulGeumgo',
+    경남은행: 'Gyeongnam',
+    광주은행: 'Gwangju',
+    부산은행: 'Busan',
+    제주은행: 'Jeju',
+    전북은행: 'Jeonbuk',
+    씨티은행: 'Citi',
+    SC: 'SC',
+    산업은행: 'IndustrialBank',
+    수협은행: 'Suhyup',
+  };
+
+  return bankNames[bankName] || bankName; // 매칭되는 영어 이름 반환, 없으면 원래 이름 반환
+};
+
+// // 예시 계좌 목록
 const accountList = reactive([]);
+
+// 예시 계좌 목록
+// const accountList = reactive([
+//   // 예시 데이터를 추가하여 항상 보이도록 설정
+//   {
+//     resAccount: '123-456-7890',
+//     resAccountName: '저축예금',
+//     resAccountBalance: 500000,
+//     bankVo: { bankName: '국민은행' },
+//   },
+//   {
+//     resAccount: '987-654-3210',
+//     resAccountName: '정기예금',
+//     resAccountBalance: 1000000,
+//     bankVo: { bankName: '신한은행' },
+//   },
+// ]);
 
 // "계좌 연결하기" 버튼 클릭 시 호출될 함수
 const Connect = async () => {
@@ -114,6 +190,11 @@ const addAccount = async () => {
   } catch (error) {
     //  console.error('API 호출 중 오류 발생:', error);
   }
+};
+
+// "홈으로 이동" 버튼 클릭 시 호출될 함수
+const goHome = () => {
+  router.push('/home');
 };
 
 // 뒤로가기 버튼 클릭 시 실행되는 함수
