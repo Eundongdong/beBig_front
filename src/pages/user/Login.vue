@@ -7,7 +7,9 @@
   <div class="lg:grid lg:grid-cols-3 lg:h-screen">
     <!-- 왼쪽 파란 배경 (웹에서만 적용) -->
     <div class="hidden lg:flex lg:bg-[#5354ff] lg:items-center lg:justify-center">
-      <img src="/images/logo-white.png" class="w-[50%]" alt="Logo" />
+      <div class="w-[270px] h-[270px] bg-white rounded-full flex items-center justify-center" >
+      <img src="/images/friends-logo.png" class="w-[250px] h-auto" alt="Logo" />
+    </div>
     </div>
 
     <div class="flex justify-center items-start mt-16 lg:col-span-2 lg:mt-32">

@@ -165,7 +165,7 @@
 }
 
 .home-profile {
-  @apply w-[100px] h-[100px] bg-white rounded-full overflow-hidden;
+  @apply w-[100px] h-[100px] bg-white rounded-full;
 }
 
 .home-profile img {

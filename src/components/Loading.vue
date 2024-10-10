@@ -1,6 +1,6 @@
 <template>
     <div :class="['loading-container', isFading ? 'fade-out' : '']">
-    <img src="/images/logo.png" class="logo" />
+    <img src="/images/friends-logo.png" class="logo" />
   </div>
 
   </template>
@@ -28,13 +28,13 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color:#5354ff; /* 검정 배경에 불투명도 50% */
+  background-color:white; /* 검정 배경에 불투명도 50% */
   z-index: 1000;
   transition: background-color 1s ease; /* 배경색 페이드 효과 */
 }
 
 .logo {
-  width: 200px;
+  width: 300px;
   height: auto;
   transition: opacity 1s ease; /* 로고 희미해짐 효과 */
 }

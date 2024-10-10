@@ -2,7 +2,7 @@
   <div class="lg:grid lg:grid-cols-3 lg:h-screen">
     <!-- 왼쪽 파란 배경 (웹에서만 적용) -->
     <div class="hidden lg:flex lg:bg-[#5354ff] lg:items-center lg:justify-center">
-      <img src="/images/logo.png" class="w-[50%]" alt="Logo" />
+      <img src="/images/logo-white.png" class="w-[50%]" alt="Logo" />
     </div>
 
     <div class="flex flex-col justify-start items-center lg:col-span-2 mt-6">
