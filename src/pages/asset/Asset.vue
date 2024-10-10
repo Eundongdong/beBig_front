@@ -33,9 +33,7 @@
             <span class="legend-color bg-indigo-900 w-3 h-3 rounded-full mr-2"></span> 기타 자산
           </div>
         </div>
-
     </div>
-  
       <!-- 소비 분석 섹션 -->
       <div class="section-style">
         <h2 class="text-lg mb-2">소비 분석</h2>
@@ -55,7 +53,7 @@
           <canvas id="spendingChart" class="w-full h-72"></canvas>
         </div>
       </div>
-  
+
       <!-- 예·적금 추천 섹션 -->
 <div class="section-style">
   <h2 class="text-lg mb-2">예·적금 추천</h2>
@@ -217,59 +215,59 @@
       </div>
     </div>
   </div>
-  </template>
-  
-  <script setup>
-  import { onMounted, ref, reactive, computed } from 'vue';
-  import AssetApi from "@/api/AssetApi";
-  import Chart from 'chart.js/auto';
-  import annotationPlugin from 'chartjs-plugin-annotation';  // Chart.js annotation 플러그인
-  Chart.register(annotationPlugin);
+</template>
+
+<script setup>
+import { onMounted, ref, reactive, computed } from "vue";
+import AssetApi from "@/api/AssetApi";
+import Chart from "chart.js/auto";
+import annotationPlugin from "chartjs-plugin-annotation"; // Chart.js annotation 플러그인
+Chart.register(annotationPlugin);
 
 //이미지 이름 변경
 const changeName = (name) => {
-  if (name == '경남은행') {
+  if (name == "경남은행") {
     return "Gyeongnam";
-  } else if (name == '광주은행') {
+  } else if (name == "광주은행") {
     return "Gwangju";
-  } else if (name == '부산은행') {
+  } else if (name == "부산은행") {
     return "Busan";
-  } else if (name == '산업은행') {
+  } else if (name == "산업은행") {
     return "IndustrialBank";
-  } else if (name == '새마을금고은행') {
+  } else if (name == "새마을금고은행") {
     return "SaemaulGeumgo";
-  } else if (name == '수협은행') {
+  } else if (name == "수협은행") {
     return "Suhyup";
-  } else if (name == '신한은행') {
+  } else if (name == "신한은행") {
     return "Shinhan";
-  } else if (name == '신협은행') {
+  } else if (name == "신협은행") {
     return "Shinhyup";
-  } else if (name == '씨티은행') {
+  } else if (name == "씨티은행") {
     return "Citi";
-  } else if (name == '우리은행') {
+  } else if (name == "우리은행") {
     return "Woori";
-  } else if (name == '우체국은행') {
+  } else if (name == "우체국은행") {
     return "PostOfficeBank";
-  } else if (name == '전북은행') {
+  } else if (name == "전북은행") {
     return "Jeonbuk";
-  } else if (name == '제주은행') {
+  } else if (name == "제주은행") {
     return "Jeju";
-  } else if (name == '카카오뱅크') {
+  } else if (name == "카카오뱅크") {
     return "KakaoBank";
-  } else if (name == '하나은행') {
+  } else if (name == "하나은행") {
     return "Hana";
-  } else if (name == '기업은행') {
+  } else if (name == "기업은행") {
     return "IBK";
-  } else if (name == 'IM') {
+  } else if (name == "IM") {
     return "IM";
-  } else if (name == 'K뱅크') {
+  } else if (name == "K뱅크") {
     return "KBank";
-  } else if (name == '국민은행') {
+  } else if (name == "국민은행") {
     return "KB";
-  } else if (name == '농협은행') {
+  } else if (name == "농협은행") {
     return "NH";
   }
-}
+};
 
 //총 자산 분석
 const totalBalance = ref('');
@@ -301,9 +299,7 @@ const getAnalysis = async() =>{
   }catch(error){
    // console.error("API 호출 중 오류 발생:", error);
   }
-}
-
-
+};
 
 //소비 분석 부분
 
@@ -314,10 +310,10 @@ const getAnalysis = async() =>{
   // 현재 월을 계산
   const currentMonth = new Date().getMonth() + 1;  // 0부터 시작하므로 1을 더함
 
-  const getSpendingPatterns = async() =>{
-    try{  
-      const response = await AssetApi.showSpendingPatterns(selectedYear.value);
-      spendings.previousMonthDiff = response.previousMonthDiff;
+const getSpendingPatterns = async () => {
+  try {
+    const response = await AssetApi.showSpendingPatterns(selectedYear.value);
+    spendings.previousMonthDiff = response.previousMonthDiff;
 
       // selectedYear가 현재 연도인 경우 currentMonth에 해당하는 개수만큼 데이터 수집
       // 이전 연도인 경우 12개월 모두 수집
@@ -330,26 +326,24 @@ const getAnalysis = async() =>{
       renderChart();
     }catch(error){
     //  console.error("API 호출 중 오류 발생:", error);
-    }
   }
-  let spendingChart; // 차트 인스턴스를 전역적으로 저장
+};
+let spendingChart; // 차트 인스턴스를 전역적으로 저장
 
-  const renderChart = () => {
-  const ctx = document.getElementById('spendingChart').getContext('2d');
-  
+const renderChart = () => {
+  const ctx = document.getElementById("spendingChart").getContext("2d");
+
   // 이전 차트가 존재하면 파괴
   if (spendingChart) {
     spendingChart.destroy();
   }
 
   // 현재 월을 기준으로 색상을 동적으로 설정
-  const barColors = Array.from({ length: currentMonth }, (_, i) => 
-    i === currentMonth - 1 ? '#3F40FF' : '#8485FF'
-  );
+  const barColors = Array.from({ length: currentMonth }, (_, i) => (i === currentMonth - 1 ? "#3F40FF" : "#8485FF"));
 
   // 새 차트 생성
   spendingChart = new Chart(ctx, {
-    type: 'bar',
+    type: "bar",
     data: {
       labels: Array.from(
         { length: selectedYear.value === new Date().getFullYear() ? currentMonth : 12 },
@@ -369,15 +363,15 @@ const getAnalysis = async() =>{
           beginAtZero: true,
           display: false,
           grid: {
-            display: false // 격자 지우기
+            display: false, // 격자 지우기
           },
           ticks: {
-            display: false // Y축 숫자 제거
-          }
+            display: false, // Y축 숫자 제거
+          },
         },
         x: {
           grid: {
-            display: false // 격자 지우기
+            display: false, // 격자 지우기
           },
           ticks: {
             max: currentMonth + 0.5,  // X축에 여백 추가
@@ -393,7 +387,7 @@ const getAnalysis = async() =>{
         },
       plugins: {
         legend: {
-          display: false // 범례 숨기기
+          display: false, // 범례 숨기기
         },
         annotation: {
           annotations: {
@@ -418,18 +412,18 @@ const getAnalysis = async() =>{
         }
       },
       // 막대의 너비를 줄이기 위한 옵션
-      barPercentage: 0.7,  // 막대 너비 (기본값보다 좁게 설정)
-      categoryPercentage: 0.8  // 카테고리 너비 조정 (막대 사이 간격 추가)
-    }
+      barPercentage: 0.7, // 막대 너비 (기본값보다 좁게 설정)
+      categoryPercentage: 0.8, // 카테고리 너비 조정 (막대 사이 간격 추가)
+    },
   });
 };
 
 //상품 번호 무작위화
-const randomnumber1 = ref('');
-const randomnumber2 = ref('');
-const randomnumber3 = ref('');
-const randomnumber4 = ref('');
-const getRandomRecommendations = () =>{
+const randomnumber1 = ref("");
+const randomnumber2 = ref("");
+const randomnumber3 = ref("");
+const randomnumber4 = ref("");
+const getRandomRecommendations = () => {
   randomnumber1.value = Math.floor(Math.random() * 6) + 2; // 2부터 7까지
   randomnumber2.value = Math.floor(Math.random() * 6) + 2;
   randomnumber3.value = Math.floor(Math.random() * 6) + 2;
@@ -440,40 +434,40 @@ const getRandomRecommendations = () =>{
 const depositRecomendations = reactive([]); // 예금 상품
 const savingsRecommendations = reactive([]); //적금상품
 const bankNames = {
-  1: '국민은행',
-  2: '신한은행',
-  3: '기업은행',
-  4: '우리은행',
-  5: '농협은행',
-  6: '하나은행'
+  1: "국민은행",
+  2: "신한은행",
+  3: "기업은행",
+  4: "우리은행",
+  5: "농협은행",
+  6: "하나은행",
 };
-const getProductRecommendations = async() =>{
-    try{  
-      const response = await AssetApi.showProductRecommendations();
-   //   console.log(response);
-      for(let i =0;i<8;i++){
-        // depositRecomendations에 은행 이름 추가
+const getProductRecommendations = async () => {
+  try {
+    const response = await AssetApi.showProductRecommendations();
+    //   console.log(response);
+    for (let i = 0; i < 8; i++) {
+      // depositRecomendations에 은행 이름 추가
       const depositBankId = response.depositRecommendations[i].bankId;
       depositRecomendations[i] = {
         ...response.depositRecommendations[i],
-        bankName: bankNames[depositBankId] || '알 수 없는 은행' // bankId가 1~6 외의 값일 경우 기본값
+        bankName: bankNames[depositBankId] || "알 수 없는 은행", // bankId가 1~6 외의 값일 경우 기본값
       };
 
       // savingsRecommendations에 은행 이름 추가
       const savingsBankId = response.savingsRecommendations[i].bankId;
       savingsRecommendations[i] = {
         ...response.savingsRecommendations[i],
-        bankName: bankNames[savingsBankId] || '알 수 없는 은행'
+        bankName: bankNames[savingsBankId] || "알 수 없는 은행",
       };
-      }
-
-      getRandomRecommendations();
-    }catch(error){
-   //   console.error("API 호출 중 오류 발생:", error);
     }
-  }
 
-  // 슬라이드 인덱스 관리
+    getRandomRecommendations();
+  } catch (error) {
+    //   console.error("API 호출 중 오류 발생:", error);
+  }
+};
+
+// 슬라이드 인덱스 관리
 const currentSlide = ref(0);
 const slideFlag = ref(false);
 const slideLeft = () => {
@@ -505,11 +499,11 @@ const updateSide = (index) =>{
 }
 
 const scrollToSlide = (index) => {
-  const carousel = document.querySelector('.recommendation-carousel');
+  const carousel = document.querySelector(".recommendation-carousel");
   const slideWidth = carousel.clientWidth;
   carousel.scrollTo({
     left: slideWidth * index,
-    behavior: 'smooth'
+    behavior: "smooth",
   });
 };
 
@@ -543,16 +537,18 @@ const scrollToSlide = (index) => {
     rankText.style.left = `${rankPosition -20}px`;
     rankText.textContent = `${rank.value}위`;
   }
+};
+const drawTriangleGraph = () => {
+  const triangleHeight = 300;
+  const rankPosition = (rank.value / totalSameUser.value) * triangleHeight;
 
+  const rankLine = document.getElementById("rankLine");
+  const rankText = document.getElementById("rankText");
 
-  onMounted(() => {
-      getAnalysis();
-      getSpendingPatterns();
-      getProductRecommendations();
-      getAgeComparison();
-    });
-
-    
+  rankLine.style.top = `${rankPosition}px`;
+  rankText.style.top = `${rankPosition - 10}px`;
+  rankText.textContent = `내 등수: ${rank.value}위`;
+};
 
   
   </script>
@@ -563,8 +559,8 @@ const scrollToSlide = (index) => {
   display: flex;
   overflow: hidden; /* 슬라이드 바 숨기기 */
   scroll-snap-type: x mandatory;
-  -ms-overflow-style: none;  /* IE 및 Edge에서 스크롤바 숨기기 */
-  scrollbar-width: none;  /* Firefox에서 스크롤바 숨기기 */
+  -ms-overflow-style: none; /* IE 및 Edge에서 스크롤바 숨기기 */
+  scrollbar-width: none; /* Firefox에서 스크롤바 숨기기 */
 }
 
 /* 캐러셀 스타일 */
@@ -591,4 +587,3 @@ const scrollToSlide = (index) => {
     border-bottom: 300px solid #8485FF;
   }
   </style>
-  

@@ -276,7 +276,7 @@ const changeName = (name) => {
   }
 };
 
-const monthlyMission = ref('');
+const monthlyMission = ref("");
 
 const dailyMissions = reactive([]);
 const getMission = async () => {
