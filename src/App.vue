@@ -1,15 +1,17 @@
 <template>
   <div class="flex flex-col relative">
-    <Header v-if="!isUserPage"/>
-    <div :class="isUserPage ? 'flex-1 mt-0' : 'flex-1 mt-[50px] mb-2 overflow-y-auto'">
+    <Header v-if="!isUserPage" class="lg:hidden"/>
+    <WebHeader v-if="!isUserPage" class="hidden lg:flex w-full mx-auto" />
+    <div :class="isUserPage ? 'flex-1 mt-0' : 'flex-1 mt-[50px] lg:mt-[80px] mb-2 overflow-y-auto'">
       <RouterView/>
     </div>
-    <Footer v-if="!isUserPage"/>
+    <Footer v-if="!isUserPage" class="lg:hidden"/>
   </div>
 </template>
 <script setup>
 import Header from "./components/Header.vue"
 import Footer from "./components/Footer.vue"
+import WebHeader from "./components/WebHeader.vue";
 
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';

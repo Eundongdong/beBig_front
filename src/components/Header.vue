@@ -1,7 +1,7 @@
 <template>
     <header class="top-0 left-0  z-50 fixed w-full bg-white shadow-md">
-        <div class="container mx-auto px-4 py-4 sm:px-4 sm:py-2 md:px-6 md:py-4">
-            <img src="/images/logo.png" alt="Logo" @click="goHome" class="w-24 h-auto max-w-full" />
+        <div class="container mx-auto px-4 py-4">
+            <img src="/images/logo.png" alt="Logo" @click="goHome" class="w-24 h-auto max-w-full ml-2" />
         </div>
     </header>
 </template>

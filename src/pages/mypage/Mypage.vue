@@ -34,7 +34,7 @@
     </header>
 
     <!-- 프로필 영역 -->
-    <section class="section-style !mt-2">
+    <section class="section-style mt-2">
       <div class="flex items-start">
         <div class="flex items-center">
           <div>
@@ -101,29 +101,17 @@
           ></div>
 
           <!-- 깃발은 오른쪽 끝에 고정 -->
-          <img
-            src="/images/flag.png"
-            alt="깃발 이미지"
-            class="flag-image absolute right-0 bottom-3 w-6 transform translate-x-4"
-          />
+          <img src="/images/flag.png" alt="깃발 이미지" class="flag-image absolute right-0 bottom-3 w-6 transform translate-x-4" />
         </div>
       </section>
 
       <!-- 내가 작성한 글 & 좋아요한 글 -->
       <section class="section-style">
         <div class="flex border-b-2 border-gray-300">
-          <button
-            @click="selectTab('myPosts')"
-            :class="selectedTab === 'myPosts' ? 'border-b-4 border-black font-bold' : 'text-gray-500'"
-            class="w-1/2 pb-2 text-center"
-          >
+          <button @click="selectTab('myPosts')" :class="selectedTab === 'myPosts' ? 'border-b-4 border-black font-bold' : 'text-gray-500'" class="w-1/2 pb-2 text-center">
             작성한 글
           </button>
-          <button
-            @click="selectTab('likedPosts')"
-            :class="selectedTab === 'likedPosts' ? 'border-b-4 border-black font-bold' : 'text-gray-500'"
-            class="w-1/2 pb-2 text-center"
-          >
+          <button @click="selectTab('likedPosts')" :class="selectedTab === 'likedPosts' ? 'border-b-4 border-black font-bold' : 'text-gray-500'" class="w-1/2 pb-2 text-center">
             좋아하는 글
           </button>
         </div>
@@ -183,11 +171,7 @@
     </div>
 
     <!-- 모달이 활성화될 때 표시 -->
-    <div
-      v-if="showModal"
-      class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
-      @click="closeModalOnOverlay"
-    >
+    <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" @click="closeModalOnOverlay">
       <div class="bg-white rounded-lg max-w-md w-80 mx-10 p-6 relative" @click.stop>
         <button @click="closeModal" class="absolute top-4 right-4">
           <i class="fa-solid fa-xmark"></i>
@@ -199,11 +183,7 @@
 
         <h2 class="font-semibold text-center mb-2">메달의 기준이 궁금하신가요?</h2>
         <!-- badgeCode가 0이 아닌 배지 목록만 표시 -->
-        <div
-          v-for="badge in filteredBadgeList"
-          :key="badge.badgeCode"
-          class="flex justify-between border-t px-4 pt-4 mt-4"
-        >
+        <div v-for="badge in filteredBadgeList" :key="badge.badgeCode" class="flex justify-between border-t px-4 pt-4 mt-4">
           <h2 class="text-[10px] font-semibold">
             {{ badge.badgeTitle }}
           </h2>
@@ -244,9 +224,9 @@ const showModal = ref(false); // 모달 표시 여부
 const badgeList = ref([]); // 뱃지 정보 배열
 
 //유형검사 다시하기
-const goSurvey = ()=>{
-  router.push("/home/survey-start");
-}
+const goSurvey = () => {
+  router.push('/home/survey-start');
+};
 
 // URL에서 userId를 가져오기
 const userId = ref(route.params.userId);
@@ -422,7 +402,6 @@ const setAchievementByUserId = async () => {
     console.error('미션 성취도 불러오는 중 에러 발생 :', error);
   }
 };
-
 
 // 정보 수정 페이지 이동 함수
 const goSettings = () => {
