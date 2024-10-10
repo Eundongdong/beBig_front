@@ -16,14 +16,21 @@
             class="bar-segment bg-indigo-600 h-full"
             :style="{ width: depositSavingsPercentage + '%' }"
           ></div>
+          <div
+            class="bar-segment bg-indigo-900 h-full"
+            :style="{ width: Math.max(etcPercentage, 1) + '%' }"
+          ></div>
         </div>
         <!-- 범례 -->
         <div class="legend flex justify-start mt-5">
           <div class="legend-item flex items-center mr-2 text-sm">
             <span class="legend-color bg-indigo-300 w-3 h-3 rounded-full mr-2"></span> 입출금 자산
           </div>
-          <div class="legend-item flex items-center text-sm">
+          <div class="legend-item flex items-center mr-2 text-sm">
             <span class="legend-color bg-indigo-600 w-3 h-3 rounded-full mr-2"></span> 예적금 자산
+          </div>
+          <div class="legend-item flex items-center text-sm">
+            <span class="legend-color bg-indigo-900 w-3 h-3 rounded-full mr-2"></span> 기타 자산
           </div>
         </div>
 
@@ -268,6 +275,7 @@ const changeName = (name) => {
 const totalBalance = ref('');
 const totalCashBalance = ref('');
 const totalDepositSavingsBalance = ref('');
+const totalEtcBalance = ref('');
 
 // 총 자산 비율 계산하는 computed
 const cashPercentage = computed(() => {
@@ -277,6 +285,11 @@ const cashPercentage = computed(() => {
     const depositSavingsPercentage = computed(() => {
       return ((totalDepositSavingsBalance.value / totalBalance.value) * 100).toFixed(2);
     });
+
+    const etcPercentage = computed(() => {
+      console.log(totalEtcBalance.value);
+      return ((totalEtcBalance.value / totalBalance.value) * 100).toFixed(2);
+    })
     
 const getAnalysis = async() =>{
   try{
@@ -284,6 +297,7 @@ const getAnalysis = async() =>{
     totalBalance.value = response.totalBalance;
     totalCashBalance.value = response.totalCashBalance;
     totalDepositSavingsBalance.value = response.totalDepositSavingsBalance;
+    totalEtcBalance.value = response.totalEtcBalance;
   }catch(error){
    // console.error("API 호출 중 오류 발생:", error);
   }
