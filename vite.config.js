@@ -11,6 +11,9 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
+
+  productionSourceMap: true,
+
   server: {
     port: 5173, // 개발 서버 포트 번호
     open: true, // 서버 시작 시 브라우저 자동 열기
