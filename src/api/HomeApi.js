@@ -30,6 +30,7 @@ export default {
 
   // 설문 결과 보내기
   async submitSurvey(survey) {
+    console.log(survey);
     const { data } = await api.post(
       `${BASE_URL}/fin-save`,
       survey,
