@@ -31,7 +31,7 @@
     <!-- 사진 추가하기 -->
     <div class="form-group">
       <label class="label">사진 추가하기</label>
-      <input type="file" accept="image/*" @change="onFileChange" multiple style="display: none;" />
+      <input type="file" accept="image/*" @change="onFileChange" multiple  />
       <!-- 파일 이름을 쉼표로 구분하여 출력 -->
       <p class="text-sm">{{ fileNames.join(', ') }}</p>
 
