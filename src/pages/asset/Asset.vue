@@ -204,8 +204,8 @@
         <!--삼각형 그리기 -->
         <div class="triangle-container relative w-48 h-72 my-12 mx-auto">
           <div class="triangle w-0 h-0 border-l-[100px] border-r-[100px] border-b-[300px] border-b-indigo-300 relative"></div>
-          <div class="rank-line absolute w-full h-0.5 bg-red-500" id="rankLine"></div>
-          <div class="rank-text absolute left-full ml-2 top-1/2 transform -translate-x-1/2 whitespace-nowrap text-black text-sm" id="rankText"></div>
+          <div class="rank-line absolute w-full h-0.5 bg-red-500 top-1/2" id="rankLine"></div>
+          <div class="rank-text absolute left-[100%] ml-2 top-1/2 transform -translate-y-1/2 whitespace-nowrap text-black text-sm" id="rankText">Rank</div>
         </div>
       </div>
     </div>
