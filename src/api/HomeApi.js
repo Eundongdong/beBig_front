@@ -54,7 +54,7 @@ export default {
     // 은행 아이디, 비번 받고, 해당 은행 계좌 정보 받아오기
     async getAccountList(bankAccount) {
         const { data } = await api.post(
-          `${BASE_URL}/account`,
+          `${BASE_URL}/account/add`,
           bankAccount,
           { 
             headers: {
@@ -63,20 +63,6 @@ export default {
           });
         return data;
     },
-    //확인된 계좌 정보들 db에 저장하기
-    async addAccount(accountList){
-     // console.log(accountList);
-      const { data } = await api.post(
-        `${BASE_URL}/account/add`,
-        accountList,
-        { 
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-      return data;
-    },
-
 
   // 미션보기
   async missionList(userId) {
