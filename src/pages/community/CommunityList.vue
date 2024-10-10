@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto p-4">
     <!-- 정렬 버튼: 좋아요순, 최신순 -->
-    <div class="hidden lg:flex justify-end mb-4">
+    <div class="hidden lg:flex justify-end mb-4 max-w-screen-md mx-auto">
       <div class="flex items-center space-x-2">
         <button
           @click="sortBy('likeHits')"
@@ -24,9 +24,9 @@
       </div>
     </div>
 
-<!-- 사이드바 및 게시글 리스트를 나란히 배치 -->
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      <!-- 사이드바 및 필터 -->
+    <!-- 사이드바 및 게시글 리스트를 나란히 배치 -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- 사이드바 및 필터 -->
       <aside class="col-span-1 lg:col-span-2">
         <div class="bg-gray-100 p-4 rounded-lg">
           <!-- 필터 드롭다운: 카테고리, 자산유형 -->
@@ -168,7 +168,7 @@
 
 
       <!-- 게시글 리스트 -->
-      <main class="col-span-1 lg:col-span-10">
+      <main class="col-span-1 lg:col-span-8">
         <!-- 모바일 화면에서 정렬 버튼 표시 -->
         <div class="flex lg:hidden justify-end mb-4">
           <div class="flex items-center space-x-2">
@@ -197,7 +197,7 @@
           <div
             v-for="post in sortedPosts"
             :key="post.postId"
-            class="post-content p-4 mb-4 bg-white rounded-lg shadow-md"
+            class="post-content p-4 mb-4 bg-white rounded-lg"
             @click="goToPostDetail(post.postId)"
           >
             <div class="flex justify-between items-center mb-2">
