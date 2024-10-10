@@ -136,6 +136,10 @@
   @apply bg-white rounded-lg max-w-md w-80 mx-10 p-6 relative
 }
 
+.modal-image{
+  @apply max-h-full w-auto object-contain;
+}
+
 .terms-content {
   @apply overflow-y-scroll text-sm text-gray-600 border border-gray-300 rounded-lg p-2 max-h-40;
 }
@@ -241,8 +245,9 @@
   @apply w-full p-3 border rounded-lg;
 }
 
-.image-preview {
-  @apply w-[80px] flex items-start justify-start space-x-2;
+.image-preview img{
+  @apply h-[100px] w-[100px] object-cover;
+  cursor: pointer;
 }
 
 .disabled-input {
@@ -263,6 +268,14 @@
 
 .loading {
   @apply flex items-center justify-center mt-2;
+}
+
+.file-input{
+  @apply hidden;
+}
+
+.file-label{
+  @apply cursor-pointer px-2 text-white text-xs px-2 bg-[#5354ff] rounded-lg hover:bg-[#3435ff];
 }
 
 .small-buttons {
