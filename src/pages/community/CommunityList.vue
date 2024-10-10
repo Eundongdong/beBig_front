@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto p-4">
     <!-- 정렬 버튼: 좋아요순, 최신순 -->
-    <div class="hidden lg:flex justify-end mb-4 max-w-screen-md mx-auto">
+    <div class="hidden lg:flex justify-end mb-4 max-w-[60%] mx-auto">
       <div class="flex items-center space-x-2">
         <button
           @click="sortBy('likeHits')"
