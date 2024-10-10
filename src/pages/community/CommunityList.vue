@@ -25,7 +25,7 @@
     </div>
 
     <!-- 사이드바 및 게시글 리스트를 나란히 배치 -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6" >
           <!-- 사이드바 및 필터 -->
       <aside class="col-span-1 lg:col-span-2">
         <div class="bg-gray-100 p-4 rounded-lg">
@@ -202,7 +202,7 @@
           >
             <div class="flex justify-between items-center mb-2">
               <div class="flex items-center space-x-2">
-                <img :src="getProfileIcon(post.finTypeCode)" class="w-10 h-10 rounded-full" alt="Profile" />
+                <img :src="getProfileIcon(post.finTypeCode)" class="w-10 h-10 rounded-full" alt="Profile" @click.stop="goToUserProfile(post.userId)"/>
                 <span>{{ post.userNickname }}</span>
               </div>
               <p class="text-gray-500 text-sm">{{ formatDate(post.postCreatedTime) }}</p>
@@ -221,7 +221,7 @@
         </div>
 
         <!-- 페이지네이션 -->
-        <div class="pagination flex justify-center items-center space-x-2 mt-4 overflow-x-auto">
+        <div class="pagination flex justify-center items-center space-x-2 mt-4 mb-12 overflow-x-auto">
           <button
             @click="goToPage(1)"
             :disabled="currentPage === 1"
@@ -402,8 +402,6 @@ const fetchPosts = async () => {
       posts.value = [];
       totalPage.value=1;
     }
-
-    console.log(posts);
     await getLike();
 
   } catch (error) {
@@ -419,7 +417,6 @@ const fetchPosts = async () => {
 const getLike = async()=>{
   try{
     const userLikePosts = await MypageApi.getMyLikePosts();
-    console.log(userLikePosts);
     const likedPostIds = userLikePosts.map(post => post.postId); // 좋아요 누른 게시글의 postId 목록 추출
 
     // fetchPosts로 가져온 posts 배열에서 좋아요한 게시글들을 찾아서 isLiked를 true로 설정
@@ -487,7 +484,7 @@ const goToNextPage = () => {
   }
 };
 
-watch([selectedCategory, selectedFinType], () => {
+watch([selectedCategory, selectedFinType, sortType], () => {
   currentPage.value = 1;
   communityStore.setCurrentPage(currentPage.value);
   fetchPosts();
