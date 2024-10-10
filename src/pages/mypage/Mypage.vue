@@ -34,24 +34,23 @@
         <i class="fa-solid fa-gear"></i>
       </button>
     </div>
-
-        <div class="flex items-start">
+      <div class="flex items-start">
           <div class="flex items-center">
             <div>
               <div class="home-profile m-2">
                   <img :src="profileImage" alt="Profile Image" />
                 </div>
               <button @click="goSurvey">유형검사 다시하기</button>
-            </div>
-            <div class="ml-4">
-              <div class="flex items-center">
-                <div class="text-sm font-bold mr-1">{{ userNickname }} 님</div>
+          </div>
+          <div class="ml-4">
+            <div class="flex items-center">
+              <div class="text-sm font-bold mr-1">{{ userNickname }} 님</div>
 
-                <!-- badgeCode가 0이 아닐 때만 배지 이미지가 버튼으로 표시됨 -->
-                <button v-if="badgeCode !== 0" @click="openBadgeModal">
-                  <img :src="badgeImage" alt="Badge" class="w-6 h-6" />
-                </button>
-              </div>
+              <!-- badgeCode가 0이 아닐 때만 배지 이미지가 버튼으로 표시됨 -->
+              <button v-if="badgeCode !== 0" @click="openBadgeModal">
+                <img :src="badgeImage" alt="Badge" class="w-6 h-6" />
+              </button>
+            </div>
 
               <div class="mt-2">
                 <p>

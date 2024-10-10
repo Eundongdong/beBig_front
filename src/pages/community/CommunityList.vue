@@ -170,8 +170,10 @@
       <div class="flex justify-between items-center">
         <div class="flex items-center space-x-3">
 
-          <img class="community-profile" :src="getProfileIcon(post.finTypeCode)" alt="Profile" @click.stop="goToUserProfile(post.userId)" />
-          <span>{{ post.userNickname }}</span>
+          <div class="community-profile">
+          <img :src="getProfileIcon(post.finTypeCode)" alt="Profile" @click.stop="goToUserProfile(post.userId)" />
+        </div>
+        <span>{{ post.userNickname }}</span>
 
         </div>
         <p class="community-content">
@@ -368,7 +370,7 @@ const goToUserProfile = async (userId) => {
 const getProfileIcon = (finTypeCode) => {
   // finTypeCode가 유효한지 확인
   if (finTypeCode && finTypeCode !== 0) {
-    return `images/${finTypeCode}.png`;
+    return `images/${finTypeCode}-face.png`;
   }
   // 기본 이미지 반환
   return 'images/0.png';

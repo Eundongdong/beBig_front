@@ -1,3 +1,5 @@
+BankLogin.vue
+
 <template>
   <div class="page">
     <header class="w-full flex justify-between items-center mb-6 px-2 relative">
@@ -7,31 +9,44 @@
       <p class="font-bold text-base absolute left-1/2 transform -translate-x-1/2">계좌 연결하기</p>
     </header>
 
-    <div class="section-style lg:mx-20">
+    <div class="section-style mx-4 lg:mx-20 lg:pt-4">
       <p class="text-base font-bold text-center mt-2">{{ selectedBank }} 계좌 연결</p>
       <div class="mt-8 mx-6">
-        <p class="label">아이디</p>
-        <input type="text" v-model="bankAccount.userBankId" placeholder="Enter your ID" class="input" />
-        <p class="label">비밀번호</p>
-        <input type="password" v-model="bankAccount.bankPassword" placeholder="Enter your password" class="input" />
-        <h3 v-if="checkCount" class="count-text">아이디/비밀번호 입력 횟수가 {{ count }}번 남았습니다.</h3>
+        <div>
+          <p class="label">아이디</p>
+          <input type="text" v-model="bankAccount.userBankId" placeholder="은행 아이디를 입력하세요" class="input" />
+        </div>
+        <div>
+          <p class="label">비밀번호</p>
+          <input
+            type="password"
+            v-model="bankAccount.bankPassword"
+            placeholder="은행 비밀번호를 입력하세요."
+            class="input"
+          />
+        </div>
+
+        <p v-if="checkCount" class="text-red-500 text-sm">아이디/비밀번호 입력 횟수가 {{ count }}번 남았습니다.</p>
         <button @click="Connect" class="button !mt-6">계좌 연결하기</button>
       </div>
     </div>
 
     <!-- 계좌 목록을 보여주는 섹션 -->
-    <div v-if="accountList.length != 0" class="account-list">
-      <div v-for="account in accountList" :key="account.resAccount" class="account-info">
-        <img :src="`../../../public/images/bank/${account.bankVo.bankName}.png`" alt="Bank Logo" class="bank-logo" />
-
-        <div class="account-details">
-          <p>{{ account.bankVo.bankName }}</p>
-          <p>통장이름: {{ account.resAccountName }}</p>
-          <p>계좌번호: {{ account.resAccount }}</p>
-          <p>잔액: {{ account.resAccountBalance.toLocaleString() }}</p>
+    <div v-if="accountList.length != 0" class="flex mt-8 mx-4 lg:mx-20">
+      < v-for="account in accountList" :key="account.resAccount" class="flex items-center justify-between mb-4 bg-white
+      p-4 rounded-lg shadow" >
+      <div class="flex items-center">
+        <img :src="`/images/bank/${account.bankVo.bankName}.png`" alt="Bank Logo" class="bank-icon" />
+        <div class="ml-4">
+          <p class="font-bold text-base">{{ account.bankVo.bankName }}</p>
+          <p class="text-sm">통장이름 : {{ account.resAccountName }}</p>
+          <p class="text-sm">계좌번호 : {{ account.resAccount }}</p>
+          <p class="text-sm">잔액 : {{ account.resAccountBalance.toLocaleString() }} 원</p>
         </div>
       </div>
-      <button @click="addAccount()" class="primary-button">계좌를 추가하시겠습니까?</button>
+      <div class="flex items-center">
+        <button @click="addAccount()" class="button ml-auto">계좌 추가</button>
+      </div>
     </div>
   </div>
 </template>
@@ -105,43 +120,3 @@ const handleBackClick = () => {
   router.push('/home/bank');
 };
 </script>
-
-<!-- <style scoped>
-
-
-    .count-text {
-      color: red;
-    }
-  
-  
-    .account-list {
-      margin-top: 20px;
-      padding: 10px;
-      background-color: #f3f3f3;
-      border-radius: 15px;
-    }
-  
-    .account-info {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-    .bank-logo {
-      width: 50px;
-      height: 50px;
-      margin-right: 10px;
-    }
-  
-    .account-details {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-    }
-  
-    .account-details p {
-      margin: 0;
-      font-size: 14px;
-      color: black;
-    }
-  </style>
-   -->

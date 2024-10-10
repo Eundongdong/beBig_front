@@ -136,6 +136,10 @@
   @apply bg-white rounded-lg max-w-md w-80 mx-10 p-6 relative
 }
 
+.modal-image{
+  @apply max-h-full w-auto object-contain;
+}
+
 .terms-content {
   @apply overflow-y-scroll text-sm text-gray-600 border border-gray-300 rounded-lg p-2 max-h-40;
 }
@@ -161,11 +165,19 @@
 }
 
 .home-profile {
-  @apply w-[80px] rounded-full;
+  @apply w-[100px] h-[100px] bg-white rounded-full overflow-hidden;
+}
+
+.home-profile img {
+  @apply w-full h-full object-contain;
 }
 
 .community-profile {
-  @apply w-[35px] rounded-full;
+  @apply w-[35px] h-[35px] bg-gray-200 rounded-full;
+}
+
+.community-profile img{
+  @apply w-full h-full object-contain;
 }
 
 .community-title {
@@ -205,7 +217,7 @@
 }
 
 .answer-button {
-  @apply w-full px-3 mb-1 text-lg text-black bg-white rounded-lg hover:bg-gray-200 border;
+  @apply w-full px-3 mb-1 text-lg text-black bg-white rounded-lg border;
   white-space: normal;
   word-break: keep-all;
   text-align: center;
@@ -233,8 +245,9 @@
   @apply w-full p-3 border rounded-lg;
 }
 
-.image-preview {
-  @apply w-[80px] flex items-start justify-start space-x-2;
+.image-preview img{
+  @apply h-[100px] w-[100px] object-cover;
+  cursor: pointer;
 }
 
 .disabled-input {
@@ -257,12 +270,24 @@
   @apply flex items-center justify-center mt-2;
 }
 
+.file-input{
+  @apply hidden;
+}
+
+.file-label{
+  @apply cursor-pointer px-2 text-white text-xs px-2 bg-[#5354ff] rounded-lg hover:bg-[#3435ff];
+}
+
 .small-buttons {
   @apply text-xs px-1 hover:text-white hover:bg-[#5354ff] text-black;
 }
 
 .selected {
   @apply text-xs px-1 text-white font-semibold bg-[#5354ff];
+}
+
+.flag-image{
+  @apply w-[40px];
 }
 
 /* @media (hover: hover) {

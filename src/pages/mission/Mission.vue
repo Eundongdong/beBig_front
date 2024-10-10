@@ -5,35 +5,35 @@
       <div class="component">
         <h1 class="font-semibold text-lg">현재 달성도</h1>
         <div class="flex justify-between items-center">
-          <span class="ml-2">미션을 {{ monthlyProgress }}% 달성했어요</span>
+          <span class="ml-2">미션을 <span class="font-semibold text-[#5354ff]"> {{ monthlyProgress }}%</span> 달성했어요!</span>
           <span class="ml-auto">D-{{ remainingDays }}</span>
         </div>
-        <div class="progress-bar relative h-5 flex items-center mt-10">
-          <div
-            class="progress-fill relative flex-1 h-2 mx-2"
-            :style="{ width: monthlyProgress + '%' }"
-          >
-            <img
-              :src="characterImage"
-              class="w-[50px] absolute transition-transform duration-200"
-              :style="{
-                left: 'calc(' + monthlyProgress + '% + 45px)',
-                top: '-40px',
-              }"
-            />
-          </div>
+        <div class="progress-bar relative w-11/12 h-2 bg-gray-300 rounded-md mx-auto mt-20">
+          <!-- 캐릭터 이미지 (진행된 만큼 왼쪽으로 배치) -->
+          <img :src="runningImage"
+            class="w-[50px] absolute duration-200 bottom-3 transform -translate-x-1/2 transition-all ease-linear"
+            :style="{
+              left: monthlyProgress + '%',
+            }" />
+          </ <!-- 진행 바 채움 -->
+          <div class="progress-fill bg-[#5354ff] h-full rounded-md absolute top-0 left-0 transition-width duration-300"
+            :style="{
+              width: monthlyProgress + '%',
+            }"></div>
+
+          <!-- 깃발은 오른쪽 끝에 고정 -->
+          <img src="/images/flag.png" alt="깃발 이미지"
+            class="flag-image absolute right-0 bottom-3 w-6 transform translate-x-4" />
         </div>
       </div>
+
 
       <!-- 월간 미션 -->
       <div class="component">
         <h1 class="font-semibold text-lg">월간 미션</h1>
         <div class="flex justify-between">
           <span class="ml-2">{{ currentMonth }}</span>
-          <div
-            class="mission-status"
-            :style="{ color: monthlyMission.isRevoked ? 'red' : '#5354ff' }"
-          >
+          <div class="mission-status" :style="{ color: monthlyMission.isRevoked ? 'red' : '#5354ff' }">
             {{ monthlyMission.isRevoked ? "미션 완료" : "미션 진행 중" }}
 
           </div>
@@ -48,33 +48,23 @@
         <h1 class="font-semibold text-lg">일간 미션</h1>
         <div class="flex justify-between">
           <span class="ml-2">{{ todayDate }}</span>
-          <div
-            class="mission-status"
-            :style="{ color: allDailyMissionsCompleted ? 'red' : '#5354ff' }"
-          >
+          <div class="mission-status" :style="{ color: allDailyMissionsCompleted ? 'red' : '#5354ff' }">
             {{ allDailyMissionsCompleted ? "미션 완료!" : "미션 진행 중" }}
           </div>
         </div>
         <ul>
-          <li
-            v-for="mission in dailyMissions"
-            :key="mission.personalDailyMissionId"
-            class="flex justify-between mission-text"
-          >
-            <div
-              :class="{ 'line-through': mission.personalDailyMissionCompleted }"
-            >
+          <li v-for="mission in dailyMissions" :key="mission.personalDailyMissionId"
+            class="flex justify-between mission-text">
+            <div :class="{ 'line-through': mission.personalDailyMissionCompleted }">
               {{ mission.missionTopic || "설명이 없습니다." }}
             </div>
-            <input
-              type="checkbox"
-              :checked="mission.personalDailyMissionCompleted"
-              @change="completeMission(mission)"
-            />
+            <input type="checkbox" :checked="mission.personalDailyMissionCompleted"
+              @change="completeMission(mission)" />
           </li>
         </ul>
 
       </div>
+
     </div>
   </div>
 </template>
@@ -195,9 +185,8 @@ const startAnimation = () => {
   }, 500); // 0.5초마다 상태 변경
 };
 
-const characterImage = computed(() => {
-  const baseImage = `/images/character${user.finTypeCode}.png`;
-  return isRunning.value ? baseImage.replace(".png", "-ani.png") : baseImage;
+const runningImage = computed(() => {
+  const baseImage = `/images/${user.finTypeCode}-animated-${isRunning.value ? 2 : 1}.png`;
+  return baseImage;
 });
 </script>
-
