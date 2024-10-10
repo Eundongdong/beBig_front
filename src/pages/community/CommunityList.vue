@@ -24,20 +24,20 @@
       </div>
     </div>
 
-  <!-- 사이드바 및 게시글 리스트를 나란히 배치 -->
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- 사이드바 및 게시글 리스트를 나란히 배치 -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
       <!-- 사이드바 및 필터 -->
       <aside class="col-span-1 lg:col-span-2">
         <div class="bg-gray-100 p-4 rounded-lg">
           <!-- 필터 드롭다운: 카테고리, 자산유형 -->
-          <div class="flex flex-wrap gap-2 lg:flex-col">
-            <div class="w-full lg:w-auto mb-4">
+          <div class="lg:flex lg:flex-col gap-4">
+            <div>
               <label class="block text-sm font-bold mb-2 text-left">카테고리</label>
-              <div class="flex flex-wrap gap-2">
+              <div class="flex flex-wrap gap-2 lg:flex-col">
                 <button
                   @click="selectCategory(-1)"
                   :class="[
-                    'small-buttons px-2 py-1',
+                    'small-buttons px-2 py-1 text-left',
                     {
                       active: selectedCategory === -1,
                       'font-bold': selectedCategory === -1,
@@ -49,7 +49,7 @@
                 <button
                   @click="selectCategory(1)"
                   :class="[
-                    'small-buttons px-2 py-1',
+                    'small-buttons px-2 py-1 text-left',
                     {
                       active: selectedCategory === 1,
                       'font-bold': selectedCategory === 1,
@@ -61,7 +61,7 @@
                 <button
                   @click="selectCategory(2)"
                   :class="[
-                    'small-buttons px-2 py-1',
+                    'small-buttons px-2 py-1 text-left',
                     {
                       active: selectedCategory === 2,
                       'font-bold': selectedCategory === 2,
@@ -73,7 +73,7 @@
                 <button
                   @click="selectCategory(3)"
                   :class="[
-                    'small-buttons px-2 py-1',
+                    'small-buttons px-2 py-1 text-left',
                     {
                       active: selectedCategory === 3,
                       'font-bold': selectedCategory === 3,
@@ -85,7 +85,7 @@
                 <button
                   @click="selectCategory(4)"
                   :class="[
-                    'small-buttons px-2 py-1',
+                    'small-buttons px-2 py-1 text-left',
                     {
                       active: selectedCategory === 4,
                       'font-bold': selectedCategory === 4,
@@ -96,13 +96,13 @@
                 </button>
               </div>
             </div>
-            <div class="w-full lg:w-auto mb-4">
+            <div>
               <label class="block text-sm font-bold mb-2 text-left">자산유형</label>
-              <div class="flex flex-wrap gap-2">
+              <div class="flex flex-wrap gap-2 lg:flex-col">
                 <button
                   @click="selectFinType(-1)"
                   :class="[
-                    'small-buttons px-2 py-1',
+                    'small-buttons px-2 py-1 text-left',
                     {
                       active: selectedFinType === -1,
                       'font-bold': selectedFinType === -1,
@@ -114,7 +114,7 @@
                 <button
                   @click="selectFinType(1)"
                   :class="[
-                    'small-buttons px-2 py-1',
+                    'small-buttons px-2 py-1 text-left',
                     {
                       active: selectedFinType === 1,
                       'font-bold': selectedFinType === 1,
@@ -126,7 +126,7 @@
                 <button
                   @click="selectFinType(2)"
                   :class="[
-                    'small-buttons px-2 py-1',
+                    'small-buttons px-2 py-1 text-left',
                     {
                       active: selectedFinType === 2,
                       'font-bold': selectedFinType === 2,
@@ -138,7 +138,7 @@
                 <button
                   @click="selectFinType(3)"
                   :class="[
-                    'small-buttons px-2 py-1',
+                    'small-buttons px-2 py-1 text-left',
                     {
                       active: selectedFinType === 3,
                       'font-bold': selectedFinType === 3,
@@ -150,7 +150,7 @@
                 <button
                   @click="selectFinType(4)"
                   :class="[
-                    'small-buttons px-2 py-1',
+                    'small-buttons px-2 py-1 text-left',
                     {
                       active: selectedFinType === 4,
                       'font-bold': selectedFinType === 4,
@@ -164,6 +164,7 @@
           </div>
         </div>
       </aside>
+
 
       <!-- 게시글 리스트 -->
       <main class="col-span-1 lg:col-span-10">
