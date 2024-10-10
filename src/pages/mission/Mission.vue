@@ -33,10 +33,10 @@
         <h1 class="font-semibold text-lg">월간 미션</h1>
         <div class="flex justify-between">
           <span class="ml-2">{{ currentMonth }}</span>
-          <div class="mission-status" :style="{ color: monthlyMission.isRevoked ? 'red' : '#5354ff' }">
-            {{ monthlyMission.isRevoked ? "미션 완료" : "미션 진행 중" }}
-
+          <div class="mission-status" :style="{ color: monthlyMission.personalMonthlyMissionCompleted === -1 ? 'red' : (monthlyMission.personalMonthlyMissionCompleted === 1 ? 'green' : '#5354ff') }">
+            {{ monthlyMission.personalMonthlyMissionCompleted === -1 ? "미션 실패" : (monthlyMission.personalMonthlyMissionCompleted === 1 ? "미션 완료" : "미션 진행 중") }}
           </div>
+
         </div>
         <div class="mission-text">
           <span>{{ monthlyMission.missionTopic || "설명이 없습니다." }}</span>
@@ -147,6 +147,7 @@ const daillyMission = async () => {
 const getMonthlyMission = async () => {
   try {
     monthlyMission.value = await MissionApi.getMonthMission();
+    console.log(monthlyMission.value);
   } catch (error) {
     //  console.error("daily mission 불러오는중 에러 발생:", error);
   }
