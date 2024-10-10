@@ -38,7 +38,9 @@
       <div class="flex items-start">
         <div class="flex items-center">
           <div>
-            <img :src="profileImage" alt="`프로필 사진 - ${finTypeCode}`" class="w-20 h-20 rounded-full" />
+            <div class="home-profile">
+                <img :src="profileImage" alt="Profile Image" />
+              </div>
             <button @click="goSurvey">유형검사 다시하기</button>
           </div>
           <div class="ml-4">
@@ -84,9 +86,8 @@
         <div class="progress-bar relative w-11/12 h-2 bg-gray-300 rounded-md mx-auto mt-10">
           <!-- 캐릭터 이미지 (진행된 만큼 왼쪽으로 배치) -->
           <img
-            :src="characterImage"
-            alt="달리는 캐릭터 이미지"
-            class="progress-character absolute bottom-3 transform -translate-x-1/2 transition-all ease-linear w-6"
+              :src="runningImage"
+              class="w-[50px] absolute duration-200 bottom-3 transform -translate-x-1/2 transition-all ease-linear"
             :style="{
               left: monthlyProgress + '%',
             }"
@@ -94,7 +95,7 @@
 
           <!-- 진행 바 채움 -->
           <div
-            class="progress-fill bg-green-500 h-full rounded-md absolute top-0 left-0 transition-width duration-300"
+            class="progress-fill bg-[#5354ff] h-full rounded-md absolute top-0 left-0 transition-width duration-300"
             :style="{
               width: monthlyProgress + '%',
             }"
@@ -222,6 +223,7 @@ const myLikePosts = ref([]);
 const selectedTab = ref('myPosts');
 const showModal = ref(false); // 모달 표시 여부
 const badgeList = ref([]); // 뱃지 정보 배열
+const isRunning = ref(false); // 캐릭터 애니메이션 상태
 
 //유형검사 다시하기
 const goSurvey = () => {
@@ -240,14 +242,25 @@ const filteredBadgeList = computed(() => {
   return badgeList.value.filter((badge) => badge.badgeCode !== 0);
 });
 
+// 뱃지 이미지 동적 경로 설정
+const badgeImage = computed(() => {
+  return `/images/badge/badge${badgeCode.value}.png`; // badgeCode 값에 따라 배지 이미지 설정
+});
+
 // 프로필 사진 동적 경로 설정
 const profileImage = computed(() => {
   return `/images/${finTypeCode.value}.png`; // 이미지 파일명은 finTypeCode 값과 일치
 });
 
-// 뱃지 이미지 동적 경로 설정
-const badgeImage = computed(() => {
-  return `/images/badge/badge${badgeCode.value}.png`; // badgeCode 값에 따라 배지 이미지 설정
+const startAnimation = () => {
+  setInterval(() => {
+    isRunning.value = !isRunning.value; // 상태를 반전시켜 이미지 변경
+  }, 500); // 0.5초마다 상태 변경
+};
+
+const runningImage = computed(() => {
+  const baseImage = `/images/${finTypeCode.value}-animated-${isRunning.value ? 2 : 1}.png`;
+  return baseImage;
 });
 
 // 모달 열기 함수
@@ -365,21 +378,6 @@ const setPublic = async (publicStatus) => {
   }
 };
 
-// 사용자 Fintype에 따른 캐릭터 이미지 설정
-const characterImage = computed(() => {
-  switch (finTypeCode.value) {
-    case '1':
-      return '/images/character1.png';
-    case '2':
-      return '/images/character2.png';
-    case '3':
-      return '/images/character3.png';
-    case '4':
-      return '/images/character4.png';
-    default:
-      return '/images/0.png';
-  }
-});
 
 // 월간 미션 성취도 받아오는 함수
 const setAchievement = async () => {
@@ -505,6 +503,7 @@ onMounted(async () => {
   }
   getMyLoginType();
   getBadgeDetails();
+  startAnimation();
 });
 
 // 탭 선택 함수

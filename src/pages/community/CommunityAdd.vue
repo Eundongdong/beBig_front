@@ -30,17 +30,21 @@
 
     <!-- 사진 추가하기 -->
     <div class="form-group">
+      <div class="flex items-center space-x-2">
       <label class="label">사진 추가하기</label>
-      <input type="file" accept="image/*" @change="onFileChange" multiple  />
+      <input id="file-upload" class="file-input" type="file" accept="image/*" @change="onFileChange" multiple />
+      <label for="file-upload" class="file-label">파일 선택</label>
+    </div>
+
       <!-- 파일 이름을 쉼표로 구분하여 출력 -->
-      <p class="text-sm">{{ fileNames.join(', ') }}</p>
+      <p class="text-xs">{{ fileNames.join(', ') }}</p>
 
       <!-- 기존 이미지와 새로운 이미지를 미리보기로 함께 보여줍니다 -->
-      <div class="image-preview" v-if="imagePreviews.length > 0">
-        <img v-for="(image, index) in imagePreviews" :key="index" :src="image" class="preview-img"
+      <div class="image-preview flex space-x-2 mt-3" v-if="imagePreviews.length > 0">
+        <img v-for="(image, index) in imagePreviews" :key="index" :src="image"
           @click="onImageClick(index)" />
       </div>
-      <p class="notification-text mt-1">사진은 최대 {{ maxImages }}개까지만 업로드할 수 있어요.</p>
+      <p class="notification-text mt-2">사진은 최대 {{ maxImages }}개까지만 업로드할 수 있어요.</p>
 
     </div>
 

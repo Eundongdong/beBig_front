@@ -14,12 +14,13 @@
       <!-- 프로필, 작성자, 날짜 -->
       <div class="flex justify-between items-center">
         <div class="flex items-center space-x-3">
+          <div class="community-profile">
           <img
-            class="community-profile"
             :src="getProfileIcon(post.finTypeCode)"
             alt="Profile"
             @click="goToUserProfile(post.userId)"
           />
+        </div>
           <span>{{ post.userNickname }}</span>
         </div>
         <p class="community-content">
@@ -37,49 +38,31 @@
         {{ post.postContent }}
       </div>
 
-      <!-- 이미지 출력 (최대 3장) -->
-      <div
-        v-if="post.postImagePaths && post.postImagePaths.length"
-        class="image-gallery"
-      >
-        <img
-          v-for="(image, index) in post.postImagePaths.slice(0, 3)"
-          :key="index"
-          :src="image"
-          alt="게시글 이미지"
-          class="post-image"
-          @click="openImagePopup(index)"
-        />
-      </div>
+      <!-- 게시글 이미지 미리보기 -->
+<div class="image-preview flex space-x-2">
+  <img v-for="(image, index) in post.postImagePaths" :key="index" :src="image" alt="Preview Image" @click="openModal(index)" />
+</div>
 
-      <!-- 이미지 팝업 -->
-      <div
-        v-if="isPopupOpen"
-        class="image-popup-overlay"
-        @click="closeImagePopup"
-      >
-        <div class="image-popup-content" @click.stop>
-          <img :src="currentPopupImage" alt="팝업 이미지" class="popup-image" />
-          <button class="close-button" @click="closeImagePopup">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-          <button
-            v-if="showPrevButton"
-            class="nav-button prev"
-            @click="changeImage(-1)"
-          >
-            <i class="fas fa-arrow-left"></i>
-          </button>
-          <button
-            v-if="showNextButton"
-            class="nav-button next"
-            @click="changeImage(1)"
-          >
-            <i class="fas fa-arrow-right"></i>
-          </button>
-        </div>
-      </div>
+<!-- 이미지 클릭 시 띄우는 모달 -->
+<div v-if="isModalOpen" class="modal-background" @click="closeModal">
+  <div class="modal-inner" @click.stop>
+   <!-- 닫기 버튼 -->
+   <button class="close-button absolute top-2 right-2 text-2xl" @click="closeModal">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <!-- 이미지 -->
+    <img :src="modalImageUrl" alt="Full Image" class="modal-image" />
 
+    <!-- 이전 화살표 버튼 -->
+    <button v-if="currentImageIndex > 0" class="nav-button prev" @click="changeImage(-1)">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <!-- 다음 화살표 버튼 -->
+    <button v-if="currentImageIndex < post.postImagePaths.length - 1" class="nav-button next" @click="changeImage(1)">
+      <i class="fas fa-arrow-right"></i>
+    </button>
+  </div>
+</div>
       <!-- 좋아요 버튼 -->
       <div class="mt-1 ml-2 text-[18px]">
         <button @click="likePost(post.postId, post.userId)">
@@ -110,6 +93,31 @@ const loggedInUserId = ref(null);
 const isAuthor = ref(false); //사용자가 작성자인지 여부를 저장하는 변수
 
 const post = ref({}); // 게시글 데이터를 저장할 post 객체 초기화
+
+const isModalOpen=ref(false);
+const modalImageUrl=ref('');
+const currentImageIndex=ref(0);
+
+// 모달 열기
+const openModal = (index) => {
+  currentImageIndex.value=index;
+  modalImageUrl.value = post.value.postImagePaths[index];
+  isModalOpen.value = true;
+};
+
+// 모달 닫기
+const closeModal = () => {
+  isModalOpen.value = false;
+};
+
+// 이미지 전환 함수
+const changeImage = (direction) => {
+  const newIndex = currentImageIndex.value + direction;
+  if (newIndex >= 0 && newIndex < post.value.postImagePaths.length) {
+    currentImageIndex.value = newIndex;
+    modalImageUrl.value = post.value.postImagePaths[newIndex];
+  }
+};
 
 const handleBack = () => {
   router.back();
@@ -160,46 +168,6 @@ const getLike = async()=>{
 const checkIfAuthor = (post) => {
   return Number(post.userId) === Number(loggedInUserId.value);
 };
-
-// 이미지 팝업 관련
-const isPopupOpen = ref(false);
-const currentImageIndex = ref(0);
-
-const openImagePopup = (index) => {
-  currentImageIndex.value = index;
-  isPopupOpen.value = true;
-};
-
-const closeImagePopup = () => {
-  isPopupOpen.value = false;
-};
-
-const changeImage = (direction) => {
-  if (post.value && post.value.postImagePaths) {
-    const newIndex = currentImageIndex.value + direction;
-    if (newIndex >= 0 && newIndex < post.value.postImagePaths.length) {
-      currentImageIndex.value = newIndex;
-    }
-  }
-};
-
-const currentPopupImage = computed(() => {
-  return post.value && post.value.postImagePaths
-    ? post.value.postImagePaths[currentImageIndex.value]
-    : null;
-});
-
-const showPrevButton = computed(() => {
-  return post.value && post.value.postImagePaths && currentImageIndex.value > 0;
-});
-
-const showNextButton = computed(() => {
-  return (
-    post.value &&
-    post.value.postImagePaths &&
-    currentImageIndex.value < post.value.postImagePaths.length - 1
-  );
-});
 
 //게시글 수정
 const editPost = () => {
@@ -268,7 +236,7 @@ const formatDate = (dateString) => {
 const getProfileIcon = (finTypeCode) => {
   // finTypeCode가 유효한지 확인
   if (finTypeCode && finTypeCode !== 0) {
-    return `/images/${finTypeCode}.png`;
+    return `/images/${finTypeCode}-face.png`;
   }
   // 기본 이미지 반환
   return "/images/0.png";
