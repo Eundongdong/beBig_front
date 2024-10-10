@@ -14,12 +14,13 @@
       <!-- 프로필, 작성자, 날짜 -->
       <div class="flex justify-between items-center">
         <div class="flex items-center space-x-3">
+          <div class="community-profile">
           <img
-            class="community-profile"
             :src="getProfileIcon(post.finTypeCode)"
             alt="Profile"
             @click="goToUserProfile(post.userId)"
           />
+        </div>
           <span>{{ post.userNickname }}</span>
         </div>
         <p class="community-content">
@@ -268,7 +269,7 @@ const formatDate = (dateString) => {
 const getProfileIcon = (finTypeCode) => {
   // finTypeCode가 유효한지 확인
   if (finTypeCode && finTypeCode !== 0) {
-    return `/images/${finTypeCode}.png`;
+    return `/images/${finTypeCode}-face.png`;
   }
   // 기본 이미지 반환
   return "/images/0.png";
