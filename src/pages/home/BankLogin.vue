@@ -33,7 +33,7 @@ BankLogin.vue
 
     <!-- 계좌 목록을 보여주는 섹션 -->
     <div v-if="accountList.length != 0" class="flex mt-8 mx-4 lg:mx-20">
-      < v-for="account in accountList" :key="account.resAccount" class="flex items-center justify-between mb-4 bg-white
+      <div v-for="account in accountList" :key="account.resAccount" class="flex items-center justify-between mb-4 bg-white
       p-4 rounded-lg shadow" >
       <div class="flex items-center">
         <img :src="`/images/bank/${account.bankVo.bankName}.png`" alt="Bank Logo" class="bank-icon" />
@@ -47,6 +47,7 @@ BankLogin.vue
       <div class="flex items-center">
         <button @click="addAccount()" class="button ml-auto">계좌 추가</button>
       </div>
+    </div>
     </div>
   </div>
 </template>
