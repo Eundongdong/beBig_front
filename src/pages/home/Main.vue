@@ -11,6 +11,7 @@
 
           <!-- 오른쪽 이미지+텍스트버튼 영역 -->
           <div class="flex items-center space-x-4">
+
             <button class="flex flex-col items-center hover:font-bold" @click="goSurvey">
               <img :src="`/images/${user.finTypeCode}.png`" class="home-profile" />
               <p class="text-sm text-gray-500">
@@ -27,7 +28,7 @@
           </div>
         </div>
 
-        <div v-else class="flex justify-between items-center items-stretch bg-gray-100">
+        <div v-else class="flex justify-between items-stretch bg-gray-100">
           <div class="text-left text-base">
             <p class="py-4">
               안녕하세요.<br />우리는 <span class="big-text">beBig </span>입니다.<br />로그인하고 더 많은 기능을<br />이용해보시겠어요?
