@@ -96,6 +96,7 @@
                 </button>
               </div>
             </div>
+            <hr class="block mb-1"/>
             <div>
               <label class="block text-sm font-bold mb-2 text-left">자산유형</label>
               <div class="flex flex-wrap gap-2 lg:flex-col">
