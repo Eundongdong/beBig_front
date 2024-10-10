@@ -137,8 +137,7 @@ const isFormValid = computed(() => {
     formData.value.email &&
     formData.value.nickname &&
     formData.value.birth &&
-    !birthError.value &&
-    !emailError.value
+    !birthError.value
   );
 });
 
@@ -159,6 +158,7 @@ const getTerms = async () => {
 // 소셜 로그인 후 localStorage에 저장된 데이터를 불러오는 함수
 const loadSocialLoginData = () => {
   const userData = localStorage.getItem('socialUser');
+  console.log(userData);
   if (userData) {
     const parsedData = JSON.parse(userData);
     formData.value.name = parsedData.name || '';
