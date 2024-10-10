@@ -4,7 +4,7 @@
       <p class="text-lg text-center font-bold">{{ finTypeTitle }}</p>
 
       <div class="flex flex-col items-center justify-center mt-4">
-        <img :src="`/images/${finTypeCode}.png`" alt="finType 이미지" class="w-28 h-auto rounded-full" />
+        <img :src="`/images/${finTypeCode}.png`" alt="finType 이미지" class="w-[100px] h-auto" />
         <p class="text-lg text-center mt-2 font-semibold">{{ finTypeSubtitle }}</p>
       </div>
 

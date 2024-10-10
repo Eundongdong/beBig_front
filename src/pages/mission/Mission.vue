@@ -196,8 +196,8 @@ const startAnimation = () => {
 };
 
 const characterImage = computed(() => {
-  const baseImage = `/images/character${user.finTypeCode}.png`;
-  return isRunning.value ? baseImage.replace(".png", "-ani.png") : baseImage;
+  const baseImage = `/images/${user.finTypeCode}-animated-${isRunning.value ? 2 : 1}.png`;
+  return baseImage;
 });
 </script>
 

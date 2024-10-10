@@ -12,7 +12,9 @@
           <!-- 오른쪽 이미지+텍스트버튼 영역 -->
           <div class="flex items-center space-x-4">
             <button class="hover:font-bold" @click="goSurvey">
-              <img :src="`/images/${user.finTypeCode}.png`" class="home-profile" />
+              <div class="home-profile">
+  <img :src="`/images/${user.finTypeCode}.png`" alt="Profile Image" />
+</div>
               <p class="text-sm text-gray-500">
                 {{ user.finTypeCode == '1' || user.finTypeCode == '2' || user.finTypeCode == '3' || user.finTypeCode == '4' ? '내 유형 보기' : '유형검사 하러 가기' }}
               </p>
