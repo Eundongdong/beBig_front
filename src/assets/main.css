@@ -18,8 +18,7 @@
   font-weight: 200;
   font-style: normal;
   src: url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-ExtraLight.eot');
-  src: url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-ExtraLight.eot?#iefix')
-      format('embedded-opentype'),
+  src: url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-ExtraLight.eot?#iefix') format('embedded-opentype'),
     url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-ExtraLight.woff2') format('woff2'),
     url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-ExtraLight.woff') format('woff'),
     url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-ExtraLight.ttf') format('truetype');
@@ -30,8 +29,7 @@
   font-weight: 300;
   font-style: normal;
   src: url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Light.eot');
-  src: url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Light.eot?#iefix')
-      format('embedded-opentype'),
+  src: url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Light.eot?#iefix') format('embedded-opentype'),
     url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Light.woff2') format('woff2'),
     url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Light.woff') format('woff'),
     url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Light.ttf') format('truetype');
@@ -42,8 +40,7 @@
   font-weight: 400;
   font-style: normal;
   src: url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Regular.eot');
-  src: url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Regular.eot?#iefix')
-      format('embedded-opentype'),
+  src: url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Regular.eot?#iefix') format('embedded-opentype'),
     url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Regular.woff2') format('woff2'),
     url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Regular.woff') format('woff'),
     url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Regular.ttf') format('truetype');
@@ -54,8 +51,7 @@
   font-weight: 500;
   font-style: normal;
   src: url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Medium.eot');
-  src: url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Medium.eot?#iefix')
-      format('embedded-opentype'),
+  src: url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Medium.eot?#iefix') format('embedded-opentype'),
     url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Medium.woff2') format('woff2'),
     url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Medium.woff') format('woff'),
     url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Medium.ttf') format('truetype');
@@ -66,8 +62,7 @@
   font-weight: 600;
   font-style: normal;
   src: url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-SemiBold.eot');
-  src: url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-SemiBold.eot?#iefix')
-      format('embedded-opentype'),
+  src: url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-SemiBold.eot?#iefix') format('embedded-opentype'),
     url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-SemiBold.woff2') format('woff2'),
     url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-SemiBold.woff') format('woff'),
     url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-SemiBold.ttf') format('truetype');
@@ -89,8 +84,7 @@
   font-weight: 800;
   font-style: normal;
   src: url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-ExtraBold.eot');
-  src: url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-ExtraBold.eot?#iefix')
-      format('embedded-opentype'),
+  src: url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-ExtraBold.eot?#iefix') format('embedded-opentype'),
     url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-ExtraBold.woff2') format('woff2'),
     url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-ExtraBold.woff') format('woff'),
     url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-ExtraBold.ttf') format('truetype');
@@ -101,8 +95,7 @@
   font-weight: 900;
   font-style: normal;
   src: url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Black.eot');
-  src: url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Black.eot?#iefix')
-      format('embedded-opentype'),
+  src: url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Black.eot?#iefix') format('embedded-opentype'),
     url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Black.woff2') format('woff2'),
     url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Black.woff') format('woff'),
     url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Black.ttf') format('truetype');
@@ -115,34 +108,40 @@
   padding: 1rem;
   font-size: small;
   font-family: 'Pretendard';
+  width: 100%;
 }
 
 .page {
-  @apply w-full mx-auto;
+  @apply w-full max-w-screen-lg mx-auto;
   /* 헤더와 푸터의 높이를 고려한 최소 높이 설정 */
   min-height: calc(100vh - 8rem); /* 100vh에서 헤더와 푸터의 높이(각 4rem)를 뺌 */
   padding-top: 0.5rem; /* 헤더 높이 */
   padding-bottom: 6rem; /* 푸터 높이 */
 }
 
-.modal-overlay {
-  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40;
-}
-
 .modal {
-  @apply relative bg-white rounded-lg p-6 z-50;
-  width: 80%;
+  @apply max-w-lg rounded-lg p-6 fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
   max-width: 90%;
-  max-height: 80vh;
+  width: auto;
+  max-height: 90vh;
 }
 
-.modal-content {
-  @apply overflow-y-auto;
-  max-height: calc(80vh - 3rem);
+/* custom.css 또는 main.css 등에서 추가 */
+.modal-background {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50;
+}
+
+
+.modal-inner {
+  @apply bg-white rounded-lg max-w-md w-80 mx-10 p-6 relative
+}
+
+.modal-image{
+  @apply max-h-full w-auto object-contain;
 }
 
 .terms-content {
-  @apply overflow-y-scroll text-sm text-gray-600 border border-gray-300 rounded-lg p-2 max-h-36;
+  @apply overflow-y-scroll text-sm text-gray-600 border border-gray-300 rounded-lg p-2 max-h-40;
 }
 
 .post-content {
@@ -158,7 +157,7 @@
 }
 
 .notification-text {
-  @apply text-red-600 text-sm;
+  @apply text-red-600 text-sm pb-2;
 }
 
 .container {
@@ -166,29 +165,19 @@
 }
 
 .home-profile {
-  @apply w-[80px] rounded-full;
+  @apply w-[100px] h-[100px] bg-white rounded-full;
 }
 
-.finType-description {
-  @apply text-lg mx-auto p-4;
-  max-width: 400px;
-  white-space: normal;
-  word-break: keep-all;
-  text-align: justify;
-  line-height: 1.8;
+.home-profile img {
+  @apply w-full h-full object-contain;
 }
 
-
-.progress-bar {
-  @apply relative h-5 bg-white;
+.community-profile {
+  @apply w-[35px] h-[35px] bg-gray-200 rounded-full;
 }
 
-.progress-fill {
-  @apply h-full bg-[#5354ff] absolute top-0 left-0;
-}
-
-.community-profile{
-  @apply w-[35px] rounded-full;
+.community-profile img{
+  @apply w-full h-full object-contain;
 }
 
 .community-title {
@@ -200,23 +189,23 @@
 }
 
 .component {
-  @apply w-full rounded-2xl p-3 mb-3 bg-gray-100;
+  @apply rounded-2xl p-3 mb-3 bg-gray-100;
+}
+
+.section-style {
+  @apply mb-4 px-6 py-4 rounded-xl bg-[#F3F3F3];
 }
 
 .bank-icon {
   @apply h-[30px];
 }
 
-.giant-text {
-  @apply text-[#5354ff] text-2xl font-semibold;
-}
-
 .big-text {
-  @apply text-[#5354ff] text-lg font-semibold;
+  @apply text-[#5354ff] text-xl font-bold;
 }
 
 .button {
-  @apply w-full py-2 mb-1 bg-[#5354ff] text-white rounded-lg hover:bg-[#3435ff] hover:duration-300;
+  @apply w-full py-2 mb-1 bg-[#5354ff] text-white rounded-lg hover:bg-[#3435ff];
 }
 
 .pagination-button {
@@ -224,11 +213,11 @@
 }
 
 .white-button {
-  @apply w-full py-1.5 mb-1 text-black bg-white rounded-lg hover:bg-gray-200 hover:duration-300;
+  @apply w-full py-1.5 mb-1 text-black bg-white rounded-lg hover:bg-gray-200;
 }
 
 .answer-button {
-  @apply w-full px-3 mb-1 text-lg text-black bg-white rounded-lg hover:bg-gray-200 border;
+  @apply w-full px-3 mb-1 text-lg text-black bg-white rounded-lg border;
   white-space: normal;
   word-break: keep-all;
   text-align: center;
@@ -237,11 +226,11 @@
 }
 
 .gray-button {
-  @apply w-full py-1.5 mb-1 text-black bg-gray-200 rounded-lg hover:bg-gray-300 ;
+  @apply w-full py-1.5 mb-1 text-black bg-gray-200 rounded-lg hover:bg-gray-300;
 }
 
 .text-button {
-  @apply text-black text-sm space-x-2 m-2 hover:underline hover:font-bold hover:duration-200;
+  @apply text-black text-sm space-x-2 m-2 hover:underline;
 }
 
 .label {
@@ -256,8 +245,9 @@
   @apply w-full p-3 border rounded-lg;
 }
 
-.image-preview {
-  @apply w-[80px] flex items-start justify-start space-x-2;
+.image-preview img{
+  @apply h-[100px] w-[100px] object-cover;
+  cursor: pointer;
 }
 
 .disabled-input {
@@ -272,16 +262,20 @@
   @apply fixed bottom-28 right-6 w-12 h-12 bg-[#5354ff] hover:bg-[#3435ff] text-2xl text-white rounded-full flex items-center justify-center shadow-lg;
 }
 
-.radio-button {
-  @apply h-4;
-}
-
 .checkbox {
   @apply h-6;
 }
 
 .loading {
   @apply flex items-center justify-center mt-2;
+}
+
+.file-input{
+  @apply hidden;
+}
+
+.file-label{
+  @apply cursor-pointer text-white text-xs px-2 bg-[#5354ff] rounded-lg hover:bg-[#3435ff];
 }
 
 .small-buttons {
@@ -292,23 +286,29 @@
   @apply text-xs px-1 text-white font-semibold bg-[#5354ff];
 }
 
-.section-style {
-  @apply mt-4 p-4 rounded-xl bg-[#F3F3F3];
+.flag-image{
+  @apply w-[40px];
 }
 
-@media (hover: hover) {
+/* @media (hover: hover) {
   a:hover {
     background-color: hsla(160, 100%, 37%, 0.2);
   }
-}
+} */
 
 @media (min-width: 1024px) {
   body {
-    display: flex;
-    place-items: center;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* 수평 스크롤 방지 */
   }
 
   #app {
-    padding: 0 2rem;
+    padding: 0 2;
+  }
+
+  .section-style {
+    @apply p-10;
   }
 }

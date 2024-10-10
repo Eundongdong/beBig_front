@@ -1,17 +1,13 @@
 <template>
-  <div class="page">
-    <!-- 상단 정렬 및 필터 -->
-    <div>
-      <!-- 정렬 버튼: 좋아요순, 최신순 -->
-      <div class="flex items-start space-x-4 text-xs ml-1">
+  <div class="container mx-auto p-4">
+    <!-- 정렬 버튼: 좋아요순, 최신순 -->
+    <div class="hidden lg:flex justify-end mb-4 max-w-[60%] mx-auto">
+      <div class="flex items-center space-x-2">
         <button
           @click="sortBy('likeHits')"
           :class="[
-            'small-buttons',
-            {
-              active: sortType === 'likeHits',
-              'font-bold': sortType === 'likeHits',
-            },
+            'px-3 py-1 text-sm rounded-md border',
+            { 'bg-blue-500 text-white': sortType === 'likeHits', 'bg-gray-100': sortType !== 'likeHits' }
           ]"
         >
           좋아요순
@@ -19,246 +15,252 @@
         <button
           @click="sortBy('latest')"
           :class="[
-            'small-buttons',
-            {
-              active: sortType === 'latest',
-              'font-bold': sortType === 'latest',
-            },
+            'px-3 py-1 text-sm rounded-md border',
+            { 'bg-blue-500 text-white': sortType === 'latest', 'bg-gray-100': sortType !== 'latest' }
           ]"
         >
           최신순
         </button>
       </div>
-
-      <!-- 필터 드롭다운: 카테고리, 자산유형 -->
-      <div>
-        <!--카테고리 필터-->
-        <div @change="fetchPosts" class="flex items-center justify-between space-x-1 m-1">
-          <label class="text-xs font-semibold">카테고리</label>
-          <button
-            @click="selectCategory(-1)"
-            :class="[
-              'small-buttons',
-              {
-                active: selectedCategory === -1,
-                selected: selectedCategory === -1,
-              },
-            ]"
-          >
-            전체
-          </button>
-          <button
-            @click="selectCategory(1)"
-            :class="[
-              'small-buttons',
-              {
-                active: selectedCategory === 1,
-                selected: selectedCategory === 1,
-              },
-            ]"
-          >
-            예적금
-          </button>
-          <button
-            @click="selectCategory(2)"
-            :class="[
-              'small-buttons',
-              {
-                active: selectedCategory === 2,
-                selected: selectedCategory === 2,
-              },
-            ]"
-          >
-            재테크
-          </button>
-          <button
-            @click="selectCategory(3)"
-            :class="[
-              'small-buttons',
-              {
-                active: selectedCategory === 3,
-                selected: selectedCategory === 3,
-              },
-            ]"
-          >
-            정보공유
-          </button>
-          <button
-            @click="selectCategory(4)"
-            :class="[
-              'small-buttons',
-              {
-                active: selectedCategory === 4,
-                selected: selectedCategory === 4,
-              },
-            ]"
-          >
-            절약팁
-          </button>
-        </div>
-        <!-- 자산유형(FinType) 필터 -->
-        <div @change="fetchPosts" class="flex items-center justify-between space-x-0.5 m-1">
-          <label class="text-xs font-semibold">자산유형</label>
-          <button
-            @click="selectFinType(-1)"
-            :class="[
-              'small-buttons',
-              {
-                active: selectedFinType === -1,
-                selected: selectedFinType === -1,
-              },
-            ]"
-          >
-            전체
-          </button>
-          <button
-            @click="selectFinType(1)"
-            :class="[
-              'small-buttons',
-              {
-                active: selectedFinType === 1,
-                selected: selectedFinType === 1,
-              },
-            ]"
-          >
-            꿀벌
-          </button>
-          <button
-            @click="selectFinType(2)"
-            :class="[
-              'small-buttons',
-              {
-                active: selectedFinType === 2,
-                selected: selectedFinType === 2,
-              },
-            ]"
-          >
-            호랑이
-          </button>
-          <button
-            @click="selectFinType(3)"
-            :class="[
-              'small-buttons',
-              {
-                active: selectedFinType === 3,
-                selected: selectedFinType === 3,
-              },
-            ]"
-          >
-            다람쥐
-          </button>
-          <button
-            @click="selectFinType(4)"
-            :class="[
-              'small-buttons',
-              {
-                active: selectedFinType === 4,
-                selected: selectedFinType === 4,
-              },
-            ]"
-          >
-            나무늘보
-          </button>
-        </div>
-      </div>
     </div>
 
-    <!-- 게시글 목록 -->
-    <div v-if="posts.length >0">
-    <div class="post-content" v-for="post in sortedPosts" :key="post.postId" @click="goToPostDetail(post.postId)">
-      <!-- 프로필, 작성자, 날짜 -->
-      <div class="flex justify-between items-center">
-        <div class="flex items-center space-x-3">
-
-          <img class="community-profile" :src="getProfileIcon(post.finTypeCode)" alt="Profile" @click.stop="goToUserProfile(post.userId)" />
-          <span>{{ post.userNickname }}</span>
-
+    <!-- 사이드바 및 게시글 리스트를 나란히 배치 -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6" >
+          <!-- 사이드바 및 필터 -->
+      <aside class="col-span-1 lg:col-span-2">
+        <div class="bg-gray-100 p-4 rounded-lg">
+          <!-- 필터 드롭다운: 카테고리, 자산유형 -->
+          <div class="lg:flex lg:flex-col gap-4">
+            <div>
+              <label class="block text-sm font-bold mb-2 text-left">카테고리</label>
+              <div class="flex flex-wrap gap-2 lg:flex-col">
+                <button
+                  @click="selectCategory(-1)"
+                  :class="[
+                    'small-buttons px-2 py-1 text-left',
+                    {
+                      active: selectedCategory === -1,
+                      'font-bold': selectedCategory === -1,
+                    },
+                  ]"
+                >
+                  전체
+                </button>
+                <button
+                  @click="selectCategory(1)"
+                  :class="[
+                    'small-buttons px-2 py-1 text-left',
+                    {
+                      active: selectedCategory === 1,
+                      'font-bold': selectedCategory === 1,
+                    },
+                  ]"
+                >
+                  예적금
+                </button>
+                <button
+                  @click="selectCategory(2)"
+                  :class="[
+                    'small-buttons px-2 py-1 text-left',
+                    {
+                      active: selectedCategory === 2,
+                      'font-bold': selectedCategory === 2,
+                    },
+                  ]"
+                >
+                  재테크
+                </button>
+                <button
+                  @click="selectCategory(3)"
+                  :class="[
+                    'small-buttons px-2 py-1 text-left',
+                    {
+                      active: selectedCategory === 3,
+                      'font-bold': selectedCategory === 3,
+                    },
+                  ]"
+                >
+                  정보공유
+                </button>
+                <button
+                  @click="selectCategory(4)"
+                  :class="[
+                    'small-buttons px-2 py-1 text-left',
+                    {
+                      active: selectedCategory === 4,
+                      'font-bold': selectedCategory === 4,
+                    },
+                  ]"
+                >
+                  절약팁
+                </button>
+              </div>
+            </div>
+            <hr class="block mb-1"/>
+            <div>
+              <label class="block text-sm font-bold mb-2 text-left">자산유형</label>
+              <div class="flex flex-wrap gap-2 lg:flex-col">
+                <button
+                  @click="selectFinType(-1)"
+                  :class="[
+                    'small-buttons px-2 py-1 text-left',
+                    {
+                      active: selectedFinType === -1,
+                      'font-bold': selectedFinType === -1,
+                    },
+                  ]"
+                >
+                  전체
+                </button>
+                <button
+                  @click="selectFinType(1)"
+                  :class="[
+                    'small-buttons px-2 py-1 text-left',
+                    {
+                      active: selectedFinType === 1,
+                      'font-bold': selectedFinType === 1,
+                    },
+                  ]"
+                >
+                  꿀벌
+                </button>
+                <button
+                  @click="selectFinType(2)"
+                  :class="[
+                    'small-buttons px-2 py-1 text-left',
+                    {
+                      active: selectedFinType === 2,
+                      'font-bold': selectedFinType === 2,
+                    },
+                  ]"
+                >
+                  호랑이
+                </button>
+                <button
+                  @click="selectFinType(3)"
+                  :class="[
+                    'small-buttons px-2 py-1 text-left',
+                    {
+                      active: selectedFinType === 3,
+                      'font-bold': selectedFinType === 3,
+                    },
+                  ]"
+                >
+                  다람쥐
+                </button>
+                <button
+                  @click="selectFinType(4)"
+                  :class="[
+                    'small-buttons px-2 py-1 text-left',
+                    {
+                      active: selectedFinType === 4,
+                      'font-bold': selectedFinType === 4,
+                    },
+                  ]"
+                >
+                  나무늘보
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-        <p class="community-content">
-          {{ formatDate(post.postCreatedTime) }}
-        </p>
-      </div>
-      <!-- 글 제목 -->
-      <div class="community-title mt-1">
-        <router-link
-          :to="{
-            name: 'communityDetail',
-            params: { postId: post.postId },
-          }"
-          class="post-title"
-          >{{ post.postTitle }}
-          <i v-if="post.postImagePaths && post.postImagePaths.length" class="fa-regular fa-image ml-1" style="color: #5354ff"></i>
-        </router-link>
-      </div>
+      </aside>
 
-      <!-- 글 내용 (미리보기) -->
-      <div class="community-content truncate mt-1">
-        {{ post.postContent }}
-      </div>
 
-      <!-- 좋아요 버튼 -->
-      <div class="mt-1 ml-2 text-[18px]">
-        <button @click.stop="likePost(post.postId, post.userId)">
-          <span class="text-red-500">
-            {{ post.isLiked ? '♥' : '♡' }}
-          </span>
-          {{ post.postLikeHits }}
-        </button>
-      </div>
+      <!-- 게시글 리스트 -->
+      <main class="col-span-1 lg:col-span-8">
+        <!-- 모바일 화면에서 정렬 버튼 표시 -->
+        <div class="flex lg:hidden justify-end mb-4">
+          <div class="flex items-center space-x-2">
+            <button
+              @click="sortBy('likeHits')"
+              :class="[
+                'px-3 py-1 text-sm rounded-md border',
+                { 'bg-blue-500 text-white': sortType === 'likeHits', 'bg-gray-100': sortType !== 'likeHits' }
+              ]"
+            >
+              좋아요순
+            </button>
+            <button
+              @click="sortBy('latest')"
+              :class="[
+                'px-3 py-1 text-sm rounded-md border',
+                { 'bg-blue-500 text-white': sortType === 'latest', 'bg-gray-100': sortType !== 'latest' }
+              ]"
+            >
+              최신순
+            </button>
+          </div>
+        </div>
+        <!-- 게시글 목록 -->
+        <div v-if="posts.length > 0">
+          <div
+            v-for="post in sortedPosts"
+            :key="post.postId"
+            class="post-content p-4 mb-4 bg-white rounded-lg"
+            @click="goToPostDetail(post.postId)"
+          >
+            <div class="flex justify-between items-center mb-2">
+              <div class="flex items-center space-x-2">
+                <img :src="getProfileIcon(post.finTypeCode)" class="w-10 h-10 rounded-full" alt="Profile" @click.stop="goToUserProfile(post.userId)"/>
+                <span>{{ post.userNickname }}</span>
+              </div>
+              <p class="text-gray-500 text-sm">{{ formatDate(post.postCreatedTime) }}</p>
+            </div>
+            <div class="community-title text-lg font-semibold mb-1">{{ post.postTitle }}</div>
+            <div class="community-content text-sm text-gray-600 mb-2">{{ post.postContent }}</div>
+            <div class="mt-1 text-red-500">
+              <button @click.stop="likePost(post.postId, post.userId)">
+                <span>{{ post.isLiked ? '♥' : '♡' }}</span> {{ post.postLikeHits }}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div v-else>
+          <p class="text-center text-gray-500">게시글이 없습니다.</p>
+        </div>
+
+        <!-- 페이지네이션 -->
+        <div class="pagination flex justify-center items-center space-x-2 mt-4 mb-12 overflow-x-auto">
+          <button
+            @click="goToPage(1)"
+            :disabled="currentPage === 1"
+            class="disabled:opacity-50"
+          >
+            <i class="fas fa-angle-double-left"></i>
+          </button>
+
+          <button
+            @click="goToPreviousPage"
+            :disabled="currentPage === 1"
+            class="disabled:opacity-50"
+          >
+            <i class="fas fa-angle-left"></i>
+          </button>
+
+          <span>페이지 {{ currentPage }} / {{ totalPage }}</span>
+
+          <button
+            @click="goToNextPage"
+            :disabled="currentPage === totalPage"
+            class="disabled:opacity-50"
+          >
+            <i class="fas fa-angle-right"></i>
+          </button>
+
+          <button
+            @click="goToPage(totalPage)"
+            :disabled="currentPage === totalPage"
+            class="disabled:opacity-50"
+          >
+            <i class="fas fa-angle-double-right"></i>
+          </button>
+        </div>
+      </main>
     </div>
-  </div>
-
-
-
-
-
-  <div v-else>
-      <p class="loading">게시글이 없습니다.</p>
-    </div>
-
-
-    <!-- 새 글 작성 버튼 -->
-    <router-link v-if="userName != 'NoLogin'" to="/community/add" class="add-button">
-      <i class="fas fa-plus"></i>
-    </router-link>
-
-    <div class="pagination flex justify-center items-center space-x-4">
-  <button
-    @click="goToPage(1)"
-    :disabled="currentPage === 1"
-    class="disabled:opacity-50"
-  >
-    <i class="fas fa-angle-double-left"></i>
-  </button>
-
-  <button
-    @click="goToPreviousPage"
-    :disabled="currentPage === 1"
-    class="disabled:opacity-50"
-  >
-    <i class="fas fa-angle-left"></i>
-  </button>
-
-  <span>페이지 {{ currentPage }} / {{ totalPage }}</span>
-
-  <button
-    @click="goToNextPage"
-    :disabled="currentPage === totalPage"
-    class="disabled:opacity-50"
-  >
-    <i class="fas fa-angle-right"></i>
-  </button>
-
-  <button
-    @click="goToPage(totalPage)"
-    :disabled="currentPage === totalPage"
-    class="disabled:opacity-50"
-  >
-    <i class="fas fa-angle-double-right"></i>
-  </button>
-</div>
   </div>
 </template>
+
 
 <script setup>
 
@@ -368,7 +370,7 @@ const goToUserProfile = async (userId) => {
 const getProfileIcon = (finTypeCode) => {
   // finTypeCode가 유효한지 확인
   if (finTypeCode && finTypeCode !== 0) {
-    return `images/${finTypeCode}.png`;
+    return `images/${finTypeCode}-face.png`;
   }
   // 기본 이미지 반환
   return 'images/0.png';
@@ -388,9 +390,9 @@ const fetchPosts = async () => {
 
     const category = selectedCategory.value;
     const finType = selectedFinType.value;
+    const nowSortType = sortType.value;
 
-    const response = await communityApi.list(category, finType, currentPage.value-1, pageSize.value);
-    console.log(response);
+    const response = await communityApi.list(category, finType, nowSortType, currentPage.value-1, pageSize.value);
 
     if (response && response.data) {
       posts.value=[];
@@ -400,6 +402,8 @@ const fetchPosts = async () => {
       posts.value = [];
       totalPage.value=1;
     }
+    await getLike();
+
   } catch (error) {
  //   console.error("게시글 불러오기 실패:", error);
     posts.value = [];
@@ -408,6 +412,25 @@ const fetchPosts = async () => {
     isFetching.value = false;
   }
 };
+
+//사용자가 좋아요 한 게시글 표시
+const getLike = async()=>{
+  try{
+    const userLikePosts = await MypageApi.getMyLikePosts();
+    const likedPostIds = userLikePosts.map(post => post.postId); // 좋아요 누른 게시글의 postId 목록 추출
+
+    // fetchPosts로 가져온 posts 배열에서 좋아요한 게시글들을 찾아서 isLiked를 true로 설정
+    posts.value.forEach(post => {
+      if (likedPostIds.includes(post.postId)) {
+        post.isLiked = true;
+      } else {
+        post.isLiked = false;
+      }
+    });
+  }catch(error){
+    //console.log(error);
+  }
+}
 
 
 // 좋아요 기능
@@ -461,7 +484,7 @@ const goToNextPage = () => {
   }
 };
 
-watch([selectedCategory, selectedFinType], () => {
+watch([selectedCategory, selectedFinType, sortType], () => {
   currentPage.value = 1;
   communityStore.setCurrentPage(currentPage.value);
   fetchPosts();
@@ -488,5 +511,11 @@ onMounted(async () => {
 .post-content:hover {
   background-color: #f0f0f0; /* 마우스 올렸을 때 배경색 */
   cursor: pointer; /* 클릭 가능한 느낌을 주는 커서 */
+}
+/* 모바일 화면에서만 margin-bottom을 적용 */
+@media (max-width: 768px) {
+  .container {
+    margin-bottom: 4rem; /* 모바일에서 footer에 가려지지 않도록 여백 추가 */
+  }
 }
 </style>

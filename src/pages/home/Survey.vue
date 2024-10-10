@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <div class="component">
+    <div class="section-style">
       <p class="flex items-end justify-end text-sm">
         <span class="font-semibold mr-2">{{ currentQuestion + 1 }}</span> / {{ shuffledQuestions.length }}
       </p>
@@ -9,14 +9,14 @@
         <button
           @click="
             selectAnswer(1, shuffledQuestions[currentQuestion].finTestType)
-          " class="answer-button"
+          " class="answer-button lg:hover:bg-gray-200"
         >
           {{ shuffledQuestions[currentQuestion].finTestAnswer1 }}
         </button>
         <button
           @click="
             selectAnswer(2, shuffledQuestions[currentQuestion].finTestType)
-          " class="answer-button"
+          " class="answer-button lg:hover:bg-gray-200"
         >
           {{ shuffledQuestions[currentQuestion].finTestAnswer2 }}
         </button>
@@ -28,11 +28,11 @@
             class="input mr-2"
             v-model="formattedIncome"
             type="text"
-            placeholder="월 소득을 입력하세요"
+            placeholder="월 수입을 입력하세요"
           />
           원
         </div>
-
+        <p v-if="isSubmitted && !isFormValid" class="text-red-500 text-sm">월 수입을 입력해주세요.</p>
         <button class="button" @click="submitSurvey">제출하기</button>
       </div>
     </div>
@@ -61,6 +61,12 @@ const questions = reactive([
 
 onMounted(() => {
   getQuestion();
+});
+
+const isSubmitted = ref(false); // 제출 버튼을 눌렀는지 여부
+
+const isFormValid = computed(() => {
+  return income.value; // 수입 값이 유효한지 판단
 });
 
 const getQuestion = async () => {
@@ -104,6 +110,8 @@ const selectAnswer = (choice) => {
 };
 
 const submitSurvey = () => {
+  isSubmitted.value = true;
+  if (isFormValid.value) {
   // finTestType이 1일 때의 답변 개수를 카운트
   const finType1Count1 = answers.value.filter(
     (a, i) => shuffledQuestions[i].finTestType === 1 && a === 1
@@ -142,9 +150,10 @@ const submitSurvey = () => {
     finType = 4; // b, d이면 finType4
   }
 
- // console.log("결정된 자산 유형:", finType);
+ // console.log("결정된 자산 유형:", f  inType);
 
   sendSurveyResult(finType);
+}
 };
 
 const sendSurveyResult = async (finType) => {

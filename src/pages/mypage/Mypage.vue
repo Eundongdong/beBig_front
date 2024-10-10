@@ -1,10 +1,12 @@
 <template>
-  <div class="page">
-    <!-- 상단 헤더 -->
-    <header v-if="isOwner" class="flex items-center justify-between">
+  <div class="page flex flex-col justify-start min-h-screen items-center">
+
+    <!-- 프로필 영역 -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-7 w-full max-w-screen-lg items-stretch">
+      <section class="section-style flex flex-col justify-between h-full">
+        <div v-if="isOwner" class="flex items-center justify-between w-full">
       <!-- 공개/비공개 버튼 (본인일 경우에만 표시) -->
-      <div class="flex items-center justify-end">
-        <div class="flex bg-gray-300 rounded-full relative">
+        <div class="flex items-center bg-gray-300 rounded-full">
           <button
             @click="setPublic(true)"
             :class="{
@@ -26,20 +28,19 @@
             비공개
           </button>
         </div>
-      </div>
 
-      <button class="text-xl cursor-pointer justify-end" @click="goSettings">
+      
+      <button class="text-xl cursor-pointer ml-4" @click="goSettings">
         <i class="fa-solid fa-gear"></i>
       </button>
-    </header>
-
-    <!-- 프로필 영역 -->
-    <section class="section-style !mt-2">
+    </div>
       <div class="flex items-start">
-        <div class="flex items-center">
-          <div>
-            <img :src="profileImage" alt="`프로필 사진 - ${finTypeCode}`" class="w-20 h-20 rounded-full" />
-            <button @click="goSurvey">유형검사 다시하기</button>
+          <div class="flex items-center">
+            <div>
+              <div class="home-profile m-2">
+                  <img :src="profileImage" alt="Profile Image" />
+                </div>
+              <button @click="goSurvey">유형검사 다시하기</button>
           </div>
           <div class="ml-4">
             <div class="flex items-center">
@@ -51,42 +52,41 @@
               </button>
             </div>
 
-            <div class="mt-2">
-              <p>
-                이번달 미션 달성도 상위
-                {{ userRank }} %
-              </p>
-              <p class="mt-1">
-                {{ finTypeInfo }}
-              </p>
+              <div class="mt-2">
+                <p>
+                  이번달 미션 달성도 상위
+                  {{ userRank }} %
+                </p>
+                <p class="mt-1">
+                  {{ finTypeInfo }}
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- 한줄 소개는 항상 표시 -->
-      <div class="mt-2 pt-2 px-2">
-        <p class="font-bold">한줄소개</p>
-        <p class="pt-1">{{ userIntro }}</p>
-      </div>
-    </section>
+        <!-- 한줄 소개는 항상 표시 -->
+        <div class="mt-2 pt-2 px-2">
+          <p class="font-bold">한줄소개</p>
+          <p class="pt-1">{{ userIntro }}</p>
+        </div>
+      </section>
 
     <!-- 공개 상태이거나 본인일 경우 모든 정보 표시 -->
     <div v-if="isPublic || isOwner">
       <!-- 월간 미션 진행상황 -->
-      <section class="section-style">
-        <div class="mission-info flex flex-col items-start mb-4">
+      <section class="section-style flex flex-col h-full">
+        <div class="mission-info flex flex-col items-start mb-5">
           <span class="text-base font-semibold">현재 미션을 {{ monthlyProgress }}% 달성했어요</span>
-          <div class="text-red-600 text-sm pt-2">D - {{ remainingDays }}</div>
+          <div class="text-red-600 text-sm pt-12">D - {{ remainingDays }}</div>
         </div>
 
         <!-- 진행 바 -->
-        <div class="progress-bar relative w-11/12 h-2 bg-gray-300 rounded-md mx-auto mt-10">
+        <div class="progress-bar relative w-11/12 h-2 bg-gray-300 rounded-md mx-auto mt-7">
           <!-- 캐릭터 이미지 (진행된 만큼 왼쪽으로 배치) -->
           <img
-            :src="characterImage"
-            alt="달리는 캐릭터 이미지"
-            class="progress-character absolute bottom-3 transform -translate-x-1/2 transition-all ease-linear w-6"
+              :src="runningImage"
+              class="w-[50px] absolute duration-200 bottom-3 transform -translate-x-1/2 transition-all ease-linear"
             :style="{
               left: monthlyProgress + '%',
             }"
@@ -94,36 +94,31 @@
 
           <!-- 진행 바 채움 -->
           <div
-            class="progress-fill bg-green-500 h-full rounded-md absolute top-0 left-0 transition-width duration-300"
+            class="progress-fill bg-[#5354ff] h-full rounded-md absolute top-0 left-0 transition-width duration-300"
             :style="{
               width: monthlyProgress + '%',
             }"
           ></div>
 
           <!-- 깃발은 오른쪽 끝에 고정 -->
-          <img
-            src="/images/flag.png"
-            alt="깃발 이미지"
-            class="flag-image absolute right-0 bottom-3 w-6 transform translate-x-4"
-          />
+          <img src="/images/flag.png" alt="깃발 이미지" class="flag-image absolute right-0 bottom-3 w-6 transform translate-x-4" />
         </div>
       </section>
-
+      </div>
+    <!-- 비공개 상태이면서 다른 사용자가 볼 때 -->
+    <div v-else class="flex flex-col items-center justify-center mt-16">
+      <!-- <i class="fa-solid fa-lock"></i> -->
+      <i class="fa-solid fa-user-lock text-6xl text-gray mb-4"></i>
+      <p class="text-gray-600 text-sm">이 사용자의 프로필은 비공개 상태입니다.</p>
+    </div>
       <!-- 내가 작성한 글 & 좋아요한 글 -->
+      <div class="flex flex-col w-full max-w-screen-lg lg:col-span-2">
       <section class="section-style">
         <div class="flex border-b-2 border-gray-300">
-          <button
-            @click="selectTab('myPosts')"
-            :class="selectedTab === 'myPosts' ? 'border-b-4 border-black font-bold' : 'text-gray-500'"
-            class="w-1/2 pb-2 text-center"
-          >
+          <button @click="selectTab('myPosts')" :class="selectedTab === 'myPosts' ? 'border-b-4 border-black font-bold' : 'text-gray-500'" class="w-1/2 pb-2 text-center">
             작성한 글
           </button>
-          <button
-            @click="selectTab('likedPosts')"
-            :class="selectedTab === 'likedPosts' ? 'border-b-4 border-black font-bold' : 'text-gray-500'"
-            class="w-1/2 pb-2 text-center"
-          >
+          <button @click="selectTab('likedPosts')" :class="selectedTab === 'likedPosts' ? 'border-b-4 border-black font-bold' : 'text-gray-500'" class="w-1/2 pb-2 text-center">
             좋아하는 글
           </button>
         </div>
@@ -175,19 +170,10 @@
         </ul>
       </section>
     </div>
-    <!-- 비공개 상태이면서 다른 사용자가 볼 때 -->
-    <div v-else class="flex flex-col items-center justify-center mt-16">
-      <!-- <i class="fa-solid fa-lock"></i> -->
-      <i class="fa-solid fa-user-lock text-6xl text-gray mb-4"></i>
-      <p class="text-gray-600 text-sm">이 사용자의 프로필은 비공개 상태입니다.</p>
     </div>
-
+  
     <!-- 모달이 활성화될 때 표시 -->
-    <div
-      v-if="showModal"
-      class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
-      @click="closeModalOnOverlay"
-    >
+    <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" @click="closeModalOnOverlay">
       <div class="bg-white rounded-lg max-w-md w-80 mx-10 p-6 relative" @click.stop>
         <button @click="closeModal" class="absolute top-4 right-4">
           <i class="fa-solid fa-xmark"></i>
@@ -199,11 +185,7 @@
 
         <h2 class="font-semibold text-center mb-2">메달의 기준이 궁금하신가요?</h2>
         <!-- badgeCode가 0이 아닌 배지 목록만 표시 -->
-        <div
-          v-for="badge in filteredBadgeList"
-          :key="badge.badgeCode"
-          class="flex justify-between border-t px-4 pt-4 mt-4"
-        >
+        <div v-for="badge in filteredBadgeList" :key="badge.badgeCode" class="flex justify-between border-t px-4 pt-4 mt-4">
           <h2 class="text-[10px] font-semibold">
             {{ badge.badgeTitle }}
           </h2>
@@ -242,11 +224,12 @@ const myLikePosts = ref([]);
 const selectedTab = ref('myPosts');
 const showModal = ref(false); // 모달 표시 여부
 const badgeList = ref([]); // 뱃지 정보 배열
+const isRunning = ref(false); // 캐릭터 애니메이션 상태
 
 //유형검사 다시하기
-const goSurvey = ()=>{
-  router.push("/home/survey-start");
-}
+const goSurvey = () => {
+  router.push('/home/survey-start');
+};
 
 // URL에서 userId를 가져오기
 const userId = ref(route.params.userId);
@@ -260,14 +243,25 @@ const filteredBadgeList = computed(() => {
   return badgeList.value.filter((badge) => badge.badgeCode !== 0);
 });
 
+// 뱃지 이미지 동적 경로 설정
+const badgeImage = computed(() => {
+  return `/images/badge/badge${badgeCode.value}.png`; // badgeCode 값에 따라 배지 이미지 설정
+});
+
 // 프로필 사진 동적 경로 설정
 const profileImage = computed(() => {
   return `/images/${finTypeCode.value}.png`; // 이미지 파일명은 finTypeCode 값과 일치
 });
 
-// 뱃지 이미지 동적 경로 설정
-const badgeImage = computed(() => {
-  return `/images/badge/badge${badgeCode.value}.png`; // badgeCode 값에 따라 배지 이미지 설정
+const startAnimation = () => {
+  setInterval(() => {
+    isRunning.value = !isRunning.value; // 상태를 반전시켜 이미지 변경
+  }, 500); // 0.5초마다 상태 변경
+};
+
+const runningImage = computed(() => {
+  const baseImage = `/images/${finTypeCode.value}-animated-${isRunning.value ? 2 : 1}.png`;
+  return baseImage;
 });
 
 // 모달 열기 함수
@@ -385,21 +379,6 @@ const setPublic = async (publicStatus) => {
   }
 };
 
-// 사용자 Fintype에 따른 캐릭터 이미지 설정
-const characterImage = computed(() => {
-  switch (finTypeCode.value) {
-    case '1':
-      return '/images/character1.png';
-    case '2':
-      return '/images/character2.png';
-    case '3':
-      return '/images/character3.png';
-    case '4':
-      return '/images/character4.png';
-    default:
-      return '/images/0.png';
-  }
-});
 
 // 월간 미션 성취도 받아오는 함수
 const setAchievement = async () => {
@@ -412,22 +391,16 @@ const setAchievement = async () => {
   }
 };
 
-// // 미션 달성도 가져오는 함수
-// const getUserMissionAchievement = async () => {
-//   try {
-//     console.log('미션 달성도 가져오는 API 호출 시작');
-//     const userMissionAchievement = await MypageApi.getMyMissionAchievement(); // 사용자의 정보를 가져오는 API 호출
-//     console.log(
-//       '미션 달성도 가져오는API 호출 성공 :',userMissionAchievement);
-
-//       missionAchievement.value = userMissionAchievement.currentScore; // 한줄소개
-//   } catch (error) {
-//     console.error(
-//       '미션 달성도 가져오기 실패:',
-//       error
-//     );
-//   }
-// };
+// 특정 userId에 따른 미션 성취도를 불러오는 함수
+const setAchievementByUserId = async () => {
+  try {
+    const achievement = await MissionApi.getAchievementByUser(userId.value);
+    monthlyProgress.value = achievement.currentScore;
+    remainingDays.value = achievement.restDays;
+  } catch (error) {
+    console.error('미션 성취도 불러오는 중 에러 발생 :', error);
+  }
+};
 
 // 정보 수정 페이지 이동 함수
 const goSettings = () => {
@@ -452,10 +425,38 @@ const getUserPosts = async () => {
   }
 };
 
+//특정 userId에 따른 작성한 글 가져오는 함수
+const getUserPostsByUserId = async () => {
+  try {
+    const userPosts = await MypageApi.getMyPostsUserId(userId.value); // 사용자의 정보를 가져오는 API 호출
+    console.log('작성한 글 가져오기 API 호출 성공 :', myPosts);
+
+    // 작성 시간 기준으로 내림차순 정렬하여 최신 글이 먼저 나오게 처리
+    myPosts.value = userPosts.sort((a, b) => b.postTime - a.postTime);
+  } catch (error) {
+    console.error('작성한 글 가져오기 실패:', error);
+  }
+};
+
 // 좋아요한 글 가져오는 함수
 const getUserLikePosts = async () => {
   try {
     const userLikePosts = await MypageApi.getMyLikePosts(); // 사용자의 정보를 가져오는 API 호출
+    console.log('좋아요한 글 가져오기 API 호출 성공 :', userLikePosts);
+
+    // 작성 시간 기준으로 내림차순 정렬하여 최신 글이 먼저 나오게 처리
+    myLikePosts.value = userLikePosts.sort(
+      (a, b) => b.postTime - a.postTime // 날짜 최신순
+    );
+  } catch (error) {
+    console.error('좋아요한 글 가져오기 실패:', error);
+  }
+};
+
+//특정 userId에 따른 좋아요한 글 가져오는 함수
+const getUserLikePostsByUserId = async () => {
+  try {
+    const userLikePosts = await MypageApi.getMyLikePostsUserId(userId.value); // 사용자의 정보를 가져오는 API 호출
     console.log('좋아요한 글 가져오기 API 호출 성공 :', userLikePosts);
 
     // 작성 시간 기준으로 내림차순 정렬하여 최신 글이 먼저 나오게 처리
@@ -490,16 +491,20 @@ onMounted(async () => {
   // 페이지의 userId가 로그인한 사용자와 같다면 내 정보를 불러옴
   if (!userId.value || userId.value === loggedInUserId) {
     await getLoggedInUserInfo();
+    await getUserPosts();
+    await getUserLikePosts();
+    await setAchievement();
     isOwner.value = true; // 내 정보일 경우 isOwner를 true로 설정
   } else {
     await getUserInfoByUserId(); // 다르면 해당 userId에 맞는 사용자 정보를 불러옴
+    await setAchievementByUserId();
+    await getUserPostsByUserId();
+    await getUserLikePostsByUserId();
     isOwner.value = false;
   }
   getMyLoginType();
-  getUserPosts();
-  getUserLikePosts();
   getBadgeDetails();
-  setAchievement();
+  startAnimation();
 });
 
 // 탭 선택 함수

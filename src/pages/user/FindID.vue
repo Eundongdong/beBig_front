@@ -2,18 +2,18 @@
   <div class="lg:grid lg:grid-cols-3 lg:h-screen">
     <!-- 왼쪽 파란 배경 (웹에서만 적용) -->
     <div class="hidden lg:flex lg:bg-[#5354ff] lg:items-center lg:justify-center">
-      <img src="/images/logo.png" class="w-[50%]" alt="Logo" />
+      <img src="/images/logo-white.png" class="w-[50%]" alt="Logo" />
     </div>
 
-    <div class="flex justify-center items-start lg:col-span-2 lg:mt-32">
-      <div class="container max-w-lg w-full px-6 ">
-        <header class="flex justify-between items-center mb-3 relative">
+    <div class="flex flex-col justify-start items-center lg:col-span-2 mt-6">
+        <header class="w-full flex justify-between items-center mb-6 px-6 relative">
           <button class="text-xl" @click="goBack">
             <i class="fa-solid fa-chevron-left"></i>
           </button>
           <span class="font-bold text-base absolute left-1/2 transform -translate-x-1/2">아이디 찾기</span>
         </header>
-
+     
+      <div class="container max-w-lg w-full px-6 ">
         <form @submit.prevent="findID" class="container py-10">
           <!-- 이름 -->
           <div class="input_name">
@@ -79,7 +79,7 @@ const goBack = () => {
 </script>
 
 <style>
-/* 최소 높이로 폼과 결과 공간 확보 */
+최소 높이로 폼과 결과 공간 확보
 .container {
   min-height: 300px; /* 필요에 따라 값 조정 가능 */
 }
