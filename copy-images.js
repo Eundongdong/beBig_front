@@ -1,4 +1,3 @@
-@ -0,0 +1,34 @@
 import { readdirSync, copyFileSync, existsSync, mkdirSync, statSync } from "fs";
 import { resolve, join } from "path";
 
