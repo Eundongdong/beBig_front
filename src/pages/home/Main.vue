@@ -1,6 +1,6 @@
 <template>
   <div class="page flex flex-col lg:flex-row lg:gap-4">
-    <!-- <button class="text-button" @click="logout">logout</button> -->
+    <button class="text-button" @click="logout">logout</button>
     <div class="flex flex-col lg:w-1/2 lg:gap-4">
       <!-- 프로필 영역 -->
       <div class="section-style lg:mb-0">
@@ -11,10 +11,17 @@
 
           <!-- 오른쪽 이미지+텍스트버튼 영역 -->
           <div class="flex items-center space-x-4">
-            <button class="hover:font-bold" @click="goSurvey">
+            <button class="flex flex-col items-center hover:font-bold" @click="goSurvey">
               <img :src="`/images/${user.finTypeCode}.png`" class="home-profile" />
               <p class="text-sm text-gray-500">
-                {{ user.finTypeCode == '1' || user.finTypeCode == '2' || user.finTypeCode == '3' || user.finTypeCode == '4' ? '내 유형 보기' : '유형검사 하러 가기' }}
+                {{
+                  user.finTypeCode == '1' ||
+                  user.finTypeCode == '2' ||
+                  user.finTypeCode == '3' ||
+                  user.finTypeCode == '4'
+                    ? '내 유형 보기'
+                    : '유형검사 하러 가기'
+                }}
               </p>
             </button>
           </div>
@@ -22,10 +29,15 @@
 
         <div v-else class="flex justify-between items-center items-stretch bg-gray-100">
           <div class="text-left text-base">
-            <p class="py-4">안녕하세요.<br />우리는 <span class="big-text">beBig </span>입니다.<br />로그인하고 더 많은 기능을<br />이용해보시겠어요?</p>
+            <p class="py-4">
+              안녕하세요.<br />우리는 <span class="big-text">beBig </span>입니다.<br />로그인하고 더 많은 기능을<br />이용해보시겠어요?
+            </p>
           </div>
           <div class="flex items-stretch">
-            <button class="bg-[#5354ff] text-white px-8 py-2 rounded-xl hover:bg-blue-600 text-base font-bold transition-colors duration-300" @click="goLogin">
+            <button
+              class="bg-[#5354ff] text-white px-8 py-2 rounded-xl hover:bg-blue-600 text-base font-bold transition-colors duration-300"
+              @click="goLogin"
+            >
               로그인 하러 가기
             </button>
           </div>
@@ -41,23 +53,41 @@
       <div class="section-style">
         <div class="flex items-center justify-between">
           <p class="font-semibold text-base lg:text-lg">총 자산</p>
-
-          <button v-if="user.userName !== 'NoLogin' && accountList.length === 0" class="hover:font-bold" @click="goAddBank">계좌 연결하기</button>
-          <button v-if="user.userName == 'NoLogin'" class="hover:font-bold" @click="goLogin">로그인하고 계좌 연결하기</button>
         </div>
 
         <!-- 총 자산 금액 표시 -->
-        <div class="flex items-center justify-between mt-1 pb-2 border-b border-gray-300">
+        <div class="flex items-center justify-between mt-1 pb-4 border-b border-gray-300">
           <p class="text-xl font-bold">{{ formatCurrency(totalAmount) }} 원</p>
           <!-- 자세히 보러 가기 버튼 -->
-          <button v-if="accountList.length > 0" class="text-black p-2 flex items-center justify-center" @click="goToAccountDetails">
+          <button
+            v-if="accountList.length > 0"
+            class="text-black px-2 flex items-center justify-center"
+            @click="goToAccountDetails"
+          >
             <i class="fa-solid fa-chevron-right text-xl"></i>
           </button>
         </div>
 
         <!-- 계좌 목록 출력 -->
         <div class="mt-2">
-          <div v-for="account in accountList" :key="accountList.accountNum" class="flex items-center justify-between p-2 mb-0 rounded-lg">
+          <div class="mt-4 flex justify-center items-center">
+            <button
+              v-if="user.userName !== 'NoLogin' && accountList.length === 0"
+              class="button !w-2/3"
+              @click="goAddBank"
+            >
+              계좌 연결하기
+            </button>
+            <button v-if="user.userName == 'NoLogin'" class="hover:font-bold" @click="goLogin">
+              로그인하고 계좌 연결하기
+            </button>
+          </div>
+
+          <div
+            v-for="account in accountList"
+            :key="accountList.accountNum"
+            class="flex items-center justify-between p-2 mb-0 rounded-lg"
+          >
             <!-- 은행 아이콘 -->
             <img class="bank-icon" :src="`/public/images/bank/${account.bankName}.png`" alt="Bank Logo" />
 
@@ -78,19 +108,23 @@
       <div class="flex items-center justify-between border-b border-gray-300 pb-3">
         <h1 class="font-semibold text-base lg:text-lg">나의 미션</h1>
         <!-- 미션 보러가기 버튼 -->
-        <button v-if="monthlyMission && dailyMissions" class="hover:font-bold" @click="goToMission">미션 전체 보기</button>
+        <button v-if="monthlyMission && dailyMissions" class="hover:font-bold" @click="goToMission">
+          미션 전체 보기
+        </button>
       </div>
 
       <!-- 연결된 계좌가 없는 경우 -->
       <div v-if="user.userName != 'NoLogin'">
-        <div v-if="!monthlyMission || !dailyMissions" class="flex items-center justify-center mt-3">
-          <p class="text-base">계좌를 연결하고 미션을 받아보세요</p>
+        <div v-if="!monthlyMission || !dailyMissions" class="flex items-center justify-center mt-4">
+          <p>계좌를 연결하고 미션을 받아보세요</p>
         </div>
       </div>
 
       <!-- 가입없이 이용인 경우 -->
       <div v-if="user.userName == 'NoLogin'" class="flex items-center justify-center mt-3">
-        <button class="hover:font-bold" @click="goLogin">로그인하고 계좌 연결하기</button>
+        <button v-if="user.userName == 'NoLogin'" class="hover:font-bold" @click="goLogin">
+          로그인하고 계좌 연결하기
+        </button>
       </div>
 
       <div v-if="monthlyMission && dailyMissions">
@@ -98,7 +132,10 @@
         <div class="mb-4 px-2 py-2">
           <div class="flex items-center justify-between mt-2">
             <p class="font-semibold text-sm">월간 미션</p>
-            <span class="text-sm font-semibold" :class="{ 'text-red-500': monthlyMission.isRevoked, 'text-blue-500': !monthlyMission.isRevoked }">
+            <span
+              class="text-sm font-semibold"
+              :class="{ 'text-red-500': monthlyMission.isRevoked, 'text-blue-500': !monthlyMission.isRevoked }"
+            >
               {{ monthlyMission.isRevoked ? '미션 완료' : '미션 진행 중' }}
             </span>
           </div>
@@ -111,7 +148,10 @@
         <div class="mb-4 p-2">
           <div class="flex items-center justify-between mt-2">
             <p class="font-semibold text-sm">일간 미션</p>
-            <span class="text-sm font-semibold" :class="{ 'text-red-500': allDailyMissionsCompleted, 'text-blue-500': !allDailyMissionsCompleted }">
+            <span
+              class="text-sm font-semibold"
+              :class="{ 'text-red-500': allDailyMissionsCompleted, 'text-blue-500': !allDailyMissionsCompleted }"
+            >
               {{ allDailyMissionsCompleted ? '미션 완료!' : '미션 진행 중' }}
             </span>
           </div>
@@ -250,7 +290,9 @@ const getMission = async () => {
   }
 };
 
-const allDailyMissionsCompleted = computed(() => dailyMissions.every((mission) => mission.personalDailyMissionCompleted));
+const allDailyMissionsCompleted = computed(() =>
+  dailyMissions.every((mission) => mission.personalDailyMissionCompleted)
+);
 
 // 숫자를 0,000원 형식으로 포맷팅하는 함수
 const formatCurrency = (value) => {

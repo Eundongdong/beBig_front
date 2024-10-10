@@ -14,7 +14,7 @@
 
       <div class="flex items-center justify-between mt-1 pb-2 border-b border-gray-300">
         <p class="text-xl font-bold">{{ totalAmount.toLocaleString() }}원</p>
-        <button @click="goAddBank" class="text-black p-2 flex items-center justify-center">
+        <button @click="goAddBank" class="p-2 flex items-center justify-center">
           <i class="fa-solid fa-plus text-xl"></i>
         </button>
       </div>
@@ -23,9 +23,9 @@
       <div class="mt-2 px-2">
         <div v-for="(account, index) in accountList" :key="index" class="flex items-center justify-between p-2 mb-0 rounded-lg hover:bg-white hover:duration-300"  @click="goBankDetail(account.accountNum)">
           <img :src="`/images/bank/${account.bankName}.png`" alt="Bank Logo" class="bank-icon" />
-          <div class="account-details ml-4">
-            <span>{{ account.accountName }}</span>
-            <span class="ml-2"> {{ account.accountNum }}</span>
+          <div class="flex-grow ml-4">
+            <span class="text-xs">{{ account.accountName }}</span>
+            <span class="text-xs ml-2"> {{ account.accountNum }}</span>
             <p class="text-base font-semibold">{{ account.transactionBalance.toLocaleString() }} 원</p>
           </div>
           <div class="mr-2"><i class="fa-solid fa-chevron-right text-base"></i></div>
@@ -127,8 +127,4 @@ onMounted(() => {
 
 <style scoped>
 
-.account-details {
-  flex-grow: 1;
-  color: black;
-}
 </style>

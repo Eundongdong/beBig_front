@@ -205,7 +205,7 @@
 }
 
 .answer-button {
-  @apply w-full px-3 mb-1 text-lg text-black bg-white rounded-lg hover:bg-gray-200 border;
+  @apply w-full px-3 mb-1 text-lg text-black bg-white rounded-lg border;
   white-space: normal;
   word-break: keep-all;
   text-align: center;
