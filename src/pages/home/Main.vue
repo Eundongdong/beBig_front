@@ -90,7 +90,7 @@
             class="flex items-center justify-between p-2 mb-0 rounded-lg"
           >
             <!-- 은행 아이콘 -->
-            <img class="bank-icon" :src="`/public/images/bank/${account.bankName}.png`" alt="Bank Logo" />
+            <img class="bank-icon" :src="`/images/bank/${account.bankName}.png`" alt="Bank Logo" />
 
             <!-- 계좌 잔액 -->
             <div class="flex-grow ml-2">

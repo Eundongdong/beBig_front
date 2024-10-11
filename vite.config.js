@@ -52,7 +52,7 @@ export default defineConfig({
     proxy: {
       // 프리뷰 환경에서도 백엔드 요청에 대한 프록시 설정
       "/api": {
-        target: "http://localhost:8080", // 백엔드 서버 주소
+        target: "http://bbbbick.duckdns.org:8080", // 백엔드 서버 주소
         changeOrigin: true, // CORS 문제 해결
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
