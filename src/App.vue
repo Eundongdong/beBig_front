@@ -1,4 +1,5 @@
 <template>
+  <Loading />
   <div class="flex flex-col relative">
     <Header v-if="!isUserPage" class="lg:hidden"/>
     <WebHeader v-if="!isUserPage" class="hidden lg:flex w-full mx-auto" />
@@ -8,10 +9,12 @@
     <Footer v-if="!isUserPage" class="lg:hidden"/>
   </div>
 </template>
+
 <script setup>
 import Header from "./components/Header.vue"
 import Footer from "./components/Footer.vue"
 import WebHeader from "./components/WebHeader.vue";
+import Loading from "./components/Loading.vue";
 
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';

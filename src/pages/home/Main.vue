@@ -12,8 +12,10 @@
           <!-- 오른쪽 이미지+텍스트버튼 영역 -->
           <div class="flex items-center space-x-4">
             <button class="flex flex-col items-center hover:font-bold" @click="goSurvey">
-              <img :src="`/images/${user.finTypeCode}.png`" class="home-profile" />
-              <p class="text-sm text-gray-500 mt-4">
+              <div class="home-profile">
+                <img :src="`/images/${user.finTypeCode}.png`"/>
+              </div>
+              <p class="text-sm text-gray-500">
                 {{
                   user.finTypeCode == '1' ||
                   user.finTypeCode == '2' ||
@@ -134,7 +136,7 @@
             <p class="font-semibold text-sm">월간 미션</p>
             <span
               class="text-sm font-semibold"
-              :class="{ 'text-red-500': monthlyMission.isRevoked, 'text-blue-500': !monthlyMission.isRevoked }"
+              :class="{ 'text-blue-500': monthlyMission.isRevoked, 'text-green-500': !monthlyMission.isRevoked }"
             >
               {{ monthlyMission.isRevoked ? '미션 완료' : '미션 진행 중' }}
             </span>
@@ -150,7 +152,7 @@
             <p class="font-semibold text-sm">일간 미션</p>
             <span
               class="text-sm font-semibold"
-              :class="{ 'text-red-500': allDailyMissionsCompleted, 'text-blue-500': !allDailyMissionsCompleted }"
+              :class="{ 'text-blue-500': allDailyMissionsCompleted, 'text-green-500': !allDailyMissionsCompleted }"
             >
               {{ allDailyMissionsCompleted ? '미션 완료!' : '미션 진행 중' }}
             </span>
@@ -284,7 +286,9 @@ const getMission = async () => {
     for (let i = 0; i < 3; i++) {
       dailyMissions[i] = response[i];
     }
-    monthlyMission.value = await MissionApi.getMonthMission();
+    const monthlyResponse = await MissionApi.getMonthMission();
+    monthlyMission.value = monthlyResponse;
+    monthlyMission.value.isRevoked = monthlyMission.value.personalMonthlyMissionCompleted === 1;
   } catch (error) {
     // console.error("API 호출 중 오류 발생:", error);
   }

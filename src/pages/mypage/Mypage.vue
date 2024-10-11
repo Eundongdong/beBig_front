@@ -124,24 +124,18 @@
         <p class="text-gray-600 text-sm">이 사용자의 프로필은 비공개 상태입니다.</p>
       </div>
       <!-- 내가 작성한 글 & 좋아요한 글 -->
-      <div class="flex flex-col w-full max-w-screen-lg lg:col-span-2">
-        <section class="section-style">
-          <div class="flex border-b-2 border-gray-300">
-            <button
-              @click="selectTab('myPosts')"
-              :class="selectedTab === 'myPosts' ? 'border-b-4 border-black font-bold' : 'text-gray-500'"
-              class="w-1/2 pb-2 text-center"
-            >
-              작성한 글
-            </button>
-            <button
-              @click="selectTab('likedPosts')"
-              :class="selectedTab === 'likedPosts' ? 'border-b-4 border-black font-bold' : 'text-gray-500'"
-              class="w-1/2 pb-2 text-center"
-            >
-              좋아하는 글
-            </button>
-          </div>
+
+      <div v-if="isPublic || isOwner" class="flex flex-col w-full max-w-screen-lg lg:col-span-2">
+      <section class="section-style">
+        <div class="flex border-b-2 border-gray-300">
+          <button @click="selectTab('myPosts')" :class="selectedTab === 'myPosts' ? 'border-b-4 border-black font-bold' : 'text-gray-500'" class="w-1/2 pb-2 text-center">
+            작성한 글
+          </button>
+          <button @click="selectTab('likedPosts')" :class="selectedTab === 'likedPosts' ? 'border-b-4 border-black font-bold' : 'text-gray-500'" class="w-1/2 pb-2 text-center">
+            좋아하는 글
+          </button>
+        </div>
+
 
           <!-- 작성한 글 리스트 -->
           <ul v-if="selectedTab === 'myPosts'" class="mt-4">

@@ -27,7 +27,7 @@
         <button @click="Connect" class="button !mt-6">계좌 연결하기</button>
       </div>
     </div>
-
+    <h1 v-if="askFlag" class="big-text">계좌 목록을 불러오는 중...</h1>
     <!-- 계좌 목록을 보여주는 섹션 -->
     <div v-if="accountList.length != 0" class="mt-8 mx-12 lg:mx-20 space-y-4">
       <div>
@@ -60,27 +60,6 @@
         <button @click="goHome" class="button">홈으로 이동</button>
       </div>
     </div>
-
-    <!-- <div v-if="accountList.length != 0" class="flex mt-8 mx-4 lg:mx-20">
-      <div
-        v-for="account in accountList"
-        :key="account.resAccount"
-        class="flex items-center justify-between mb-4 bg-white p-4 rounded-lg shadow"
-      >
-        <div class="flex items-center">
-          <img :src="`../../public/images/bank/${account.bankVo.bankName}.png`" alt="Bank Logo" class="bank-icon" />
-          <div class="ml-4">
-            <p class="font-bold text-base">{{ account.bankVo.bankName }}</p>
-            <p class="text-sm">통장이름 : {{ account.resAccountName }}</p>
-            <p class="text-sm">계좌번호 : {{ account.resAccount }}</p>
-            <p class="text-sm">잔액 : {{ account.resAccountBalance.toLocaleString() }} 원</p>
-          </div>
-        </div>
-        <div class="flex items-center">
-          <button @click="addAccount()" class="button ml-auto">계좌 추가</button>
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -135,37 +114,28 @@ const changeNameToEnglish = (bankName) => {
 // // 예시 계좌 목록
 const accountList = reactive([]);
 
-// 예시 계좌 목록
-// const accountList = reactive([
-//   // 예시 데이터를 추가하여 항상 보이도록 설정
-//   {
-//     resAccount: '123-456-7890',
-//     resAccountName: '저축예금',
-//     resAccountBalance: 500000,
-//     bankVo: { bankName: '국민은행' },
-//   },
-//   {
-//     resAccount: '987-654-3210',
-//     resAccountName: '정기예금',
-//     resAccountBalance: 1000000,
-//     bankVo: { bankName: '신한은행' },
-//   },
-// ]);
-
+const askFlag = ref(false);
 // "계좌 연결하기" 버튼 클릭 시 호출될 함수
 const Connect = async () => {
   try {
+    askFlag.value=true;
     const response = await HomeApi.getAccountList(bankAccount);
     for (let i = 0; i < response.length; i++) {
       accountList[i] = response[i];
     }
     checkCount.value = false;
+    askFlag.value = false;
     //  console.log(accountList);
   } catch (error) {
     //여기서 error 코드에 따라 남은 횟수 수정하기
     console.error('API 호출 중 오류 발생:', error);
     console.log(error.response.data);
-    if (error.response.data == '아이디/비밀번호를 확인하세요.') {
+    if (error.response.data == '아이디/비밀번호를 확인하세요.' || 
+        error.response.data =='비밀번호 자릿수 오류입니다. 확인 후 거래하시기 바랍니다.' || 
+        error.response.data == '아이디 또는 비밀번호 오류입니다. 확인 후 거래하시기 바랍니다.'||
+        error.response.data == '아이디 오류입니다. 확인 후 거래하시기 바랍니다.' ||
+        error.response.data == '아이디 자릿수 오류입니다. 확인 후 거래하시기 바랍니다.'||
+        error.response.data == '비밀번호 오류입니다. 확인 후 거래하시기 바랍니다.') {
       if (count.value == 1) {
         alert('은행 홈페이지에 방문하여 아이디/비밀번호를 확인하시기 바랍니다.');
         router.push('/home');
@@ -178,17 +148,6 @@ const Connect = async () => {
       alert(error.response.data);
       router.push('/home/bank');
     }
-  }
-};
-
-// "계좌를 추가하시겠습니까?" 버튼 클릭 시 호출될 함수
-const addAccount = async () => {
-  console.log('계좌 추가 시도');
-  try {
-    const response = await HomeApi.addAccount(accountList);
-    router.push('/home');
-  } catch (error) {
-    //  console.error('API 호출 중 오류 발생:', error);
   }
 };
 

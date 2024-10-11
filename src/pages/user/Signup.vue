@@ -44,14 +44,18 @@
         <!-- 닉네임 -->
         <div class="input_nickname">
           <label class="label" for="nickname">닉네임</label>
-          <input class="input" id="nickname" type="text" v-model="User.nickname" placeholder="닉네임을 입력해주세요" required />
+          <input class="input" id="nickname" type="text" v-model="User.nickname" placeholder="닉네임을 입력해주세요" @change="nicknameDupCheckAPI" required />
+          <p class="notification-text" v-if="nicknameDupCheckResult && User.nickname">이미 사용 중인 닉네임입니다.</p>
+          <p class="notification-text" v-if="nicknameDupCheckOk && User.nickname" style="color: blue">사용가능한 닉네임입니다.</p>
         </div>
         
         <!-- 이메일 -->
         <div class="input_email">
           <label class="label" for="email">이메일</label>
-          <input class="input" id="email" type="text" v-model="User.email" placeholder="이메일을 입력해주세요" @input="validateEmail" required />
+          <input class="input" id="email" type="text" v-model="User.email" placeholder="이메일을 입력해주세요" @input="validateEmail" @change="emailDupCheckAPI" required />
           <p class="notification-text" v-if="emailError && User.email">이메일 형식에 맞게 입력해주세요.</p>
+          <p class="notification-text" v-if="emailDupCheckResult && User.email">이미 사용 중인 이메일입니다..</p>
+          <p class="notification-text" v-if="emailDupCheckOk && User.email" style="color: blue">사용가능한 이메일입니다.</p>
         </div>
 
         <!-- 성별 -->
@@ -115,6 +119,14 @@ const idDupCheckResult = ref(false);
 const idDupCheckOk = ref(false);
 const checkPassword = ref('');
 
+// 이메일 중복 체크 변수
+const emailDupCheckResult = ref(false);
+const emailDupCheckOk = ref(false);
+
+//닉네임 중복 체크 변수
+const nicknameDupCheckResult = ref(false);
+const nicknameDupCheckOk = ref(false);
+
 // 에러 상태 저장
 const emailError = ref(false);
 const birthError = ref(false);
@@ -159,6 +171,30 @@ const idDupCheckAPI = async () => {
     idDupCheckResult.value = true;
   }
 };
+
+// email 중복 체크
+const emailDupCheckAPI = async () => {
+    try {
+        const emailDupCheck = await UserApi.emailDuplicateCheck(User.email);
+        emailDupCheckOk.value = true;
+        emailDupCheckResult.value = false; 
+    } catch (error) {
+        emailDupCheckOk.value = false;
+        emailDupCheckResult.value = true;
+    }
+}
+
+// nickname 중복 체크
+const nicknameDupCheckAPI = async () => {
+    try {
+        const nicknameDupCheck = await UserApi.nicknameDuplicateCheck(User.nickname);
+        nicknameDupCheckOk.value = true;
+        nicknameDupCheckResult.value = false; 
+    } catch (error) {
+        nicknameDupCheckOk.value = false;
+        nicknameDupCheckResult.value = true;
+    }
+}
 
 // 이메일 유효성 검사 함수
 const validateEmail = () => {
@@ -237,7 +273,9 @@ const isFormValid = computed(() => {
     !emailError.value &&
     !birthError.value &&
     !idDupCheckResult.value &&
-    !pwdChecking.value
+    !pwdChecking.value &&
+    !emailDupCheckResult.value &&
+    !nicknameDupCheckResult.value
   );
 });
 
