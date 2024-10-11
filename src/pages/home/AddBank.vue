@@ -55,7 +55,7 @@ const bankNames = [
 
 // 뒤로가기 버튼 클릭 시 실행되는 함수
 const handleBackClick = () => {
-  router.back();
+  router.push({ name: 'main' });
 };
 
 const changeName = (name) => {

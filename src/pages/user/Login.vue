@@ -1,13 +1,11 @@
 <template>
-  <!-- 로딩 상태일 때 로딩 컴포넌트 표시 -->
-  <Loading v-if="isLoading"/>
-  <div :class="['login-container', isLoginVisible ? 'fade-in' : '']">
-    
   <!-- 로딩이 끝나면 로그인 폼 표시 -->
   <div class="lg:grid lg:grid-cols-3 lg:h-screen">
     <!-- 왼쪽 파란 배경 (웹에서만 적용) -->
     <div class="hidden lg:flex lg:bg-[#5354ff] lg:items-center lg:justify-center">
-      <img src="/images/logo-white.png" class="w-[50%]" alt="Logo" />
+      <div class="w-[270px] h-[270px] bg-white rounded-full flex items-center justify-center" >
+      <img src="/images/friends-logo.png" class="w-[250px] h-auto" alt="Logo" />
+    </div>
     </div>
 
     <div class="flex justify-center items-start mt-16 lg:col-span-2 lg:mt-32">
@@ -57,14 +55,13 @@
       </div>
     </div>
   </div>
-  </div>
+
 </template>
 
 <script setup>
 import { reactive, computed, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
-import Loading from '@/components/Loading.vue';
 
 ////// 변수 선언
 const router = useRouter();
@@ -80,13 +77,11 @@ const noLogin = reactive({
   password: '1234',
 });
 
-const isLoading=ref(true);
 
 const isLoginVisible=ref(false);
 
 onMounted(()=>{
   setTimeout(()=>{
-    isLoading.value = false;
     isLoginVisible.value=true;
   }, 2000);
 });
@@ -218,16 +213,3 @@ const GoFindPwd = () => {
   router.push('./user/findpwd');
 };
 </script>
-
-<style scoped>
-.login-container{
-  opacity: 0;
-  transition: opacity 1s ease;
-}
-
-.fade-in{
-  opacity: 1;
-}
-
-</style>
-

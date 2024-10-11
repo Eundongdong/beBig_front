@@ -2,7 +2,7 @@
   <div class="lg:grid lg:grid-cols-3 lg:h-screen">
     <!-- 왼쪽 파란 배경 (웹에서만 적용) -->
     <div class="hidden lg:flex lg:bg-[#5354ff] lg:items-center lg:justify-center">
-      <img src="/images/logo.png" class="w-[50%]" alt="Logo" />
+      <img src="/images/logo-white.png" class="w-[50%]" alt="Logo" />
     </div>
 
     <div class="flex flex-col justify-start items-center lg:col-span-2 mt-6">
@@ -52,7 +52,9 @@
         <!-- 닉네임 -->
         <div class="input_nickname">
           <label class="label" for="nickname">닉네임</label>
-          <input class="input" v-model="formData.nickname" type="text" id="nickname" placeholder="닉네임을 입력하세요" required />
+          <input class="input" v-model="formData.nickname" type="text" id="nickname" placeholder="닉네임을 입력하세요" @change="nicknameDupCheckAPI" required />
+          <p class="notification-text" v-if="nicknameDupCheckResult && formData.nickname">이미 사용 중인 닉네임입니다.</p>
+          <p class="notification-text" v-if="nicknameDupCheckOk && formData.nickname" style="color: blue">사용가능한 닉네임입니다.</p>
         </div>
 
         <!-- 가입하기 버튼 -->
@@ -98,6 +100,10 @@ const formData = ref({
   password: 'kakao',
 });
 
+//닉네임 중복 체크 변수
+const nicknameDupCheckResult = ref(false);
+const nicknameDupCheckOk = ref(false);
+
 // 에러 상태 저장
 const birthError = ref(false);
 
@@ -137,7 +143,8 @@ const isFormValid = computed(() => {
     formData.value.email &&
     formData.value.nickname &&
     formData.value.birth &&
-    !birthError.value
+    !birthError.value &&
+    !nicknameDupCheckResult.value
   );
 });
 
@@ -192,6 +199,19 @@ const handleTermsConfirmation = async (confirmedTerms) => {
     alert('모든 약관에 동의해야 회원가입이 가능합니다.');
   }
 };
+
+// nickname 중복 체크
+const nicknameDupCheckAPI = async () => {
+    try {
+        const nicknameDupCheck = await UserApi.nicknameDuplicateCheck(formData.value.nickname);
+        nicknameDupCheckOk.value = true;
+        nicknameDupCheckResult.value = false; 
+    } catch (error) {
+        nicknameDupCheckOk.value = false;
+        nicknameDupCheckResult.value = true;
+    }
+}
+
 
 // 폼 제출 함수
 const submitSignup = async () => {

@@ -1,6 +1,6 @@
 <template>
+  <button class="text-button" @click="logout">logout</button>
   <div class="page flex flex-col lg:flex-row lg:gap-4">
-    <button class="text-button" @click="logout">logout</button>
     <div class="flex flex-col lg:w-1/2 lg:gap-4">
       <!-- 프로필 영역 -->
       <div class="section-style lg:mb-0">
@@ -11,9 +11,10 @@
 
           <!-- 오른쪽 이미지+텍스트버튼 영역 -->
           <div class="flex items-center space-x-4">
-
             <button class="flex flex-col items-center hover:font-bold" @click="goSurvey">
-              <img :src="`/images/${user.finTypeCode}.png`" class="home-profile" />
+              <div class="home-profile">
+                <img :src="`/images/${user.finTypeCode}.png`"/>
+              </div>
               <p class="text-sm text-gray-500">
                 {{
                   user.finTypeCode == '1' ||
@@ -51,7 +52,7 @@
       </div>
 
       <!-- 총자산 컴포넌트 -->
-      <div class="section-style">
+      <div class="section-style flex-grow">
         <div class="flex items-center justify-between">
           <p class="font-semibold text-base lg:text-lg">총 자산</p>
         </div>
@@ -71,7 +72,7 @@
 
         <!-- 계좌 목록 출력 -->
         <div class="mt-2">
-          <div class="mt-4 flex justify-center items-center">
+          <div class="mt-8 flex justify-center items-center">
             <button
               v-if="user.userName !== 'NoLogin' && accountList.length === 0"
               class="button !w-2/3"
@@ -105,7 +106,7 @@
     </div>
 
     <!-- 미션 컴포넌트 -->
-    <div class="section-style lg:w-1/2 lg:h-full">
+    <div class="section-style lg:w-1/2 flex-grow">
       <div class="flex items-center justify-between border-b border-gray-300 pb-3">
         <h1 class="font-semibold text-base lg:text-lg">나의 미션</h1>
         <!-- 미션 보러가기 버튼 -->
@@ -116,7 +117,7 @@
 
       <!-- 연결된 계좌가 없는 경우 -->
       <div v-if="user.userName != 'NoLogin'">
-        <div v-if="!monthlyMission || !dailyMissions" class="flex items-center justify-center mt-4">
+        <div v-if="!monthlyMission || !dailyMissions" class="flex items-center justify-center text-base mt-8">
           <p>계좌를 연결하고 미션을 받아보세요</p>
         </div>
       </div>
@@ -135,7 +136,7 @@
             <p class="font-semibold text-sm">월간 미션</p>
             <span
               class="text-sm font-semibold"
-              :class="{ 'text-red-500': monthlyMission.isRevoked, 'text-blue-500': !monthlyMission.isRevoked }"
+              :class="{ 'text-blue-500': monthlyMission.isRevoked, 'text-green-500': !monthlyMission.isRevoked }"
             >
               {{ monthlyMission.isRevoked ? '미션 완료' : '미션 진행 중' }}
             </span>
@@ -151,7 +152,7 @@
             <p class="font-semibold text-sm">일간 미션</p>
             <span
               class="text-sm font-semibold"
-              :class="{ 'text-red-500': allDailyMissionsCompleted, 'text-blue-500': !allDailyMissionsCompleted }"
+              :class="{ 'text-blue-500': allDailyMissionsCompleted, 'text-green-500': !allDailyMissionsCompleted }"
             >
               {{ allDailyMissionsCompleted ? '미션 완료!' : '미션 진행 중' }}
             </span>
@@ -285,7 +286,9 @@ const getMission = async () => {
     for (let i = 0; i < 3; i++) {
       dailyMissions[i] = response[i];
     }
-    monthlyMission.value = await MissionApi.getMonthMission();
+    const monthlyResponse = await MissionApi.getMonthMission();
+    monthlyMission.value = monthlyResponse;
+    monthlyMission.value.isRevoked = monthlyMission.value.personalMonthlyMissionCompleted === 1;
   } catch (error) {
     // console.error("API 호출 중 오류 발생:", error);
   }
