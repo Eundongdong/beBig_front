@@ -88,18 +88,15 @@ import MypageApi from "@/api/MypageApi";
 import HomeApi from "@/api/HomeApi";
 
 // 사용자 정보를 가져오는 함수
-const userName = ref('');
-const getUser = async () => {
-    try {
-        const userInfo = await HomeApi.getMyInfoFooter(); // /home/info 호출
-        if(userInfo.userName == 'NoLogin'){
-          alert('로그인 후 이용해주세요.');
-          router.push({ name: 'main' });
-        }
-    } catch (error) {
-       // console.error("사용자 정보 가져오는 함수 API 호출 중 오류 발생:", error);
-    }
-};
+// const userName = ref('');
+// const getUser = async () => {
+//     try {
+//         const userInfo = await HomeApi.getMyInfoFooter(); // /home/info 호출
+        
+//     } catch (error) {
+//        // console.error("사용자 정보 가져오는 함수 API 호출 중 오류 발생:", error);
+//     }
+// };
 
 
 //Route를 통해 postId를 얻어옴
@@ -289,7 +286,6 @@ const goToUserProfile = async (userId) => {
 
 // 컴포넌트가 마운트될 때 게시글 정보를 가져옵니다.
 onMounted(async () => {
-  getUser();
   const postId = route.params.postId;
   if (postId) {
     await fetchLoggedInUserId(); //로그인된 사용자ID를 먼저 가져옴
