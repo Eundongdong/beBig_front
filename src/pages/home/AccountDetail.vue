@@ -106,7 +106,7 @@ const getAccountInfo = async () => {
     accountName.value = accountInfo.accountName;
 
     // 첫 번째 페이지일 경우에만 잔액을 설정
-    if (currentPage.value === 1) {
+    if (currentPage.value === 0) {
       accountAmount.value = accountInfo.transactions[0]?.transactionBalance;
     }
 
