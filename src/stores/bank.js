@@ -22,7 +22,7 @@ export const useBankStore = defineStore('bank', () => {
         else if(selectedBank.value == '신한은행'){
             return '0088';
         }
-        else if(selectedBank.value == '기업은행'){
+        else if(selectedBank.value == 'IBK기업은행'){
             return '0003';
         }
         else if(selectedBank.value == '우리은행'){

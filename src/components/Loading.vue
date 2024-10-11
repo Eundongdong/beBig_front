@@ -1,22 +1,34 @@
 <template>
-    <div :class="['loading-container', isFading ? 'fade-out' : '']">
-    <img src="/images/friends-logo.png" class="logo" />
-  </div>
+  <Transition name="fade">
+    <div v-if="showLoading" class="loading-container">
+      <img src="/images/friends-logo.png" class="logo" />
+    </div>
+  </Transition>
+</template>
 
-  </template>
-  
-  <script setup>
+<script setup>
 import { ref, onMounted } from 'vue';
 
-const isFading = ref(false);
+const showLoading = ref(false);
 
 onMounted(() => {
-  // 1초 후 페이드 아웃 애니메이션 시작
-  setTimeout(() => {
-    isFading.value = true;
-  }, 1000);
+  // 세션 스토리지를 사용하여 현재 세션에서 이미 로딩을 표시했는지 확인
+  if (!sessionStorage.getItem('loadingShown')) {
+    showLoading.value = true;
+    sessionStorage.setItem('loadingShown', 'true');
+
+    // 로컬 스토리지를 사용하여 최초 방문 여부 확인
+    if (!localStorage.getItem('hasVisited')) {
+      localStorage.setItem('hasVisited', 'true');
+    }
+
+    // 1초 동안 로딩 화면을 표시한 후 페이드아웃 시작
+    setTimeout(() => {
+      showLoading.value = false;
+    }, 1000);
+  }
 });
-  </script>
+</script>
 
 <style scoped>
 .loading-container {
@@ -28,22 +40,22 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color:white; /* 검정 배경에 불투명도 50% */
+  background-color: white;
   z-index: 1000;
-  transition: background-color 1s ease; /* 배경색 페이드 효과 */
 }
 
 .logo {
   width: 300px;
   height: auto;
-  transition: opacity 1s ease; /* 로고 희미해짐 효과 */
 }
 
-.fade-out {
-  background-color: rgba(0, 0, 0, 0); /* 배경 불투명도 0% */
+
+.fade-leave-active {
+  transition: opacity 2s ease; /* 페이드아웃 시간을 2초로 늘림 */
 }
 
-.fade-out .logo {
-  opacity: 0; /* 로고 희미해짐 */
+
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

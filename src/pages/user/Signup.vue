@@ -31,26 +31,31 @@
         <div class="input_password">
           <label class="label" for="password">비밀번호</label>
           <input class="input" id="password" type="password" v-model="User.password" placeholder="비밀번호를 입력하세요" required />
+          <p class="notification-text" v-if="passwordError && User.password">비밀번호는 영문, 숫자, 특수문자를 포함한 8자 이상이어야 합니다.</p>
         </div>
 
         <!-- 비밀번호 확인 -->
         <div class="input_password_check">
           <label class="label" for="password_check">비밀번호 확인</label>
           <input id="password_check" class="input" type="password" v-model="checkPassword" placeholder="비밀번호를 다시 한번 입력하세요" required />
-          <p class="notification-text" v-if="pwdChecking && checkPassword">비밀번호가 다릅니다.</p>
+          <p class="notification-text" v-if="pwdChecking && checkPassword">비밀번호가 일치하지 않습니다.</p>
         </div>
 
         <!-- 닉네임 -->
         <div class="input_nickname">
           <label class="label" for="nickname">닉네임</label>
-          <input class="input" id="nickname" type="text" v-model="User.nickname" placeholder="닉네임을 입력해주세요" required />
+          <input class="input" id="nickname" type="text" v-model="User.nickname" placeholder="닉네임을 입력해주세요" @change="nicknameDupCheckAPI" required />
+          <p class="notification-text" v-if="nicknameDupCheckResult && User.nickname">이미 사용 중인 닉네임입니다.</p>
+          <p class="notification-text" v-if="nicknameDupCheckOk && User.nickname" style="color: blue">사용가능한 닉네임입니다.</p>
         </div>
         
         <!-- 이메일 -->
         <div class="input_email">
           <label class="label" for="email">이메일</label>
-          <input class="input" id="email" type="text" v-model="User.email" placeholder="이메일을 입력해주세요" @input="validateEmail" required />
+          <input class="input" id="email" type="text" v-model="User.email" placeholder="이메일을 입력해주세요" @input="validateEmail" @change="emailDupCheckAPI" required />
           <p class="notification-text" v-if="emailError && User.email">이메일 형식에 맞게 입력해주세요.</p>
+          <p class="notification-text" v-if="emailDupCheckResult && User.email">이미 사용 중인 이메일입니다..</p>
+          <p class="notification-text" v-if="emailDupCheckOk && User.email" style="color: blue">사용가능한 이메일입니다.</p>
         </div>
 
         <!-- 성별 -->
@@ -114,9 +119,18 @@ const idDupCheckResult = ref(false);
 const idDupCheckOk = ref(false);
 const checkPassword = ref('');
 
+// 이메일 중복 체크 변수
+const emailDupCheckResult = ref(false);
+const emailDupCheckOk = ref(false);
+
+//닉네임 중복 체크 변수
+const nicknameDupCheckResult = ref(false);
+const nicknameDupCheckOk = ref(false);
+
 // 에러 상태 저장
 const emailError = ref(false);
 const birthError = ref(false);
+const passwordError = ref(false);
 
 // 약관 데이터 배열
 const terms = ref([]);
@@ -140,6 +154,12 @@ const pwdChecking = computed(() => {
   return User.password !== checkPassword.value && checkPassword.value.length > 0;
 });
 
+// 비밀번호 유효성 검사 함수(정규표현식 사용 / 영어 대소문자 구별함)
+const validatePassword = () => {
+  const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  return passwordPattern.test(User.password);
+};
+
 //ID 중복체크
 const idDupCheckAPI = async () => {
   try {
@@ -151,6 +171,30 @@ const idDupCheckAPI = async () => {
     idDupCheckResult.value = true;
   }
 };
+
+// email 중복 체크
+const emailDupCheckAPI = async () => {
+    try {
+        const emailDupCheck = await UserApi.emailDuplicateCheck(User.email);
+        emailDupCheckOk.value = true;
+        emailDupCheckResult.value = false; 
+    } catch (error) {
+        emailDupCheckOk.value = false;
+        emailDupCheckResult.value = true;
+    }
+}
+
+// nickname 중복 체크
+const nicknameDupCheckAPI = async () => {
+    try {
+        const nicknameDupCheck = await UserApi.nicknameDuplicateCheck(User.nickname);
+        nicknameDupCheckOk.value = true;
+        nicknameDupCheckResult.value = false; 
+    } catch (error) {
+        nicknameDupCheckOk.value = false;
+        nicknameDupCheckResult.value = true;
+    }
+}
 
 // 이메일 유효성 검사 함수
 const validateEmail = () => {
@@ -220,6 +264,7 @@ const isFormValid = computed(() => {
     User.name &&
     User.userLoginId &&
     User.password &&
+    validatePassword() &&
     checkPassword.value &&
     User.nickname &&
     User.email &&
@@ -228,7 +273,9 @@ const isFormValid = computed(() => {
     !emailError.value &&
     !birthError.value &&
     !idDupCheckResult.value &&
-    !pwdChecking.value
+    !pwdChecking.value &&
+    !emailDupCheckResult.value &&
+    !nicknameDupCheckResult.value
   );
 });
 
@@ -238,6 +285,13 @@ watch([year, month, day], () => {
     User.birth = `${year.value}-${month.value}-${day.value}`;
   }
 });
+
+// 비밀번호 유효성 검사 및 에러 처리
+watch(() => User.password, () => {
+  passwordError.value = !validatePassword() && User.password.length > 0;
+});
+
+
 
 //회원가입
 const signup = async () => {

@@ -7,7 +7,7 @@
           @click="sortBy('likeHits')"
           :class="[
             'px-3 py-1 text-sm rounded-md border',
-            { 'bg-blue-500 text-white': sortType === 'likeHits', 'bg-gray-100': sortType !== 'likeHits' }
+            { 'bg-[#5354ff] text-white': sortType === 'likeHits', 'bg-gray-100': sortType !== 'likeHits' }
           ]"
         >
           좋아요순
@@ -16,7 +16,7 @@
           @click="sortBy('latest')"
           :class="[
             'px-3 py-1 text-sm rounded-md border',
-            { 'bg-blue-500 text-white': sortType === 'latest', 'bg-gray-100': sortType !== 'latest' }
+            { 'bg-[#5354ff] text-white': sortType === 'latest', 'bg-gray-100': sortType !== 'latest' }
           ]"
         >
           최신순
@@ -176,7 +176,7 @@
               @click="sortBy('likeHits')"
               :class="[
                 'px-3 py-1 text-sm rounded-md border',
-                { 'bg-blue-500 text-white': sortType === 'likeHits', 'bg-gray-100': sortType !== 'likeHits' }
+                { 'bg-[#5354ff] text-white': sortType === 'likeHits', 'bg-gray-100': sortType !== 'likeHits' }
               ]"
             >
               좋아요순
@@ -185,7 +185,7 @@
               @click="sortBy('latest')"
               :class="[
                 'px-3 py-1 text-sm rounded-md border',
-                { 'bg-blue-500 text-white': sortType === 'latest', 'bg-gray-100': sortType !== 'latest' }
+                { 'bg-[#5354ff] text-white': sortType === 'latest', 'bg-gray-100': sortType !== 'latest' }
               ]"
             >
               최신순
@@ -207,11 +207,17 @@
               </div>
               <p class="text-gray-500 text-sm">{{ formatDate(post.postCreatedTime) }}</p>
             </div>
-            <div class="community-title text-lg font-semibold mb-1">{{ post.postTitle }}</div>
-            <div class="community-content text-sm text-gray-600 mb-2">{{ post.postContent }}</div>
+            <div class="community-title text-lg font-semibold mb-1">
+              {{ post.postTitle }}
+              <i v-if="post.postImagePaths && post.postImagePaths.length" class="fa-regular fa-image ml-1" style="color: #5354ff"></i>
+            </div>
+            <div class="community-content text-sm text-gray-600 mb-2">
+              {{ post.postContent.length > 10 ? post.postContent.slice(0, 10) + '...' : post.postContent }}
+            </div>
             <div class="mt-1 text-red-500">
               <button @click.stop="likePost(post.postId, post.userId)">
-                <span>{{ post.isLiked ? '♥' : '♡' }}</span> {{ post.postLikeHits }}
+                <span>{{ post.isLiked ? '♥ ' : '♡ ' }}</span> 
+                <span class=" mt-1 text-black">{{ post.postLikeHits }}</span>
               </button>
             </div>
           </div>
@@ -219,6 +225,12 @@
         <div v-else>
           <p class="text-center text-gray-500">게시글이 없습니다.</p>
         </div>
+
+        <!-- 새 글 작성 버튼 -->
+        <router-link v-if="userName != 'NoLogin'" to="/community/add" class="add-button">
+          <i class="fas fa-plus"></i>
+        </router-link>
+
 
         <!-- 페이지네이션 -->
         <div class="pagination flex justify-center items-center space-x-2 mt-4 mb-12 overflow-x-auto">
@@ -277,10 +289,15 @@ const router = useRouter();
 const loggedInUserId = ref(null);
 
 const goToPostDetail = (postId) => {
-  router.push({
-    name: 'communityDetail',
-    params: { postId }
-  });
+    if(userName.value === 'NoLogin') {
+      alert('로그인 후 이용해주세요.');
+      router.push({ name: 'main' });
+    } else {
+      router.push({
+        name: 'communityDetail',
+        params: { postId }
+      })
+    }
 };
 
 // 로그인된 사용자 ID를 미리 가져오는 함수
@@ -440,22 +457,23 @@ const likePost = async (postId, userId) => {
  //     console.error('게시글번호 또는 작성자번호가 없습니다');
       return;
     }
+    if(userId != 99){
+      //좋아요 API 호출
+      const response = await communityApi.likePost(postId, userId);
 
-    //좋아요 API 호출
-    const response = await communityApi.likePost(postId, userId);
-
-    /// 좋아요 상태를 업데이트 (post 객체에 직접 접근하지 않고 posts 배열에서 해당 게시글을 찾아 업데이트)
-    const postIndex = posts.value.findIndex((post) => post.postId === postId);
-    if (postIndex !== -1) {
-      posts.value[postIndex].isLiked = !posts.value[postIndex].isLiked;
-      // 서버에서 반환된 값을 반영
-      if (response && response.postLikeHits !== undefined) {
-        posts.value[postIndex].postLikeHits = response.postLikeHits;
-      } else {
-        // 서버 응답이 없으면 로컬에서 값을 증가/감소
-        posts.value[postIndex].postLikeHits += posts.value[postIndex].isLiked ? 1 : -1;
+      /// 좋아요 상태를 업데이트 (post 객체에 직접 접근하지 않고 posts 배열에서 해당 게시글을 찾아 업데이트)
+      const postIndex = posts.value.findIndex((post) => post.postId === postId);
+      if (postIndex !== -1) {
+        posts.value[postIndex].isLiked = !posts.value[postIndex].isLiked;
+        // 서버에서 반환된 값을 반영
+        if (response && response.postLikeHits !== undefined) {
+          posts.value[postIndex].postLikeHits = response.postLikeHits;
+        } else {
+          // 서버 응답이 없으면 로컬에서 값을 증가/감소
+          posts.value[postIndex].postLikeHits += posts.value[postIndex].isLiked ? 1 : -1;
+        }
       }
-    }
+  }
   } catch (error) {
   //  console.error('Error:', error);
   }
@@ -491,7 +509,6 @@ watch([selectedCategory, selectedFinType, sortType], () => {
 });
 
 // 컴포넌트가 마운트되면 게시글을 불러옴
-
 onMounted(async () => {
     await fetchLoggedInUserId();  // 이 부분에서 API 호출이 완료될 때까지 기다림
     if (loggedInUserId.value) {

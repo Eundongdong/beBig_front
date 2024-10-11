@@ -11,6 +11,7 @@
       <div class="flex items-center my-4">
         <img :src="`/images/bank/${bankName}.png`" alt="Bank Logo" class="w-24" />
         <div class="flex flex-col justify-between ml-4 flex-grow space-y-1">
+          <p class="text-xs font-bold">{{ bankNameKR }}</p>
           <p class="text-xs">{{ accountName }}</p>
           <p class="text-xl font-bold">{{ accountAmount.toLocaleString() }} 원</p>
           <p class="text-xs">{{ accountNum }}</p>
@@ -51,7 +52,7 @@
 
 <script setup>
 import { useRoute, useRouter } from 'vue-router';
-import { reactive, onMounted, computed, ref } from 'vue';
+import { reactive, computed, ref, onMounted, onBeforeUnmount } from 'vue';
 import HomeApi from '@/api/HomeApi';
 
 const route = useRoute();
@@ -60,8 +61,16 @@ const router = useRouter();
 const accountNum = route.query.accountNum; // 쿼리에서 계좌 번호를 받아옴
 const accountName = ref('');
 const bankName = ref('');
+const bankNameKR = ref('');
 const accountAmount = ref('');
 const transactions = reactive([]);
+
+//페이지네이션
+const currentPage = ref(0); // 현재 페이지 번호
+const pageSize = ref(10); // 한 번에 가져올 거래 내역 개수
+const totalPage = ref(1); // 전체 페이지 수 (필요시 추가)
+const isFetching = ref(false); // 데이터 로딩 중인지 상태 확인
+const hasMore = ref(true); // 추가 데이터가 있는지 여부
 
 const groupedTransactions = computed(() => {
   const groups = {};
@@ -79,19 +88,41 @@ const groupedTransactions = computed(() => {
 
 const getAccountInfo = async () => {
   try {
-    const accountInfo = await HomeApi.transactionList(accountNum);
+    if (isFetching.value || currentPage.value > totalPage.value) return;
+
+    isFetching.value = true;
+
+    const accountInfo = await HomeApi.transactionList(
+      accountNum,
+      pageSize.value,
+      currentPage.value
+    );
+    console.log("현재 페이지:", currentPage.value, "offset:", (currentPage.value) *pageSize.value);
+    console.log("받은 데이터:", accountInfo);
+
+
+    bankNameKR.value = accountInfo.bankName;
     bankName.value = changeName(accountInfo.bankName);
     accountName.value = accountInfo.accountName;
-    for (let i = 0; i < accountInfo.transactions.length; i++) {
-      const transaction = accountInfo.transactions[i];
-      // 타임스탬프를 날짜 형식으로 변환하여 transactionDate에 할당
-      transaction.transactionDate = new Date(transaction.transactionDate).toLocaleDateString();
-      transactions[i] = transaction; // 변환된 transaction을 배열에 추가
+
+    // 첫 번째 페이지일 경우에만 잔액을 설정
+    if (currentPage.value === 0) {
+      accountAmount.value = accountInfo.transactions[0]?.transactionBalance;
     }
-    // console.log(transactions);
-    accountAmount.value = transactions[0].transactionBalance;
+
+    // 새로운 거래 내역을 기존 거래 내역에 추가
+    accountInfo.transactions.forEach((transaction) => {
+      transaction.transactionDate = new Date(transaction.transactionDate).toLocaleDateString();
+      transactions.push(transaction);
+    });
+
+    // 전체 페이지 수 계산 (필요시)
+    totalPage.value = accountInfo.totalPage || 1;
+
   } catch (error) {
-    //  console.error('API 호출 중 오류 발생:', error);
+     console.error('API 호출 중 오류 발생:', error);
+  } finally {
+    isFetching.value = false;
   }
 };
 
@@ -143,8 +174,57 @@ const goBack = () => {
   router.push('/home/account');
 };
 
+const loadMoreTransactions = async () => {
+  if (isFetching.value || currentPage.value >= totalPage.value) return;
+
+  currentPage.value++; // 다음 페이지로 이동
+  console.log("페이지 증가:", currentPage.value, "offset:", (currentPage.value - 1) * pageSize.value);
+  await getAccountInfo(); // 다음 페이지의 거래 내역을 불러옴
+};
+
+// 거래 내역을 불러오는 함수
+const fetchTransactions = async () => {
+  if (isFetching.value || !hasMore.value) return; // 이미 로딩 중이거나 더 이상 불러올 데이터가 없으면 중단
+
+  isFetching.value = true; // 로딩 상태로 변경
+
+  try {
+    const data = await HomeApi.transactionList(accountNum.value, pageSize.value, (currentPage.value - 1) * pageSize.value);
+
+    if (data.transactions.length < pageSize.value) {
+      hasMore.value = false; // 추가 데이터가 더 이상 없으면 false로 설정
+    }
+
+    transactions.value = [...transactions.value, ...data.transactions]; // 기존 거래 내역에 새로 받은 데이터를 추가
+    currentPage.value += 1; // 페이지 증가
+  } catch (error) {
+    console.error("거래 내역 로드 중 오류:", error);
+  } finally {
+    isFetching.value = false; // 로딩 상태 해제
+  }
+};
+
+// 스크롤 이벤트 핸들러
+const handleScroll = () => {
+  const scrollY = window.scrollY || document.documentElement.scrollTop;
+  const scrollHeight = document.documentElement.scrollHeight;
+  const clientHeight = window.innerHeight || document.documentElement.clientHeight;
+
+  if (scrollY + clientHeight >= scrollHeight - 100) {
+    loadMoreTransactions();
+  }
+};
+
+
 onMounted(() => {
   getAccountInfo(); // 필요 시 호출
+  fetchTransactions(); // 첫 번째 데이터를 로드
+  window.addEventListener('scroll', handleScroll); // 스크롤 이벤트 추가
+});
+
+// 컴포넌트가 해제될 때 스크롤 이벤트를 제거
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', handleScroll); // 스크롤 이벤트 제거
 });
 </script>
 

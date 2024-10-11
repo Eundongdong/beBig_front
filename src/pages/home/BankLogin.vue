@@ -130,7 +130,12 @@ const Connect = async () => {
     //여기서 error 코드에 따라 남은 횟수 수정하기
     console.error('API 호출 중 오류 발생:', error);
     console.log(error.response.data);
-    if (error.response.data == '아이디/비밀번호를 확인하세요.') {
+    if (error.response.data == '아이디/비밀번호를 확인하세요.' || 
+        error.response.data =='비밀번호 자릿수 오류입니다. 확인 후 거래하시기 바랍니다.' || 
+        error.response.data == '아이디 또는 비밀번호 오류입니다. 확인 후 거래하시기 바랍니다.'||
+        error.response.data == '아이디 오류입니다. 확인 후 거래하시기 바랍니다.' ||
+        error.response.data == '아이디 자릿수 오류입니다. 확인 후 거래하시기 바랍니다.'||
+        error.response.data == '비밀번호 오류입니다. 확인 후 거래하시기 바랍니다.') {
       if (count.value == 1) {
         alert('은행 홈페이지에 방문하여 아이디/비밀번호를 확인하시기 바랍니다.');
         router.push('/home');
