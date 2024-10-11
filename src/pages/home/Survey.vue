@@ -1,11 +1,11 @@
 <template>
-  <div class="page">
+  <div class="page flex items-center justify-center">
     <div class="section-style">
       <p class="flex items-end justify-end text-sm">
         <span class="font-semibold mr-2">{{ currentQuestion + 1 }}</span> / {{ shuffledQuestions.length }}
       </p>
-      <div v-if="currentQuestion < shuffledQuestions.length - 1" class="space-y-4 mt-5">
-        <h2 class="flex items-center justify-center font-semibold">{{ shuffledQuestions[currentQuestion].finTestQuestion }}</h2>
+      <div v-if="currentQuestion < shuffledQuestions.length - 1" class="flex lg:w-[650px] flex-col items-center justify-center space-y-4 mt-5">
+        <h2 class=" text-xl font-semibold">{{ shuffledQuestions[currentQuestion].finTestQuestion }}</h2>
         <button
           @click="
             selectAnswer(1, shuffledQuestions[currentQuestion].finTestType)
@@ -21,9 +21,10 @@
           {{ shuffledQuestions[currentQuestion].finTestAnswer2 }}
         </button>
       </div>
-      <div v-else class="space-y-4 mt-5">
-        <h2 class="flex items-center justify-center font-semibold">{{ shuffledQuestions[currentQuestion].finTestQuestion }}</h2>
-        <div class="flex items-center">
+      <div v-else class="flex lg:w-[650px] flex-col items-center justify-center space-y-2 mt-5">
+        <h2 class="text-xl font-semibold">{{ shuffledQuestions[currentQuestion].finTestQuestion }}</h2>
+        <p>입력하신 월 수입은 미션 제공과 자산 분석에만 사용돼요.</p>
+        <div class="flex items-center mt-2">
           <input
             class="input mr-2"
             v-model="formattedIncome"
