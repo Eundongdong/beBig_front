@@ -121,7 +121,7 @@ const unsignLogin = async () => {
 // 카카오 소셜 로그인
 const kakaoSocialLogin = () => {
   const REST_API_KEY = 'f8156e1595fd76d2b241ad4b4f3c4ca6'; // 카카오 REST API 키
-  const REDIRECT_URI = 'http://bbbbick.duckdns:5173/user'; // 카카오 리다이렉트 URI
+  const REDIRECT_URI = 'http://bbbbick.duckdns.org:5173/user'; // 카카오 리다이렉트 URI
   const kakaoLoginUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code&prompt=login`;
 
   // 카카오 로그인 URL로 리다이렉트
@@ -137,7 +137,7 @@ const handleKakaoLogin = async () => {
   if (code) {
     try {
       // 서버로 인가 코드를 전송하여 액세스 토큰 및 사용자 정보 가져오기
-      const response = await fetch(`http://bbbbick.duckdns:8080/user/social-kakao?code=${code}`, {
+      const response = await fetch(`http://bbbbick.duckdns.org:8080/user/social-kakao?code=${code}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
