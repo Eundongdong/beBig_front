@@ -20,7 +20,7 @@
 
           <!-- 스크롤 가능한 약관 내용 -->
           <div class="bg-gray-100 p-3 rounded-lg mt-2 max-h-40 overflow-y-auto text-sm text-gray-600">
-            {{ term.utilContent }}
+            <div v-html="formatContent(term.utilContent)"></div>
           </div>
         </div>
       </div>
@@ -72,6 +72,11 @@ const toggleAll = () => {
   localTerms.value.forEach((term) => {
     term.agreed = allAgree.value;
   });
+};
+
+// 줄바꿈을 <br>로 변환하는 함수
+const formatContent = (content) => {
+  return content.replace(/\n/g, '<br>');
 };
 
 //모달 닫기

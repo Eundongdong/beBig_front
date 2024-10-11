@@ -7,7 +7,7 @@
           @click="sortBy('likeHits')"
           :class="[
             'px-3 py-1 text-sm rounded-md border',
-            { 'bg-blue-500 text-white': sortType === 'likeHits', 'bg-gray-100': sortType !== 'likeHits' }
+            { 'bg-[#5354ff] text-white': sortType === 'likeHits', 'bg-gray-100': sortType !== 'likeHits' }
           ]"
         >
           좋아요순
@@ -16,7 +16,7 @@
           @click="sortBy('latest')"
           :class="[
             'px-3 py-1 text-sm rounded-md border',
-            { 'bg-blue-500 text-white': sortType === 'latest', 'bg-gray-100': sortType !== 'latest' }
+            { 'bg-[#5354ff] text-white': sortType === 'latest', 'bg-gray-100': sortType !== 'latest' }
           ]"
         >
           최신순
@@ -176,7 +176,7 @@
               @click="sortBy('likeHits')"
               :class="[
                 'px-3 py-1 text-sm rounded-md border',
-                { 'bg-blue-500 text-white': sortType === 'likeHits', 'bg-gray-100': sortType !== 'likeHits' }
+                { 'bg-[#5354ff] text-white': sortType === 'likeHits', 'bg-gray-100': sortType !== 'likeHits' }
               ]"
             >
               좋아요순
@@ -185,7 +185,7 @@
               @click="sortBy('latest')"
               :class="[
                 'px-3 py-1 text-sm rounded-md border',
-                { 'bg-blue-500 text-white': sortType === 'latest', 'bg-gray-100': sortType !== 'latest' }
+                { 'bg-[#5354ff] text-white': sortType === 'latest', 'bg-gray-100': sortType !== 'latest' }
               ]"
             >
               최신순
