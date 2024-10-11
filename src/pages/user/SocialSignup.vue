@@ -5,36 +5,36 @@
       <img src="/images/logo-white.png" class="w-[50%]" alt="Logo" />
     </div>
 
-    <div class="flex flex-col justify-start items-center lg:col-span-2 mt-6">
-      <header class="w-full flex justify-between items-center mb-6 px-6 relative">
+    <div class="flex flex-col justify-start items-center lg:col-span-2 mt-4">
+      <header class="w-full flex justify-between items-center mb-6 px-2 relative lg:px-4">
         <button class="text-xl" @click="goBack">
           <i class="fa-solid fa-chevron-left"></i>
         </button>
         <span class="font-bold text-base absolute left-1/2 transform -translate-x-1/2">소셜 회원가입</span>
       </header>
 
-      <form @submit.prevent class="max-w-lg w-full px-6">
+      <form @submit.prevent class="max-w-lg w-full px-6 mt-6">
         <!-- 이름 -->
-        <div class="input_name">
+        <div class="input-bg">
           <label class="label" for="name">이름</label>
           <input class="disabled-input" v-model="formData.name" type="text" id="name" disabled />
         </div>
 
         <!-- 이메일 -->
-        <div class="input_email">
+        <div class="input-bg">
           <label class="label" for="email">이메일</label>
           <input class="disabled-input" v-model="formData.email" type="email" id="email" disabled />
         </div>
 
         <!-- 생년월일 -->
-        <div class="input_birth">
+        <div class="input-bg">
           <label class="label" for="birth">생년월일</label>
           <input class="input" v-model="formData.birth" type="text" id="birth" placeholder="YYYY-MM-DD" @input="validateBirthInput" />
           <p class="notification-text" v-if="birthError && formData.birth">올바른 형식(YYYY-MM-DD)으로 입력해주세요.</p>
         </div>
 
         <!-- 성별 -->
-        <div class="input_gender">
+        <div class="input-bg">
           <label class="label" for="gender">성별</label>
           <div class="flex items-centerpx-3 py-2 mb-3">
             <label class="flex items-center space-x-2">
@@ -50,9 +50,9 @@
         </div>
 
         <!-- 닉네임 -->
-        <div class="input_nickname">
+        <div class="input-bg">
           <label class="label" for="nickname">닉네임</label>
-          <input class="input" v-model="formData.nickname" type="text" id="nickname" placeholder="닉네임을 입력하세요" @change="nicknameDupCheckAPI" required />
+          <input class="input" v-model="formData.nickname" type="text" id="nickname" placeholder="닉네임을 입력하세요" @input="nicknameDupCheckAPI" required />
           <p class="notification-text" v-if="nicknameDupCheckResult && formData.nickname">이미 사용 중인 닉네임입니다.</p>
           <p class="notification-text" v-if="nicknameDupCheckOk && formData.nickname" style="color: blue">사용가능한 닉네임입니다.</p>
         </div>
@@ -116,7 +116,7 @@ const validateBirthInput = () => {
   if (!/^\d*$/.test(rawInput)) {
     formData.value.birth = rawInput.replace(/\D/g, ''); // 숫자가 아닌 문자는 제거
     // alert 대신 화면에 오류 메시지를 표시
-    errorMessage.value = '숫자만 입력 가능합니다.';
+    alert('숫자만 입력 가능합니다.');
   }
 
   // 입력이 8자리를 초과하면 알림
