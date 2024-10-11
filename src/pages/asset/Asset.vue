@@ -7,20 +7,31 @@
         <h1 class="text-2xl mb-2">{{ totalBalance.toLocaleString() }}원</h1>
 
         <div
-          class="bar-chart flex w-full h-8 bg-gray-200 border border-gray-300 mt-5"
+          class="bar-chart flex w-full h-8 bg-gray-200 border border-gray-300 mt-5 relative"
         >
           <div
             class="bar-segment bg-indigo-300 h-full"
             :style="{ width: cashPercentage + '%' }"
+            @click="showValue($event, cashPercentage, '입출금 자산')"
           ></div>
           <div
             class="bar-segment bg-indigo-600 h-full"
             :style="{ width: depositSavingsPercentage + '%' }"
+            @click="showValue($event,depositSavingsPercentage, '예적금 자산')"
           ></div>
           <div
             class="bar-segment bg-indigo-900 h-full"
             :style="{ width: Math.max(etcPercentage, 1) + '%' }"
+            @click="showValue($event,etcPercentage, '기타 자산')"
           ></div>
+          <!-- 말풍선 (tooltip) -->
+      <div
+        v-if="show"
+        class="absolute bg-gray-700 text-white text-sm rounded p-2"
+        :style="{ top: tooltipY + 'px', left: tooltipX + 'px' }"
+      >
+        {{ clickedLabel }}: {{ clickedValue }}%
+      </div>
         </div>
         <!-- 범례 -->
         <div class="legend flex justify-start mt-5">
@@ -271,6 +282,21 @@ import AssetApi from '@/api/AssetApi';
 import Chart from 'chart.js/auto';
 import annotationPlugin from 'chartjs-plugin-annotation'; // Chart.js annotation 플러그인
 Chart.register(annotationPlugin);
+
+
+const clickedValue = ref(null); // 클릭된 값
+const clickedLabel = ref('');
+const show = ref(false); // 말풍선 표시 여부
+const tooltipX = ref(0); // 말풍선 X 좌표
+const tooltipY = ref(0); // 말풍선 Y 좌표
+const showValue = (event, value, label) => {
+      clickedValue.value = value;
+      clickedLabel.value = label;
+      show.value = true;
+      // 마우스 클릭 위치 계산 (말풍선 위치)
+      tooltipX.value = event.clientX - event.target.getBoundingClientRect().left;
+      tooltipY.value = event.clientY - event.target.getBoundingClientRect().top - 30; // 클릭 위치보다 위로 배치
+    };
 
 //이미지 이름 변경
 const changeName = (name) => {
