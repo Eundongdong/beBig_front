@@ -289,10 +289,15 @@ const router = useRouter();
 const loggedInUserId = ref(null);
 
 const goToPostDetail = (postId) => {
-  router.push({
-    name: 'communityDetail',
-    params: { postId }
-  });
+    if(userName.value === 'NoLogin') {
+      alert('로그인 후 이용해주세요.');
+      router.push({ name: 'main' });
+    } else {
+      router.push({
+        name: 'communityDetail',
+        params: { postId }
+      })
+    }
 };
 
 // 로그인된 사용자 ID를 미리 가져오는 함수
@@ -504,7 +509,6 @@ watch([selectedCategory, selectedFinType, sortType], () => {
 });
 
 // 컴포넌트가 마운트되면 게시글을 불러옴
-
 onMounted(async () => {
     await fetchLoggedInUserId();  // 이 부분에서 API 호출이 완료될 때까지 기다림
     if (loggedInUserId.value) {
