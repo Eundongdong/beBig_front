@@ -185,6 +185,10 @@
   @apply h-5 w-5 text-blue-600 transition duration-150 ease-in-out mr-2;
 }
 
+.product-container {
+  @apply border border-gray-300 p-4 rounded-lg mb-4
+}
+
 .drop-down {
   @apply w-full p-3 border rounded-lg;
 }
