@@ -13,7 +13,9 @@
           <div class="flex items-center space-x-4">
 
             <button class="flex flex-col items-center hover:font-bold" @click="goSurvey">
-              <img :src="`/images/${user.finTypeCode}.png`" class="home-profile" />
+              <div class="home-profile">
+                <img :src="`/images/${user.finTypeCode}.png`"/>
+              </div>
               <p class="text-sm text-gray-500">
                 {{
                   user.finTypeCode == '1' ||
