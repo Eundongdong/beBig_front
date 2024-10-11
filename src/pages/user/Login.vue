@@ -1,8 +1,4 @@
 <template>
-  <!-- 로딩 상태일 때 로딩 컴포넌트 표시 -->
-  <Loading v-if="isLoading"/>
-  <div :class="['login-container', isLoginVisible ? 'fade-in' : '']">
-    
   <!-- 로딩이 끝나면 로그인 폼 표시 -->
   <div class="lg:grid lg:grid-cols-3 lg:h-screen">
     <!-- 왼쪽 파란 배경 (웹에서만 적용) -->
@@ -59,14 +55,13 @@
       </div>
     </div>
   </div>
-  </div>
+
 </template>
 
 <script setup>
 import { reactive, computed, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
-import Loading from '@/components/Loading.vue';
 
 ////// 변수 선언
 const router = useRouter();
@@ -82,13 +77,11 @@ const noLogin = reactive({
   password: '1234',
 });
 
-const isLoading=ref(true);
 
 const isLoginVisible=ref(false);
 
 onMounted(()=>{
   setTimeout(()=>{
-    isLoading.value = false;
     isLoginVisible.value=true;
   }, 2000);
 });
@@ -220,16 +213,3 @@ const GoFindPwd = () => {
   router.push('./user/findpwd');
 };
 </script>
-
-<style scoped>
-.login-container{
-  opacity: 0;
-  transition: opacity 1s ease;
-}
-
-.fade-in{
-  opacity: 1;
-}
-
-</style>
-
