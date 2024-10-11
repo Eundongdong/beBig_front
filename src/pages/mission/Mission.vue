@@ -20,7 +20,7 @@
           <!-- 캐릭터 이미지 (진행된 만큼 왼쪽으로 배치) -->
           <img
             :src="runningImage"
-            class="w-[50px] absolute duration-200 bottom-3 transform -translate-x-1/2 transition-all ease-linear"
+            class="w-[50px] absolute duration-200 bottom-3 transform -translate-x-1/2 transition-all ease-linear z-10"
             :style="{ left: monthlyProgress + '%' }"
           />
           <!-- 진행 바 채움 -->
@@ -33,7 +33,7 @@
           <img
             src="/images/flag.png"
             alt="깃발 이미지"
-            class="flag-image absolute right-0 bottom-3 w-6 transform translate-x-4"
+            class="flag-image absolute right-0 bottom-3 w-6 transform translate-x-7"
           />
         </div>
       </div>
@@ -47,13 +47,10 @@
             <span class="ml-2">{{ currentMonth }}</span>
             <div
               class="mission-status"
-              :style="{
-                color:
-                  monthlyMission.personalMonthlyMissionCompleted === -1
-                    ? 'red'
-                    : monthlyMission.personalMonthlyMissionCompleted === 1
-                    ? 'green'
-                    : '#5354ff',
+              :class="{
+                'text-red-500': monthlyMission.personalMonthlyMissionCompleted === -1,
+                'text-blue-500': monthlyMission.personalMonthlyMissionCompleted === 1,
+                'text-green-500': monthlyMission.personalMonthlyMissionCompleted === 0
               }"
             >
               {{
@@ -66,7 +63,13 @@
             </div>
           </div>
           <div class="mission-text">
-            <span>{{ monthlyMission.missionTopic || '설명이 없습니다.' }}</span>
+            <span
+              :class="{
+                'line-through' : monthlyMission.personalMonthlyMissionCompleted === 1,
+              }"
+            >
+            {{ monthlyMission.missionTopic || '설명이 없습니다.' }}
+          </span>
           </div>
         </div>
 
@@ -77,7 +80,10 @@
             <span class="ml-2">{{ todayDate }}</span>
             <div
               class="mission-status"
-              :style="{ color: allDailyMissionsCompleted ? 'red' : '#5354ff' }"
+              :class="{
+                'text-blue-500' : allDailyMissionsCompleted,
+                'text-green-500' : !allDailyMissionsCompleted
+              }"
             >
               {{ allDailyMissionsCompleted ? '미션 완료!' : '미션 진행 중' }}
             </div>
@@ -157,7 +163,7 @@ const calculateMonthlyProgress = (missionData) => {
 const setAchievement = async () => {
   try {
     const achievement = await MissionApi.getAchievement();
-    monthlyProgress.value = achievement.currentScore;
+    monthlyProgress.value = Math.min(achievement.currentScore, 100);
     remainingDays.value = achievement.restDays;
   } catch (error) {
     // console.error("미션 성취도 불러오는중 에러 발생 :", error);
@@ -205,6 +211,9 @@ const completeMission = async (mission) => {
       missionType: mission.missionType,
     };
     await MissionApi.updateMission(missionData);
+
+    // 일간 미션 체크 후 미션 진행바 갱신
+    await setAchievement();
   } catch (error) {
     //  console.error("미션 업데이트 중 오류 발생", error);
   }
