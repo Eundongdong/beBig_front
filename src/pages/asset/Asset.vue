@@ -365,7 +365,7 @@ const depositSavingsPercentage = computed(() => {
 });
 
 const etcPercentage = computed(() => {
-  console.log(totalEtcBalance.value);
+ // console.log(totalEtcBalance.value);
   return ((totalEtcBalance.value / totalBalance.value) * 100).toFixed(2);
 });
 

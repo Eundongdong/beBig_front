@@ -187,7 +187,7 @@ const daillyMission = async () => {
 const getMonthlyMission = async () => {
   try {
     monthlyMission.value = await MissionApi.getMonthMission();
-    console.log(monthlyMission.value);
+  //  console.log(monthlyMission.value);
   } catch (error) {
     //  console.error("daily mission 불러오는중 에러 발생:", error);
   }

@@ -53,10 +53,10 @@ export default {
           headers,
         }
       );
-      console.log(
-        '커뮤니티 글 작성 전체 응답',
-        response
-      );
+      // console.log(
+      //   '커뮤니티 글 작성 전체 응답',
+      //   response
+      // );
       return response.data;
     } catch (error) {
       console.error(
@@ -75,13 +75,13 @@ export default {
     );
 
     // 서버에서 갱신된 postLikeHits 값을 응답으로 받는다고 가정
-    console.log('COMMUNITY POST LIKE', response);
+   // console.log('COMMUNITY POST LIKE', response);
     return response.data; // 좋아요 처리 후 변경된 데이터 반환
   },
 
   // 게시글 수정
   async update(postId, formData) {
-    console.log(postId);
+   // console.log(postId);
     const response = await api.post(
       `${BASE_URL}/${postId}/update`,
       formData,
@@ -89,10 +89,10 @@ export default {
         headers,
       }
     );
-    console.log(
-      'COMMUNITY POST UPDATE',
-      response
-    );
+    // console.log(
+    //   'COMMUNITY POST UPDATE',
+    //   response
+    // );
     return response.data;
   },
 
@@ -102,7 +102,7 @@ export default {
     const response = await api.delete(
       `${BASE_URL}/${postId}/delete`
     );
-    console.log('COMMUNITY DELETE', response);
+  //  console.log('COMMUNITY DELETE', response);
     return response.data;
   },
 };

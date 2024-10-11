@@ -367,7 +367,7 @@ const selectFinType = (finTypeCode) => {
 const goToUserProfile = async (userId) => {
   try {
     if (!loggedInUserId.value) {
-      console.log('로그인된 사용자 ID를 가져오는 중...');
+    //  console.log('로그인된 사용자 ID를 가져오는 중...');
       await fetchLoggedInUserId(); // 여기서 fetch 이후 로그 찍기
     }
 
