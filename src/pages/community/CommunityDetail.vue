@@ -163,7 +163,7 @@ const fetchPostDetails = async (postId) => {
 const getLike = async()=>{
   try{
     const userLikePosts = await MypageApi.getMyLikePosts();
-    console.log(userLikePosts);
+   // console.log(userLikePosts);
     const likedPostIds = userLikePosts.map(post => post.postId); // 좋아요 누른 게시글의 postId 목록 추출
 
     // 현재 게시글이 사용자가 좋아요한 목록에 있는지 확인하여 isLiked 설정
@@ -184,7 +184,7 @@ const checkIfAuthor = (post) => {
 
 //게시글 수정
 const editPost = () => {
-  console.log("전달할 데이터:", post.value);
+//  console.log("전달할 데이터:", post.value);
 
   router.push({
     name: "communityAdd",
@@ -217,14 +217,14 @@ const deletePost = async () => {
 // 좋아요 기능
 const likePost = async (postId, userId) => {
   //postId와 userId를 콘솔에 찍어서 확인
-  console.log(`PostID: ${postId}, userID: ${userId}`);
+ // console.log(`PostID: ${postId}, userID: ${userId}`);
   try {
     if (!postId || !userId) {
       console.error("게시글번호 또는 작성자번호가 없습니다");
       return;
     }
     const response = await communityApi.likePost(postId, userId);
-    console.log("Response:", response);
+    //console.log("Response:", response);
 
     // 좋아요 상태를 업데이트 (post 객체에 직접 접근)
     if (post.value) {

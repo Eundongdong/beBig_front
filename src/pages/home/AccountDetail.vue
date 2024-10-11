@@ -97,8 +97,8 @@ const getAccountInfo = async () => {
       pageSize.value,
       currentPage.value
     );
-    console.log("현재 페이지:", currentPage.value, "offset:", (currentPage.value) *pageSize.value);
-    console.log("받은 데이터:", accountInfo);
+    //console.log("현재 페이지:", currentPage.value, "offset:", (currentPage.value) *pageSize.value);
+    //console.log("받은 데이터:", accountInfo);
 
 
     bankNameKR.value = accountInfo.bankName;
@@ -178,7 +178,7 @@ const loadMoreTransactions = async () => {
   if (isFetching.value || currentPage.value >= totalPage.value) return;
 
   currentPage.value++; // 다음 페이지로 이동
-  console.log("페이지 증가:", currentPage.value, "offset:", (currentPage.value - 1) * pageSize.value);
+  //console.log("페이지 증가:", currentPage.value, "offset:", (currentPage.value - 1) * pageSize.value);
   await getAccountInfo(); // 다음 페이지의 거래 내역을 불러옴
 };
 

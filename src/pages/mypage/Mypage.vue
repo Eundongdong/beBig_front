@@ -285,7 +285,7 @@ const startAnimation = () => {
 
 const runningImage = computed(() => {
   const baseImage = `/images/${finTypeCode.value}-animated-${isRunning.value ? 2 : 1}.png`;
-  console.log('Running image path:', baseImage); // 로그로 경로 확인
+  //console.log('Running image path:', baseImage); // 로그로 경로 확인
   return baseImage;
 });
 
@@ -309,9 +309,9 @@ const closeModalOnOverlay = (e) => {
 // API에서 사용자 정보를 가져오는 함수
 const getLoggedInUserInfo = async () => {
   try {
-    console.log('내 정보 API 호출 시작');
+    //console.log('내 정보 API 호출 시작');
     const userInfo = await MypageApi.getMypage(); // 사용자의 정보를 가져오는 API 호출
-    console.log('내 정보 API 호출 성공, 사용자 정보:', userInfo);
+  //  console.log('내 정보 API 호출 성공, 사용자 정보:', userInfo);
 
     userNickname.value = userInfo.userNickname; //이름
     finTypeCode.value = userInfo.finTypeCode; // 핀타입 코드
@@ -332,9 +332,9 @@ const getLoggedInUserInfo = async () => {
 // 특정 userId에 따른 사용자 정보를 불러오는 함수
 const getUserInfoByUserId = async () => {
   try {
-    console.log('API 호출 시작');
+   // console.log('API 호출 시작');
     const userInfo = await MypageApi.getUserProfile(userId.value); // 특정 userId의 정보를 가져오는 API 호출
-    console.log('API 호출 성공, 사용자 정보:', userInfo);
+   // console.log('API 호출 성공, 사용자 정보:', userInfo);
 
     userNickname.value = userInfo.userNickname;
     finTypeCode.value = userInfo.finTypeCode;
@@ -355,23 +355,23 @@ const getUserInfoByUserId = async () => {
 // 뱃지 정보 가져오는 함수
 const getBadgeDetails = async () => {
   try {
-    console.log('뱃지 정보 가져오는 API 호출 시작');
+   // console.log('뱃지 정보 가져오는 API 호출 시작');
     const badgeInfo = await MypageApi.getBadgeInfo(); // 뱃지 정보를 가져오는 API 호출
-    console.log('뱃지 정보 API 호출 성공, 사용자 정보:', badgeInfo);
+  //  console.log('뱃지 정보 API 호출 성공, 사용자 정보:', badgeInfo);
 
     badgeList.value = badgeInfo;
 
-    console.log('현재 badgeCode:', Number(badgeCode.value));
+   // console.log('현재 badgeCode:', Number(badgeCode.value));
 
     // badgeCode에 해당하는 배지 이름 설정
     const foundBadge = badgeList.value.find((badge) => badge.badgeCode === Number(badgeCode.value));
 
     if (foundBadge) {
       badgeName.value = foundBadge.badgeTitle;
-      console.log('badgeName 설정됨: ', badgeName.value);
+     // console.log('badgeName 설정됨: ', badgeName.value);
     } else {
       badgeName.value = '배지를 찾을 수 없습니다.';
-      console.log('해당 badgeCode에 맞는 배지를 찾을 수 없습니다.');
+    //  console.log('해당 badgeCode에 맞는 배지를 찾을 수 없습니다.');
     }
   } catch (error) {
     console.error('뱃지 정보 가져오기 실패:', error);
@@ -381,13 +381,13 @@ const getBadgeDetails = async () => {
 // 로그인타입 가져오는 함수
 const getMyLoginType = async () => {
   try {
-    console.log('로그인 타입 API 호출 시작');
+   // console.log('로그인 타입 API 호출 시작');
     const userLoginType = await MypageApi.getMyLoginType(); // 사용자의 정보를 가져오는 API 호출
-    console.log('로그인 타입 API 호출 성공 :', userLoginType);
+   // console.log('로그인 타입 API 호출 성공 :', userLoginType);
 
     loginType.value = userLoginType;
   } catch (error) {
-    console.error('사용자 정보 가져오기 실패:', error);
+   // console.error('사용자 정보 가져오기 실패:', error);
   }
 };
 
@@ -398,9 +398,9 @@ const setPublic = async (publicStatus) => {
     // 서버에 공개/비공개 상태 업데이트 요청
     await MypageApi.updateVisibility(publicStatus ? 1 : 0);
 
-    console.log('사용자 공개/비공개 상태 업데이트 성공', publicStatus);
+  //  console.log('사용자 공개/비공개 상태 업데이트 성공', publicStatus);
   } catch (error) {
-    console.error('사용자 공개/비공개 상태 업데이트 실패:', error);
+  //  console.error('사용자 공개/비공개 상태 업데이트 실패:', error);
   }
 };
 
@@ -450,7 +450,7 @@ const goSettings = () => {
 const getUserPosts = async () => {
   try {
     const userPosts = await MypageApi.getMyPosts(); // 사용자의 정보를 가져오는 API 호출
-    console.log('작성한 글 가져오기 API 호출 성공 :', myPosts);
+   // console.log('작성한 글 가져오기 API 호출 성공 :', myPosts);
 
     // 작성 시간 기준으로 내림차순 정렬하여 최신 글이 먼저 나오게 처리
     myPosts.value = userPosts.sort((a, b) => b.postTime - a.postTime);
@@ -476,7 +476,7 @@ const getUserPostsByUserId = async () => {
 const getUserLikePosts = async () => {
   try {
     const userLikePosts = await MypageApi.getMyLikePosts(); // 사용자의 정보를 가져오는 API 호출
-    console.log('좋아요한 글 가져오기 API 호출 성공 :', userLikePosts);
+   // console.log('좋아요한 글 가져오기 API 호출 성공 :', userLikePosts);
 
     // 작성 시간 기준으로 내림차순 정렬하여 최신 글이 먼저 나오게 처리
     myLikePosts.value = userLikePosts.sort(
@@ -491,7 +491,7 @@ const getUserLikePosts = async () => {
 const getUserLikePostsByUserId = async () => {
   try {
     const userLikePosts = await MypageApi.getMyLikePostsUserId(userId.value); // 사용자의 정보를 가져오는 API 호출
-    console.log('좋아요한 글 가져오기 API 호출 성공 :', userLikePosts);
+   // console.log('좋아요한 글 가져오기 API 호출 성공 :', userLikePosts);
 
     // 작성 시간 기준으로 내림차순 정렬하여 최신 글이 먼저 나오게 처리
     myLikePosts.value = userLikePosts.sort(

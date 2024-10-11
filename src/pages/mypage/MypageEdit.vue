@@ -126,9 +126,9 @@ const logout = async () => {
 // 기존 정보 불러오는 함수
 const getUserExistingInfo = async () => {
   try {
-    console.log('회원 기존정보 불러오는 API 호출 시작');
+   // console.log('회원 기존정보 불러오는 API 호출 시작');
     const userExistingInfo = await MypageApi.getMyExistingInfo(); // 사용자의 정보를 가져오는 API 호출
-    console.log('회원 기존정보 불러오는 API 호출 성공:', userExistingInfo);
+  //  console.log('회원 기존정보 불러오는 API 호출 성공:', userExistingInfo);
 
     // 받아온 데이터를 변수에 저장
     intro.value = userExistingInfo.userIntro;
@@ -147,7 +147,7 @@ const getUserExistingInfo = async () => {
 const checkCurrentPassword = async () => {
   try {
     const result = await MypageApi.checkPassword(currentPassword.value); // 비밀번호 확인 API 호출
-    console.log('API 응답 결과:', result); // 응답 데이터 구조 확인
+   // console.log('API 응답 결과:', result); // 응답 데이터 구조 확인
 
     if (result === 'password match') {
       alert('비밀번호가 일치합니다.');
@@ -203,7 +203,7 @@ const handleSubmit = async () => {
     }
 
     const response = await MypageApi.edit(userData); // 백엔드로 정보 전송
-    console.log('프로필 수정 완료:', response);
+   // console.log('프로필 수정 완료:', response);
 
     alert('프로필이 성공적으로 수정되었습니다.');
     router.push({ name: 'mypage' }); // 성공 후 mypage로 이동
