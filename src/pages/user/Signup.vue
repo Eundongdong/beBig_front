@@ -31,13 +31,14 @@
         <div class="input_password">
           <label class="label" for="password">비밀번호</label>
           <input class="input" id="password" type="password" v-model="User.password" placeholder="비밀번호를 입력하세요" required />
+          <p class="notification-text" v-if="passwordError && User.password">비밀번호는 영문, 숫자, 특수문자를 포함한 8자 이상이어야 합니다.</p>
         </div>
 
         <!-- 비밀번호 확인 -->
         <div class="input_password_check">
           <label class="label" for="password_check">비밀번호 확인</label>
           <input id="password_check" class="input" type="password" v-model="checkPassword" placeholder="비밀번호를 다시 한번 입력하세요" required />
-          <p class="notification-text" v-if="pwdChecking && checkPassword">비밀번호가 다릅니다.</p>
+          <p class="notification-text" v-if="pwdChecking && checkPassword">비밀번호가 일치하지 않습니다.</p>
         </div>
 
         <!-- 닉네임 -->
@@ -117,6 +118,7 @@ const checkPassword = ref('');
 // 에러 상태 저장
 const emailError = ref(false);
 const birthError = ref(false);
+const passwordError = ref(false);
 
 // 약관 데이터 배열
 const terms = ref([]);
@@ -139,6 +141,12 @@ const getTerms = async () => {
 const pwdChecking = computed(() => {
   return User.password !== checkPassword.value && checkPassword.value.length > 0;
 });
+
+// 비밀번호 유효성 검사 함수(정규표현식 사용 / 영어 대소문자 구별함)
+const validatePassword = () => {
+  const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  return passwordPattern.test(User.password);
+};
 
 //ID 중복체크
 const idDupCheckAPI = async () => {
@@ -220,6 +228,7 @@ const isFormValid = computed(() => {
     User.name &&
     User.userLoginId &&
     User.password &&
+    validatePassword() &&
     checkPassword.value &&
     User.nickname &&
     User.email &&
@@ -238,6 +247,13 @@ watch([year, month, day], () => {
     User.birth = `${year.value}-${month.value}-${day.value}`;
   }
 });
+
+// 비밀번호 유효성 검사 및 에러 처리
+watch(() => User.password, () => {
+  passwordError.value = !validatePassword() && User.password.length > 0;
+});
+
+
 
 //회원가입
 const signup = async () => {

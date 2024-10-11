@@ -38,7 +38,7 @@
               <div class="home-profile m-2">
                 <img :src="profileImage" alt="Profile Image" />
               </div>
-              <button @click="goSurvey">유형검사 다시하기</button>
+              <button @click="goSurvey" v-if="isOwner">유형검사 다시하기</button>
             </div>
             <div class="ml-4">
               <div class="flex items-center">
@@ -66,47 +66,57 @@
         <!-- 한줄 소개는 항상 표시 -->
         <div class="mt-2 pt-2 px-2">
           <p class="font-bold">한줄소개</p>
-          <p class="pt-1">{{ userIntro }}</p>
+          <p class="pt-1">{{ userIntro ? userIntro : "한 줄 소개를 입력해주세요." }}</p>
         </div>
       </section>
 
       <!-- 공개 상태이거나 본인일 경우 모든 정보 표시 -->
-      <div v-if="finTypeCode !== 0 && (isPublic || isOwner)">
+      <div v-if="isPublic || isOwner">
         <!-- 월간 미션 진행상황 -->
+
         <section class="section-style flex flex-col h-full">
-          <div class="mission-info flex flex-col items-start mb-5">
-            <span class="text-base font-semibold">현재 미션을 {{ monthlyProgress }}% 달성했어요</span>
-            <div class="text-red-600 text-sm pt-12">D - {{ remainingDays }}</div>
+          <!-- 계좌가 연결되지 않은 경우 -->
+          <div v-if="accountList.length === 0" class="flex flex-col items-center justify-center">
+            <div class="text-left w-full border-bottom mb-2 font-semibold text-base pb-3">미션 달성도</div>
+            <div class="text-center mt-8 text-base">계좌연결 후 미션을 받아보세요</div>
           </div>
+          <!-- 계좌가 연결된 경우 -->
+          <div v-else>
+            <div class="mission-info flex flex-col items-start mb-5">
+              <span class="text-base font-semibold">현재 미션을 {{ monthlyProgress }}% 달성했어요</span>
+              <div class="text-red-600 text-sm pt-12">D - {{ remainingDays }}</div>
+            </div>
 
-          <!-- 진행 바 -->
-          <div class="progress-bar relative w-11/12 h-2 bg-gray-300 rounded-md mx-auto mt-7">
-            <!-- 캐릭터 이미지 (진행된 만큼 왼쪽으로 배치) -->
-            <img
-              :src="runningImage"
-              class="w-[50px] absolute duration-200 bottom-3 transform -translate-x-1/2 transition-all ease-linear"
-              :style="{
-                left: monthlyProgress + '%',
-              }"
-            />
+            <!-- 진행 바 -->
+            <div class="progress-bar relative w-11/12 h-2 bg-gray-300 rounded-md mx-auto mt-7">
+              <!-- 캐릭터 이미지 (진행된 만큼 왼쪽으로 배치) -->
+              <img
+                :src="runningImage"
+                class="w-[50px] absolute duration-200 bottom-3 transform -translate-x-1/2 transition-all ease-linear"
+                :style="{
+                  left: monthlyProgress + '%',
+                }"
+              />
 
-            <!-- 진행 바 채움 -->
-            <div
-              class="progress-fill bg-[#5354ff] h-full rounded-md absolute top-0 left-0 transition-width duration-300"
-              :style="{
-                width: monthlyProgress + '%',
-              }"
-            ></div>
+              <!-- 진행 바 채움 -->
+              <div
+                class="progress-fill bg-[#5354ff] h-full rounded-md absolute top-0 left-0 transition-width duration-300"
+                :style="{
+                  width: monthlyProgress + '%',
+                }"
+              ></div>
 
-            <!-- 깃발은 오른쪽 끝에 고정 -->
-            <img
-              src="/images/flag.png"
-              alt="깃발 이미지"
-              class="flag-image absolute right-0 bottom-3 w-6 transform translate-x-4"
-            />
+              <!-- 깃발은 오른쪽 끝에 고정 -->
+              <img
+                src="/images/flag.png"
+                alt="깃발 이미지"
+                class="flag-image absolute right-0 bottom-3 w-6 transform translate-x-4"
+              />
+            </div>
           </div>
         </section>
       </div>
+
       <!-- 비공개 상태이면서 다른 사용자가 볼 때 -->
       <div v-else class="flex flex-col items-center justify-center mt-16">
         <!-- <i class="fa-solid fa-lock"></i> -->
@@ -221,6 +231,7 @@ import { ref, onMounted, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router'; // useRouter 가져오기
 import MypageApi from '@/api/MypageApi';
 import MissionApi from '@/api/MissionApi';
+import HomeApi from '@/api/HomeApi'; // 계좌 목록 가져오기 위해 추가
 
 // 라우터와 라우트 사용
 const router = useRouter();
@@ -243,6 +254,7 @@ const selectedTab = ref('myPosts');
 const showModal = ref(false); // 모달 표시 여부
 const badgeList = ref([]); // 뱃지 정보 배열
 const isRunning = ref(false); // 캐릭터 애니메이션 상태
+const accountList = ref([]); // 계좌 리스트
 
 //유형검사 다시하기
 const goSurvey = () => {
@@ -420,6 +432,16 @@ const setAchievementByUserId = async () => {
   }
 };
 
+// 계좌 목록 가져오는 함수 추가
+const fetchAccountList = async () => {
+  try {
+    const response = await HomeApi.accountList();
+    accountList.value = response; // 계좌 목록을 반응형 변수에 저장
+  } catch (error) {
+    console.error('계좌 목록 가져오기 실패:', error);
+  }
+};
+
 // 정보 수정 페이지 이동 함수
 const goSettings = () => {
   // loginType에 따라 다른 페이지로 이동
@@ -523,6 +545,7 @@ onMounted(async () => {
   getMyLoginType();
   getBadgeDetails();
   startAnimation();
+  await fetchAccountList(); // 계좌 목록 가져오기 호출
 });
 
 // 탭 선택 함수
