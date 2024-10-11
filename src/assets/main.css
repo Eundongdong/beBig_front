@@ -39,12 +39,11 @@
   @apply fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50;
 }
 
-
 .modal-inner {
-  @apply bg-white rounded-lg max-w-md w-80 mx-10 p-6 relative
+  @apply bg-white rounded-lg max-w-md w-80 mx-10 p-6 relative;
 }
 
-.modal-image{
+.modal-image {
   @apply max-h-full w-auto object-contain;
 }
 
@@ -73,18 +72,19 @@
 }
 
 .home-profile {
-  @apply w-[100px] h-[100px] bg-white rounded-full;
+  /*  */
+  @apply w-24 h-24 bg-white rounded-full;
 }
 
 .home-profile img {
-  @apply w-full h-full object-contain;
+  @apply w-16 h-16 object-contain;
 }
 
 .community-profile {
   @apply w-[35px] h-[35px] bg-gray-200 rounded-full;
 }
 
-.community-profile img{
+.community-profile img {
   @apply w-full h-full object-contain;
 }
 
@@ -105,21 +105,41 @@
   @apply mb-4 px-6 py-4 rounded-xl bg-[#F3F3F3];
 }
 
+.section-title {
+  /*  */
+  @apply font-semibold text-lg
+}
+
+.account-list-bg {
+  /*  */
+  @apply mt-2 px-2
+}
+
+.account-list-inner {
+  /*  */
+ @apply p-2
+}
+
 .bank-icon {
-  @apply h-[30px];
+  @apply h-8;
+}
+
+.icon {
+  @apply text-xl
 }
 
 .big-text {
-  @apply text-[#5354ff] text-xl font-bold;
+
+  @apply text-primary text-xl font-bold;
 }
 
 .button {
   /*  */
-  @apply w-full py-2 mb-1 bg-[#5354ff] text-white rounded-lg hover:bg-[#3435ff];
+  @apply w-full py-2 mb-1 bg-primary text-white rounded-lg hover:bg-[#3435ff];
 }
 
 .pagination-button {
-  @apply p-2 bg-[#5354ff] text-white rounded-lg hover:bg-[#3435ff];
+  @apply p-2 bg-primary text-white rounded-lg hover:bg-[#3435ff];
 }
 
 .white-button {
@@ -155,21 +175,21 @@
   @apply w-full px-3 py-2 mt-1 mb-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500;
 }
 
-.input-bg{
+.input-bg {
   /*  */
-  @apply mb-2
+  @apply mb-2;
 }
 
 .terms-checkbox {
   /*  */
-  @apply h-5 w-5 text-blue-600 transition duration-150 ease-in-out mr-2
+  @apply h-5 w-5 text-blue-600 transition duration-150 ease-in-out mr-2;
 }
 
 .drop-down {
   @apply w-full p-3 border rounded-lg;
 }
 
-.image-preview img{
+.image-preview img {
   @apply h-[100px] w-[100px] object-cover;
   cursor: pointer;
 }
@@ -194,11 +214,11 @@
   @apply flex items-center justify-center mt-2;
 }
 
-.file-input{
+.file-input {
   @apply hidden;
 }
 
-.file-label{
+.file-label {
   @apply cursor-pointer text-white text-xs px-2 bg-[#5354ff] rounded-lg hover:bg-[#3435ff];
 }
 
@@ -210,8 +230,18 @@
   @apply text-xs px-1 text-white font-semibold bg-[#5354ff];
 }
 
-.flag-image{
+.flag-image {
   @apply w-[40px];
+}
+
+.border-bottom {
+  /*  */
+  @apply border-b border-gray-300
+}
+
+.hover-white {
+  /*  */
+  @apply hover:bg-white hover:duration-300
 }
 
 /* @media (hover: hover) {
@@ -233,6 +263,6 @@
   }
 
   .section-style {
-    @apply p-10;
+    @apply p-8;
   }
 }

@@ -4,7 +4,7 @@
       <button class="text-lg" @click="goBack">
         <i class="fa-solid fa-chevron-left"></i>
       </button>
-      <span class="font-bold text-base absolute left-1/2 transform -translate-x-1/2">내 계좌</span>
+      <span class="font-bold text-base absolute left-1/2 transform -translate-x-1/2">계좌 거래 내역</span>
     </header>
 
     <div class="section-style mx-4 lg:mx-20">
