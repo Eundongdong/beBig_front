@@ -87,9 +87,15 @@ export default {
   },
     
     // 거래 내역 조회
-    async transactionList(accountNum) {
+    async transactionList(accountNum, limit = 10, offset = 0) {
       const response = await refreshToken.checkToken();
-        const { data } = await api.get(`${BASE_URL}/account/${accountNum}/transactions`);
+        const { data } = await api.get(`${BASE_URL}/account/${accountNum}/transactions`,{
+          params: {
+            limit: limit,
+            offset: offset
+          }
+        });
+        console.log("거래내역 api :",response);
         return data;
     },
 
