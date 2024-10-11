@@ -12,17 +12,17 @@
           <div
             class="bar-segment bg-indigo-300 h-full"
             :style="{ width: cashPercentage + '%' }"
-            @click="showValue($event, cashPercentage, '입출금 자산')"
+            @click="showValue($event, cashPercentage, 0, '입출금 자산')"
           ></div>
           <div
             class="bar-segment bg-indigo-600 h-full"
             :style="{ width: depositSavingsPercentage + '%' }"
-            @click="showValue($event,depositSavingsPercentage, '예적금 자산')"
+            @click="showValue($event,depositSavingsPercentage, cashPercentage, '예적금 자산')"
           ></div>
           <div
             class="bar-segment bg-indigo-900 h-full"
             :style="{ width: Math.max(etcPercentage, 1) + '%' }"
-            @click="showValue($event,etcPercentage, '기타 자산')"
+            @click="showValue($event,etcPercentage, depositSavingsPercentage+cashPercentage, '기타 자산')"
           ></div>
           <!-- 말풍선 (tooltip) -->
       <div
@@ -289,12 +289,15 @@ const clickedLabel = ref('');
 const show = ref(false); // 말풍선 표시 여부
 const tooltipX = ref(0); // 말풍선 X 좌표
 const tooltipY = ref(0); // 말풍선 Y 좌표
-const showValue = (event, value, label) => {
+const showValue = (event, value, previousPercentage, label) => {
       clickedValue.value = value;
       clickedLabel.value = label;
       show.value = true;
       // 마우스 클릭 위치 계산 (말풍선 위치)
-      tooltipX.value = event.clientX - event.target.getBoundingClientRect().left;
+      const chartWidth = event.target.parentElement.offsetWidth; // 차트의 전체 너비
+      const offsetX = previousPercentage * chartWidth / 100; // 이전 막대들의 너비
+
+      tooltipX.value = event.clientX - event.target.getBoundingClientRect().left + offsetX;
       tooltipY.value = event.clientY - event.target.getBoundingClientRect().top - 30; // 클릭 위치보다 위로 배치
     };
 
