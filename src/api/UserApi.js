@@ -28,6 +28,24 @@ export default {
     return data;
   },
 
+// email 중복체크
+async emailDuplicateCheck(userEmail) {
+  const { data } = await api.get(
+    `${BASE_URL}/check-email`,
+    { params: { email: userEmail } } // 'params'로 수정
+  );
+  return data;
+},
+
+// nickname 중복체크
+async nicknameDuplicateCheck(userNickname) {
+  const { data } = await api.get(
+    `${BASE_URL}/check-nickname`,
+    { params: { nickname: userNickname } } // 'params'로 수정
+  );
+  return data;
+},
+
   // 소셜 회원가입 정보전달
   async socialSignupInfo() {
     const { data } = await api.get(
