@@ -6,8 +6,8 @@
         <i class="fa-solid fa-chevron-left"></i>
       </button>
       <h2 class="font-bold text-sm absolute left-1/2 transform -translate-x-1/2">내 정보 수정</h2>
-      <button class="text-xl" @click="logout">
-        <i class="fa-solid fa-power-off"></i>
+      <button class="text-button" @click="logout">
+        로그아웃
       </button>
     </header>
 
@@ -109,12 +109,18 @@ const goBack = () => {
 
 // 로그아웃 함수 추가
 const logout = async () => {
-  try {
-    const response = refreshToken.logouting();
-  } catch (error) {
-    // console.log(error);
+  // 확인 창 표시
+  if (confirm('정말 로그아웃 하시겠습니까?')) {
+    try {
+      const response = await refreshToken.logouting();
+      // 로그아웃 성공 시 알림 창 표시
+      alert('다음에 또 만나요!');
+      router.push("/");
+    } catch (error) {
+      console.error('로그아웃 중 오류 발생:', error);
+      alert('로그아웃 중 오류가 발생했습니다.');
+    }
   }
-  router.push("/");
 };
 
 // 기존 정보 불러오는 함수

@@ -14,7 +14,7 @@
   margin: 0 auto;
   padding: 1rem;
   font-size: small;
-  font-family: 'Pretendard';
+  font-family: 'Pretendard-Regular';
   width: 100%;
 }
 
@@ -124,7 +124,7 @@
 }
 
 .answer-button {
-  @apply w-full px-3 mb-1 text-lg text-black bg-white rounded-lg border;
+  @apply w-full lg:w-[600px] px-3 mb-1 text-lg text-black bg-white rounded-lg border;
   white-space: normal;
   word-break: keep-all;
   text-align: center;
@@ -195,10 +195,6 @@
 
 .flag-image{
   @apply w-[40px];
-}
-
-.border-bottom {
-  @apply border-b border-gray-300
 }
 
 /* @media (hover: hover) {

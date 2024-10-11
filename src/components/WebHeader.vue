@@ -3,10 +3,9 @@
     <div><img src="/images/logo.png" alt="Logo" @click="goHome" class="w-28 mt-2 cursor-pointer" /></div>
     <div>
       <ul class="flex space-x-10 text-base">
-        <li><button @click="goAsset" class="hover:text-blue-500" :class="{ 'text-blue-500 font-bold': isAssetActive }">내 자산분석</button></li>
-        <li><button @click="goCommunity" class="hover:text-blue-500" :class="{ 'text-blue-500 font-bold': isCommunityActive }">커뮤니티</button></li>
-        <li><button @click="goMypage" class="hover:text-blue-500" :class="{ 'text-blue-500 font-bold': isMypageActive }">마이페이지</button></li>
-        <li><button @click="logout" class="hover:text-blue-500">로그아웃</button></li>
+        <li><button @click="goAsset" class="hover:text-[#5354FF]" :class="{ 'text-[#5354FF] font-bold': isAssetActive }">내 자산분석</button></li>
+        <li><button @click="goCommunity" class="hover:text-[#5354FF]" :class="{ 'text-[#5354FF] font-bold': isCommunityActive }">커뮤니티</button></li>
+        <li><button @click="goMypage" class="hover:text-[#5354FF]" :class="{ 'text-[#5354FF] font-bold': isMypageActive }">마이페이지</button></li>
       </ul>
     </div>
   </nav>
@@ -79,16 +78,6 @@ const goMypage = () => {
     else{
         router.push({ name: 'mypage' });
     }
-};
-
-// 로그아웃 함수 추가
-const logout = async () => {
-  try {
-    const response = refreshToken.logouting();
-  } catch (error) {
-    // console.log(error);
-  }
-  router.push('/');
 };
 
 // 메뉴 활성화 상태를 체크
