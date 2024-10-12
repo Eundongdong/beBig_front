@@ -1,5 +1,4 @@
 <template>
-  <button class="text-button" @click="logout">logout</button>
   <div class="page flex flex-col lg:flex-row lg:gap-4">
     <div class="flex flex-col lg:w-1/2 lg:gap-4">
       <!-- 프로필 영역 -->
