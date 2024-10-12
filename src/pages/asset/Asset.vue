@@ -5,7 +5,7 @@
       <div class="section-style">
         <div class="border-bottom flex justify-between items-center pb-2">
           <p class="section-title">총 자산 분석</p>
-          <p class="text-xl">{{ totalBalance.toLocaleString() }}원</p>
+          <p class="text-xl">{{ totalBalance.toLocaleString() }} 원</p>
         </div>
 
         <div class="mt-10 px-6">
