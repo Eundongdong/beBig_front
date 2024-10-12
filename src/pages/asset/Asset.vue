@@ -61,15 +61,15 @@
           </div>
         </div>
 
-        <div class="mt-4 px-6">
-          <div>
+        <div class="mt-4 px-6 w-full pl-0 pr-0">
+          <div class="pl-1">
             지난달보다
             <span class="text-primary">
               {{ Math.abs(spendings.previousMonthDiff).toLocaleString() }}
             </span>
             {{ spendings.previousMonthDiff >= 0 ? '원 더 썼어요.' : '원 덜 썼어요.' }}
           </div>
-          <div>
+          <div class="w-full">
             <canvas id="spendingChart" class="w-full h-72"></canvas>
           </div>
         </div>
@@ -444,8 +444,8 @@ const renderChart = () => {
       },
       layout: {
         padding: {
-          left: 30,
-          right: 30,
+          left: 0,
+          right: 0,
         },
       },
       plugins: {
@@ -476,7 +476,7 @@ const renderChart = () => {
       },
       // 막대의 너비를 줄이기 위한 옵션
       barPercentage: 0.7, // 막대 너비 (기본값보다 좁게 설정)
-      categoryPercentage: 0.8, // 카테고리 너비 조정 (막대 사이 간격 추가)
+      categoryPercentage: 0.5, // 카테고리 너비 조정 (막대 사이 간격 추가)
     },
   });
 };
