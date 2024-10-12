@@ -1,18 +1,18 @@
 <template>
-  <div class="page">
+  <div class="page bg-gray-50 min-h-screen p-4">
     <!-- 왼쪽 상단에 뒤로가기 버튼 -->
-    <button @click="handleBack" class="back-button">
+    <button @click="handleBack" class="back-button text-gray-700 mb-4">
       <i class="fas fa-arrow-left"></i>
     </button>
 
-    <div v-if="post" class="container">
+    <div v-if="post" class="container mx-auto bg-white border rounded-lg p-6 space-y-4">
       <!-- 수정 및 삭제 버튼 -->
       <div v-if="isAuthor" class="flex items-end justify-end">
-        <button @click="editPost" class="text-button">수정</button>
-        <button @click="deletePost" class="text-button">삭제</button>
+        <button @click="editPost" class="text-button hover:text-blue-700 font-semibold">수정</button>
+        <button @click="deletePost" class="text-button hover:text-red-700 font-semibold">삭제</button>
       </div>
       <!-- 프로필, 작성자, 날짜 -->
-      <div class="flex justify-between items-center">
+      <div class="flex justify-between items-center border-b pb-4">
         <div class="flex items-center space-x-3">
           <div class="community-profile">
           <img
@@ -21,7 +21,7 @@
             @click="goToUserProfile(post.userId)"
           />
         </div>
-          <span>{{ post.userNickname }}</span>
+          <span class="text-lg font-semibold">{{ post.userNickname }}</span>
         </div>
         <p class="community-content">
           {{ formatDate(post.postCreatedTime) }}
@@ -29,7 +29,7 @@
       </div>
 
       <!-- 글 제목 -->
-      <div class="community-title mt-3">
+      <div class="community-title">
         {{ post.postTitle }}
       </div>
 

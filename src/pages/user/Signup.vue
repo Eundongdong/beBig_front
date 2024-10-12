@@ -5,61 +5,61 @@
       <img src="/images/logo-white.png" class="w-[50%]" alt="Logo" />
     </div>
 
-    <div class="flex flex-col justify-start items-center lg:col-span-2 mt-6">
-      <header class="w-full flex justify-between items-center mb-6 px-6 relative">
+    <div class="flex flex-col justify-start items-center lg:col-span-2 mt-4">
+      <header class="w-full flex justify-between items-center mb-6 px-2 relative lg:px-4">
         <button class="text-xl" @click="goBack">
           <i class="fa-solid fa-chevron-left"></i>
         </button>
-        <span class="font-bold text-base absolute left-1/2 transform -translate-x-1/2">회원가입</span>
+        <span class="font-bold text-lg absolute left-1/2 transform -translate-x-1/2">회원가입</span>
       </header>
 
-      <form @submit.prevent class="max-w-lg w-full px-6">
+      <form @submit.prevent class="max-w-lg w-full px-6 mt-6">
         <!-- 이름 -->
-        <div class="input_name">
+        <div class="input-bg">
           <label class="label" for="name">이름</label>
           <input id="name" class="input" type="text" v-model="User.name" placeholder="이름을 입력하세요" required />
         </div>
         <!-- 아이디 -->
-        <div class="input_id">
+        <div class="input-bg">
           <label class="label" for="id">아이디</label>
-          <input class="input" id="id" type="text" v-model="User.userLoginId" placeholder="ID를 입력하세요" @change="idDupCheckAPI" required />
+          <input class="input" id="id" type="text" v-model="User.userLoginId" placeholder="ID를 입력하세요" @input="idDupCheckAPI" required />
           <p class="notification-text" v-if="idDupCheckResult && User.userLoginId">이미 사용 중인 아이디입니다.</p>
-          <p class="notification-text" v-if="idDupCheckOk && User.userLoginId" style="color: blue">사용가능한 아이디입니다.</p>
+          <p class="notification-text" v-if="idDupCheckOk && User.userLoginId" style="color: blue">사용 가능한 아이디입니다.</p>
         </div>
 
         <!-- 비밀번호 -->
-        <div class="input_password">
+        <div class="input-bg">
           <label class="label" for="password">비밀번호</label>
           <input class="input" id="password" type="password" v-model="User.password" placeholder="비밀번호를 입력하세요" required />
           <p class="notification-text" v-if="passwordError && User.password">비밀번호는 영문, 숫자, 특수문자를 포함한 8자 이상이어야 합니다.</p>
         </div>
 
         <!-- 비밀번호 확인 -->
-        <div class="input_password_check">
+        <div class="input-bg">
           <label class="label" for="password_check">비밀번호 확인</label>
           <input id="password_check" class="input" type="password" v-model="checkPassword" placeholder="비밀번호를 다시 한번 입력하세요" required />
           <p class="notification-text" v-if="pwdChecking && checkPassword">비밀번호가 일치하지 않습니다.</p>
         </div>
 
         <!-- 닉네임 -->
-        <div class="input_nickname">
+        <div class="input-bg">
           <label class="label" for="nickname">닉네임</label>
-          <input class="input" id="nickname" type="text" v-model="User.nickname" placeholder="닉네임을 입력해주세요" @change="nicknameDupCheckAPI" required />
+          <input class="input" id="nickname" type="text" v-model="User.nickname" placeholder="닉네임을 입력해주세요" @input="nicknameDupCheckAPI" required />
           <p class="notification-text" v-if="nicknameDupCheckResult && User.nickname">이미 사용 중인 닉네임입니다.</p>
-          <p class="notification-text" v-if="nicknameDupCheckOk && User.nickname" style="color: blue">사용가능한 닉네임입니다.</p>
+          <p class="notification-text" v-if="nicknameDupCheckOk && User.nickname" style="color: blue">사용 가능한 닉네임입니다.</p>
         </div>
         
         <!-- 이메일 -->
-        <div class="input_email">
+        <div class="input-bg">
           <label class="label" for="email">이메일</label>
           <input class="input" id="email" type="text" v-model="User.email" placeholder="이메일을 입력해주세요" @input="validateEmail" @change="emailDupCheckAPI" required />
           <p class="notification-text" v-if="emailError && User.email">이메일 형식에 맞게 입력해주세요.</p>
-          <p class="notification-text" v-if="emailDupCheckResult && User.email">이미 사용 중인 이메일입니다..</p>
-          <p class="notification-text" v-if="emailDupCheckOk && User.email" style="color: blue">사용가능한 이메일입니다.</p>
+          <p class="notification-text" v-else-if="emailDupCheckResult && !emailError">이미 사용 중인 이메일입니다.</p>
+          <p class="notification-text" v-else-if="emailDupCheckOk && !emailError" style="color: blue">사용 가능한 이메일입니다.</p>
         </div>
 
         <!-- 성별 -->
-        <div class="input_gender">
+        <div class="input-bg">
           <label class="label" for="gender">성별</label>
           <div class="flex items-center px-3 py-2 mb-3">
             <label class="flex items-center space-x-2">
@@ -75,7 +75,7 @@
         </div>
 
         <!-- 생년월일 -->
-        <div class="input_birth">
+        <div class="input-bg">
           <label class="label" for="birth">생년월일</label>
           <input class="input" v-model="User.birth" type="text" id="birth" placeholder="YYYY-MM-DD" @input="validateBirthInput" required />
           <p class="notification-text" v-if="birthError && User.birth">올바른 형식(YYYY-MM-DD)으로 입력해주세요.</p>
@@ -197,12 +197,28 @@ const nicknameDupCheckAPI = async () => {
 }
 
 // 이메일 유효성 검사 함수
-const validateEmail = () => {
+const validateEmail = async () => {
   // 이메일 형식 정규표현식
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   // 이메일이 유효하지 않으면 emailError를 true로 설정
   emailError.value = !emailPattern.test(User.email);
+
+  // 이메일 형식이 맞으면 중복 검사 실행
+  if (!emailError.value) {
+    try {
+      const emailDupCheck = await UserApi.emailDuplicateCheck(User.email);
+      emailDupCheckOk.value = true;
+      emailDupCheckResult.value = false;
+    } catch (error) {
+      emailDupCheckOk.value = false;
+      emailDupCheckResult.value = true;
+    }
+  } else {
+    // 이메일 형식이 맞지 않으면 중복 검사 결과 초기화
+    emailDupCheckResult.value = false;
+    emailDupCheckOk.value = false;
+  }
 };
 
 // 가입 버튼을 누를 때 모달을 열기

@@ -8,20 +8,22 @@
     </header>
 
     <div class="section-style mx-4 lg:mx-20">
+        <div class="">
       <div class="flex items-center justify-between">
-        <p class="font-semibold text-base lg:text-lg">총 자산</p>
+        <p class="section-title">총 자산</p>
       </div>
 
-      <div class="flex items-center justify-between mt-1 pb-2 border-b border-gray-300">
+      <div class="flex items-center justify-between mt-1 pb-2 border-bottom">
         <p class="text-xl font-bold">{{ totalAmount.toLocaleString() }}원</p>
         <button @click="goAddBank" class="p-2 flex items-center justify-center">
           <i class="fa-solid fa-plus text-xl"></i>
         </button>
       </div>
+    </div>
 
       <!-- 계좌 목록 출력 -->
-      <div class="mt-2 px-2">
-        <div v-for="(account, index) in accountList" :key="index" class="flex items-center justify-between p-2 mb-0 rounded-lg hover:bg-white hover:duration-300"  @click="goBankDetail(account.accountNum)">
+      <div class="account-list-bg">
+        <div v-for="(account, index) in accountList" :key="index" class="flex items-center justify-between rounded-lg account-list-inner hover-white"  @click="goBankDetail(account.accountNum)">
           <img :src="`/images/bank/${account.bankName}.png`" alt="Bank Logo" class="bank-icon" />
           <div class="flex-grow ml-4">
             <span class="text-xs">{{ account.accountName }}</span>

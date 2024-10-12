@@ -1,4 +1,5 @@
 <template>
+    <!-- <footer class="fixed bottom-0 left-0 right-0 bg-gray-100 shadow-lg z-50"> -->
     <footer class="fixed bottom-4 left-4 right-4 bg-gray-100 rounded-2xl shadow-lg z-50">
         <nav class="h-16 flex items-center justify-around">
             <button @click="goHome" :class="getButtonClass(isHome)">
@@ -91,7 +92,7 @@ const goMypage = () => {
 };
 
 const getButtonClass = (isActive) => {
-    return `flex flex-col items-center justify-center w-1/4 focus:outline-none transition-colors duration-200 ${isActive ? 'text-black' : 'text-gray-500 hover:text-gray-700'
+    return `flex flex-col items-center justify-center w-1/4 focus:outline-none transition-colors duration-200 ${isActive ? 'text-primary' : 'text-gray-500 hover:text-gray-700'
         }`;
 };
 </script>
