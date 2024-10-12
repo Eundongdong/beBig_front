@@ -27,8 +27,8 @@
     <!-- 사이드바 및 게시글 리스트를 나란히 배치 -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6" >
           <!-- 사이드바 및 필터 -->
-      <aside class="col-span-1 lg:col-span-2">
-        <div class="bg-gray-100 p-4 rounded-lg">
+      <aside class="col-span-1 lg:col-span-2 relative lg:p-0">
+        <div class="bg-gray-100 p-4 rounded-lg lg:w-36 lg:fixed ">
           <!-- 필터 드롭다운: 카테고리, 자산유형 -->
           <div class="lg:flex lg:flex-col gap-4">
             <div>
