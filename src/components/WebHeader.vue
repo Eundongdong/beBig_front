@@ -1,5 +1,5 @@
 <template>
-  <nav class="hidden lg:flex justify-between items-center px-8 py-2 bg-white shadow-lg fixed top-0 left-0 w-full z-50 ">
+  <nav class="hidden lg:flex justify-between items-center px-8 py-2 bg-white shadow-md fixed top-0 left-0 w-full h-[60px] z-50 ">
     <div><img src="/images/logo.png" alt="Logo" @click="goHome" class="w-28 mt-2 cursor-pointer" /></div>
     <div>
       <ul class="flex space-x-10 text-base">

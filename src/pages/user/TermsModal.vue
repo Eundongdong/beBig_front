@@ -6,7 +6,7 @@
 
       <!-- 전체 동의 -->
       <div class="flex items-center mb-4">
-        <input type="checkbox" v-model="allAgree" @change="toggleAll" class="form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out mr-2" />
+        <input type="checkbox" v-model="allAgree" @change="toggleAll" class="terms-checkbox" />
         <span class="text-sm font-semibold">전체 동의하기</span>
       </div>
 
@@ -14,18 +14,18 @@
       <div class="divide-y divide-gray-200 max-h-64 overflow-y-auto">
         <div v-for="(term, index) in localTerms" :key="index" class="py-4">
           <div class="flex items-center ml-2">
-            <input type="checkbox" v-model="term.agreed" class="form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out mr-2" />
+            <input type="checkbox" v-model="term.agreed" class="terms-checkbox" />
             <span class="text-sm font-semibold">{{ term.utilTitle }}</span>
           </div>
 
           <!-- 스크롤 가능한 약관 내용 -->
-          <div class="bg-gray-100 p-3 rounded-lg mt-2 max-h-40 overflow-y-auto text-sm text-gray-600">
+          <div class="bg-gray-100 p-4 rounded-lg mt-4 mx-2 max-h-40 overflow-y-auto text-sm text-gray-600">
             <div v-html="formatContent(term.utilContent)"></div>
           </div>
         </div>
       </div>
 
-      <div class="mt-6 flex justify-end space-x-2">
+      <div class="mt-6 flex justify-end gap-4">
         <button @click="closeModal" class="gray-button">취소</button>
         <button @click="confirmAgreement" class="button">확인</button>
       </div>
