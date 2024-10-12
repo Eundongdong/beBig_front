@@ -133,6 +133,11 @@
   @apply text-primary text-xl font-bold;
 }
 
+.blue-bold {
+
+  @apply text-primary font-bold;
+}
+
 .button {
   /*  */
   @apply w-full py-2 mb-1 bg-primary text-white rounded-lg hover:bg-[#3435ff];
