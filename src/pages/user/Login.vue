@@ -30,7 +30,7 @@
           />
         </div>
 
-        <div class="flex justify-between space-x-2">
+        <div class="flex justify-between gap-4 mt pt-4">
           <button class="button lg:w-1/2" @click="GoSignup">회원가입</button>
           <button class="button lg:w-1/2" :disabled="disableSubmit" @click="login">로그인</button>
         </div>

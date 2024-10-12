@@ -12,36 +12,27 @@
           <!-- 오른쪽 이미지+텍스트버튼 영역 -->
           <div class="flex items-center space-x-4">
             <button class="flex flex-col items-center hover:font-bold" @click="goSurvey">
-              <div class="home-profile">
-                <img :src="`/images/${user.finTypeCode}.png`"/>
+              <div class="home-profile flex justify-center items-center">
+                <img :src="`/images/${user.finTypeCode}.png`" />
               </div>
-              <p class="text-sm text-gray-500">
-                {{
-                  user.finTypeCode == '1' ||
-                  user.finTypeCode == '2' ||
-                  user.finTypeCode == '3' ||
-                  user.finTypeCode == '4'
-                    ? '내 유형 보기'
-                    : '유형검사 하러 가기'
-                }}
+              <p class="text-sm mt-2 text-gray-500">
+                {{ user.finTypeCode == '1' || user.finTypeCode == '2' || user.finTypeCode == '3' || user.finTypeCode == '4' ? '내 유형 보기' : '유형검사 하러 가기' }}
               </p>
             </button>
           </div>
         </div>
 
-        <div v-else class="flex justify-between items-stretch bg-gray-100">
-          <div class="text-left text-base">
-            <p class="py-4">
-              안녕하세요.<br />우리는 <span class="big-text">beBig </span>입니다.<br />로그인하고 더 많은 기능을<br />이용해보시겠어요?
-            </p>
+        <div v-else class=" items-stretch bg-gray-100">
+          <div class="flex justify-between items-center">
+            <div class="text-left text-base">
+              <p class="py-4">안녕하세요.<br />우리는 <span class="big-text">beBig </span>입니다.<br />로그인하고 더 많은 기능을<br />이용해보시겠어요?</p>
+            </div>
+            <div class="w-32 h-32 bg-white rounded-full flex justify-center items-center">
+              <img class="w-24" :src="`/images/friends-logo.png`" />
+            </div>
           </div>
-          <div class="flex items-stretch">
-            <button
-              class="bg-[#5354ff] text-white px-8 py-2 rounded-xl hover:bg-blue-600 text-base font-bold transition-colors duration-300"
-              @click="goLogin"
-            >
-              로그인 하러 가기
-            </button>
+          <div class="">
+            <button class="button mt-6" @click="goLogin">로그인 하러 가기</button>
           </div>
         </div>
 
@@ -54,42 +45,26 @@
       <!-- 총자산 컴포넌트 -->
       <div class="section-style flex-grow">
         <div class="flex items-center justify-between">
-          <p class="font-semibold text-base lg:text-lg">총 자산</p>
+          <p class="section-title">총 자산</p>
         </div>
 
         <!-- 총 자산 금액 표시 -->
-        <div class="flex items-center justify-between mt-1 pb-4 border-b border-gray-300">
+        <div class="flex items-center justify-between mt-1 pb-4 border-bottom">
           <p class="text-xl font-bold">{{ formatCurrency(totalAmount) }} 원</p>
           <!-- 자세히 보러 가기 버튼 -->
-          <button
-            v-if="accountList.length > 0"
-            class="text-black px-2 flex items-center justify-center"
-            @click="goToAccountDetails"
-          >
-            <i class="fa-solid fa-chevron-right text-xl"></i>
+          <button v-if="accountList.length > 0" class="text-black px-2 flex items-center justify-center" @click="goToAccountDetails">
+            <i class="fa-solid fa-chevron-right icon"></i>
           </button>
         </div>
 
         <!-- 계좌 목록 출력 -->
-        <div class="mt-2">
-          <div class="mt-8 flex justify-center items-center">
-            <button
-              v-if="user.userName !== 'NoLogin' && accountList.length === 0"
-              class="button !w-2/3"
-              @click="goAddBank"
-            >
-              계좌 연결하기
-            </button>
-            <button v-if="user.userName == 'NoLogin'" class="hover:font-bold" @click="goLogin">
-              로그인하고 계좌 연결하기
-            </button>
+        <div class="account-list-bg">
+          <div class="flex justify-center items-center">
+            <button v-if="user.userName !== 'NoLogin' && accountList.length === 0" class="button !w-2/3 mt-4" @click="goAddBank">계좌 연결하기</button>
+            <button v-if="user.userName == 'NoLogin'" class="hover:font-bold mt-4" @click="goLogin">로그인하고 계좌 연결하기</button>
           </div>
 
-          <div
-            v-for="account in accountList"
-            :key="accountList.accountNum"
-            class="flex items-center justify-between p-2 mb-0 rounded-lg"
-          >
+          <div v-for="account in accountList" :key="accountList.accountNum" class="flex items-center justify-between account-list-inner rounded-lg">
             <!-- 은행 아이콘 -->
             <img class="bank-icon" :src="`/images/bank/${account.bankName}.png`" alt="Bank Logo" />
 
@@ -108,25 +83,21 @@
     <!-- 미션 컴포넌트 -->
     <div class="section-style lg:w-1/2 flex-grow">
       <div class="flex items-center justify-between border-b border-gray-300 pb-3">
-        <h1 class="font-semibold text-base lg:text-lg">나의 미션</h1>
+        <h1 class="section-title">나의 미션</h1>
         <!-- 미션 보러가기 버튼 -->
-        <button v-if="monthlyMission && dailyMissions" class="hover:font-bold" @click="goToMission">
-          미션 전체 보기
-        </button>
+        <button v-if="monthlyMission && dailyMissions" class="hover:font-bold" @click="goToMission">미션 전체 보기</button>
       </div>
 
       <!-- 연결된 계좌가 없는 경우 -->
       <div v-if="user.userName != 'NoLogin'">
-        <div v-if="!monthlyMission || !dailyMissions" class="flex items-center justify-center text-base mt-8">
+        <div v-if="!monthlyMission || !dailyMissions" class="flex items-center justify-center text-base mt-8 mb-6">
           <p>계좌를 연결하고 미션을 받아보세요</p>
         </div>
       </div>
 
       <!-- 가입없이 이용인 경우 -->
       <div v-if="user.userName == 'NoLogin'" class="flex items-center justify-center mt-3">
-        <button v-if="user.userName == 'NoLogin'" class="hover:font-bold" @click="goLogin">
-          로그인하고 계좌 연결하기
-        </button>
+        <button v-if="user.userName == 'NoLogin'" class="hover:font-bold mt-4" @click="goLogin">로그인하고 계좌 연결하기</button>
       </div>
 
       <div v-if="monthlyMission && dailyMissions">
@@ -134,10 +105,7 @@
         <div class="mb-4 px-2 py-2">
           <div class="flex items-center justify-between mt-2">
             <p class="font-semibold text-sm">월간 미션</p>
-            <span
-              class="text-sm font-semibold"
-              :class="{ 'text-blue-500': monthlyMission.isRevoked, 'text-green-500': !monthlyMission.isRevoked }"
-            >
+            <span class="text-sm font-semibold" :class="{ 'text-blue-500': monthlyMission.isRevoked, 'text-green-500': !monthlyMission.isRevoked }">
               {{ monthlyMission.isRevoked ? '미션 완료' : '미션 진행 중' }}
             </span>
           </div>
@@ -150,10 +118,7 @@
         <div class="mb-4 p-2">
           <div class="flex items-center justify-between mt-2">
             <p class="font-semibold text-sm">일간 미션</p>
-            <span
-              class="text-sm font-semibold"
-              :class="{ 'text-blue-500': allDailyMissionsCompleted, 'text-green-500': !allDailyMissionsCompleted }"
-            >
+            <span class="text-sm font-semibold" :class="{ 'text-blue-500': allDailyMissionsCompleted, 'text-green-500': !allDailyMissionsCompleted }">
               {{ allDailyMissionsCompleted ? '미션 완료!' : '미션 진행 중' }}
             </span>
           </div>
@@ -294,9 +259,7 @@ const getMission = async () => {
   }
 };
 
-const allDailyMissionsCompleted = computed(() =>
-  dailyMissions.every((mission) => mission.personalDailyMissionCompleted)
-);
+const allDailyMissionsCompleted = computed(() => dailyMissions.every((mission) => mission.personalDailyMissionCompleted));
 
 // 숫자를 0,000원 형식으로 포맷팅하는 함수
 const formatCurrency = (value) => {
