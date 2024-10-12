@@ -7,7 +7,7 @@
         <div class="lg:mt-11 bg-gray-100 p-4 rounded-lg">
           <!-- 필터 드롭다운: 카테고리, 자산유형 -->
           <div class="flex flex-col gap-2">
-            <div>
+            <div class="mx-2">
               <div class="block text-sm font-bold mb-2 text-left">카테고리</div>
               <div class="flex flex-wrap gap-2 lg:flex-col lg:ml-1">
                 <button
@@ -75,7 +75,7 @@
 
             <hr class="border-bottom mb-1" />
 
-            <div>
+            <div class="mx-2">
               <div class="block text-sm font-bold mb-2 text-left">자산 유형</div>
               <div class="flex flex-wrap gap-2 lg:flex-col lg:ml-1">
                 <button
