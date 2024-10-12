@@ -35,10 +35,10 @@
         <div class="flex items-start">
           <div class="flex items-center">
             <div>
-              <div class="home-profile m-2">
-                <img :src="profileImage" alt="Profile Image" />
+              <div class="home-profile m-2 flex justify-center items-center">
+                <img :src="profileImage" alt="Profile Image"/>
               </div>
-              <button @click="goSurvey" v-if="isOwner">유형검사 다시하기</button>
+              <!-- <button @click="goSurvey" v-if="isOwner">유형검사 다시하기</button> -->
             </div>
             <div class="ml-4">
               <div class="flex items-center">
@@ -64,7 +64,7 @@
         </div>
 
         <!-- 한줄 소개는 항상 표시 -->
-        <div class="mt-2 pt-2 px-2">
+        <div class=" pt-2 px-2">
           <p class="font-bold">한줄소개</p>
           <p class="pt-1">{{ userIntro ? userIntro : "한 줄 소개를 입력해주세요." }}</p>
         </div>
@@ -83,8 +83,8 @@
           <!-- 계좌가 연결된 경우 -->
           <div v-else>
             <div class="mission-info flex flex-col items-start mb-5">
-              <span class="text-base font-semibold">현재 미션을 {{ monthlyProgress }}% 달성했어요</span>
-              <div class="text-red-600 text-sm pt-12">D - {{ remainingDays }}</div>
+              <span class="text-base font-semibold">현재 미션을 <span class="blue-bold">{{ monthlyProgress }}</span> % 달성했어요</span>
+              <div class="text-red-600 font-semibold text-sm pt-4 pb-8">D - {{ remainingDays }}</div>
             </div>
 
             <!-- 진행 바 -->
@@ -110,7 +110,7 @@
               <img
                 src="/images/flag.png"
                 alt="깃발 이미지"
-                class="flag-image absolute right-0 bottom-3 w-6 transform translate-x-4"
+                class="flag-image absolute right-0 bottom-3 w-6 transform translate-x-7"
               />
             </div>
           </div>
@@ -192,8 +192,8 @@
       class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
       @click="closeModalOnOverlay"
     >
-      <div class="bg-white rounded-lg max-w-md w-80 mx-10 p-6 relative" @click.stop>
-        <button @click="closeModal" class="absolute top-4 right-4">
+      <div class="bg-white rounded-lg w-100 mx-10 px-6 py-10 relative" @click.stop>
+        <button @click="closeModal" class="absolute top-4 right-4 text-xl">
           <i class="fa-solid fa-xmark"></i>
         </button>
         <img :src="badgeImage" alt="Badge Image" class="mx-auto w-32 h-32 m-4" />
@@ -208,10 +208,10 @@
           :key="badge.badgeCode"
           class="flex justify-between border-t px-4 pt-4 mt-4"
         >
-          <h2 class="text-[10px] font-semibold">
+          <h2 class="text-sm font-semibold">
             {{ badge.badgeTitle }}
           </h2>
-          <p class="text-[10px]">
+          <p class="text-sm">
             {{ badge.badgeDescription }}
           </p>
         </div>
