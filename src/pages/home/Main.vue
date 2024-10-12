@@ -66,7 +66,7 @@
 
           <div v-for="account in accountList" :key="accountList.accountNum" class="flex items-center justify-between account-list-inner rounded-lg">
             <!-- 은행 아이콘 -->
-            <img class="bank-icon" :src="`/public/images/bank/${account.bankName}.png`" alt="Bank Logo" />
+            <img class="bank-icon" :src="`/images/bank/${account.bankName}.png`" alt="Bank Logo" />
 
             <!-- 계좌 잔액 -->
             <div class="flex-grow ml-2">
