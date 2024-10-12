@@ -375,16 +375,16 @@
         <div class="section-title pb-2 border-bottom">연령대별 자산 비교</div>
         <div class="mt-4 px-4">
           <div>
-            <span class="blue-bold">{{ ageRange }}</span> 대에서 당신의 자산 순위는 상위
+            <span class="blue-bold">{{ ageRange }}</span> 대 사용자 중 상위
             <span class="blue-bold">{{ rank }}</span> % 입니다.<br />
           </div>
           <div class="mt-2">
-            해당 연령대 평균 자산은 <span class="blue-bold">{{ avgAsset.toLocaleString() }}</span> 원 입니다.
+            {{ ageRange }} 대 평균 자산은 <span class="blue-bold">{{ avgAsset.toLocaleString() }}</span> 원 입니다.
           </div>
         </div>
 
         <!--삼각형 그리기 -->
-        <div class="triangle-container relative w-48 h-72 my-12 mx-auto">
+        <div class="relative w-48 h-72 mb-8 mt-12 mx-auto">
           <div
             class="triangle w-0 h-0 border-l-[100px] border-r-[100px] border-b-[300px] border-b-indigo-300 relative"
           ></div>
