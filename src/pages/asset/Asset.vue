@@ -18,12 +18,12 @@
             <div
               class="bar-segment bg-indigo-600 h-full"
               :style="{ width: depositSavingsPercentage + '%' }"
-              @click="showValue($event, depositSavingsPercentage, cashPercentage, '예적금 자산')"
+              @click="showValue($event, depositSavingsPercentage, 1, '예적금 자산')"
             ></div>
             <div
               class="bar-segment bg-indigo-900 h-full"
               :style="{ width: Math.max(etcPercentage, 1) + '%' }"
-              @click="showValue($event, etcPercentage, depositSavingsPercentage + cashPercentage, '기타 자산')"
+              @click="showValue($event, etcPercentage, 2, '기타 자산')"
             ></div>
             <!-- 말풍선 (tooltip) -->
             <div
@@ -31,7 +31,8 @@
               class="absolute bg-gray-700 text-white text-sm rounded p-2"
               :style="{ top: tooltipY + 'px', left: tooltipX + 'px' }"
             >
-              {{ clickedLabel }}: {{ clickedValue }}%
+              {{ clickedLabel }}: {{ clickedValue }}%<br>
+              {{ clikedValance}}원
             </div>
           </div>
 
@@ -53,40 +54,41 @@
         </div>
       </div>
 
-      <!-- 소비 분석 섹션 -->
-      <div class="section-style">
-        <div class="border-bottom flex justify-between items-center pb-2">
-          <div class="section-title">소비 분석</div>
+      
+        <!-- 소비 분석 섹션 -->
+        <div class="section-style">
+                <div class="border-bottom flex justify-between items-center pb-2">
+                  <div class="section-title">소비 분석</div>
 
-          <!-- 년도 선택 드롭다운 추가 -->
-          <div class="flex items-center">
-            <label for="year" class="mr-2">년도 선택 :</label>
-            <select
-              id="year"
-              v-model="selectedYear"
-              @change="getSpendingPatterns"
-              class="p-2 border border-gray-300 rounded"
-            >
-              <option v-for="year in availableYears" :key="year" :value="year">
-                {{ year }}
-              </option>
-            </select>
-          </div>
-        </div>
+                  <!-- 년도 선택 드롭다운 추가 -->
+                  <div class="flex items-center">
+                    <label for="year" class="mr-2">년도 선택 :</label>
+                    <select
+                      id="year"
+                      v-model="selectedYear"
+                      @change="getSpendingPatterns"
+                      class="p-2 border border-gray-300 rounded"
+                    >
+                      <option v-for="year in availableYears" :key="year" :value="year">
+                        {{ year }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
 
-        <div class="mt-4 px-6 w-full pl-0 pr-0">
-          <div class="pl-1">
-            지난달보다
-            <span class="blue-bold">
-              {{ Math.abs(spendings.previousMonthDiff).toLocaleString() }}
-            </span>
-            {{ spendings.previousMonthDiff >= 0 ? '원 더 썼어요.' : '원 덜 썼어요.' }}
-          </div>
-          <div class="w-full">
-            <canvas id="spendingChart" class="w-full h-72"></canvas>
-          </div>
-        </div>
-      </div>
+                <div class="mt-4 px-6 w-full pl-0 pr-0">
+                  <div class="pl-1">
+                    지난달보다
+                    <span class="blue-bold">
+                      {{ Math.abs(spendings.previousMonthDiff).toLocaleString() }}
+                    </span>
+                    {{ spendings.previousMonthDiff >= 0 ? '원 더 썼어요.' : '원 덜 썼어요.' }}
+                  </div>
+                  <div class="w-full">
+                    <canvas id="spendingChart" class="w-full h-72"></canvas>
+                  </div>
+                </div>
+              </div>
 
       <!-- 예·적금 추천 섹션 -->
       <div class="section-style">
@@ -367,6 +369,7 @@
         </div>
       </div>
 
+
       <!-- 연령대별 총자산 비교 섹션 -->
       <div class="section-style">
         <div class="section-title pb-2 border-bottom">연령대별 자산 비교</div>
@@ -407,6 +410,7 @@ Chart.register(annotationPlugin);
 
 const clickedValue = ref(null); // 클릭된 값
 const clickedLabel = ref('');
+const clikedValance = ref(null);
 const show = ref(false); // 말풍선 표시 여부
 const tooltipX = ref(0); // 말풍선 X 좌표
 const tooltipY = ref(0); // 말풍선 Y 좌표
@@ -416,8 +420,19 @@ const showValue = (event, value, previousPercentage, label) => {
   show.value = true;
   // 마우스 클릭 위치 계산 (말풍선 위치)
   const chartWidth = event.target.parentElement.offsetWidth; // 차트의 전체 너비
-  const offsetX = (previousPercentage * chartWidth) / 100; // 이전 막대들의 너비
-
+  let prev = 0;
+  if(previousPercentage == 0){
+    prev = 0;
+    clikedValance.value = totalCashBalance;
+  }
+  else if(previousPercentage == 1){
+    prev = cashPercentage.value;
+    clikedValance.value = totalDepositSavingsBalance;
+  }else{
+    prev = Number(cashPercentage.value) + Number(depositSavingsPercentage.value); 
+    clikedValance.value = totalEtcBalance;
+  }
+  const offsetX = (prev * chartWidth) / 100; // 이전 막대들의 너비
   tooltipX.value = event.clientX - event.target.getBoundingClientRect().left + offsetX;
   tooltipY.value = event.clientY - event.target.getBoundingClientRect().top - 30; // 클릭 위치보다 위로 배치
 };

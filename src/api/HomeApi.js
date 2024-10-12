@@ -99,6 +99,19 @@ export default {
         return data;
     },
 
+    //거래내역 재요청 조회
+    async refreshTransactionList(accountNum) {
+      const { data } = await api.post(
+        `${BASE_URL}/account/update-transactions`,
+        {accountNum},
+        { 
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      return data;
+    },
+
     // 미션 생성
     async createMission() {
         const { data } = await api.get(`/mission/update-mission`);

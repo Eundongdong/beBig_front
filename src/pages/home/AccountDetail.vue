@@ -16,6 +16,12 @@
           <p class="text-xl font-bold">{{ accountAmount.toLocaleString() }} 원</p>
           <p class="text-xs">{{ accountNum }}</p>
         </div>
+        <button @click="getupdate(accountNum)"
+          class="ml-10 px-2 py-1 rounded bg-transparent border border-gray-300 cursor-pointer"
+        >
+          <i class="fa-solid fa-rotate-right"></i>
+        </button>
+        <p v-if="askFlag" class="big-text ml-2">로딩중...</p>
       </div>
 
       <div class="mt-10">
@@ -97,8 +103,6 @@ const getAccountInfo = async () => {
       pageSize.value,
       currentPage.value
     );
-    //console.log("현재 페이지:", currentPage.value, "offset:", (currentPage.value) *pageSize.value);
-    //console.log("받은 데이터:", accountInfo);
 
 
     bankNameKR.value = accountInfo.bankName;
@@ -120,7 +124,7 @@ const getAccountInfo = async () => {
     totalPage.value = accountInfo.totalPage || 1;
 
   } catch (error) {
-     console.error('API 호출 중 오류 발생:', error);
+      console.error('API 호출 중 오류 발생:', error);
   } finally {
     isFetching.value = false;
   }
@@ -182,6 +186,62 @@ const loadMoreTransactions = async () => {
   await getAccountInfo(); // 다음 페이지의 거래 내역을 불러옴
 };
 
+//거래 내역을 갱신하는 함수
+const askFlag = ref(false);
+const getupdate = async(accountNum)=>{
+  try{
+    askFlag.value = true;
+    const response = await HomeApi.refreshTransactionList(accountNum);
+    if (!accountNum) {
+    //  console.error("accountNum이 유효하지 않습니다.");
+      return;
+    }
+    isFetching.value = true; // 로딩 상태 설정
+
+    // 데이터를 초기화
+    transactions.splice(0, transactions.length); // 기존 거래 내역을 초기화
+    currentPage.value = 1; // 현재 페이지를 0으로 초기화
+    hasMore.value = true; // 추가 데이터가 있는 상태로 초기화
+
+    // 계좌 정보를 새로 불러옴
+    await getAccountInfo(); // 계좌 정보를 다시 불러옴
+    await reFetchTransactions(accountNum);
+
+  }catch(error){
+   // console.log(error);
+  }finally {
+    isFetching.value = false; // 로딩 상태 해제
+    askFlag.value = false;
+  }
+}
+const newTransactions = reactive([]);
+const reFetchTransactions = async (accountNumber) => {
+  if (isFetching.value || !hasMore.value) return; // 이미 로딩 중이거나 더 이상 불러올 데이터가 없으면 중단
+
+  isFetching.value = true; // 로딩 상태로 변경
+
+  try {
+    const data = await HomeApi.transactionList(accountNumber, pageSize.value, (currentPage.value - 1) * pageSize.value);
+
+    if (data.transactions.length < pageSize.value) {
+      hasMore.value = false; // 추가 데이터가 더 이상 없으면 false로 설정
+    }
+    newTransactions.push(...data.transactions); // 기존 거래 내역에 새로 받은 데이터를 추가
+
+    newTransactions.forEach((transaction) => {
+      transaction.transactionDate = new Date(transaction.transactionDate).toLocaleDateString();
+      transactions.push(transaction);
+    });
+    currentPage.value += 1; // 페이지 증가
+  } catch (error) {
+   // console.error("거래 내역 로드 중 오류:", error);
+  } finally {
+    isFetching.value = false; // 로딩 상태 해제
+  }
+};
+
+
+
 // 거래 내역을 불러오는 함수
 const fetchTransactions = async () => {
   if (isFetching.value || !hasMore.value) return; // 이미 로딩 중이거나 더 이상 불러올 데이터가 없으면 중단
@@ -198,7 +258,7 @@ const fetchTransactions = async () => {
     transactions.value = [...transactions.value, ...data.transactions]; // 기존 거래 내역에 새로 받은 데이터를 추가
     currentPage.value += 1; // 페이지 증가
   } catch (error) {
-    console.error("거래 내역 로드 중 오류:", error);
+   // console.error("거래 내역 로드 중 오류:", error);
   } finally {
     isFetching.value = false; // 로딩 상태 해제
   }

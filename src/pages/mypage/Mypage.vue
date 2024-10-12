@@ -441,7 +441,7 @@ const goSettings = () => {
   // loginType에 따라 다른 페이지로 이동
   if (loginType.value === 'kakao') {
     router.push({ name: 'mypageSocialEdit' });
-  } else if (loginType.value === 'general') {
+  } else{
     router.push({ name: 'mypageEdit' });
   }
 };
