@@ -6,8 +6,8 @@
           <i class="fa-solid fa-chevron-left"></i>
         </button>
         <h2 class="font-bold text-sm absolute left-1/2 transform -translate-x-1/2">내 정보 수정</h2>
-      <button class="text-xl" @click="logout">
-        <i class="fa-solid fa-power-off"></i>
+      <button class="text-button" @click="logout">
+        로그아웃
       </button>
       </header>
   
