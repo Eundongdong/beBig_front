@@ -9,7 +9,7 @@
     </div>
 
     <div class="flex justify-center items-start mt-16 lg:col-span-2 lg:mt-32">
-      <div class="container max-w-lg w-full px-6 ">
+      <div class="max-w-lg w-full px-6 ">
         <div class="flex justify-center mb-8">
           <img src="/images/logo.png" class="w-[45%] lg:w-[30%]" alt="Logo" />
         </div>

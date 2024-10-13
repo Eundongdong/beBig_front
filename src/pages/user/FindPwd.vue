@@ -13,8 +13,8 @@
         <span class="font-bold text-base absolute left-1/2 transform -translate-x-1/2">비밀번호 찾기</span>
       </header>
 
-      <div class="container max-w-lg w-full px-6">
-        <form @submit.prevent="findPassword" class="container py-10">
+      <div class=" max-w-lg w-full px-6">
+        <form @submit.prevent="findPassword" class=" py-10">
           <!-- 이름 -->
           <div class="input_name">
             <label class="label" for="name">이름</label>

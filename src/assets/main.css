@@ -40,7 +40,7 @@
 }
 
 .modal-inner {
-  @apply bg-white rounded-lg max-w-md w-80 mx-10 p-6 relative;
+  @apply bg-white rounded-lg max-w-md w-80 mt-10 mb-[50px] p-6 relative;
 }
 
 .modal-image {
@@ -51,9 +51,6 @@
   @apply overflow-y-scroll text-sm text-gray-600 border border-gray-300 rounded-lg p-2 max-h-40;
 }
 
-.post-content {
-  @apply my-3 p-4 bg-white rounded-lg border border-gray-300;
-}
 
 .mission-text {
   @apply text-[12px] text-gray-600 border border-gray-300 rounded bg-white m-2 p-2;
@@ -77,23 +74,41 @@
 }
 
 .home-profile img {
+  /*  */
   @apply w-16 h-16 object-contain;
 }
 
 .community-profile {
-  @apply w-[35px] h-[35px] bg-gray-200 rounded-full;
+  @apply w-11 h-11 bg-gray-200 rounded-full flex justify-center items-center;
 }
 
 .community-profile img {
-  @apply w-full h-full object-contain;
+  @apply w-8 h-8 object-contain;
 }
 
 .community-title {
-  @apply font-bold text-base hover:underline;
+  @apply font-bold text-base;
 }
 
 .community-content {
   @apply text-sm text-gray-600;
+}
+
+.community-filter {
+  @apply text-xs px-2 py-1 text-left
+}
+
+
+.community-filter-hover {
+  @apply rounded-md hover:bg-light text-xs px-2 py-1 text-left
+}
+
+.community-filter-click {
+  @apply rounded-md bg-primary text-xs px-2 py-1 text-left text-white
+}
+
+.small-buttons {
+  @apply text-xs px-1 hover:text-white hover:bg-[#5354ff] text-black;
 }
 
 .component {
@@ -104,6 +119,17 @@
   /* 사용함 */
   @apply mb-4 px-6 py-4 rounded-xl bg-[#F3F3F3];
 }
+
+.section-style-white {
+  /*  */
+  @apply mb-4 px-6 py-4 rounded-xl bg-white border border-gray-200;
+}
+
+.post-content {
+/*  */
+  @apply mb-4 px-6 py-4 bg-white rounded-xl border border-gray-300;
+}
+
 
 .section-title {
   /*  */
@@ -195,7 +221,7 @@
 }
 
 .drop-down {
-  @apply w-full p-3 border rounded-lg;
+  @apply w-full px-2 py-3 border rounded-lg;
 }
 
 .image-preview img {
@@ -212,7 +238,8 @@
 }
 
 .add-button {
-  @apply fixed bottom-28 right-6 w-12 h-12 bg-[#5354ff] hover:bg-[#3435ff] text-2xl text-white rounded-full flex items-center justify-center shadow-lg;
+  /*  */
+  @apply fixed bottom-24 right-6 w-12 h-12 bg-primary hover:bg-serve text-2xl text-white rounded-full flex items-center justify-center shadow-lg;
 }
 
 .checkbox {
@@ -228,12 +255,10 @@
 }
 
 .file-label {
-  @apply cursor-pointer text-white text-xs px-2 bg-[#5354ff] rounded-lg hover:bg-[#3435ff];
+  @apply cursor-pointer text-white text-xs px-2 py-1 bg-[#5354ff] rounded-lg hover:bg-[#3435ff];
 }
 
-.small-buttons {
-  @apply text-xs px-1 hover:text-white hover:bg-[#5354ff] text-black;
-}
+
 
 .selected {
   @apply text-xs px-1 text-white font-semibold bg-[#5354ff];
@@ -273,5 +298,13 @@
 
   .section-style {
     @apply p-8;
+  }
+
+  .section-style-white {
+    @apply p-8;
+  }
+
+  .modal-background {
+    @apply fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50;
   }
 }
