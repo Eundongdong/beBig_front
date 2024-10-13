@@ -1,27 +1,34 @@
-# dev.yml
-name: dev branch auto ci process script
+name: Deploy Vue Application
 
-on: # 아래 job을 실행시킬 상황
+on:
   push:
-    branches: [ dev ]
+    branches:
+      - main  # main 브랜치에 푸시될 때마다 실행
 
 jobs:
   deploy:
-    name: deploy
-    runs-on: 20.04 # 실행될 인스턴스 OS와 버전
+    runs-on: ubuntu-latest
 
     steps:
-      - name: excuting remote ssh commands
-        uses: appleboy/ssh-action@v0.1.6 # ssh 접속하는 오픈소스
-        with:
-          host: ${{ secrets.REMOTE_IP }} # 인스턴스 IP
-          username: ${{ secrets.REMOTE_USER }} # 우분투 아이디
-          key: ${{ secrets.REMOTE_PRIVATE_KEY }} # ec2 instance pem key
-          port: ${{ secrets.REMOTE_SSH_PORT }} # 접속포트
-          script: | # 실행할 스크립트
-            cd /beBig_front
-            git pull origin dev
-            pm2 kill
-            npm i --force
-            npm run build
-            pm2 start dist/main.js
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Deploy to EC2 via SSH
+      uses: appleboy/ssh-action@v0.1.6  # SSH를 통해 EC2 서버에 접속
+      with:
+        host: ${{ secrets.AWS_HOST }} 
+        username: ${{ secrets.AWS_USER }} 
+        key: ${{ secrets.AWS_KEY }} 
+        script: |
+          cd ~/beBig_front  # Vue 프로젝트 디렉토리로 이동
+          
+          # 최신 코드로 업데이트
+          git pull origin main --rebase
+          
+          # 빌드 실행
+          # npm install  # 필요시 의존성 설치
+          npm run build
+          
+          # 기존 pm2 프로세스 종료 및 새로운 프로세스 실행
+          pm2 delete 0 || true  # 0번 프로세스를 삭제 (실행 중이지 않으면 무시)
+          pm2 start npm --name "front" -- run preview
