@@ -3,9 +3,10 @@
     <div><img src="/images/logo.png" alt="Logo" @click="goHome" class="w-28 mt-2 cursor-pointer" /></div>
     <div>
       <ul class="flex space-x-10 text-base">
-        <li><button @click="goAsset" class="hover:text-[#5354FF]" :class="{ 'text-[#5354FF] font-bold': isAssetActive }">내 자산분석</button></li>
-        <li><button @click="goCommunity" class="hover:text-[#5354FF]" :class="{ 'text-[#5354FF] font-bold': isCommunityActive }">커뮤니티</button></li>
-        <li><button @click="goMypage" class="hover:text-[#5354FF]" :class="{ 'text-[#5354FF] font-bold': isMypageActive }">마이페이지</button></li>
+        <li><button @click="goHome" class="hover:text-primary" :class="{ 'text-primary font-bold': isHomeActive }">홈</button></li>
+        <li><button @click="goAsset" class="hover:text-primary" :class="{ 'text-primary font-bold': isAssetActive }">내 자산분석</button></li>
+        <li><button @click="goCommunity" class="hover:text-primary" :class="{ 'text-primary font-bold': isCommunityActive }">커뮤니티</button></li>
+        <li><button @click="goMypage" class="hover:text-primary" :class="{ 'text-primary font-bold': isMypageActive }">마이페이지</button></li>
       </ul>
     </div>
   </nav>
@@ -81,6 +82,7 @@ const goMypage = () => {
 };
 
 // 메뉴 활성화 상태를 체크
+const isHomeActive = computed(() => route.path === '/home');
 const isAssetActive = computed(() => route.path.startsWith('/asset'));
 const isCommunityActive = computed(() => route.path.startsWith('/community'));
 const isMypageActive = computed(() => route.path === '/mypage');

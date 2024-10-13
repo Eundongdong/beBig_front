@@ -4,10 +4,10 @@
     <div class="lg:flex lg:w-full">
       <!-- 사이드바 및 필터 -->
       <aside class="lg:w-40 lg:fixed">
-        <div class="lg:mt-11 bg-gray-100 p-4 rounded-lg">
+        <div class="lg:mt-11 section-style lg:px-6 lg:pt-4">
           <!-- 필터 드롭다운: 카테고리, 자산유형 -->
           <div class="flex flex-col gap-2">
-            <div>
+            <div class="">
               <div class="block text-sm font-bold mb-2 text-left">카테고리</div>
               <div class="flex flex-wrap gap-2 lg:flex-col lg:ml-1">
                 <button
@@ -75,7 +75,7 @@
 
             <hr class="border-bottom mb-1" />
 
-            <div>
+            <div class="">
               <div class="block text-sm font-bold mb-2 text-left">자산 유형</div>
               <div class="flex flex-wrap gap-2 lg:flex-col lg:ml-1">
                 <button
@@ -170,11 +170,11 @@
       </div>
     </div>
       <div v-if="posts.length > 0" class="flex flex-col">
-        <div v-for="post in sortedPosts" :key="post.postId" class="post-content" @click="goToPostDetail(post.postId)">
+        <div v-for="post in sortedPosts" :key="post.postId" class="post-content cursor-pointer hover:border-gray-500 hover:duration-300" @click="goToPostDetail(post.postId)">
           <!-- 얼굴/닉네임/날짜 -->
           <div class="flex justify-between items-center mb-2">
             <div class="flex items-center space-x-2">
-              <div class="w-11 h-11 bg-gray-200 rounded-full flex items-center justify-center">
+              <div class="community-profile">
                 <img
                   :src="getProfileIcon(post.finTypeCode)"
                   class="w-8 h-8 object-obtain"

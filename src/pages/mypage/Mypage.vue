@@ -12,7 +12,7 @@
                 'bg-primary text-white': isPublic,
                 'text-black': !isPublic,
               }"
-              class="w-12 h-7 rounded-full transition-all duration-300 relative z-10 text-[10px]"
+              class="w-14 h-8 rounded-full transition-all duration-300 relative z-10 text-xs"
             >
               공개
             </button>
@@ -22,7 +22,7 @@
                 'bg-primary text-white': !isPublic,
                 'text-black': isPublic,
               }"
-              class="w-12 h-7 rounded-full transition-all duration-300 relative z-10 -ml-2 text-[10px]"
+              class="w-14 h-8 rounded-full transition-all duration-300 relative z-10 -ml-2 text-xs"
             >
               비공개
             </button>
@@ -32,7 +32,7 @@
             <i class="fa-solid fa-gear"></i>
           </button>
         </div>
-        <div class="flex items-start">
+        <div class="flex items-start mt-2">
           <div class="flex items-center">
             <div>
               <div class="home-profile m-2 flex justify-center items-center">
@@ -64,7 +64,7 @@
         </div>
 
         <!-- 한줄 소개는 항상 표시 -->
-        <div class=" pt-2 px-2">
+        <div class=" py-2 px-4">
           <p class="font-bold">한줄소개</p>
           <p class="pt-1">{{ userIntro ? userIntro : "한 줄 소개를 입력해주세요." }}</p>
         </div>
@@ -142,7 +142,7 @@
             <li
               v-for="(post, index) in myPosts"
               :key="index"
-              class="flex justify-between items-center px-3 py-2 border-b border-gray-200 hover:bg-gray-200 transition-colors duration-300"
+            class="flex justify-between items-center px-2 py-2 border-b border-gray-200 hover:bg-gray-200 transition-colors duration-300 text-sm"
               @click="goToPostDetail(post.postId)"
             >
               <div class="w-1/2 truncate">
@@ -165,7 +165,7 @@
             <li
               v-for="(post, index) in myLikePosts"
               :key="index"
-              class="flex justify-between items-center px-3 py-2 border-b border-gray-200 hover:bg-gray-200 transition-colors duration-300"
+              class="flex justify-between items-center px-3 py-2 border-b border-gray-200 hover:bg-gray-200 transition-colors duration-300 text-sm"
               @click="goToPostDetail(post.postId)"
             >
               <div class="w-1/2 truncate">

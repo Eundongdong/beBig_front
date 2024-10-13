@@ -1,8 +1,8 @@
 <template>
   <div class="page">
-    <div class="analysis-page">
+    <div class="analysis-page lg:grid lg:grid-cols-2">
       <!-- 총자산 분석 섹션 -->
-      <div class="section-style">
+      <div class="section-style lg:col-span-2">
         <div class="border-bottom flex justify-between items-center pb-2">
           <p class="section-title">총 자산 분석</p>
           <p class="text-xl">{{ totalBalance.toLocaleString() }} 원</p>
@@ -56,7 +56,7 @@
 
       
         <!-- 소비 분석 섹션 -->
-        <div class="section-style">
+        <div class="section-style lg:col-span-1  lg:order-2 lg:ml-2">
                 <div class="border-bottom flex justify-between items-center pb-2">
                   <div class="section-title">소비 분석</div>
 
@@ -91,10 +91,10 @@
               </div>
 
       <!-- 예·적금 추천 섹션 -->
-      <div class="section-style">
+      <div class="section-style lg:col-span-1 lg:order-1 lg:row-span-2 lg:mr-2">
         <div class="section-title">상품 추천</div>
         <div
-          class="recommendation-carousel flex overflow-hidden snap-x snap-mandatory mt-2"
+          class="recommendation-carousel flex overflow-hidden snap-x snap-mandatory mt-2 lg:mt-4"
           @scrollend="updateSide(currentSlide)"
         >
           <div
@@ -106,7 +106,7 @@
             <!-- 상품 리스트를 flex로 나란히 배치 -->
             <!-- <div class="flex mt-4">
       <div class="flex-1 mr-4 border border-gray-300 p-4 rounded-lg"> -->
-            <div class="mt-2">
+            <div class="mt-2 lg:mt-4">
               <div class="product-container lg:flex-1 mb-0">
                 <p class="pb-2 border-bottom font-semibold">적금상품</p>
 
@@ -371,20 +371,20 @@
 
 
       <!-- 연령대별 총자산 비교 섹션 -->
-      <div class="section-style">
+      <div class="section-style col-span-1 lg:order-3 lg:ml-2">
         <div class="section-title pb-2 border-bottom">연령대별 자산 비교</div>
         <div class="mt-4 px-4">
           <div>
-            <span class="blue-bold">{{ ageRange }}</span> 대에서 당신의 자산 순위는 상위
+            <span class="blue-bold">{{ ageRange }}</span> 대 사용자 중 상위
             <span class="blue-bold">{{ rank }}</span> % 입니다.<br />
           </div>
           <div class="mt-2">
-            해당 연령대 평균 자산은 <span class="blue-bold">{{ avgAsset.toLocaleString() }}</span> 원 입니다.
+            {{ ageRange }} 대 평균 자산은 <span class="blue-bold">{{ avgAsset.toLocaleString() }}</span> 원 입니다.
           </div>
         </div>
 
         <!--삼각형 그리기 -->
-        <div class="triangle-container relative w-48 h-72 my-12 mx-auto">
+        <div class="relative w-48 h-72 mb-8 mt-12 mx-auto">
           <div
             class="triangle w-0 h-0 border-l-[100px] border-r-[100px] border-b-[300px] border-b-indigo-300 relative"
           ></div>
