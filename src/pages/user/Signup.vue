@@ -315,6 +315,7 @@ const signup = async () => {
   try {
     const response = await UserApi.signup(User);
     //console.log("회원가입 성공: ", response);
+    alert("회원가입 성공^^");
     router.push('/user');
   } catch (error) {
     // console.log("에러 =>", error);
