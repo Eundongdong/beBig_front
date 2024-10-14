@@ -36,9 +36,8 @@
           <div class="flex items-center">
             <div>
               <div class="home-profile m-2 flex justify-center items-center">
-                <img :src="profileImage" alt="Profile Image" />
+                <img :src="profileImage" alt="Profile Image" @click="openSurveyModal" />
               </div>
-              <!-- <button @click="goSurvey" v-if="isOwner">유형검사 다시하기</button> -->
             </div>
             <div class="ml-4">
               <div class="flex items-center">
@@ -112,7 +111,11 @@
               ></div>
 
               <!-- 깃발은 오른쪽 끝에 고정 -->
-              <img src="/images/flag.png" alt="깃발 이미지" class="flag-image absolute right-0 bottom-3 w-6 transform translate-x-7" />
+              <img
+                src="/images/flag.png"
+                alt="깃발 이미지"
+                class="flag-image absolute right-0 bottom-3 w-6 transform translate-x-7"
+              />
             </div>
           </div>
         </section>
@@ -129,10 +132,18 @@
       <div v-if="isPublic || isOwner" class="flex flex-col w-full max-w-screen-lg lg:col-span-2">
         <section class="section-style">
           <div class="flex border-b-2 border-gray-300">
-            <button @click="selectTab('myPosts')" :class="selectedTab === 'myPosts' ? 'border-b-4 border-black font-bold' : 'text-gray-500'" class="w-1/2 pb-2 text-center">
+            <button
+              @click="selectTab('myPosts')"
+              :class="selectedTab === 'myPosts' ? 'border-b-4 border-black font-bold' : 'text-gray-500'"
+              class="w-1/2 pb-2 text-center"
+            >
               작성한 글
             </button>
-            <button @click="selectTab('likedPosts')" :class="selectedTab === 'likedPosts' ? 'border-b-4 border-black font-bold' : 'text-gray-500'" class="w-1/2 pb-2 text-center">
+            <button
+              @click="selectTab('likedPosts')"
+              :class="selectedTab === 'likedPosts' ? 'border-b-4 border-black font-bold' : 'text-gray-500'"
+              class="w-1/2 pb-2 text-center"
+            >
               좋아하는 글
             </button>
           </div>
@@ -187,7 +198,11 @@
     </div>
 
     <!-- 모달이 활성화될 때 표시 -->
-    <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" @click="closeModalOnOverlay">
+    <div
+      v-if="showModal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+      @click="closeModalOnOverlay"
+    >
       <div class="bg-white rounded-lg w-100 mx-10 px-6 py-10 relative" @click.stop>
         <button @click="closeModal" class="absolute top-4 right-4 text-xl">
           <i class="fa-solid fa-xmark"></i>
@@ -199,7 +214,11 @@
 
         <h2 class="font-semibold text-center mb-2">메달의 기준이 궁금하신가요?</h2>
         <!-- badgeCode가 0이 아닌 배지 목록만 표시 -->
-        <div v-for="badge in filteredBadgeList" :key="badge.badgeCode" class="flex items-center border-t px-4 pt-4 mt-4 space-x-6">
+        <div
+          v-for="badge in filteredBadgeList"
+          :key="badge.badgeCode"
+          class="flex items-center border-t px-4 pt-4 mt-4 space-x-6"
+        >
           <div class="text-xs lg:text-sm font-semibold">
             {{ badge.badgeTitle }}
           </div>
@@ -212,6 +231,9 @@
         </div>
       </div>
     </div>
+    <div v-if="showSurveyModal" @click="closeModalOnOverlay">
+      <SurveyResult @close-modal="closeSurveyModal" :isModal="true" />
+    </div>
   </div>
 </template>
 
@@ -221,6 +243,7 @@ import { useRouter, useRoute } from 'vue-router'; // useRouter 가져오기
 import MypageApi from '@/api/MypageApi';
 import MissionApi from '@/api/MissionApi';
 import HomeApi from '@/api/HomeApi'; // 계좌 목록 가져오기 위해 추가
+import SurveyResult from '../home/SurveyResult.vue';
 
 // 라우터와 라우트 사용
 const router = useRouter();
@@ -241,6 +264,7 @@ const myPosts = ref([]);
 const myLikePosts = ref([]);
 const selectedTab = ref('myPosts');
 const showModal = ref(false); // 모달 표시 여부
+const showSurveyModal = ref(false); // Survey 모달
 const badgeList = ref([]); // 뱃지 정보 배열
 const isRunning = ref(false); // 캐릭터 애니메이션 상태
 const accountList = ref([]); // 계좌 리스트
@@ -284,6 +308,16 @@ const runningImage = computed(() => {
   return baseImage;
 });
 
+// SurveyResult 모달 열기 함수
+const openSurveyModal = () => {
+  showSurveyModal.value = true; // 모달을 엶
+};
+
+// SurveyResult 모달 닫기 함수
+const closeSurveyModal = () => {
+  showSurveyModal.value = false;
+};
+
 // 모달 열기 함수
 const openBadgeModal = () => {
   showModal.value = true;
@@ -298,6 +332,7 @@ const closeModal = () => {
 const closeModalOnOverlay = (e) => {
   if (e.target === e.currentTarget) {
     closeModal();
+    closeSurveyModal();
   }
 };
 
