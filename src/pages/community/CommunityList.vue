@@ -323,11 +323,19 @@ const sortBy = (type) => {
 };
 
 const selectCategory = (categoryId) => {
-  selectedCategory.value = categoryId;
+  if(selectedCategory.value ==categoryId){
+    selectedCategory.value = -1;
+  }else{
+    selectedCategory.value = categoryId;
+  }
 };
 
 const selectFinType = (finTypeCode) => {
-  selectedFinType.value = finTypeCode;
+  if(selectedFinType.value ==finTypeCode){
+    selectedFinType.value = -1;
+  }else{
+    selectedFinType.value = finTypeCode;
+  }
 };
 
 // 프로필 페이지로 이동하는 함수
