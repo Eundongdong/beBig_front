@@ -4,6 +4,7 @@
     <div>
       <ul class="flex space-x-10 text-base">
         <li><button @click="goHome" class="hover:text-primary" :class="{ 'text-primary font-bold': isHomeActive }">홈</button></li>
+        <li><button @click="goMission" class="hover:text-primary" :class="{ 'text-primary font-bold': isMissionActive }">미션</button></li>
         <li><button @click="goAsset" class="hover:text-primary" :class="{ 'text-primary font-bold': isAssetActive }">내 자산분석</button></li>
         <li><button @click="goCommunity" class="hover:text-primary" :class="{ 'text-primary font-bold': isCommunityActive }">커뮤니티</button></li>
         <li><button @click="goMypage" class="hover:text-primary" :class="{ 'text-primary font-bold': isMypageActive }">마이페이지</button></li>
@@ -56,6 +57,9 @@ const goHome = () => {
   router.push({ name: 'main' });
 };
 
+const goMission = () =>{
+    router.push({ name: 'mission' });
+ }
 const goAsset = () => {
     if(userName.value == 'NoLogin'){
         alert('로그인 후 이용해주세요.');
@@ -83,6 +87,7 @@ const goMypage = () => {
 
 // 메뉴 활성화 상태를 체크
 const isHomeActive = computed(() => route.path === '/home');
+const isMissionActive = computed(() => route.path === '/mission');
 const isAssetActive = computed(() => route.path.startsWith('/asset'));
 const isCommunityActive = computed(() => route.path.startsWith('/community'));
 const isMypageActive = computed(() => route.path === '/mypage');
