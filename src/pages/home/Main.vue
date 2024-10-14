@@ -91,10 +91,10 @@
       <!-- 연결된 계좌가 없는 경우 -->
       <div v-if="user.userName != 'NoLogin'">
         <div v-if="!monthlyMission || !dailyMissions" class="flex items-center justify-center text-base mt-8 mb-6">
-          <p>자산을 먼저 연결해주세요.</p>
+          <p>계좌를 연결해주세요.</p>
         </div>
         <div v-else-if="user.finTypeCode != '1' && user.finTypeCode != '2' && user.finTypeCode != '3' && user.finTypeCode != '4'" class="flex items-center justify-center text-base mt-8 mb-6">
-          <p>미션을 받기 위해 유형검사를 실시해주세요.</p>
+          <p>유형검사를 실시해주세요.</p>
         </div>
       </div>
 
