@@ -261,7 +261,6 @@ const loggedInUserId = ref(null);
 const goToPostDetail = (postId) => {
   if (userName.value === 'NoLogin') {
     alert('로그인 후 이용해주세요.');
-    router.push({ name: 'main' });
   } else {
     router.push({
       name: 'communityDetail',
@@ -340,10 +339,14 @@ const selectFinType = (finTypeCode) => {
 
 // 프로필 페이지로 이동하는 함수
 const goToUserProfile = async (userId) => {
+  if (userName.value === 'NoLogin') {
+    alert('로그인 후 이용해주세요.');
+    return; // 로그인하지 않은 경우 함수 종료
+  }
+
   try {
     if (!loggedInUserId.value) {
-      //  console.log('로그인된 사용자 ID를 가져오는 중...');
-      await fetchLoggedInUserId(); // 여기서 fetch 이후 로그 찍기
+      await fetchLoggedInUserId();
     }
 
     // userId가 같은지 확인
@@ -427,6 +430,11 @@ const getLike = async () => {
 
 // 좋아요 기능
 const likePost = async (postId, userId) => {
+  if (userName.value === 'NoLogin') {
+    alert('로그인 후 이용해주세요.');
+    return; // 로그인하지 않은 경우 함수 종료
+  }
+
   try {
     if (!postId || !userId) {
       //     console.error('게시글번호 또는 작성자번호가 없습니다');
