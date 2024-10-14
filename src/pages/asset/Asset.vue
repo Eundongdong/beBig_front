@@ -127,6 +127,7 @@
                           :href="depositRecomendations[0].depositProductUrl"
                           target="_blank"
                           class="text-xs text-primary lg:text-sm"
+                          @click.stop
                           >홈페이지 방문하기</a
                         >
                       </div>
@@ -149,6 +150,7 @@
                           :href="depositRecomendations[1].depositProductUrl"
                           target="_blank"
                           class="text-xs text-primary lg:text-sm"
+                          @click.stop
                           >홈페이지 방문하기</a
                         >
                       </div>
@@ -180,6 +182,7 @@
                           :href="savingsRecommendations[0].savingsProductUrl"
                           target="_blank"
                           class="text-xs text-primary lg:text-sm"
+                          @click.stop
                           >홈페이지 방문하기</a
                         >
                       </div>
@@ -202,6 +205,7 @@
                           :href="savingsRecommendations[1].savingsProductUrl"
                           target="_blank"
                           class="text-xs text-primary lg:text-sm"
+                          @click.stop
                           >홈페이지 방문하기</a
                         >
                       </div>
@@ -259,6 +263,7 @@
                           :href="depositRecomendations[randomnumber1].depositProductUrl"
                           target="_blank"
                           class="text-xs text-primary lg:text-sm"
+                          @click.stop
                           >홈페이지 방문하기</a
                         >
                       </div>
@@ -287,6 +292,7 @@
                         :href="depositRecomendations[randomnumber2].depositProductUrl"
                         target="_blank"
                         class="text-xs text-primary lg:text-sm"
+                        @click.stop
                         >홈페이지 방문하기</a
                       >
                     </div>
@@ -321,6 +327,7 @@
                           :href="savingsRecommendations[randomnumber3].savingsProductUrl"
                           target="_blank"
                           class="text-xs text-primary lg:text-sm"
+                          @click.stop
                           >홈페이지 방문하기</a
                         >
                       </div>
@@ -349,6 +356,7 @@
                         :href="savingsRecommendations[randomnumber4].savingsProductUrl"
                         target="_blank"
                         class="text-xs text-primary lg:text-sm"
+                        @click.stop
                         >홈페이지 방문하기</a
                       >
                     </div>
