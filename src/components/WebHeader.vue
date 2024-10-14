@@ -53,19 +53,6 @@ const getAsset = async () => {
     }
 };
 
-// const missionFlag = ref(false);
-// const getMission = async () => {
-//     try {
-//         const response = await HomeApi.missionListFooter(userId.value);
-//         console.log(response);
-//         missionFlag.value = true;
-//         console.log(missionFlag);
-//     } catch (error) {
-//         console.log(error);
-//         missionFlag.value = false;
-//     }
-// };
-
 
 //라우터 이동 함수
 const goHome = () => {
@@ -73,7 +60,6 @@ const goHome = () => {
 };
 
 const goMission = () =>{
-    console.log(userType.value);
     if(userName.value == 'NoLogin'){
         alert('로그인 후 이용해주세요.');
     }else if(userType.value == '0'){
