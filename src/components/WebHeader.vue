@@ -28,17 +28,16 @@ const route = useRoute();
 onMounted(() => {
     getUser();
     getAsset();
-    getMission();
 });
 
 // 사용자 정보를 가져오는 함수
 const userName = ref('');
-const userId = ref('');
+const userType = ref('0');
 const getUser = async () => {
     try {
         const userInfo = await HomeApi.getMyInfoFooter(); // /home/info 호출
         userName.value = userInfo.userName;
-        userId.value = userInfo.userId;
+        userType.value = userInfo.finTypeCode;
     } catch (error) {
        // console.error("사용자 정보 가져오는 함수 API 호출 중 오류 발생:", error);
     }
@@ -54,15 +53,18 @@ const getAsset = async () => {
     }
 };
 
-const missionFlag = ref(false);
-const getMission = async () => {
-    try {
-        const response = await HomeApi.missionListFooter(userId);
-        missionFlag.value = true;
-    } catch (error) {
-        missionFlag.value = false;
-    }
-};
+// const missionFlag = ref(false);
+// const getMission = async () => {
+//     try {
+//         const response = await HomeApi.missionListFooter(userId.value);
+//         console.log(response);
+//         missionFlag.value = true;
+//         console.log(missionFlag);
+//     } catch (error) {
+//         console.log(error);
+//         missionFlag.value = false;
+//     }
+// };
 
 
 //라우터 이동 함수
@@ -71,10 +73,13 @@ const goHome = () => {
 };
 
 const goMission = () =>{
+    console.log(userType.value);
     if(userName.value == 'NoLogin'){
         alert('로그인 후 이용해주세요.');
-    }else if(missionFlag.value == false){
-        alert('계좌 연결, 유형검사 후 이용해주세요.');
+    }else if(userType.value == '0'){
+        alert('유형검사 후 이용해주세요.');
+    }else if(assetFlag.value == false){
+        alert('계좌 연결 후 이용해주세요.');
     }
     else{
         router.push({ name: 'mission' });
