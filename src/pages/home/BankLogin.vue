@@ -99,7 +99,9 @@ import { useBankStore } from '@/stores/bank'; // Pinia 스토어 가져오기
 import HomeApi from '@/api/HomeApi';
 import { ref, reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { useFooterStore } from '@/stores/footerStore';
 const router = useRouter();
+const footerStore = useFooterStore();
 
 const bankStore = useBankStore(); // Pinia 스토어 사용
 
@@ -193,6 +195,7 @@ const Connect = async () => {
 
 // "홈으로 이동" 버튼 클릭 시 호출될 함수
 const goHome = () => {
+  footerStore.incrementFooterKey();
   router.push('/home');
 };
 
