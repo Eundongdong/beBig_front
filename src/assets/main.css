@@ -9,14 +9,24 @@
   font-style: normal;
 }
 
+
 #app {
   max-width: 1280px;
   margin: 0 auto;
-  /* padding: 1rem; */
+  padding: 1rem; /* 기본 padding */
   font-size: medium;
-  /* font-size: small; */
   font-family: 'Pretendard-Regular';
   width: 100%;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+
+body.user-page #app {
+  padding: 0;
 }
 
 .page {
