@@ -22,7 +22,10 @@
           <li :key="advice">{{ finTypeHabit2 }}</li>
         </ul>
       </div>
-      <button class="button mt-5" @click="handleButtonClick">{{ buttonText }}</button>
+      <div class="flex flex-col justify-center">
+        <button class="button mt-5" @click="handleButtonClick">{{ buttonText }}</button>
+        <button @click="goSurvey" class="text-button">유형검사 다시하기</button>
+      </div>
     </div>
   </div>
 </template>
@@ -97,6 +100,10 @@ const closeModalOnOverlay = (e) => {
   if (e.target === e.currentTarget) {
     emit('close-modal'); // 부모 컴포넌트로 이벤트 전달
   }
+};
+
+const goSurvey = () => {
+  router.push('/home/survey-start');
 };
 
 // emit 정의

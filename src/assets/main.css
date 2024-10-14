@@ -40,7 +40,7 @@
 }
 
 .modal-inner {
-  @apply bg-white rounded-lg max-w-md w-80 mt-10 mb-[50px] p-6 relative;
+  @apply bg-white rounded-lg max-w-md mt-10 mb-[50px] p-6 relative;
 }
 
 .modal-image {
@@ -178,7 +178,7 @@
 }
 
 .answer-button {
-  @apply w-full lg:w-[600px] px-3 mb-1 text-lg text-black bg-white rounded-lg border;
+  @apply w-full lg:w-[600px]  mb-1 text-lg text-black bg-white rounded-lg border;
   white-space: normal;
   word-break: keep-all;
   text-align: center;
