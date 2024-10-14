@@ -53,11 +53,11 @@
 
 
 .mission-text {
-  @apply text-[12px] text-gray-600 border border-gray-300 rounded bg-white m-2 p-2;
+  @apply mt-2 p-2 rounded-md bg-white text-sm lg:text-base;
 }
 
 .mission-status {
-  @apply text-sm font-semibold ml-2;
+  @apply text-sm font-semibold;
 }
 
 .notification-text {

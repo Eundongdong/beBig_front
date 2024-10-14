@@ -1,56 +1,54 @@
 <template>
-  <div class="page">
-    <div class="container">
-      <!-- 현재 달성도 -->
-      <div class="section-style">
-        <h1 class="font-semibold text-lg">현재 달성도</h1>
-        <div class="flex justify-between items-center">
-          <span class="ml-2">
-            미션을
-            <span class="font-semibold text-[#5354ff]"
-              >{{ monthlyProgress }}%</span
-            >
-            달성했어요!
-          </span>
-          <span class="ml-auto">D-{{ remainingDays }}</span>
+  <div class="page min-h-screen flex flex-col">
+    <!-- 현재 달성도 -->
+    <div class="section-style">
+      <div class="section-title border-bottom pb-3">이번달 미션 달성도</div>
+      <div class="mt-3 mx-2 flex justify-between items-center pb-10">
+        <div class="text-base font-semibold">
+          현재 미션을
+          <span class="blue-bold">{{ monthlyProgress }}</span>
+          % 달성했어요!
         </div>
-        <div
-          class="progress-bar relative w-11/12 h-2 bg-gray-300 rounded-md mx-auto mt-20"
-        >
-          <!-- 캐릭터 이미지 (진행된 만큼 왼쪽으로 배치) -->
-          <img
-            :src="runningImage"
-            class="w-[50px] absolute duration-200 bottom-3 transform -translate-x-1/2 transition-all ease-linear z-10"
-            :style="{ left: monthlyProgress + '%' }"
-          />
-          <!-- 진행 바 채움 -->
-          <div
-            class="progress-fill bg-[#5354ff] h-full rounded-md absolute top-0 left-0 transition-width duration-300"
-            :style="{ width: monthlyProgress + '%' }"
-          ></div>
-
-          <!-- 깃발은 오른쪽 끝에 고정 -->
-          <img
-            src="/images/flag.png"
-            alt="깃발 이미지"
-            class="flag-image absolute right-0 bottom-3 w-6 transform translate-x-7"
-          />
-        </div>
+        <div class="text-red-500 font-semibold">D-{{ remainingDays }}</div>
       </div>
 
-      <!-- 웹에서는 월간 미션과 일간 미션을 한 행에 배치 -->
-      <div class="flex flex-col md:flex-row md:gap-6">
-        <!-- 월간 미션 -->
-        <div class="section-style flex-1">
-          <h1 class="font-semibold text-lg">월간 미션</h1>
-          <div class="flex justify-between">
-            <span class="ml-2">{{ currentMonth }}</span>
+      <!-- 진행바 -->
+      <div class="progress-bar relative w-11/12 h-2 bg-gray-300 rounded-md mx-auto mt-10 lg:mt-20">
+        <!-- 캐릭터 이미지 (진행된 만큼 왼쪽으로 배치) -->
+        <img
+          :src="runningImage"
+          class="w-[50px] absolute duration-200 bottom-3 transform -translate-x-1/2 transition-all ease-linear z-10"
+          :style="{ left: monthlyProgress + '%' }"
+        />
+        <!-- 진행 바 채움 -->
+        <div
+          class="progress-fill bg-[#5354ff] h-full rounded-md absolute top-0 left-0 transition-width duration-300"
+          :style="{ width: monthlyProgress + '%' }"
+        ></div>
+
+        <!-- 깃발은 오른쪽 끝에 고정 -->
+        <img
+          src="/images/flag.png"
+          alt="깃발 이미지"
+          class="flag-image absolute right-0 bottom-3 w-6 transform translate-x-7"
+        />
+      </div>
+    </div>
+
+    <!-- 웹에서는 월간 미션과 일간 미션을 한 행에 배치 -->
+    <div class="flex flex-col lg:flex-row lg:gap-4 flex-grow">
+      <!-- 월간 미션 -->
+      <div class="section-style lg:w-1/2 flex-grow">
+        <div class="section-title border-bottom pb-3">월간 미션</div>
+        <div class="mx-2 mt-3">
+          <div class="flex justify-between items-center">
+            <span class="font-semibold">{{ currentMonth }}</span>
             <div
               class="mission-status"
               :class="{
                 'text-red-500': monthlyMission.personalMonthlyMissionCompleted === -1,
                 'text-blue-500': monthlyMission.personalMonthlyMissionCompleted === 1,
-                'text-green-500': monthlyMission.personalMonthlyMissionCompleted === 0
+                'text-green-500': monthlyMission.personalMonthlyMissionCompleted === 0,
               }"
             >
               {{
@@ -62,27 +60,30 @@
               }}
             </div>
           </div>
+
           <div class="mission-text">
             <span
               :class="{
-                'line-through' : monthlyMission.personalMonthlyMissionCompleted === 1,
+                'line-through': monthlyMission.personalMonthlyMissionCompleted === 1,
               }"
             >
-            {{ monthlyMission.missionTopic || '설명이 없습니다.' }}
-          </span>
+              {{ monthlyMission.missionTopic || '설명이 없습니다.' }}
+            </span>
           </div>
         </div>
+      </div>
 
-        <!-- 일간 미션 -->
-        <div class="section-style flex-1">
-          <h1 class="font-semibold text-lg">일간 미션</h1>
-          <div class="flex justify-between">
-            <span class="ml-2">{{ todayDate }}</span>
+      <!-- 일간 미션 -->
+      <div class="section-style lg:w-1/2 flex-grow">
+        <div class="section-title border-bottom pb-3">일간 미션</div>
+        <div class="mx-2 mt-3">
+          <div class="flex justify-between items-center">
+            <span class="font-semibold">{{ todayDate }}</span>
             <div
               class="mission-status"
               :class="{
-                'text-blue-500' : allDailyMissionsCompleted,
-                'text-green-500' : !allDailyMissionsCompleted
+                'text-blue-500': allDailyMissionsCompleted,
+                'text-green-500': !allDailyMissionsCompleted,
               }"
             >
               {{ allDailyMissionsCompleted ? '미션 완료!' : '미션 진행 중' }}
@@ -187,7 +188,7 @@ const daillyMission = async () => {
 const getMonthlyMission = async () => {
   try {
     monthlyMission.value = await MissionApi.getMonthMission();
-  //  console.log(monthlyMission.value);
+    //  console.log(monthlyMission.value);
   } catch (error) {
     //  console.error("daily mission 불러오는중 에러 발생:", error);
   }
@@ -204,8 +205,7 @@ onMounted(() => {
 // 미션 완료 처리
 const completeMission = async (mission) => {
   try {
-    mission.personalDailyMissionCompleted =
-      !mission.personalDailyMissionCompleted;
+    mission.personalDailyMissionCompleted = !mission.personalDailyMissionCompleted;
     const missionData = {
       personalMissionId: mission.personalDailyMissionId,
       missionType: mission.missionType,
@@ -220,10 +220,7 @@ const completeMission = async (mission) => {
 };
 
 const allDailyMissionsCompleted = computed(() => {
-  return (
-    dailyMissions.length > 0 &&
-    dailyMissions.every((mission) => mission.personalDailyMissionCompleted)
-  );
+  return dailyMissions.length > 0 && dailyMissions.every((mission) => mission.personalDailyMissionCompleted);
 });
 
 const startAnimation = () => {
@@ -233,9 +230,7 @@ const startAnimation = () => {
 };
 
 const runningImage = computed(() => {
-  const baseImage = `/images/${user.finTypeCode}-animated-${
-    isRunning.value ? 2 : 1
-  }.png`;
+  const baseImage = `/images/${user.finTypeCode}-animated-${isRunning.value ? 2 : 1}.png`;
   return baseImage;
 });
 </script>
