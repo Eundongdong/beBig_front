@@ -231,7 +231,7 @@
           <i class="fas fa-angle-left text-xl"></i>
         </button>
 
-        <div class="text-lg">페이지 <span class="px-2">{{ currentPage }}</span> / <span class="px-2">{{ totalPage }}</span></div>
+        <div class="text-lg"><span class="px-2">{{ currentPage }}</span> / <span class="px-2">{{ totalPage }}</span></div>
 
         <button @click="goToNextPage" :disabled="currentPage === totalPage" class="disabled:opacity-50">
           <i class="fas fa-angle-right text-xl"></i>
