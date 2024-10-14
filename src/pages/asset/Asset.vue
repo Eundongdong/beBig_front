@@ -108,7 +108,7 @@
       <div class="flex-1 mr-4 border border-gray-300 p-4 rounded-lg"> -->
             <div class="mt-2 lg:mt-4">
               <div class="product-container lg:flex-1 mb-0">
-                <p class="pb-3 border-bottom font-semibold">적금상품</p>
+                <p class="pb-3 border-bottom font-semibold">예금상품</p>
 
                 <div class="px-2">
                   <div class="border-bottom mt-3">
@@ -124,7 +124,7 @@
                       <div class="text-sm">기간 : {{ depositRecomendations[0].depositProductTerm }}개월</div>
                       <div v-if="depositRecomendations[0]" class="mb-4">
                         <a
-                          :href="depositRecomendations[0].bankUrl"
+                          :href="depositRecomendations[0].depositProductUrl"
                           target="_blank"
                           class="text-xs text-primary lg:text-sm"
                           >홈페이지 방문하기</a
@@ -146,7 +146,7 @@
                       <div class="text-sm">기간 : {{ depositRecomendations[1].depositProductTerm }}개월</div>
                       <div v-if="depositRecomendations[1]" class="mb-4">
                         <a
-                          :href="depositRecomendations[1].bankUrl"
+                          :href="depositRecomendations[1].depositProductUrl"
                           target="_blank"
                           class="text-xs text-primary lg:text-sm"
                           >홈페이지 방문하기</a
@@ -159,7 +159,7 @@
 
               <!-- <div class="flex-1 mr-4 border border-gray-300 p-4 rounded-lg"> -->
               <div class="product-container lg:flex-1 mb-0">
-                <p class="pb-3 border-bottom font-semibold">예금상품</p>
+                <p class="pb-3 border-bottom font-semibold">적금상품</p>
                 <div class="px-2">
                   <div class="border-bottom mt-3">
                     <div v-if="savingsRecommendations[0]" class="product-item flex items-center mb-2">
@@ -177,7 +177,7 @@
                       </div>
                       <div v-if="savingsRecommendations[0]" class="mb-4">
                         <a
-                          :href="savingsRecommendations[0].bankUrl"
+                          :href="savingsRecommendations[0].savingsProductUrl"
                           target="_blank"
                           class="text-xs text-primary lg:text-sm"
                           >홈페이지 방문하기</a
@@ -199,7 +199,7 @@
                       <div class="text-sm">기간 : {{ savingsRecommendations[1].savingsProductTerm }}개월</div>
                       <div v-if="savingsRecommendations[1]">
                         <a
-                          :href="savingsRecommendations[1].bankUrl"
+                          :href="savingsRecommendations[1].savingsProductUrl"
                           target="_blank"
                           class="text-xs text-primary lg:text-sm"
                           >홈페이지 방문하기</a
@@ -232,7 +232,7 @@
             <!-- <div class="flex-1 mr-4 border border-gray-300 p-4 rounded-lg"> -->
             <div class="mt-2">
               <div class="product-container lg:flex-1 mb-0">
-                <p class="pb-3 border-bottom font-semibold">적금상품</p>
+                <p class="pb-3 border-bottom font-semibold">예금상품</p>
 
                 <div class="px-2">
                   <div class="border-bottom mt-3">
@@ -256,7 +256,7 @@
                       </div>
                       <div v-if="depositRecomendations[randomnumber1]" class="mb-4">
                         <a
-                          :href="depositRecomendations[randomnumber1].bankUrl"
+                          :href="depositRecomendations[randomnumber1].depositProductUrl"
                           target="_blank"
                           class="text-xs text-primary lg:text-sm"
                           >홈페이지 방문하기</a
@@ -284,7 +284,7 @@
                     <div class="text-sm">기간: {{ depositRecomendations[randomnumber2].depositProductTerm }}개월</div>
                     <div v-if="depositRecomendations[randomnumber2]">
                       <a
-                        :href="depositRecomendations[randomnumber2].bankUrl"
+                        :href="depositRecomendations[randomnumber2].depositProductUrl"
                         target="_blank"
                         class="text-xs text-primary lg:text-sm"
                         >홈페이지 방문하기</a
@@ -293,10 +293,9 @@
                   </div>
                 </div>
               </div>
-
               <!-- <div class="flex-1 mr-4 border border-gray-300 p-4 rounded-lg"> -->
               <div class="product-container lg:flex-1 mb-0">
-                <p class="pb-3 border-bottom font-semibold">예금상품</p>
+                <p class="pb-3 border-bottom font-semibold">적금상품</p>
                 <div class="px-2">
                   <div class="border-bottom mt-3">
                     <div v-if="savingsRecommendations[randomnumber3]" class="product-item flex items-center mb-2">
@@ -319,7 +318,7 @@
                       </div>
                       <div v-if="savingsRecommendations[randomnumber3]" class="mb-4">
                         <a
-                          :href="savingsRecommendations[randomnumber3].bankUrl"
+                          :href="savingsRecommendations[randomnumber3].savingsProductUrl"
                           target="_blank"
                           class="text-xs text-primary lg:text-sm"
                           >홈페이지 방문하기</a
@@ -347,7 +346,7 @@
                     <div class="text-sm">기간: {{ savingsRecommendations[randomnumber4].savingsProductTerm }}개월</div>
                     <div v-if="savingsRecommendations[randomnumber4]">
                       <a
-                        :href="savingsRecommendations[randomnumber4].bankUrl"
+                        :href="savingsRecommendations[randomnumber4].savingsProductUrl"
                         target="_blank"
                         class="text-xs text-primary lg:text-sm"
                         >홈페이지 방문하기</a
