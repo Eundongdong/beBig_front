@@ -1,6 +1,6 @@
 <template>
     <!-- <footer class="fixed bottom-0 left-0 right-0 bg-gray-100 shadow-lg z-50"> -->
-    <footer class="fixed bottom-4 left-4 right-4 bg-gray-100 rounded-2xl shadow-lg z-50">
+    <footer class="fixed bottom-4 left-4 right-4 bg-[#f3f3f3] rounded-2xl shadow-lg z-50">
         <nav class="h-16 flex items-center justify-around">
             <button @click="goHome" :class="getButtonClass(isHome)">
                 <i class="fas fa-home text-lg md:text-lg"></i>
