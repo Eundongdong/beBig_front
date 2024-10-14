@@ -9,13 +9,12 @@
   font-style: normal;
 }
 
-
 #app {
   max-width: 1280px;
   margin: 0 auto;
 
   padding: 1rem; /* 기본 padding */
-
+  /* background-color: #f3f3f3; */
   font-size: medium;
   font-family: 'Pretendard-Regular';
   width: 100%;
@@ -25,7 +24,6 @@ body {
   padding: 0;
   margin: 0;
 }
-
 
 body.user-page #app {
   padding: 0;
@@ -63,13 +61,13 @@ body.user-page #app {
   @apply overflow-y-scroll text-sm text-gray-600 border border-gray-300 rounded-lg p-2 max-h-40;
 }
 
-
 .mission-text {
-  @apply text-[12px] text-gray-600 border border-gray-300 rounded bg-white m-2 p-2;
+  /* @apply text-[12px] text-gray-600 border border-gray-300 rounded bg-white m-2 p-2; */
+  @apply mt-2 p-2 rounded-md bg-white text-sm lg:text-base;
 }
 
 .mission-status {
-  @apply text-sm font-semibold ml-2;
+  @apply text-sm font-semibold;
 }
 
 .notification-text {
@@ -107,16 +105,15 @@ body.user-page #app {
 }
 
 .community-filter {
-  @apply text-xs px-2 py-1 text-left
+  @apply text-xs px-2 py-1 text-left;
 }
 
-
 .community-filter-hover {
-  @apply rounded-md hover:bg-light text-xs px-2 py-1 text-left
+  @apply rounded-md hover:bg-light text-xs px-2 py-1 text-left;
 }
 
 .community-filter-click {
-  @apply rounded-md bg-primary text-xs px-2 py-1 text-left text-white
+  @apply rounded-md bg-primary text-xs px-2 py-1 text-left text-white;
 }
 
 .small-buttons {
@@ -138,24 +135,23 @@ body.user-page #app {
 }
 
 .post-content {
-/*  */
+  /*  */
   @apply mb-4 px-6 py-4 bg-white rounded-xl border border-gray-300;
 }
 
-
 .section-title {
   /*  */
-  @apply font-semibold text-lg
+  @apply font-semibold text-lg;
 }
 
 .account-list-bg {
   /*  */
-  @apply mt-2 px-2
+  @apply mt-2 px-2;
 }
 
 .account-list-inner {
   /*  */
- @apply p-2
+  @apply p-2;
 }
 
 .bank-icon {
@@ -163,16 +159,14 @@ body.user-page #app {
 }
 
 .icon {
-  @apply text-xl
+  @apply text-xl;
 }
 
 .big-text {
-
   @apply text-primary text-xl font-bold;
 }
 
 .blue-bold {
-
   @apply text-primary font-bold;
 }
 
@@ -229,7 +223,7 @@ body.user-page #app {
 }
 
 .product-container {
-  @apply border border-gray-300 p-4 rounded-lg mb-4
+  @apply border border-gray-300 p-4 rounded-lg mb-4;
 }
 
 .drop-down {
@@ -270,8 +264,6 @@ body.user-page #app {
   @apply cursor-pointer text-white text-xs px-2 py-1 bg-[#5354ff] rounded-lg hover:bg-[#3435ff];
 }
 
-
-
 .selected {
   @apply text-xs px-1 text-white font-semibold bg-[#5354ff];
 }
@@ -282,12 +274,16 @@ body.user-page #app {
 
 .border-bottom {
   /*  */
-  @apply border-b border-gray-300
+  @apply border-b border-gray-300;
 }
 
 .hover-white {
   /*  */
-  @apply hover:bg-white hover:duration-300
+  @apply hover:bg-white hover:duration-300;
+}
+
+.remaining-days {
+  @apply text-red-500 font-semibold;
 }
 
 /* @media (hover: hover) {

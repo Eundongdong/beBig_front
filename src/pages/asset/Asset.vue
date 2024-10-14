@@ -3,9 +3,9 @@
     <div class="analysis-page lg:grid lg:grid-cols-2">
       <!-- 총자산 분석 섹션 -->
       <div class="section-style lg:col-span-2">
-        <div class="border-bottom flex justify-between items-center pb-2">
+        <div class="border-bottom flex justify-between items-center pb-3">
           <p class="section-title">총 자산 분석</p>
-          <p class="text-xl">{{ totalBalance.toLocaleString() }} 원</p>
+          <p class="text-xl font-semibold">{{ totalBalance.toLocaleString() }} 원</p>
         </div>
 
         <div class="mt-10 px-6">
