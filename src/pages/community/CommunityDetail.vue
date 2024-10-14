@@ -135,7 +135,7 @@ const currentImageIndex = ref(0);
 // 모달 열기
 const openModal = (index) => {
   currentImageIndex.value = index;
-  mnndalImageUrl.value = post.value.postImagePaths[index];
+  modalImageUrl.value = post.value.postImagePaths[index];
   isModalOpen.value = true;
 };
 
