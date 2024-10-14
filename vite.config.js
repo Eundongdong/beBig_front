@@ -20,7 +20,7 @@ export default defineConfig({
     proxy: {
       // '/api'로 시작하는 요청은 백엔드 서버로 프록시
       "/api": {
-        target: "http:/localhost:8080", // 백엔드 서버 주소
+        target: "http:/bbbbick.duckdns.org:8080", // 백엔드 서버 주소
         changeOrigin: true, // 백엔드 서버의 CORS 문제 해결
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
