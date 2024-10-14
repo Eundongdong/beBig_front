@@ -199,8 +199,8 @@
               ></i>
             </div>
 
-            <div class="community-content text-sm text-gray-600 my-2">
-              {{ post.postContent.length > 10 ? post.postContent.slice(0, 10) + '...' : post.postContent }}
+            <div class="community-content text-sm text-gray-600 my-2 truncate">
+              {{ post.postContent }}
             </div>
 
             <div class="mt-1 text-red-500">
@@ -494,7 +494,14 @@ onMounted(async () => {
   await fetchPosts();
 });
 </script>
+
 <style scoped>
+.truncate{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* 모바일 화면에서만 margin-bottom을 적용 */
 @media (max-width: 768px) {
   .container {
