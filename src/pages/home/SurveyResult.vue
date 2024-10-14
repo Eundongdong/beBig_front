@@ -8,7 +8,7 @@
         <p class="text-lg text-center mt-2 font-semibold">{{ finTypeSubtitle }}</p>
       </div>
 
-      <div class="mt-4">
+      <div class="mt-4 text-[14px]">
         <div>
           <p class="text-justify">
             <span class="text-[#5354ff] font-semibold">{{ userName }}</span> 님은 {{ finTypeTitleDescription }}
