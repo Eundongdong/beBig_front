@@ -60,9 +60,7 @@ const goHome = () => {
 };
 
 const goMission = () =>{
-    if(userName.value == 'NoLogin'){
-        alert('로그인 후 이용해주세요.');
-    }else if(userType.value == '0'){
+    if(userType.value == '0'){
         alert('유형검사 후 이용해주세요.');
     }else if(assetFlag.value == false){
         alert('계좌 연결 후 이용해주세요.');
@@ -72,10 +70,7 @@ const goMission = () =>{
     }
  }
 const goAsset = () => {
-    if(userName.value == 'NoLogin'){
-        alert('로그인 후 이용해주세요.');
-    }
-    else if(assetFlag.value == false){
+    if(assetFlag.value == false){
         alert('계좌 연결 후 이용해주세요.');
     }
     else{
