@@ -50,7 +50,7 @@
               <p class="font-bold text-base">{{ account.bankVo.bankName }}</p>
               <p class="text-sm">{{ account.resAccount }}</p>
               <p class="text-sm">{{ account.resAccountName }}</p>
-              <p class="text-sm">잔액 : {{ account.resAccountBalance.toLocaleString() }} 원</p>
+              <p class="text-sm">잔액 : {{ Number(account.resAccountBalance).toLocaleString() }} 원</p>
             </div>
           </div>
         </div>
