@@ -114,7 +114,7 @@
                   <div class="border-bottom mt-3">
                     <div v-if="depositRecomendations[0]" class="product-item flex items-center mb-2">
                       <img
-                        :src="`../../../public/images/bank/${changeName(depositRecomendations[0].bankName)}.png`"
+                        :src="`/images/bank/${changeName(depositRecomendations[0].bankName)}.png`"
                         class="w-12 mr-2"
                       />
                       <span class="text-xs lg:text-base">{{ depositRecomendations[0].depositProductName }}</span>
@@ -136,7 +136,7 @@
                   <div class="mt-3">
                     <div v-if="depositRecomendations[1]" class="product-item flex items-center mb-2">
                       <img
-                        :src="`../../../public/images/bank/${changeName(depositRecomendations[1].bankName)}.png`"
+                        :src="`/images/bank/${changeName(depositRecomendations[1].bankName)}.png`"
                         class="w-12 mr-2"
                       />
                       <span class="text-xs lg:text-base">{{ depositRecomendations[1].depositProductName }}</span>
@@ -164,7 +164,7 @@
                   <div class="border-bottom mt-3">
                     <div v-if="savingsRecommendations[0]" class="product-item flex items-center mb-2">
                       <img
-                        :src="`../../../public/images/bank/${changeName(savingsRecommendations[0].bankName)}.png`"
+                        :src="`/images/bank/${changeName(savingsRecommendations[0].bankName)}.png`"
                         class="w-12 mr-2"
                       />
                       <span class="text-xs lg:text-base">{{ savingsRecommendations[0].savingsProductName }}</span>
@@ -189,7 +189,7 @@
                   <div class="mt-3">
                     <div v-if="savingsRecommendations[1]" class="product-item flex items-center mb-2">
                       <img
-                        :src="`../../../public/images/bank/${changeName(savingsRecommendations[1].bankName)}.png`"
+                        :src="`/images/bank/${changeName(savingsRecommendations[1].bankName)}.png`"
                         class="w-12 mr-3"
                       />
                       <span class="text-xs lg:text-base">{{ savingsRecommendations[1].savingsProductName }}</span>
@@ -238,7 +238,7 @@
                   <div class="border-bottom mt-3">
                     <div v-if="depositRecomendations[randomnumber1]" class="product-item flex items-center mb-2">
                       <img
-                        :src="`../../../public/images/bank/${changeName(
+                        :src="`/images/bank/${changeName(
                           depositRecomendations[randomnumber1].bankName
                         )}.png`"
                         class="w-12 mr-2"
@@ -268,7 +268,7 @@
                   <div class="mt-3"></div>
                   <div v-if="depositRecomendations[randomnumber2]" class="product-item flex items-center mb-2">
                     <img
-                      :src="`../../../public/images/bank/${changeName(
+                      :src="`/images/bank/${changeName(
                         depositRecomendations[randomnumber2].bankName
                       )}.png`"
                       class="w-12 mr-2"
@@ -300,7 +300,7 @@
                   <div class="border-bottom mt-3">
                     <div v-if="savingsRecommendations[randomnumber3]" class="product-item flex items-center mb-2">
                       <img
-                        :src="`../../../public/images/bank/${changeName(
+                        :src="`/images/bank/${changeName(
                           savingsRecommendations[randomnumber3].bankName
                         )}.png`"
                         class="w-12 mr-2"
@@ -330,7 +330,7 @@
                   <div class="mt-3"></div>
                   <div v-if="savingsRecommendations[randomnumber4]" class="product-item flex items-center mb-2">
                     <img
-                      :src="`../../../public/images/bank/${changeName(
+                      :src="`/images/bank/${changeName(
                         savingsRecommendations[randomnumber4].bankName
                       )}.png`"
                       class="w-12 mr-2"

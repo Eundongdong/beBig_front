@@ -216,7 +216,7 @@ const nicknameDupCheckAPI = async () => {
 // 폼 제출 함수
 const submitSignup = async () => {
   try {
-    const response = await fetch('http://localhost:8080/user/signup', {
+    const response = await fetch('http://bbbbick.duckdns.org:8080/user/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
