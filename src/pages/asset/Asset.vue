@@ -108,10 +108,10 @@
       <div class="flex-1 mr-4 border border-gray-300 p-4 rounded-lg"> -->
             <div class="mt-2 lg:mt-4">
               <div class="product-container lg:flex-1 mb-0">
-                <p class="pb-2 border-bottom font-semibold">적금상품</p>
+                <p class="pb-3 border-bottom font-semibold">적금상품</p>
 
                 <div class="px-2">
-                  <div class="border-bottom mt-2">
+                  <div class="border-bottom mt-3">
                     <div v-if="depositRecomendations[0]" class="product-item flex items-center mb-2">
                       <img
                         :src="`../../../public/images/bank/${changeName(depositRecomendations[0].bankName)}.png`"
@@ -133,7 +133,7 @@
                     </div>
                   </div>
 
-                  <div class="mt-2">
+                  <div class="mt-3">
                     <div v-if="depositRecomendations[1]" class="product-item flex items-center mb-2">
                       <img
                         :src="`../../../public/images/bank/${changeName(depositRecomendations[1].bankName)}.png`"
@@ -159,9 +159,9 @@
 
               <!-- <div class="flex-1 mr-4 border border-gray-300 p-4 rounded-lg"> -->
               <div class="product-container lg:flex-1 mb-0">
-                <p class="pb-2 border-bottom font-semibold">예금상품</p>
+                <p class="pb-3 border-bottom font-semibold">예금상품</p>
                 <div class="px-2">
-                  <div class="border-bottom mt-2">
+                  <div class="border-bottom mt-3">
                     <div v-if="savingsRecommendations[0]" class="product-item flex items-center mb-2">
                       <img
                         :src="`../../../public/images/bank/${changeName(savingsRecommendations[0].bankName)}.png`"
@@ -186,7 +186,7 @@
                     </div>
                   </div>
 
-                  <div class="mt-2">
+                  <div class="mt-3">
                     <div v-if="savingsRecommendations[1]" class="product-item flex items-center mb-2">
                       <img
                         :src="`../../../public/images/bank/${changeName(savingsRecommendations[1].bankName)}.png`"
@@ -232,10 +232,10 @@
             <!-- <div class="flex-1 mr-4 border border-gray-300 p-4 rounded-lg"> -->
             <div class="mt-2">
               <div class="product-container lg:flex-1 mb-0">
-                <p class="pb-2 border-bottom font-semibold">적금상품</p>
+                <p class="pb-3 border-bottom font-semibold">적금상품</p>
 
                 <div class="px-2">
-                  <div class="border-bottom mt-2">
+                  <div class="border-bottom mt-3">
                     <div v-if="depositRecomendations[randomnumber1]" class="product-item flex items-center mb-2">
                       <img
                         :src="`../../../public/images/bank/${changeName(
@@ -265,7 +265,7 @@
                     </div>
                   </div>
 
-                  <div class="mt-2"></div>
+                  <div class="mt-3"></div>
                   <div v-if="depositRecomendations[randomnumber2]" class="product-item flex items-center mb-2">
                     <img
                       :src="`../../../public/images/bank/${changeName(
@@ -296,9 +296,9 @@
 
               <!-- <div class="flex-1 mr-4 border border-gray-300 p-4 rounded-lg"> -->
               <div class="product-container lg:flex-1 mb-0">
-                <p class="pb-2 border-bottom font-semibold">예금상품</p>
+                <p class="pb-3 border-bottom font-semibold">예금상품</p>
                 <div class="px-2">
-                  <div class="border-bottom mt-2">
+                  <div class="border-bottom mt-3">
                     <div v-if="savingsRecommendations[randomnumber3]" class="product-item flex items-center mb-2">
                       <img
                         :src="`../../../public/images/bank/${changeName(
@@ -328,7 +328,7 @@
                     </div>
                   </div>
 
-                  <div class="mt-2"></div>
+                  <div class="mt-3"></div>
                   <div v-if="savingsRecommendations[randomnumber4]" class="product-item flex items-center mb-2">
                     <img
                       :src="`../../../public/images/bank/${changeName(
