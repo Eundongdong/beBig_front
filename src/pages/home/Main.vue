@@ -64,7 +64,7 @@
             <button v-if="user.userName == 'NoLogin'" class="hover:font-bold mt-2" @click="goLogin">로그인하고 계좌 연결하기</button>
           </div>
 
-          <div v-for="account in accountList" :key="accountList.accountNum" class="flex items-center justify-between account-list-inner rounded-lg">
+          <div v-for="account in accountList" :key="accountList.accountNum" class="flex items-center justify-between account-list-inner rounded-lg hover-white"  @click="goBankDetail(account.accountNum)">
             <!-- 은행 아이콘 -->
             <img class="bank-icon" :src="`/public/images/bank/${account.bankName}.png`" alt="Bank Logo" />
 
@@ -152,6 +152,13 @@ import refreshToken from '@/api/refreshToken';
 
 const homeStore = useHomeStore();
 
+const goBankDetail = (accountNum)=>{
+  router.push({
+    path: '/home/account-detail',
+    query: { accountNum: accountNum },
+  });
+}
+
 const logout = async () => {
   try {
     const response = refreshToken.logouting();
@@ -188,7 +195,6 @@ const getAsset = async () => {
     // 모든 계좌의 transactionBalance 값을 합산
     let total = response.reduce((sum, account) => sum + account.transactionBalance, 0);
     totalAmount.value = total; // totalAmount에 총합을 저장
-
     // transactionBalance로 내림차순 정렬 후 상위 2개만 추출
     const sortedAccounts = response.sort((a, b) => b.transactionBalance - a.transactionBalance).slice(0, 2);
     sortedAccounts.forEach((account, index) => {
