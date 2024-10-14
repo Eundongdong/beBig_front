@@ -44,7 +44,7 @@
     <!-- 요청이 진행 중일 때 로딩 이미지 추가 -->
     <div v-if="askFlag" class="flex justify-center items-center mt-6">
       <img src="/images/bank/loading.gif" alt="Loading..." class="w-12 h-12" />
-      <h1 class="big-text ml-4">계좌 목록을 불러오는 중...</h1> 
+      <h1 class="big-text ml-4">계좌 목록을 불러오는 중...</h1>
     </div>
 
     <!-- 계좌 목록을 보여주는 섹션 -->
@@ -158,6 +158,7 @@ const Connect = async () => {
     askFlag.value = false;
     //  console.log(accountList);
   } catch (error) {
+    askFlag.value = false;
     //여기서 error 코드에 따라 남은 횟수 수정하기
     console.error('API 호출 중 오류 발생:', error);
     console.log(error.response.data);
