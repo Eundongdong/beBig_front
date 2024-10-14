@@ -68,10 +68,7 @@ const goHome = () => {
     router.push({ name: 'main' });
 };
 const goAsset = () => {
-    if(userName.value == 'NoLogin'){
-        alert('로그인 후 이용해주세요.');
-    }
-    else if(assetFlag.value == false){
+    if(assetFlag.value == false){
         alert('계좌 연결 후 이용해주세요.');
     }
     else{

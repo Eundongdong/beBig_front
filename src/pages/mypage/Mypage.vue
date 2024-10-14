@@ -41,7 +41,7 @@
             </div>
             <div class="ml-4">
               <div class="flex items-center">
-                <div class="text-sm font-bold mr-1">{{ userNickname }} 님</div>
+                <div class="text-lg font-bold mr-1">{{ userNickname }} 님</div>
 
                 <!-- badgeCode가 0이 아닐 때만 배지 이미지가 버튼으로 표시됨 -->
                 <button v-if="badgeCode !== 0" @click="openBadgeModal">
@@ -52,7 +52,7 @@
               <div class="mt-2">
                 <p>
                   이번달 미션 달성도 상위
-                  {{ userRank }} %
+                  <span class="blue-bold">{{ userRank }}</span> %
                 </p>
                 <p class="mt-1">
                   {{ finTypeInfo }}

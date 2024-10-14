@@ -61,7 +61,6 @@
         <div class="account-list-bg">
           <div class="flex justify-center items-center">
             <button v-if="user.userName !== 'NoLogin' && accountList.length === 0" class="button !w-2/3 mt-4" @click="goAddBank">계좌 연결하기</button>
-            <button v-if="user.userName == 'NoLogin'" class="hover:font-bold mt-2" @click="goLogin">로그인하고 계좌 연결하기</button>
           </div>
 
           <div v-for="account in accountList" :key="accountList.accountNum" class="flex items-center justify-between account-list-inner rounded-lg hover-white"  @click="goBankDetail(account.accountNum)">
@@ -98,10 +97,7 @@
         </div>
       </div>
 
-      <!-- 가입없이 이용인 경우 -->
-      <div v-if="user.userName == 'NoLogin'" class="flex items-center justify-center mt-2">
-        <button v-if="user.userName == 'NoLogin'" class="hover:font-bold mt-2" @click="goLogin">계좌 연결 하고 미션받기</button>
-      </div>
+
 
       <div v-if="monthlyMission && dailyMissions">
         <!-- 월간 미션 -->
