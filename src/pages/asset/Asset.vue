@@ -108,10 +108,10 @@
       <div class="flex-1 mr-4 border border-gray-300 p-4 rounded-lg"> -->
             <div class="mt-2 lg:mt-4">
               <div class="product-container lg:flex-1 mb-0">
-                <p class="pb-2 border-bottom font-semibold">적금상품</p>
+                <p class="pb-3 border-bottom font-semibold">예금상품</p>
 
                 <div class="px-2">
-                  <div class="border-bottom mt-2">
+                  <div class="border-bottom mt-3">
                     <div v-if="depositRecomendations[0]" class="product-item flex items-center mb-2">
                       <img
                         :src="`/images/bank/${changeName(depositRecomendations[0].bankName)}.png`"
@@ -124,7 +124,7 @@
                       <div class="text-sm">기간 : {{ depositRecomendations[0].depositProductTerm }}개월</div>
                       <div v-if="depositRecomendations[0]" class="mb-4">
                         <a
-                          :href="depositRecomendations[0].bankUrl"
+                          :href="depositRecomendations[0].depositProductUrl"
                           target="_blank"
                           class="text-xs text-primary lg:text-sm"
                           >홈페이지 방문하기</a
@@ -133,7 +133,7 @@
                     </div>
                   </div>
 
-                  <div class="mt-2">
+                  <div class="mt-3">
                     <div v-if="depositRecomendations[1]" class="product-item flex items-center mb-2">
                       <img
                         :src="`/images/bank/${changeName(depositRecomendations[1].bankName)}.png`"
@@ -146,7 +146,7 @@
                       <div class="text-sm">기간 : {{ depositRecomendations[1].depositProductTerm }}개월</div>
                       <div v-if="depositRecomendations[1]" class="mb-4">
                         <a
-                          :href="depositRecomendations[1].bankUrl"
+                          :href="depositRecomendations[1].depositProductUrl"
                           target="_blank"
                           class="text-xs text-primary lg:text-sm"
                           >홈페이지 방문하기</a
@@ -159,9 +159,9 @@
 
               <!-- <div class="flex-1 mr-4 border border-gray-300 p-4 rounded-lg"> -->
               <div class="product-container lg:flex-1 mb-0">
-                <p class="pb-2 border-bottom font-semibold">예금상품</p>
+                <p class="pb-3 border-bottom font-semibold">적금상품</p>
                 <div class="px-2">
-                  <div class="border-bottom mt-2">
+                  <div class="border-bottom mt-3">
                     <div v-if="savingsRecommendations[0]" class="product-item flex items-center mb-2">
                       <img
                         :src="`/images/bank/${changeName(savingsRecommendations[0].bankName)}.png`"
@@ -177,7 +177,7 @@
                       </div>
                       <div v-if="savingsRecommendations[0]" class="mb-4">
                         <a
-                          :href="savingsRecommendations[0].bankUrl"
+                          :href="savingsRecommendations[0].savingsProductUrl"
                           target="_blank"
                           class="text-xs text-primary lg:text-sm"
                           >홈페이지 방문하기</a
@@ -186,7 +186,7 @@
                     </div>
                   </div>
 
-                  <div class="mt-2">
+                  <div class="mt-3">
                     <div v-if="savingsRecommendations[1]" class="product-item flex items-center mb-2">
                       <img
                         :src="`/images/bank/${changeName(savingsRecommendations[1].bankName)}.png`"
@@ -199,7 +199,7 @@
                       <div class="text-sm">기간 : {{ savingsRecommendations[1].savingsProductTerm }}개월</div>
                       <div v-if="savingsRecommendations[1]">
                         <a
-                          :href="savingsRecommendations[1].bankUrl"
+                          :href="savingsRecommendations[1].savingsProductUrl"
                           target="_blank"
                           class="text-xs text-primary lg:text-sm"
                           >홈페이지 방문하기</a
@@ -232,10 +232,10 @@
             <!-- <div class="flex-1 mr-4 border border-gray-300 p-4 rounded-lg"> -->
             <div class="mt-2">
               <div class="product-container lg:flex-1 mb-0">
-                <p class="pb-2 border-bottom font-semibold">적금상품</p>
+                <p class="pb-3 border-bottom font-semibold">예금상품</p>
 
                 <div class="px-2">
-                  <div class="border-bottom mt-2">
+                  <div class="border-bottom mt-3">
                     <div v-if="depositRecomendations[randomnumber1]" class="product-item flex items-center mb-2">
                       <img
                         :src="`/images/bank/${changeName(
@@ -256,7 +256,7 @@
                       </div>
                       <div v-if="depositRecomendations[randomnumber1]" class="mb-4">
                         <a
-                          :href="depositRecomendations[randomnumber1].bankUrl"
+                          :href="depositRecomendations[randomnumber1].depositProductUrl"
                           target="_blank"
                           class="text-xs text-primary lg:text-sm"
                           >홈페이지 방문하기</a
@@ -265,7 +265,7 @@
                     </div>
                   </div>
 
-                  <div class="mt-2"></div>
+                  <div class="mt-3"></div>
                   <div v-if="depositRecomendations[randomnumber2]" class="product-item flex items-center mb-2">
                     <img
                       :src="`/images/bank/${changeName(
@@ -284,7 +284,7 @@
                     <div class="text-sm">기간: {{ depositRecomendations[randomnumber2].depositProductTerm }}개월</div>
                     <div v-if="depositRecomendations[randomnumber2]">
                       <a
-                        :href="depositRecomendations[randomnumber2].bankUrl"
+                        :href="depositRecomendations[randomnumber2].depositProductUrl"
                         target="_blank"
                         class="text-xs text-primary lg:text-sm"
                         >홈페이지 방문하기</a
@@ -293,12 +293,11 @@
                   </div>
                 </div>
               </div>
-
               <!-- <div class="flex-1 mr-4 border border-gray-300 p-4 rounded-lg"> -->
               <div class="product-container lg:flex-1 mb-0">
-                <p class="pb-2 border-bottom font-semibold">예금상품</p>
+                <p class="pb-3 border-bottom font-semibold">적금상품</p>
                 <div class="px-2">
-                  <div class="border-bottom mt-2">
+                  <div class="border-bottom mt-3">
                     <div v-if="savingsRecommendations[randomnumber3]" class="product-item flex items-center mb-2">
                       <img
                         :src="`/images/bank/${changeName(
@@ -319,7 +318,7 @@
                       </div>
                       <div v-if="savingsRecommendations[randomnumber3]" class="mb-4">
                         <a
-                          :href="savingsRecommendations[randomnumber3].bankUrl"
+                          :href="savingsRecommendations[randomnumber3].savingsProductUrl"
                           target="_blank"
                           class="text-xs text-primary lg:text-sm"
                           >홈페이지 방문하기</a
@@ -328,7 +327,7 @@
                     </div>
                   </div>
 
-                  <div class="mt-2"></div>
+                  <div class="mt-3"></div>
                   <div v-if="savingsRecommendations[randomnumber4]" class="product-item flex items-center mb-2">
                     <img
                       :src="`/images/bank/${changeName(
@@ -347,7 +346,7 @@
                     <div class="text-sm">기간: {{ savingsRecommendations[randomnumber4].savingsProductTerm }}개월</div>
                     <div v-if="savingsRecommendations[randomnumber4]">
                       <a
-                        :href="savingsRecommendations[randomnumber4].bankUrl"
+                        :href="savingsRecommendations[randomnumber4].savingsProductUrl"
                         target="_blank"
                         class="text-xs text-primary lg:text-sm"
                         >홈페이지 방문하기</a
@@ -379,21 +378,20 @@
             <span class="blue-bold">{{ rank }}</span> % 입니다.<br />
           </div>
           <div class="mt-2">
-            {{ ageRange }} 대 평균 자산은 <span class="blue-bold">{{ avgAsset.toLocaleString() }}</span> 원 입니다.
+            <span class="blue-bold">{{ ageRange }}</span> 대 평균 자산은 <span class="blue-bold">{{ avgAsset.toLocaleString() }}</span> 원 입니다.
           </div>
         </div>
 
         <!--삼각형 그리기 -->
-        <div class="relative w-48 h-72 mb-8 mt-12 mx-auto">
-          <div
-            class="triangle w-0 h-0 border-l-[100px] border-r-[100px] border-b-[300px] border-b-indigo-300 relative"
-          ></div>
-          <div class="rank-line absolute w-full h-0.5 bg-red-500 top-1/2" id="rankLine"></div>
-          <div
-            class="rank-text absolute left-[100%] ml-2 top-1/2 transform -translate-y-1/2 whitespace-nowrap text-black text-sm"
-            id="rankText"
-          >
-            Rank
+        <div class="flex justify-center items-center h-64 relative mt-8">
+          <div class="triangle-container relative">
+            <div class="triangle"></div>
+
+              <div class="rank-line absolute w-full h-0.5 bg-red-500" :style="{top: `${rank}%`}"></div>
+              <div
+                class="rank-text absolute whitespace-nowrap text-black text-sm" :style="{top: `${rank}%`, left: 'calc(100% + 5px)', transform: 'translateY(-50%)'}">
+              상위 {{ rank }}%
+              </div>
           </div>
         </div>
       </div>
@@ -749,7 +747,7 @@ const drawTriangleGraph = () => {
   const triangleHeight = 300; // 삼각형의 높이
   const rankPercentage = rank.value; // 순위가 상위 몇 퍼센트인지
 
-  const rankPosition = (rankPercentage / 100) * triangleHeight; // 퍼센트에 맞는 위치 계산
+  const rankPosition = ((100 - rankPercentage) / 100) * triangleHeight; // 퍼센트에 맞는 위치 계산
 
   const rankLine = document.getElementById('rankLine');
   const rankText = document.getElementById('rankText');
@@ -796,9 +794,26 @@ onMounted(() => {
   transition: transform 0.5s ease;
 }
 
+.triangle-container {
+  width: 200px;
+  height: 173.21px;
+  position: relative;
+}
+
 .triangle {
+  width: 0;
+  height: 0;
   border-left: 100px solid transparent;
   border-right: 100px solid transparent;
-  border-bottom: 300px solid #8485ff;
+  border-bottom: 173.21px solid #8485ff;
+}
+
+.rank-line {
+  left: 0;
+  right: 0;
+}
+
+.rank-text {
+  margin-left: 10px;
 }
 </style>

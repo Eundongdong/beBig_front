@@ -15,7 +15,7 @@
 
       <div class="flex items-center justify-between mt-1 pb-2 border-bottom">
         <p class="text-xl font-bold">{{ totalAmount.toLocaleString() }}원</p>
-        <button @click="goAddBank" class="p-2 flex items-center justify-center">
+        <button v-if="NoLoginFlag" @click="goAddBank" class="p-2 flex items-center justify-center">
           <i class="fa-solid fa-plus text-xl"></i>
         </button>
       </div>
@@ -46,7 +46,7 @@ const router = useRouter();
 
 const totalAmount = ref(''); // 총 자산 예시
 const accountList = reactive([]);
-
+const NoLoginFlag = ref(true);
 const getList = async () => {
   try {
     const response = await HomeApi.accountList();
@@ -55,7 +55,9 @@ const getList = async () => {
       const newName = changeName(accountList[i].bankName);
       accountList[i].bankName = newName;
     }
-    //  console.log(accountList);
+      if(accountList[0].accountNum == 11013154513){
+        NoLoginFlag.value = false;
+      }
     // 총 자산 계산
     const total = accountList.reduce((acc, account) => acc + account.transactionBalance, 0);
     totalAmount.value = total;

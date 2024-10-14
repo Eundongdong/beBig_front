@@ -1,6 +1,6 @@
 <template>
     <!-- <footer class="fixed bottom-0 left-0 right-0 bg-gray-100 shadow-lg z-50"> -->
-    <footer class="fixed bottom-4 left-4 right-4 bg-gray-100 rounded-2xl shadow-lg z-50">
+    <footer class="fixed bottom-4 left-4 right-4 bg-[#f3f3f3] rounded-2xl shadow-lg z-50">
         <nav class="h-16 flex items-center justify-around">
             <button @click="goHome" :class="getButtonClass(isHome)">
                 <i class="fas fa-home text-lg md:text-lg"></i>
@@ -68,10 +68,7 @@ const goHome = () => {
     router.push({ name: 'main' });
 };
 const goAsset = () => {
-    if(userName.value == 'NoLogin'){
-        alert('로그인 후 이용해주세요.');
-    }
-    else if(assetFlag.value == false){
+    if(assetFlag.value == false){
         alert('계좌 연결 후 이용해주세요.');
     }
     else{

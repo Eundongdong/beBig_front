@@ -38,7 +38,7 @@
             <span class="big-text">{{ userLoginId }}</span> 입니다.
           </p>
         </div>
-        <div v-else-if="errorMessage" class="result_error text-center text-lg mt-10">
+        <div v-else-if="errorMessage" class="result_error text-center text-[16px] mt-10">
           <p>{{ errorMessage }}</p>
         </div>
       </div>

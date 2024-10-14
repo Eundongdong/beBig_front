@@ -106,11 +106,31 @@ const changeName = (name) => {
 
 // 은행 선택 시 실행되는 함수
 const selectBank = (bankName) => {
-  bankStore.setSelectedBank(changeName(bankName)); // Pinia 스토어에 선택된 은행 저장
-  //  console.log("선택된 은행:", bankName); // 테스트용 콘솔 출력
+  console.log(bankName);
+  if(bankName == 'KakaoBank' ||
+    bankName == 'KBank'|| 
+    bankName == 'PostOfficeBank' || 
+    bankName == 'Shinhyup' || 
+    bankName == 'SaemaulGeumgo' || 
+    bankName == 'Gyeongnam'||  
+    bankName == 'Jeonbuk'||  
+    bankName == 'Jeju' || 
+    bankName == 'Gwangju' || 
+    bankName == 'Busan' || 
+    bankName == 'IM' || 
+    bankName == 'Citi' || 
+    bankName == 'SC' || 
+    bankName == 'IndustrialBank' ||
+    bankName == 'Suhyup'){
+    alert("서비스 준비중입니다...");
+  }
+  else{
+    bankStore.setSelectedBank(changeName(bankName)); // Pinia 스토어에 선택된 은행 저장
+    //  console.log("선택된 은행:", bankName); // 테스트용 콘솔 출력
 
-  // 은행 선택 후 /home/bank-login 경로로 이동
-  router.push('/home/bank-login');
+    // 은행 선택 후 /home/bank-login 경로로 이동
+    router.push('/home/bank-login');
+  }
 };
 </script>
 

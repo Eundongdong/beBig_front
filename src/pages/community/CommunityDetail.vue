@@ -20,7 +20,12 @@
             <div class="community-profile">
               <img :src="getProfileIcon(post.finTypeCode)" alt="Profile" @click="goToUserProfile(post.userId)" />
             </div>
-            <span class="text-lg font-semibold">{{ post.userNickname }}</span>
+            <div class="flex flex-col">
+              <span class="text-lg font-semibold">{{ post.userNickname }}</span>
+              <p class="community-content ">
+                {{ changeCategory(post.postCategory) }}
+              </p>
+            </div>
           </div>
           <p class="community-content">
             {{ formatDate(post.postCreatedTime) }}
@@ -100,6 +105,21 @@ import HomeApi from '@/api/HomeApi';
 //     }
 // };
 
+const changeCategory = (postCategory)=>{
+  if(postCategory == 1){
+    return "예적금";
+  }
+  else if(postCategory == 2){
+    return "재테크";
+  }
+  else if(postCategory == 3){
+    return "정보공유";
+  }
+  else{
+    return "절약팁";
+  }
+}
+
 //Route를 통해 postId를 얻어옴
 const route = useRoute();
 const router = useRouter(); // useRouter를 통해 router 인스턴스 가져옴
@@ -142,7 +162,7 @@ const fetchPostDetails = async (postId) => {
     const response = await communityApi.detail(postId);
 
     //응답을 콘솔에 출력하여 확인
-    //console.log("API 응답: ", response);
+  //  console.log("API 응답: ", response);
 
     post.value = {
       ...response, //서버에서 받은 응답 데이터를 모두 복사
@@ -150,13 +170,14 @@ const fetchPostDetails = async (postId) => {
       postLikeHits: response.postLikeHits, //좋아요 수
       finTypeCode: response.finTypeCode,
       userId: response.userId,
+      postCategory: response.postCategory
     };
 
     await getLike();
 
     isAuthor.value = checkIfAuthor(post.value); // 작성자 확인 함수 호출
   } catch (error) {
-    console.error('게시글을 불러오는 중 오류 발생:', error);
+   // console.error('게시글을 불러오는 중 오류 발생:', error);
   }
 };
 

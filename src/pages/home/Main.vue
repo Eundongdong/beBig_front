@@ -60,10 +60,9 @@
         <div class="account-list-bg">
           <div class="flex justify-center items-center">
             <button v-if="user.userName !== 'NoLogin' && accountList.length === 0" class="button !w-2/3 mt-4" @click="goAddBank">계좌 연결하기</button>
-            <button v-if="user.userName == 'NoLogin'" class="hover:font-bold mt-4" @click="goLogin">로그인하고 계좌 연결하기</button>
           </div>
 
-          <div v-for="account in accountList" :key="accountList.accountNum" class="flex items-center justify-between account-list-inner rounded-lg">
+          <div v-for="account in accountList" :key="accountList.accountNum" class="flex items-center justify-between account-list-inner rounded-lg hover-white"  @click="goBankDetail(account.accountNum)">
             <!-- 은행 아이콘 -->
             <img class="bank-icon" :src="`/images/bank/${account.bankName}.png`" alt="Bank Logo" />
 
@@ -81,7 +80,7 @@
 
     <!-- 미션 컴포넌트 -->
     <div class="section-style lg:w-1/2 flex-grow">
-      <div class="flex items-center justify-between border-b border-gray-300 pb-3">
+      <div class="flex items-center justify-between border-bottom pb-3">
         <h1 class="section-title">나의 미션</h1>
         <!-- 미션 보러가기 버튼 -->
         <button v-if="monthlyMission && dailyMissions" class="hover:font-bold" @click="goToMission">미션 전체 보기</button>
@@ -90,14 +89,14 @@
       <!-- 연결된 계좌가 없는 경우 -->
       <div v-if="user.userName != 'NoLogin'">
         <div v-if="!monthlyMission || !dailyMissions" class="flex items-center justify-center text-base mt-8 mb-6">
-          <p>계좌를 연결하고 미션을 받아보세요</p>
+          <p>계좌를 연결해주세요.</p>
+        </div>
+        <div v-else-if="user.finTypeCode != '1' && user.finTypeCode != '2' && user.finTypeCode != '3' && user.finTypeCode != '4'" class="flex items-center justify-center text-base mt-8 mb-6">
+          <p>유형검사를 실시해주세요.</p>
         </div>
       </div>
 
-      <!-- 가입없이 이용인 경우 -->
-      <div v-if="user.userName == 'NoLogin'" class="flex items-center justify-center mt-3">
-        <button v-if="user.userName == 'NoLogin'" class="hover:font-bold mt-4" @click="goLogin">로그인하고 계좌 연결하기</button>
-      </div>
+
 
       <div v-if="monthlyMission && dailyMissions">
         <!-- 월간 미션 -->
@@ -148,6 +147,13 @@ import refreshToken from '@/api/refreshToken';
 
 const homeStore = useHomeStore();
 
+const goBankDetail = (accountNum)=>{
+  router.push({
+    path: '/home/account-detail',
+    query: { accountNum: accountNum },
+  });
+}
+
 const logout = async () => {
   try {
     const response = refreshToken.logouting();
@@ -184,7 +190,6 @@ const getAsset = async () => {
     // 모든 계좌의 transactionBalance 값을 합산
     let total = response.reduce((sum, account) => sum + account.transactionBalance, 0);
     totalAmount.value = total; // totalAmount에 총합을 저장
-
     // transactionBalance로 내림차순 정렬 후 상위 2개만 추출
     const sortedAccounts = response.sort((a, b) => b.transactionBalance - a.transactionBalance).slice(0, 2);
     sortedAccounts.forEach((account, index) => {

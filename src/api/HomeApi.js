@@ -74,6 +74,15 @@ export default {
     return data;
   },
 
+ // 미션보기
+ async missionListFooter(userId) {
+  const { data } = await api.get(
+    `${BASE_URL}/${userId}/mission`
+  );
+//   console.log('HOME GET MISSIONLIST', data);
+  return data;
+},
+
   // 계좌 목록 조회
     async accountList() {
       const response = await refreshToken.checkToken();
