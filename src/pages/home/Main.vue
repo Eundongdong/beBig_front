@@ -1,5 +1,4 @@
 <template>
-  <!-- <button class="text-button" @click="logout">logout</button> -->
   <div class="page flex flex-col lg:flex-row lg:gap-4">
     <div class="flex flex-col lg:w-1/2 lg:gap-4">
       <!-- 프로필 영역 -->
@@ -65,7 +64,7 @@
 
           <div v-for="account in accountList" :key="accountList.accountNum" class="flex items-center justify-between account-list-inner rounded-lg hover-white"  @click="goBankDetail(account.accountNum)">
             <!-- 은행 아이콘 -->
-            <img class="bank-icon" :src="`/public/images/bank/${account.bankName}.png`" alt="Bank Logo" />
+            <img class="bank-icon" :src="`/images/bank/${account.bankName}.png`" alt="Bank Logo" />
 
             <!-- 계좌 잔액 -->
             <div class="flex-grow ml-2">
