@@ -68,44 +68,26 @@
         </div>
 
 <!-- 이미지 클릭 시 띄우는 모달 -->
-<div v-if="isModalOpen" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50" @click="closeModal">
-  <div class="relative p-10 bg-white rounded-lg overflow-hidden" @click.stop>
+<div v-if="isModalOpen" class="modal-background fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" @click="closeModal">
+  <div class="modal-inner relative max-w-full max-h-full flex items-center justify-center p-10" @click.stop>
     <!-- 닫기 버튼 -->
-    <button 
-      class="absolute top-2 right-2 text-black text-3xl z-10" 
-      @click="closeModal"
-    >
+    <button class="close-button absolute top-4 right-4 text-2xl text-black" @click="closeModal">
       <i class="fa-solid fa-xmark"></i>
     </button>
-    <!-- 이전 화살표 버튼 -->
-    <button 
-        v-if="currentImageIndex > 0" 
-        class="absolute left-2 top-1/2 transform -translate-y-1/2 text-black text-3xl px-2 py-1 rounde"
-        @click="changeImage(-1)"
-      >
-        <i class="fas fa-chevron-left"></i>
-      </button>
-      <!-- 다음 화살표 버튼 -->
-      <button 
-        v-if="currentImageIndex < post.postImagePaths.length - 1" 
-        class="absolute right-2 top-1/2 transform -translate-y-1/2 text-black text-3xl px-2 py-1 rounded"
-        @click="changeImage(1)"
-      >
-        <i class="fas fa-chevron-right"></i>
-      </button>
-    <!-- 이미지 컨테이너 -->
-    <div class="relative">
-      <img 
-        :src="modalImageUrl" 
-        alt="Full Image" 
-        class="max-w-[90vw] max-h-[90vh] object-contain"
-        @load="adjustModalSize"
-      />
+    <!-- 이미지 -->
+    <img :src="modalImageUrl" alt="Full Image" class="modal-image max-w-full max-h-screen object-contain" />
 
-      
-    </div>
+    <!-- 이전 화살표 버튼 -->
+    <button v-if="currentImageIndex > 0" class="nav-button prev absolute left-4 top-1/2 transform -translate-y-2/3 text-black text-3xl" @click="changeImage(-1)">
+  <i class="fas fa-arrow-left"></i>
+</button>
+<button v-if="currentImageIndex < post.postImagePaths.length - 1" class="nav-button next absolute right-4 top-1/2 transform -translate-y-2/3 text-black text-3xl" @click="changeImage(1)">
+  <i class="fas fa-arrow-right"></i>
+</button>
   </div>
 </div>
+
+
 
         <!-- 좋아요 버튼 -->
         <div class="mt-4 ml-2 text-lg">
