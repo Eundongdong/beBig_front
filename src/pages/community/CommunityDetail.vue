@@ -45,8 +45,12 @@
         </div>
 
         <!-- 게시글 이미지 미리보기 -->
-        <div class="image-preview flex space-x-2">
-          <img v-for="(image, index) in post.postImagePaths" :key="index" :src="image" alt="Preview Image" @click="openModal(index)" />
+        <div class="image-preview-container flex space-x-2">
+          <div class="image-preview" :class="previewClass">
+            <div v-for="(image, index) in post.postImagePaths" :key="index" class="image-wrapper">
+              <img :src="image" alt="Preview Image" @click="openModal(index)" />
+            </div>
+          </div>
         </div>
 
         <!-- 이미지 클릭 시 띄우는 모달 -->
@@ -93,17 +97,6 @@ import { useRoute, useRouter } from 'vue-router';
 import communityApi from '@/api/CommunityApi';
 import MypageApi from '@/api/MypageApi';
 import HomeApi from '@/api/HomeApi';
-
-// 사용자 정보를 가져오는 함수
-// const userName = ref('');
-// const getUser = async () => {
-//     try {
-//         const userInfo = await HomeApi.getMyInfoFooter(); // /home/info 호출
-
-//     } catch (error) {
-//        // console.error("사용자 정보 가져오는 함수 API 호출 중 오류 발생:", error);
-//     }
-// };
 
 const changeCategory = (postCategory)=>{
   if(postCategory == 1){
@@ -152,6 +145,16 @@ const changeImage = (direction) => {
     modalImageUrl.value = post.value.postImagePaths[newIndex];
   }
 };
+
+// 이미지 프리뷰 클래스 계산
+const previewClass = computed(() => {
+  const imageCount = post.value?.postImagePaths?.length || 0;
+  return {
+    'single-image': imageCount === 1,
+    'double-image': imageCount === 2,
+    'triple-image': imageCount >= 3
+  };
+});
 
 const handleBack = () => {
   router.back();
@@ -313,3 +316,82 @@ onMounted(async () => {
   }
 });
 </script>
+
+<style scoped>
+.image-preview-container {
+  width: 100%;
+  padding: 0 16px;
+  margin-top: 16px;
+}
+
+.image-preview {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  justify-content: center; /* 중앙 정렬을 위해 변경 */
+  align-items: center; /* 세로 방향 중앙 정렬 추가 */
+}
+
+.image-wrapper {
+  position: relative;
+  width: 33.333%;
+  max-width: 33.333%; /* 최대 너비 설정 */
+  padding-bottom: 33.333%;
+  overflow: hidden;
+}
+
+.image-wrapper img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.single-image .image-wrapper {
+  width: 50%;
+  max-width: 50%; /* 최대 너비 설정 */
+  padding-bottom: 50%;
+}
+
+.double-image .image-wrapper {
+  width: calc(50% - 4px);
+  max-width: calc(50% - 4px); /* 최대 너비 설정 */
+  padding-bottom: calc(50% - 4px);
+}
+
+.triple-image .image-wrapper {
+  width: calc(33.333% - 5.333px);
+  max-width: calc(33.333% - 5.333px); /* 최대 너비 설정 */
+  padding-bottom: calc(33.333% - 5.333px);
+}
+
+@media (max-width: 640px) {
+  .image-preview-container {
+    padding: 0 8px;
+  }
+
+  .image-preview {
+    gap: 4px;
+  }
+
+  .single-image .image-wrapper {
+    width: 50%;
+    max-width: 50%; /* 최대 너비 설정 */
+    padding-bottom: 50%;
+  }
+
+  .double-image .image-wrapper {
+    width: calc(50% - 2px);
+    max-width: calc(50% - 2px); /* 최대 너비 설정 */
+    padding-bottom: calc(50% - 2px);
+  }
+
+  .triple-image .image-wrapper {
+    width: calc(33.333% - 2.667px);
+    max-width: calc(33.333% - 2.667px); /* 최대 너비 설정 */
+    padding-bottom: calc(33.333% - 2.667px);
+  }
+}
+</style>
