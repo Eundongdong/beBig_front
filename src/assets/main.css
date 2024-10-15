@@ -129,10 +129,7 @@ body.user-page #app {
   @apply mb-4 px-6 py-4 rounded-xl bg-[#F3F3F3];
 }
 
-.section-style-white {
-  /*  */
-  @apply mb-4 px-6 py-4 rounded-xl bg-white border border-gray-200;
-}
+
 
 .post-content {
   /*  */
@@ -184,12 +181,12 @@ body.user-page #app {
 }
 
 .answer-button {
-  @apply w-full lg:w-[600px]  mb-1 text-lg text-black bg-white rounded-lg border;
-  white-space: normal;
-  word-break: keep-all;
-  text-align: center;
-  line-height: 1.5;
-  height: 150px;
+  @apply mb-4 px-6 py-4 h-40 lg:h-60 rounded-xl bg-white lg:text-lg border border-gray-200 hover:bg-primary hover:text-white lg:w-1/2;
+}
+
+.section-style-white {
+  /*  */
+  @apply mb-4 px-6 py-4 h-40 rounded-xl bg-white border border-gray-200;
 }
 
 .gray-button {
