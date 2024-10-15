@@ -67,26 +67,26 @@
           </div>
         </div>
 
-<!-- 이미지 클릭 시 띄우는 모달 -->
-<div v-if="isModalOpen" class="modal-background fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" @click="closeModal">
-  <div class="modal-inner relative max-w-full max-h-full flex items-center justify-center p-10" @click.stop>
-    <!-- 닫기 버튼 -->
-    <button class="close-button absolute top-4 right-4 text-2xl text-black" @click="closeModal">
-      <i class="fa-solid fa-xmark"></i>
-    </button>
-    <!-- 이미지 -->
-    <img :src="modalImageUrl" alt="Full Image" class="modal-image max-w-full max-h-screen object-contain" />
+        <!-- 이미지 클릭 시 띄우는 모달 -->
+        <div v-if="isModalOpen" class="modal-background fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" @click="closeModal">
+          <div
+            class="modal-inner relative flex items-center justify-center p-10 w-[90%] lg:w-auto" @click.stop>
+            <!-- 닫기 버튼 -->
+            <button class="close-button absolute top-4 right-4 text-2xl text-black" @click="closeModal">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+            <!-- 이미지 -->
+            <img :src="modalImageUrl" alt="Full Image" class="modal-image max-w-full max-h-screen object-contain" />
 
-    <!-- 이전 화살표 버튼 -->
-    <button v-if="currentImageIndex > 0" class="nav-button prev absolute left-4 top-1/2 transform -translate-y-2/3 text-black text-3xl" @click="changeImage(-1)">
-  <i class="fas fa-arrow-left"></i>
-</button>
-<button v-if="currentImageIndex < post.postImagePaths.length - 1" class="nav-button next absolute right-4 top-1/2 transform -translate-y-2/3 text-black text-3xl" @click="changeImage(1)">
-  <i class="fas fa-arrow-right"></i>
-</button>
-  </div>
-</div>
-
+            <!-- 화살표 버튼 -->
+            <button v-if="currentImageIndex > 0" class="nav-button prev absolute left-2.5 top-1/2 transform -translate-y-2/3 text-black text-2xl" @click="changeImage(-1)">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            <button v-if="currentImageIndex < post.postImagePaths.length - 1" class="nav-button next absolute right-2.5 top-1/2 transform -translate-y-2/3 text-black text-2xl" @click="changeImage(1)">
+              <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
 
 
         <!-- 좋아요 버튼 -->
