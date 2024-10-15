@@ -7,31 +7,35 @@
       <span class="font-bold text-base absolute left-1/2 transform -translate-x-1/2">내 계좌</span>
     </header>
 
-    <div class="section-style mx-4 lg:mx-20">
-        <div class="">
-      <div class="flex items-center justify-between">
-        <p class="section-title">총 자산</p>
-      </div>
+    <div class="section-style lg:mx-20">
+      <div class="">
+        <div class="flex items-center justify-between">
+          <p class="section-title">총 자산</p>
+        </div>
 
-      <div class="flex items-center justify-between mt-1 pb-2 border-bottom">
-        <p class="text-xl font-bold">{{ totalAmount.toLocaleString() }}원</p>
-        <button v-if="NoLoginFlag" @click="goAddBank" class="p-2 flex items-center justify-center">
-          <i class="fa-solid fa-plus text-xl"></i>
-        </button>
+        <div class="flex items-center justify-between mt-1 pb-2 border-bottom">
+          <p class="text-xl font-bold">{{ totalAmount.toLocaleString() }}원</p>
+          <button v-if="NoLoginFlag" @click="goAddBank" class="p-2 flex items-center justify-center">
+            <i class="fa-solid fa-plus text-xl"></i>
+          </button>
+        </div>
       </div>
-    </div>
 
       <!-- 계좌 목록 출력 -->
       <div class="account-list-bg">
-        <div v-for="(account, index) in accountList" :key="index" class="flex items-center justify-between rounded-lg account-list-inner hover-white"  @click="goBankDetail(account.accountNum)">
+        <div
+          v-for="(account, index) in accountList"
+          :key="index"
+          class="flex items-center justify-between rounded-lg account-list-inner hover-white"
+          @click="goBankDetail(account.accountNum)"
+        >
           <img :src="`/images/bank/${account.bankName}.png`" alt="Bank Logo" class="bank-icon" />
           <div class="flex-grow ml-4">
-            <span class="text-xs">{{ account.accountName }}</span>
-            <span class="text-xs ml-2"> {{ account.accountNum }}</span>
-            <p class="text-base font-semibold">{{ account.transactionBalance.toLocaleString() }} 원</p>
+            <span class="text-xs lg:text-sm">{{ account.accountName }}</span>
+            <span class="text-xs lg:text-sm ml-2"> {{ account.accountNum }}</span>
+            <p class="text-base lg:text-lg font-semibold">{{ account.transactionBalance.toLocaleString() }} 원</p>
           </div>
           <div class="mr-2"><i class="fa-solid fa-chevron-right text-base"></i></div>
-            
         </div>
       </div>
     </div>
@@ -55,9 +59,9 @@ const getList = async () => {
       const newName = changeName(accountList[i].bankName);
       accountList[i].bankName = newName;
     }
-      if(accountList[0].accountNum == 11013154513){
-        NoLoginFlag.value = false;
-      }
+    if (accountList[0].accountNum == 11013154513) {
+      NoLoginFlag.value = false;
+    }
     // 총 자산 계산
     const total = accountList.reduce((acc, account) => acc + account.transactionBalance, 0);
     totalAmount.value = total;
@@ -129,6 +133,4 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

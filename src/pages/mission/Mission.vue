@@ -100,7 +100,10 @@ import { useRouter } from 'vue-router';
 import HomeApi from '@/api/HomeApi'; //사용자 Fintype을 불러오기 위함
 
 const router = useRouter();
-const todayDate = computed(() => new Date().toISOString().split('T')[0]);
+const todayDate = computed(() => {
+  const date = new Date();
+  return new Intl.DateTimeFormat('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }).format(date);
+});
 const currentMonth = computed(() => {
   const date = new Date();
   return `${date.getFullYear()}년 ${date.getMonth() + 1}월`;

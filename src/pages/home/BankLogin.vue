@@ -11,7 +11,7 @@
       </p>
     </header>
 
-    <div class="section-style mx-4 lg:mx-20 lg:pt-4">
+    <div class="section-style lg:mx-20 lg:pt-4">
       <p class="text-base font-bold text-center mt-2">
         {{ selectedBank }} 계좌 연결
       </p>
@@ -44,13 +44,13 @@
     <!-- 요청이 진행 중일 때 로딩 이미지 추가 -->
     <div v-if="askFlag" class="flex justify-center items-center mt-6">
       <img src="/images/bank/loading.gif" alt="Loading..." class="w-12 h-12" />
-      <h1 class="big-text ml-4">{{ loadingMessage }}</h1>
+      <h1 class="blue-bold lg:big-text ml-2">{{ loadingMessage }}</h1>
     </div>
 
     <!-- 계좌 목록을 보여주는 섹션 -->
     <div v-if="accountList.length != 0" class="mt-8 mx-12 lg:mx-20 space-y-4">
       <div>
-        <p class="font-semibold text-lg text-center">
+        <p class="font-semibold lg:text-lg text-center">
           아래 계좌를 성공적으로 연결했습니다.
         </p>
       </div>
