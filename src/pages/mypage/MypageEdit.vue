@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div class="page flex flex-col">
     <!-- 상단 바 -->
     <header class="flex justify-between items-center mb-3">
       <button class="text-xl" @click="goBack">
@@ -11,8 +11,9 @@
       </button>
     </header>
 
+    <div class="flex justify-center mt-2">
     <!-- 입력 폼 -->
-    <form @submit.prevent="handleSubmit" class="px-2">
+    <form @submit.prevent="handleSubmit" class="max-w-lg w-full px-6">
       <div class="input_group">
         <label class="label">한줄 소개</label>
         <input type="text" v-model="intro" class="input" />
@@ -40,7 +41,7 @@
           <button
             type="button"
             @click="checkCurrentPassword"
-            class="w-1/5 ml-2 mb-3 border-primary rounded-lg bg-primary text-white"
+            class="button !w-1/5 ml-2 mt-1 !mb-3 border-primary rounded-lg bg-primary text-white"
           >
             확인
           </button>
@@ -72,8 +73,9 @@
         <input type="text" v-model="birth" class="input" disabled />
       </div>
 
-      <button type="submit" class="button">수정하기</button>
+      <button type="submit" class="button !mt-6">수정하기</button>
     </form>
+  </div>
   </div>
 </template>
 

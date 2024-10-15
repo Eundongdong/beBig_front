@@ -108,7 +108,7 @@
               {{ monthlyMission.isRevoked ? '미션 완료' : '미션 진행 중' }}
             </span>
           </div>
-          <div class="mt-2 p-2 rounded-md bg-white" :class="{ 'line-through': monthlyMission.isRevoked }">
+          <div class="mission-text " :class="{ 'line-through': monthlyMission.isRevoked }">
             {{ monthlyMission.missionTopic }}
           </div>
         </div>
@@ -125,7 +125,7 @@
             <div
               v-for="mission in dailyMissions"
               :key="mission.personalDailyMissionId"
-              class="my-2 p-2 rounded-md bg-white"
+              class="mission-text "
               :class="{ 'line-through': mission.personalDailyMissionCompleted }"
             >
               {{ mission.missionTopic || '설명이 없습니다.' }}

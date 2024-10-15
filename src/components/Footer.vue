@@ -4,19 +4,19 @@
         <nav class="h-16 flex items-center justify-around">
             <button @click="goHome" :class="getButtonClass(isHome)">
                 <i class="fas fa-home text-lg md:text-lg"></i>
-                <span class="text-xs mt-1 md:mt-2">홈</span>
+                <span class="text-xs mt-1">홈</span>
             </button>
             <button @click="goAsset" :class="getButtonClass(isAsset)">
                 <i class="fas fa-chart-simple text-lg"></i>
-                <span class="text-xs mt-1 md:mt-2">자산분석</span>
+                <span class="text-xs mt-1">자산분석</span>
             </button>
             <button @click="goCommunity" :class="getButtonClass(isCommunity)">
                 <i class="fas fa-file-lines text-lg"></i>
-                <span class="text-xs mt-1 md:mt-2">커뮤니티</span>
+                <span class="text-xs mt-1">커뮤니티</span>
             </button>
             <button @click="goMypage" :class="getButtonClass(isMypage)">
                 <i class="fas fa-user text-lg"></i>
-                <span class="text-xs mt-1 md:mt-2">마이페이지</span>
+                <span class="text-xs mt-1">마이페이지</span>
             </button>
         </nav>
     </footer>

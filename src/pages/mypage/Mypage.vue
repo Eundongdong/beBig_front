@@ -1,8 +1,10 @@
 <template>
   <div class="page flex flex-col justify-start min-h-screen items-center">
     <!-- 프로필 영역 -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full max-w-screen-lg items-stretch">
-      <section class="section-style flex flex-col justify-between h-full">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full max-w-screen-lg items-stretch"
+    :class="{ 'lg:grid-cols-1': !isPublic && !isOwner }">
+      <section class="section-style flex flex-col justify-between h-full"
+       >
         <div v-if="isOwner" class="flex items-center justify-between w-full">
           <!-- 공개/비공개 버튼 (본인일 경우에만 표시) -->
           <div class="flex items-center bg-gray-300 rounded-full">
@@ -55,7 +57,7 @@
                   <span class="blue-bold">{{ userRank }}</span> %
                 </p>
                 <p class="mt-1">
-                  {{ finTypeInfo }}
+                  {{ finTypeCode === '0' ? '유형 검사를 진행해 주세요' : finTypeInfo }}
                 </p>
               </div>
             </div>
@@ -65,9 +67,15 @@
         <!-- 한줄 소개는 항상 표시 -->
         <div class="py-2 px-4">
           <p class="font-bold">한줄소개</p>
-          <p class="pt-1">{{ userIntro ? userIntro : '한 줄 소개를 입력해주세요.' }}</p>
+          <p class="pt-1">{{ userIntro ? userIntro : '한 줄 소개를 입력해 주세요.' }}</p>
         </div>
       </section>
+
+        <!-- 비공개 상태이면서 다른 사용자가 볼 때 -->
+        <div v-if="!isPublic && !isOwner" class="flex flex-col items-center justify-center mt-16">
+        <i class="fa-solid fa-user-lock text-6xl text-gray mb-4"></i>
+        <p class="text-gray-600 text-sm">이 사용자의 프로필은 비공개 상태입니다.</p>
+      </div>
 
       <!-- 공개 상태이거나 본인일 경우 모든 정보 표시 -->
       <div v-if="isPublic || isOwner">
@@ -84,10 +92,10 @@
             <div class="mission-info flex flex-col mb-5">
               <div class="section-title border-bottom pb-3">이번달 미션 달성도</div>
               <div class="mt-3 mx-2 flex justify-between items-center pb-10">
-                <div class="text-base font-semibold">
+                <div class="font-semibold">
                   현재 미션을 <span class="blue-bold">{{ monthlyProgress }}</span> % 달성했어요
                 </div>
-                <div class="text-red-500 font-semibold">D - {{ remainingDays }}</div>
+                <div class="remaining-days">D - {{ remainingDays }}</div>
               </div>
             </div>
 
@@ -121,14 +129,9 @@
         </section>
       </div>
 
-      <!-- 비공개 상태이면서 다른 사용자가 볼 때 -->
-      <div v-else class="flex flex-col items-center justify-center mt-16">
-        <!-- <i class="fa-solid fa-lock"></i> -->
-        <i class="fa-solid fa-user-lock text-6xl text-gray mb-4"></i>
-        <p class="text-gray-600 text-sm">이 사용자의 프로필은 비공개 상태입니다.</p>
-      </div>
-      <!-- 내가 작성한 글 & 좋아요한 글 -->
+    
 
+      <!-- 내가 작성한 글 & 좋아요한 글 -->
       <div v-if="isPublic || isOwner" class="flex flex-col w-full max-w-screen-lg lg:col-span-2">
         <section class="section-style">
           <div class="flex border-b-2 border-gray-300">
@@ -310,7 +313,12 @@ const runningImage = computed(() => {
 
 // SurveyResult 모달 열기 함수
 const openSurveyModal = () => {
-  showSurveyModal.value = true; // 모달을 엶
+    // finTypeCode가 0인 경우 모달이 뜨지 않도록 조건 추가
+    if (finTypeCode.value !== '0') {
+    showSurveyModal.value = true; // 모달을 엶
+  } else {
+    console.log("핀타입 코드가 0이므로 모달이 뜨지 않습니다.");
+  }
 };
 
 // SurveyResult 모달 닫기 함수
