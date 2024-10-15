@@ -3,9 +3,9 @@
     <div class="analysis-page lg:grid lg:grid-cols-2">
       <!-- 총자산 분석 섹션 -->
       <div class="section-style lg:col-span-2">
-        <div class="border-bottom flex justify-between items-center pb-2">
+        <div class="border-bottom flex justify-between items-center pb-3">
           <p class="section-title">총 자산 분석</p>
-          <p class="text-xl">{{ totalBalance.toLocaleString() }} 원</p>
+          <p class="text-xl font-semibold">{{ totalBalance.toLocaleString() }} 원</p>
         </div>
 
         <div class="mt-10 px-6">
@@ -32,7 +32,7 @@
               :style="{ top: tooltipY + 'px', left: tooltipX + 'px' }"
             >
               {{ clickedLabel }}: {{ clickedValue }}%<br>
-              {{ clikedValance}}원
+              {{ clikedValance.value.toLocaleString()}}원
             </div>
           </div>
 
@@ -127,6 +127,7 @@
                           :href="depositRecomendations[0].depositProductUrl"
                           target="_blank"
                           class="text-xs text-primary lg:text-sm"
+                          @click.stop
                           >홈페이지 방문하기</a
                         >
                       </div>
@@ -149,6 +150,7 @@
                           :href="depositRecomendations[1].depositProductUrl"
                           target="_blank"
                           class="text-xs text-primary lg:text-sm"
+                          @click.stop
                           >홈페이지 방문하기</a
                         >
                       </div>
@@ -180,6 +182,7 @@
                           :href="savingsRecommendations[0].savingsProductUrl"
                           target="_blank"
                           class="text-xs text-primary lg:text-sm"
+                          @click.stop
                           >홈페이지 방문하기</a
                         >
                       </div>
@@ -202,6 +205,7 @@
                           :href="savingsRecommendations[1].savingsProductUrl"
                           target="_blank"
                           class="text-xs text-primary lg:text-sm"
+                          @click.stop
                           >홈페이지 방문하기</a
                         >
                       </div>
@@ -259,6 +263,7 @@
                           :href="depositRecomendations[randomnumber1].depositProductUrl"
                           target="_blank"
                           class="text-xs text-primary lg:text-sm"
+                          @click.stop
                           >홈페이지 방문하기</a
                         >
                       </div>
@@ -287,6 +292,7 @@
                         :href="depositRecomendations[randomnumber2].depositProductUrl"
                         target="_blank"
                         class="text-xs text-primary lg:text-sm"
+                        @click.stop
                         >홈페이지 방문하기</a
                       >
                     </div>
@@ -321,6 +327,7 @@
                           :href="savingsRecommendations[randomnumber3].savingsProductUrl"
                           target="_blank"
                           class="text-xs text-primary lg:text-sm"
+                          @click.stop
                           >홈페이지 방문하기</a
                         >
                       </div>
@@ -349,6 +356,7 @@
                         :href="savingsRecommendations[randomnumber4].savingsProductUrl"
                         target="_blank"
                         class="text-xs text-primary lg:text-sm"
+                        @click.stop
                         >홈페이지 방문하기</a
                       >
                     </div>

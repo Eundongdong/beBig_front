@@ -175,7 +175,7 @@ const changeName = (name) => {
 };
 
 const goBack = () => {
-  router.push('/home/account');
+  router.go(-1);
 };
 
 const loadMoreTransactions = async () => {

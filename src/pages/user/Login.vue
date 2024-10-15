@@ -2,21 +2,35 @@
   <!-- 로딩이 끝나면 로그인 폼 표시 -->
   <div class="lg:grid lg:grid-cols-3 lg:h-screen">
     <!-- 왼쪽 파란 배경 (웹에서만 적용) -->
-    <div class="hidden lg:flex lg:bg-[#5354ff] lg:items-center lg:justify-center">
-      <div class="w-[270px] h-[270px] bg-white rounded-full flex items-center justify-center" >
-      <img src="/images/friends-logo.png" class="w-[250px] h-auto" alt="Logo" />
-    </div>
+    <div
+      class="hidden lg:flex lg:bg-[#5354ff] lg:items-center lg:justify-center"
+    >
+      <div
+        class="w-[270px] h-[270px] bg-white rounded-full flex items-center justify-center"
+      >
+        <img
+          src="/images/friends-logo.png"
+          class="w-[250px] h-auto"
+          alt="Logo"
+        />
+      </div>
     </div>
 
     <div class="flex justify-center items-start mt-16 lg:col-span-2 lg:mt-32">
-      <div class="max-w-lg w-full px-6 ">
+      <div class="max-w-lg w-full px-6">
         <div class="flex justify-center mb-8">
           <img src="/images/logo.png" class="w-[45%] lg:w-[30%]" alt="Logo" />
         </div>
 
         <div class="input_id">
           <label for="id" class="label">아이디</label>
-          <input type="text" class="input" v-model="loginUser.userLoginId" placeholder="아이디를 입력하세요" id="id" />
+          <input
+            type="text"
+            class="input"
+            v-model="loginUser.userLoginId"
+            placeholder="아이디를 입력하세요"
+            id="id"
+          />
         </div>
 
         <div class="input_password">
@@ -32,7 +46,13 @@
 
         <div class="flex justify-between gap-4 mt pt-4">
           <button class="button lg:w-1/2" @click="GoSignup">회원가입</button>
-          <button class="button lg:w-1/2" :disabled="disableSubmit" @click="login">로그인</button>
+          <button
+            class="button lg:w-1/2"
+            :disabled="disableSubmit"
+            @click="login"
+          >
+            로그인
+          </button>
         </div>
         <div class="flex justify-center items-center space-x-2">
           <button class="text-button" @click="GoFindId">아이디 찾기</button>
@@ -42,20 +62,34 @@
         <div class="space-y-4 mt-6">
           <ul>
             <li>
-              <button class="white-button flex justify-center items-center space-x-2" @click="kakaoSocialLogin">
-                <img src="/images/kakao.png" class="w-[40px]" />
-                <span>카카오 로그인</span>
+              <button
+                class="button mt-4 flex items-center justify-center relative"
+                @click="kakaoSocialLogin"
+                style="
+                  background-color: #fae300;
+                  color: black;
+                  padding: 0.5rem 1rem;
+                "
+              >
+                <img
+                  src="/images/symbol.png"
+                  style="height: 1.1em"
+                  class="absolute left-6"
+                />
+                <span class="flex-1 text-center">카카오 로그인</span>
               </button>
             </li>
+
             <li>
-              <button class="button mt-4" @click="unsignLogin">가입없이 이용하기</button>
+              <button class="button mt-4" @click="unsignLogin">
+                가입없이 이용하기
+              </button>
             </li>
           </ul>
         </div>
       </div>
     </div>
   </div>
-
 </template>
 
 <script setup>
@@ -77,17 +111,18 @@ const noLogin = reactive({
   password: '1234',
 });
 
+const isLoginVisible = ref(false);
 
-const isLoginVisible=ref(false);
-
-onMounted(()=>{
-  setTimeout(()=>{
-    isLoginVisible.value=true;
+onMounted(() => {
+  setTimeout(() => {
+    isLoginVisible.value = true;
   }, 2000);
 });
 
 // id, password 입력 확인 => id, password 입력 시 버튼 활성화
-const disableSubmit = computed(() => !(loginUser.userLoginId && loginUser.password));
+const disableSubmit = computed(
+  () => !(loginUser.userLoginId && loginUser.password)
+);
 
 // 로그인
 const login = async () => {

@@ -1,12 +1,12 @@
 <template>
-  <Loading />
-  <div class="flex flex-col relative">
+<Loading />
+  <div id="app" :class="{ 'user-page': isUserPage }" class="flex flex-col relative">
     <Header v-if="!isUserPage" class="lg:hidden"/>
-    <WebHeader v-if="!isUserPage" class="hidden lg:flex w-full mx-auto" />
-    <div :class="isUserPage ? 'flex-1 mt-0' : 'flex-1 mt-[50px] lg:mt-[50px] mb-2 overflow-y-auto'">
+    <WebHeader v-if="!isUserPage" :key="footerStore.footerKey" class="hidden lg:flex w-full mx-auto" />
+    <div :class="['flex-1', isUserPage ? 'mt-0' : 'mt-[50px] lg:mt-[50px] mb-2 overflow-y-auto']">
       <RouterView/>
     </div>
-    <Footer v-if="!isUserPage" class="lg:hidden"/>
+    <Footer v-if="!isUserPage" :key="footerStore.footerKey" class="lg:hidden"/>
   </div>
 </template>
 
@@ -16,17 +16,40 @@ import Footer from "./components/Footer.vue"
 import WebHeader from "./components/WebHeader.vue";
 import Loading from "./components/Loading.vue";
 
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
+import { useFooterStore } from '@/stores/footerStore';
 
 const route = useRoute();
+const footerStore = useFooterStore();
 const isUserPage = ref(route.path.startsWith('/user'));
 
-// 경로가 변경될 때마다 isUserPage 업데이트
+
+const updateBodyClass = (isUser) => {
+  if (isUser) {
+    document.body.classList.add('user-page');
+  } else {
+    document.body.classList.remove('user-page');
+  }
+};
+
+onMounted(() => {
+  updateBodyClass(isUserPage.value);
+});
+
+watch(isUserPage, (newValue) => {
+  updateBodyClass(newValue);
+});
+
+
 watch(route, (newRoute) => {
   isUserPage.value = newRoute.path.startsWith('/user');
 });
 
-</script>
+onUnmounted(() => {
+  document.body.classList.remove('user-page');
+});
 
-<style scoped> </style>
+
+
+</script>

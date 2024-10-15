@@ -44,7 +44,7 @@
     <!-- 요청이 진행 중일 때 로딩 이미지 추가 -->
     <div v-if="askFlag" class="flex justify-center items-center mt-6">
       <img src="/images/bank/loading.gif" alt="Loading..." class="w-12 h-12" />
-      <h1 class="big-text ml-4">계좌 목록을 불러오는 중...</h1>
+      <h1 class="big-text ml-4">{{ loadingMessage }}</h1>
     </div>
 
     <!-- 계좌 목록을 보여주는 섹션 -->
@@ -99,7 +99,9 @@ import { useBankStore } from '@/stores/bank'; // Pinia 스토어 가져오기
 import HomeApi from '@/api/HomeApi';
 import { ref, reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { useFooterStore } from '@/stores/footerStore';
 const router = useRouter();
+const footerStore = useFooterStore();
 
 const bankStore = useBankStore(); // Pinia 스토어 사용
 
@@ -146,22 +148,50 @@ const changeNameToEnglish = (bankName) => {
 const accountList = reactive([]);
 
 const askFlag = ref(false);
+const loadingMessage = ref(selectedBank.value+' 서버와 연결하는 중...');
+const messages = [
+  '계좌를 확인하는 중...',
+  '거래 내역을 요청하는 중...',
+  '나만의 자산 분석 진행 중...',
+  '화면을 불러오는 중입니다...',
+];
+let messageInterval;
+
 // "계좌 연결하기" 버튼 클릭 시 호출될 함수
 const Connect = async () => {
   try {
     askFlag.value = true;
+
+    // 3초마다 메시지를 변경하는 함수 실행
+    let messageIndex = 0;
+    messageInterval = setInterval(() => {
+      if (messageIndex < 3) {
+        loadingMessage.value = messages[messageIndex];
+        messageIndex++;
+      } else {
+        clearInterval(messageInterval); // messageIndex가 3일 때 멈춤
+      }
+    }, 3000);
+
     const response = await HomeApi.getAccountList(bankAccount);
+
     for (let i = 0; i < response.length; i++) {
       accountList[i] = response[i];
     }
     checkCount.value = false;
     askFlag.value = false;
-    //  console.log(accountList);
+
+    // 로딩이 끝났으니 메시지 변경 멈추기
+    clearInterval(messageInterval);
   } catch (error) {
     askFlag.value = false;
-    //여기서 error 코드에 따라 남은 횟수 수정하기
-    console.error('API 호출 중 오류 발생:', error);
-    console.log(error.response.data);
+
+    // 로딩이 끝났으니 메시지 변경 멈추기
+    clearInterval(messageInterval);
+
+    ///console.error('API 호출 중 오류 발생:', error);
+   // console.log(error.response.data);
+
     if (
       error.response.data == '아이디/비밀번호를 확인하세요.' ||
       error.response.data ==
@@ -193,6 +223,7 @@ const Connect = async () => {
 
 // "홈으로 이동" 버튼 클릭 시 호출될 함수
 const goHome = () => {
+  footerStore.incrementFooterKey();
   router.push('/home');
 };
 

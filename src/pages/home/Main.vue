@@ -102,12 +102,12 @@
         <!-- 월간 미션 -->
         <div class="mb-4 px-2 py-2">
           <div class="flex items-center justify-between mt-2">
-            <p class="font-semibold text-sm">월간 미션</p>
+            <p class="font-semibold">월간 미션</p>
             <span class="text-sm font-semibold" :class="{ 'text-blue-500': monthlyMission.isRevoked, 'text-green-500': !monthlyMission.isRevoked }">
               {{ monthlyMission.isRevoked ? '미션 완료' : '미션 진행 중' }}
             </span>
           </div>
-          <div class="mt-2 p-2 rounded-md bg-white" :class="{ 'line-through': monthlyMission.isRevoked }">
+          <div class="mission-text " :class="{ 'line-through': monthlyMission.isRevoked }">
             {{ monthlyMission.missionTopic }}
           </div>
         </div>
@@ -115,7 +115,7 @@
         <!-- 일간 미션 -->
         <div class="mb-4 p-2">
           <div class="flex items-center justify-between mt-2">
-            <p class="font-semibold text-sm">일간 미션</p>
+            <p class="font-semibold">일간 미션</p>
             <span class="text-sm font-semibold" :class="{ 'text-blue-500': allDailyMissionsCompleted, 'text-green-500': !allDailyMissionsCompleted }">
               {{ allDailyMissionsCompleted ? '미션 완료!' : '미션 진행 중' }}
             </span>
@@ -124,7 +124,7 @@
             <div
               v-for="mission in dailyMissions"
               :key="mission.personalDailyMissionId"
-              class="my-2 p-2 rounded-md bg-white"
+              class="mission-text "
               :class="{ 'line-through': mission.personalDailyMissionCompleted }"
             >
               {{ mission.missionTopic || '설명이 없습니다.' }}

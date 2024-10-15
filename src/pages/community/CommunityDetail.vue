@@ -45,30 +45,50 @@
         </div>
 
         <!-- 게시글 이미지 미리보기 -->
-        <div class="image-preview flex space-x-2">
-          <img v-for="(image, index) in post.postImagePaths" :key="index" :src="image" alt="Preview Image" @click="openModal(index)" />
+        <div class="mt-4">
+          <div class="flex space-x-2 lg:space-x-4">
+            <template v-for="(image, index) in post.postImagePaths" :key="index">
+              <div 
+                :class="{
+                  'w-full': post.postImagePaths.length === 1,
+                  'w-1/2': post.postImagePaths.length === 2,
+                  'w-1/3': post.postImagePaths.length >= 3,
+                  'aspect-square overflow-hidden rounded-lg': true
+                }"
+              >
+                <img 
+                  :src="image" 
+                  alt="Preview Image" 
+                  @click="openModal(index)"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+            </template>
+          </div>
         </div>
 
         <!-- 이미지 클릭 시 띄우는 모달 -->
-        <div v-if="isModalOpen" class="modal-background" @click="closeModal">
-          <div class="modal-inner" @click.stop>
+        <div v-if="isModalOpen" class="modal-background fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" @click="closeModal">
+          <div
+            class="modal-inner relative flex items-center justify-center p-10 w-[90%] lg:w-auto" @click.stop>
             <!-- 닫기 버튼 -->
-            <button class="close-button absolute top-2 right-2 text-2xl" @click="closeModal">
+            <button class="close-button absolute top-4 right-4 text-2xl text-black" @click="closeModal">
               <i class="fa-solid fa-xmark"></i>
             </button>
             <!-- 이미지 -->
-            <img :src="modalImageUrl" alt="Full Image" class="modal-image" />
+            <img :src="modalImageUrl" alt="Full Image" class="modal-image max-w-full max-h-screen object-contain" />
 
-            <!-- 이전 화살표 버튼 -->
-            <button v-if="currentImageIndex > 0" class="nav-button prev" @click="changeImage(-1)">
+            <!-- 화살표 버튼 -->
+            <button v-if="currentImageIndex > 0" class="nav-button prev absolute left-2.5 top-1/2 transform -translate-y-2/3 text-black text-2xl" @click="changeImage(-1)">
               <i class="fas fa-arrow-left"></i>
             </button>
-            <!-- 다음 화살표 버튼 -->
-            <button v-if="currentImageIndex < post.postImagePaths.length - 1" class="nav-button next" @click="changeImage(1)">
+            <button v-if="currentImageIndex < post.postImagePaths.length - 1" class="nav-button next absolute right-2.5 top-1/2 transform -translate-y-2/3 text-black text-2xl" @click="changeImage(1)">
               <i class="fas fa-arrow-right"></i>
             </button>
           </div>
         </div>
+
+
         <!-- 좋아요 버튼 -->
         <div class="mt-4 ml-2 text-lg">
           <button @click="likePost(post.postId, post.userId)">
@@ -88,22 +108,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import communityApi from '@/api/CommunityApi';
 import MypageApi from '@/api/MypageApi';
-import HomeApi from '@/api/HomeApi';
-
-// 사용자 정보를 가져오는 함수
-// const userName = ref('');
-// const getUser = async () => {
-//     try {
-//         const userInfo = await HomeApi.getMyInfoFooter(); // /home/info 호출
-
-//     } catch (error) {
-//        // console.error("사용자 정보 가져오는 함수 API 호출 중 오류 발생:", error);
-//     }
-// };
 
 const changeCategory = (postCategory)=>{
   if(postCategory == 1){
