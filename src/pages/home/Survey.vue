@@ -1,31 +1,61 @@
 <template>
-  <div class="page">
-    <div class="section-style mt-4 flex flex-col justify-center">
-      <div class="flex justify-end">
-        <p class="text-sm">
-          <span class="font-semibold">{{ currentQuestion + 1 }}</span> / {{ shuffledQuestions.length }}
-        </p>
+  <div class="page flex flex-grow justify-center mt-4">
+    <div class="section-style w-[500px] lg:w-full mt-4 flex flex-col justify-start lg:justify-start gap-4">
+      <div class="flex justify-between items-center border-bottom pb-3 mt-8">
+        <div class="text-3xl lg:text-4xl font-black">
+          Q<span class="">{{ currentQuestion + 1 }}</span
+          >.
+        </div>
+        <div class="text-sm lg:text-base bg-white px-4 py-2 rounded-2xl">
+          <span class="font-extrabold blue-bold">{{ currentQuestion + 1 }}</span> /
+          <span class="text-gray-500">{{ shuffledQuestions.length }}</span>
+        </div>
       </div>
-      <div v-if="currentQuestion < shuffledQuestions.length - 1" class="flex flex-col items-center justify-center space-y-4 mt-5">
-        <h2 class="flex text-xl font-semibold">{{ shuffledQuestions[currentQuestion].finTestQuestion }}</h2>
-        <div class="flex flex-col justify-center pt-4">
-          <button @click="selectAnswer(1, shuffledQuestions[currentQuestion].finTestType)" class="answer-button lg:hover:bg-gray-200">
-            {{ shuffledQuestions[currentQuestion].finTestAnswer1 }}
+      <div
+        v-if="currentQuestion < shuffledQuestions.length - 1"
+        class="flex flex-col items-center justify-center space-y-4 mt-4 lg:mt-10 lg:gap-4"
+      >
+        <div class="flex text-xl lg:text-2xl font-semibold">
+          {{ shuffledQuestions[currentQuestion].finTestQuestion }}
+        </div>
+        <div class="flex flex-col w-full lg:flex-row justify-center pt-4 lg:w-full lg:flex-grow lg:gap-4">
+          <button @click="selectAnswer(1, shuffledQuestions[currentQuestion].finTestType)" class="answer-button">
+            <div style="white-space: pre-line">{{ shuffledQuestions[currentQuestion].finTestAnswer1 }}</div>
           </button>
-          <button @click="selectAnswer(2, shuffledQuestions[currentQuestion].finTestType)" class="answer-button lg:hover:bg-gray-200 mt-2">
-            {{ shuffledQuestions[currentQuestion].finTestAnswer2 }}
+          <button @click="selectAnswer(2, shuffledQuestions[currentQuestion].finTestType)" class="answer-button" style="white-space: pre-line">
+            <div style="white-space: pre-line">{{ shuffledQuestions[currentQuestion].finTestAnswer2 }}</div>
           </button>
         </div>
       </div>
-      <div v-else class="flex lg:w-[650px] flex-col items-center justify-center space-y-2 mt-5">
-        <h2 class="text-xl font-semibold">{{ shuffledQuestions[currentQuestion].finTestQuestion }}</h2>
-        <p>입력하신 월 수입은 미션 제공과 자산 분석에만 사용돼요.</p>
-        <div class="flex items-center mt-2">
-          <input class="input mr-2" v-model="formattedIncome" type="text" placeholder="월 수입을 입력하세요" />
-          원
+      <div v-else class="flex flex-col items-center justify-start mt-10">
+        <div class="text-xl lg:text-2xl font-semibold">{{ shuffledQuestions[currentQuestion].finTestQuestion }}</div>
+        <div class="text-center lg:text-lg mt-6">
+          입력하신 월 수입은<span class="lg:hidden"><br /></span> 미션 제공과 자산 분석에만 사용돼요.
         </div>
-        <p v-if="isSubmitted && !isFormValid" class="text-red-500 text-sm">월 수입을 입력해주세요.</p>
-        <button class="button" @click="submitSurvey">제출하기</button>
+        <div class="flex items-center pt-6">
+          <input
+            class="input !mb-0"
+            v-model="formattedIncome"
+            type="text"
+            placeholder="월 수입을 입력하세요"
+            @input="validateIncome"
+          />
+          <div class="ml-2 lg:text-lg">원</div>
+        </div>
+
+        <div class="h-6 text-center">
+          <div v-if="isNotNumber" class="text-red-500 text-sm lg:text-base mt-4">
+            숫자를 입력해 주세요.
+          </div>
+          <div
+            v-else-if="isSubmitted && !isFormValid"
+            class="text-red-500 text-sm lg:text-base mt-4"
+            
+          >
+            월 수입을 입력해 주세요.
+          </div>
+        </div>
+        <button class="button !mt-32 lg:w-2/3" @click="submitSurvey">제출하기</button>
       </div>
     </div>
   </div>
@@ -40,6 +70,9 @@ const router = useRouter();
 const currentQuestion = ref(0);
 const answers = ref([]);
 const income = ref('');
+
+// 월 수입에 숫자가 아닌 값이 입력되었을 때
+const isNotNumber = ref(false);
 
 const questions = reactive([
   {
@@ -58,8 +91,22 @@ onMounted(() => {
 const isSubmitted = ref(false); // 제출 버튼을 눌렀는지 여부
 
 const isFormValid = computed(() => {
-  return income.value; // 수입 값이 유효한지 판단
+  return income.value && !isNotNumber.value; // 수입 값이 유효하고 숫자인지 판단
 });
+
+// 숫자가 아닐 경우 메시지 출력
+const validateIncome = (event) => {
+  // 입력 값에서 콤마를 제거한 후 유효성 검사
+  const value = event.target.value.replace(/,/g, '');
+
+  if (value === '') {
+    isNotNumber.value = false;
+  } else if (!/^\d+$/.test(value)) {
+    isNotNumber.value = true;
+  } else {
+    isNotNumber.value = false;
+  }
+};
 
 const getQuestion = async () => {
   try {
