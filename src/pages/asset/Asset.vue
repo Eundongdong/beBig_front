@@ -8,7 +8,7 @@
           <p class="text-xl font-semibold">{{ totalBalance.toLocaleString() }} 원</p>
         </div>
 
-        <div class="mt-10 px-6">
+        <div class="mt-10 px-2">
           <div class="bar-chart flex w-full h-8 bg-gray-200 border border-gray-300 mt-5 relative">
             <div
               class="bar-segment bg-indigo-300 h-full"
@@ -31,22 +31,22 @@
               class="absolute bg-gray-700 text-white text-sm rounded p-2"
               :style="{ top: tooltipY + 'px', left: tooltipX + 'px' }"
             >
-              {{ clickedLabel }}: {{ clickedValue }}%<br>
-              {{ clikedValance.value.toLocaleString()}}원
+              {{ clickedLabel }}: {{ clickedValue }}%<br />
+              {{ clikedValance.value.toLocaleString() }}원
             </div>
           </div>
 
           <!-- 범례 -->
           <div class="legend flex justify-start mt-5">
-            <div class="legend-item flex items-center mr-2 text-sm">
+            <div class="legend-item flex items-center mr-2 text-xs lg:text-sm">
               <span class="legend-color bg-indigo-300 w-3 h-3 rounded-full mr-2"></span>
               입출금 자산
             </div>
-            <div class="legend-item flex items-center mr-2 text-sm">
+            <div class="legend-item flex items-center mr-2 text-xs lg:text-sm">
               <span class="legend-color bg-indigo-600 w-3 h-3 rounded-full mr-2"></span>
               예적금 자산
             </div>
-            <div class="legend-item flex items-center text-sm">
+            <div class="legend-item flex items-center text-xs lg:text-sm">
               <span class="legend-color bg-indigo-900 w-3 h-3 rounded-full mr-2"></span>
               기타 자산
             </div>
@@ -54,41 +54,40 @@
         </div>
       </div>
 
-      
-        <!-- 소비 분석 섹션 -->
-        <div class="section-style lg:col-span-1  lg:order-2 lg:ml-2">
-                <div class="border-bottom flex justify-between items-center pb-2">
-                  <div class="section-title">소비 분석</div>
+      <!-- 소비 분석 섹션 -->
+      <div class="section-style lg:col-span-1 lg:order-2 lg:ml-2">
+        <div class="border-bottom flex justify-between items-center pb-2">
+          <div class="section-title">소비 분석</div>
 
-                  <!-- 년도 선택 드롭다운 추가 -->
-                  <div class="flex items-center">
-                    <label for="year" class="mr-2">년도 선택 :</label>
-                    <select
-                      id="year"
-                      v-model="selectedYear"
-                      @change="getSpendingPatterns"
-                      class="p-2 border border-gray-300 rounded"
-                    >
-                      <option v-for="year in availableYears" :key="year" :value="year">
-                        {{ year }}
-                      </option>
-                    </select>
-                  </div>
-                </div>
+          <!-- 년도 선택 드롭다운 추가 -->
+          <div class="flex items-center">
+            <label for="year" class="mr-2">년도 선택 :</label>
+            <select
+              id="year"
+              v-model="selectedYear"
+              @change="getSpendingPatterns"
+              class="p-2 border border-gray-300 rounded"
+            >
+              <option v-for="year in availableYears" :key="year" :value="year">
+                {{ year }}
+              </option>
+            </select>
+          </div>
+        </div>
 
-                <div class="mt-4 px-6 w-full pl-0 pr-0">
-                  <div class="pl-1">
-                    지난달보다
-                    <span class="blue-bold">
-                      {{ Math.abs(spendings.previousMonthDiff).toLocaleString() }}
-                    </span>
-                    {{ spendings.previousMonthDiff >= 0 ? '원 더 썼어요.' : '원 덜 썼어요.' }}
-                  </div>
-                  <div class="w-full">
-                    <canvas id="spendingChart" class="w-full h-72"></canvas>
-                  </div>
-                </div>
-              </div>
+        <div class="mt-4 px-6 w-full pl-0 pr-0">
+          <div class="pl-1">
+            지난달보다
+            <span class="blue-bold">
+              {{ Math.abs(spendings.previousMonthDiff).toLocaleString() }}
+            </span>
+            {{ spendings.previousMonthDiff >= 0 ? '원 더 썼어요.' : '원 덜 썼어요.' }}
+          </div>
+          <div class="w-full">
+            <canvas id="spendingChart" class="w-full h-72"></canvas>
+          </div>
+        </div>
+      </div>
 
       <!-- 예·적금 추천 섹션 -->
       <div class="section-style lg:col-span-1 lg:order-1 lg:row-span-2 lg:mr-2">
@@ -376,17 +375,17 @@
         </div>
       </div>
 
-
       <!-- 연령대별 총자산 비교 섹션 -->
       <div class="section-style col-span-1 lg:order-3 lg:ml-2">
         <div class="section-title pb-2 border-bottom">연령대별 자산 비교</div>
         <div class="mt-4 px-4">
           <div>
-            <span class="blue-bold">{{ ageRange }}</span> 대 사용자 중 상위
-            <span class="blue-bold">{{ rank }}</span> % 입니다.<br />
+            <span class="blue-bold">{{ ageRange }}</span> 대 사용자 중 상위 <span class="blue-bold">{{ rank }}</span> %
+            입니다.<br />
           </div>
           <div class="mt-2">
-            <span class="blue-bold">{{ ageRange }}</span> 대 평균 자산은 <span class="blue-bold">{{ avgAsset.toLocaleString() }}</span> 원 입니다.
+            <span class="blue-bold">{{ ageRange }}</span> 대 평균 자산은
+            <span class="blue-bold">{{ avgAsset.toLocaleString() }}</span> 원 입니다.
           </div>
         </div>
 
@@ -395,11 +394,13 @@
           <div class="triangle-container relative">
             <div class="triangle"></div>
 
-              <div class="rank-line absolute w-full h-0.5 bg-red-500" :style="{top: `${rank}%`}"></div>
-              <div
-                class="rank-text absolute whitespace-nowrap text-black text-sm" :style="{top: `${rank}%`, left: 'calc(100% + 5px)', transform: 'translateY(-50%)'}">
+            <div class="rank-line absolute w-full h-0.5 bg-red-500" :style="{ top: `${rank}%` }"></div>
+            <div
+              class="rank-text absolute whitespace-nowrap text-black text-sm"
+              :style="{ top: `${rank}%`, left: 'calc(100% + 5px)', transform: 'translateY(-50%)' }"
+            >
               상위 {{ rank }}%
-              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -427,15 +428,14 @@ const showValue = (event, value, previousPercentage, label) => {
   // 마우스 클릭 위치 계산 (말풍선 위치)
   const chartWidth = event.target.parentElement.offsetWidth; // 차트의 전체 너비
   let prev = 0;
-  if(previousPercentage == 0){
+  if (previousPercentage == 0) {
     prev = 0;
     clikedValance.value = totalCashBalance;
-  }
-  else if(previousPercentage == 1){
+  } else if (previousPercentage == 1) {
     prev = cashPercentage.value;
     clikedValance.value = totalDepositSavingsBalance;
-  }else{
-    prev = Number(cashPercentage.value) + Number(depositSavingsPercentage.value); 
+  } else {
+    prev = Number(cashPercentage.value) + Number(depositSavingsPercentage.value);
     clikedValance.value = totalEtcBalance;
   }
   const offsetX = (prev * chartWidth) / 100; // 이전 막대들의 너비
