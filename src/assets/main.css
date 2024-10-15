@@ -50,7 +50,7 @@ body.user-page #app {
 }
 
 .modal-inner {
-  @apply bg-white rounded-lg max-w-md mt-10 mb-[50px] p-6 relative;
+  @apply bg-white rounded-lg w-full max-w-lg mt-8 mb-8 p-10 relative;
 }
 
 .modal-image {
