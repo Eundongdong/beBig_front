@@ -1,7 +1,7 @@
 <template>
-  <div class="page flex flex-grow justify-center mt-4">
+  <div class="page flex flex-grow justify-center">
     <div class="section-style w-[500px] lg:w-full mt-4 flex flex-col justify-start lg:justify-start gap-4">
-      <div class="flex justify-between items-center border-bottom pb-3 mt-8">
+      <div class="flex justify-between items-center border-bottom pb-3 mt-4">
         <div class="text-3xl lg:text-4xl font-black">
           Q<span class="">{{ currentQuestion + 1 }}</span
           >.
@@ -15,7 +15,7 @@
         v-if="currentQuestion < shuffledQuestions.length - 1"
         class="flex flex-col items-center justify-center space-y-4 mt-4 lg:mt-10 lg:gap-4"
       >
-        <div class="flex text-xl lg:text-2xl font-semibold">
+        <div class="flex text-lg lg:text-2xl font-semibold">
           {{ shuffledQuestions[currentQuestion].finTestQuestion }}
         </div>
         <div class="flex flex-col w-full lg:flex-row justify-center pt-4 lg:w-full lg:flex-grow lg:gap-4">
@@ -28,7 +28,7 @@
         </div>
       </div>
       <div v-else class="flex flex-col items-center justify-start mt-10">
-        <div class="text-xl lg:text-2xl font-semibold">{{ shuffledQuestions[currentQuestion].finTestQuestion }}</div>
+        <div class="text-lg lg:text-2xl font-semibold">{{ shuffledQuestions[currentQuestion].finTestQuestion }}</div>
         <div class="text-center lg:text-lg mt-6">
           입력하신 월 수입은<span class="lg:hidden"><br /></span> 미션 제공과 자산 분석에만 사용돼요.
         </div>

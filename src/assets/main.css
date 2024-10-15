@@ -50,7 +50,7 @@ body.user-page #app {
 }
 
 .modal-inner {
-  @apply bg-white rounded-lg w-full max-w-lg mt-8 mb-8 p-10 relative;
+  @apply bg-white rounded-lg max-w-lg mt-8 mx-4 mb-8 px-4 py-6 relative;
 }
 
 .modal-image {
@@ -181,12 +181,12 @@ body.user-page #app {
 }
 
 .answer-button {
-  @apply mb-4 px-6 py-4 h-40 lg:h-60 rounded-xl bg-white lg:text-lg border border-gray-200 hover:bg-primary hover:text-white lg:w-1/2;
+  @apply mb-4 px-6 py-4 h-32 lg:h-60 rounded-xl bg-white lg:text-lg border border-gray-200 lg:hover:bg-primary lg:hover:text-white lg:w-1/2;
 }
 
 .section-style-white {
   /*  */
-  @apply mb-4 px-6 py-4 h-40 rounded-xl bg-white border border-gray-200;
+  @apply mb-4 px-6 py-4 rounded-xl bg-white border border-gray-200;
 }
 
 .gray-button {
