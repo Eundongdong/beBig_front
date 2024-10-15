@@ -32,7 +32,7 @@
               :style="{ top: tooltipY + 'px', left: tooltipX + 'px' }"
             >
               {{ clickedLabel }}: {{ clickedValue }}%<br>
-              {{ clikedValance}}원
+              {{ clikedValance.value.toLocaleString()}}원
             </div>
           </div>
 
