@@ -67,26 +67,46 @@
           </div>
         </div>
 
-        <!-- 이미지 클릭 시 띄우는 모달 -->
-        <div v-if="isModalOpen" class="modal-background" @click="closeModal">
-          <div class="modal-inner" @click.stop>
-            <!-- 닫기 버튼 -->
-            <button class="close-button absolute top-2 right-2 text-2xl" @click="closeModal">
-              <i class="fa-solid fa-xmark"></i>
-            </button>
-            <!-- 이미지 -->
-            <img :src="modalImageUrl" alt="Full Image" class="modal-image" />
+<!-- 이미지 클릭 시 띄우는 모달 -->
+<div v-if="isModalOpen" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50" @click="closeModal">
+  <div class="relative p-10 bg-white rounded-lg overflow-hidden" @click.stop>
+    <!-- 닫기 버튼 -->
+    <button 
+      class="absolute top-2 right-2 text-black text-3xl z-10" 
+      @click="closeModal"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <!-- 이전 화살표 버튼 -->
+    <button 
+        v-if="currentImageIndex > 0" 
+        class="absolute left-2 top-1/2 transform -translate-y-1/2 text-black text-3xl px-2 py-1 rounde"
+        @click="changeImage(-1)"
+      >
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <!-- 다음 화살표 버튼 -->
+      <button 
+        v-if="currentImageIndex < post.postImagePaths.length - 1" 
+        class="absolute right-2 top-1/2 transform -translate-y-1/2 text-black text-3xl px-2 py-1 rounded"
+        @click="changeImage(1)"
+      >
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    <!-- 이미지 컨테이너 -->
+    <div class="relative">
+      <img 
+        :src="modalImageUrl" 
+        alt="Full Image" 
+        class="max-w-[90vw] max-h-[90vh] object-contain"
+        @load="adjustModalSize"
+      />
 
-            <!-- 이전 화살표 버튼 -->
-            <button v-if="currentImageIndex > 0" class="nav-button prev" @click="changeImage(-1)">
-              <i class="fas fa-arrow-left"></i>
-            </button>
-            <!-- 다음 화살표 버튼 -->
-            <button v-if="currentImageIndex < post.postImagePaths.length - 1" class="nav-button next" @click="changeImage(1)">
-              <i class="fas fa-arrow-right"></i>
-            </button>
-          </div>
-        </div>
+      
+    </div>
+  </div>
+</div>
+
         <!-- 좋아요 버튼 -->
         <div class="mt-4 ml-2 text-lg">
           <button @click="likePost(post.postId, post.userId)">
@@ -106,7 +126,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import communityApi from '@/api/CommunityApi';
 import MypageApi from '@/api/MypageApi';
