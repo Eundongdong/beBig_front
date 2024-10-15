@@ -148,7 +148,7 @@ const changeNameToEnglish = (bankName) => {
 const accountList = reactive([]);
 
 const askFlag = ref(false);
-const loadingMessage = ref('은행 서버와 연결하는 중...');
+const loadingMessage = ref(selectedBank.value+' 서버와 연결하는 중...');
 const messages = [
   '계좌를 확인하는 중...',
   '거래 내역을 요청하는 중...',
@@ -189,8 +189,8 @@ const Connect = async () => {
     // 로딩이 끝났으니 메시지 변경 멈추기
     clearInterval(messageInterval);
 
-    console.error('API 호출 중 오류 발생:', error);
-    console.log(error.response.data);
+    ///console.error('API 호출 중 오류 발생:', error);
+   // console.log(error.response.data);
 
     if (
       error.response.data == '아이디/비밀번호를 확인하세요.' ||
